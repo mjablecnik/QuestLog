@@ -108,7 +108,7 @@ Build the Questlog screens on top of the finished domain layer from `001-questlo
   - Ensure all tests pass, ask the user if questions arise.
 
 - [ ] 6. Implement shared widgets
-  - [ ] 6.1 Implement common widgets
+  - [x] 6.1 Implement common widgets
     - `lib/ui/widgets/common/`: `AppIcon` (flutter_svg), `QuestlogSegmented`, `EmptyState` (pinned blank slip), `SkeletonList` (static under reduced motion), snackbar host, haptic helper and a semantic announcement helper that announces Quest and Mission completion and reopening
     - Every tappable widget has a 44×44 hit area, a pressed state and a semantic label
     - _Requirements: 3.9, 3.10, 15.8, 16.1, 16.2, 16.3, 16.4, 16.5, 16.9, 18.4_
@@ -145,7 +145,7 @@ Build the Questlog screens on top of the finished domain layer from `001-questlo
     - _Requirements: 5.8, 7.1, 7.3, 7.4, 7.5, 7.8, 7.9_
 
 - [ ] 7. Implement the application shell
-  - [ ] 7.1 Implement UI providers and the app root
+  - [x] 7.1 Implement UI providers and the app root
     - `lib/ui/state/ui_providers.dart`: settings stream, effective locale (via `resolveLanguage` and the device locale), theme mode, display font, app version (`package_info_plus`), snackbar notifier
     - `lib/app.dart`: `QuestlogApp` with `MaterialApp`, localization delegates, theme and dark theme, `themeMode`, locale and `CupertinoPageTransitionsBuilder` so the edge-swipe back works
     - `lib/main.dart`: open the database, run `ProviderScope` with `SystemClock`, run `QuestlogApp`
