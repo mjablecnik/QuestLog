@@ -189,7 +189,7 @@ Build the Questlog screens on top of the finished domain layer from `001-questlo
     - `lib/ui/screens/missions/missions_screen.dart`: open Mission_Cards, section "Dokončeno dnes" with earned bonus, skeletons, empty state with a create button, FAB, swipe actions with the Mission deletion confirmation, tap to open detail
     - _Requirements: 6.5, 6.6, 6.7, 6.8, 6.9, 8.1, 8.2, 8.4, 8.5, 8.6, 8.7, 8.8, 8.9, 8.10_
 
-  - [ ] 10.2 Implement the Mission_Sheet
+  - [x] 10.2 Implement the Mission_Sheet
     - `lib/ui/sheets/mission_sheet.dart`: name, Mission_Bonus selector (default Střední), removable quest rows with name and Difficulty plus "Přidat quest" row, empty rows ignored, edit mode with only name and bonus and the earned-bonus note for completed Missions, discard confirmation
     - _Requirements: 9.1, 9.2, 9.3, 9.4, 9.5, 9.6, 9.7, 9.8, 9.9_
 
