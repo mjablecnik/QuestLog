@@ -145,7 +145,7 @@ Build the Questlog domain layer in a new Flutter project at `/workspace/questlog
     - Unit: unknown id and duplicate id are rejected with nothing changed; new Quests are placed last; the Board and a Mission show the same relative order for shared Quests
     - _Requirements: 3.1, 3.5_
 
-  - [ ] 6.7 Implement board streams and Quest history
+  - [x] 6.7 Implement board streams and Quest history
     - Add `BoardQuest` (Quest plus nullable Mission name, joined in the query) to `lib/data/models.dart`
     - `watchOpenBoard()` returning `BoardQuest` (standalone or `open` Mission, open, in `sort_order`), `watchDoneToday(today)` returning `BoardQuest` completed within the Board_Day of the supplied `today` (`boardDayStartOf(today)` up to the next Day_Start), `history(fromDay, toDay)` returning `HistoryQuest` newest first with name, Difficulty, awarded XP, completion time and Mission name
     - The Board_Day comes from the caller, never from a timer inside the service, so the UI's Board_Day signal drives the refresh

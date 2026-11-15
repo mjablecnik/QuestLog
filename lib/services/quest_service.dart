@@ -1,5 +1,6 @@
 import 'package:drift/drift.dart';
 
+import '../core/board_day.dart';
 import '../core/clock.dart';
 import '../core/errors.dart';
 import '../core/xp_rules.dart';
@@ -172,6 +173,82 @@ class QuestService {
             .write(QuestsCompanion(sortOrder: Value(positions[i])));
       }
     });
+  }
+
+  /// Open Quests that are standalone or belong to an `open` Mission, in the
+  /// manual order.
+  Stream<List<BoardQuest>> watchOpenBoard() {
+    final query = _boardQuery()
+      ..where(
+        _db.quests.completedAt.isNull() &
+            (_db.quests.missionId.isNull() | _db.missions.status.equalsValue(MissionStatus.open)),
+      )
+      ..orderBy([OrderingTerm.asc(_db.quests.sortOrder)]);
+    return query.watch().map(_toBoardQuests);
+  }
+
+  /// Quests completed within the Board_Day of [today], newest first.
+  ///
+  /// [today] comes from the caller, so a consumer can refresh the window when the
+  /// Board_Day changes. Quests of `closed` Missions are left out.
+  Stream<List<BoardQuest>> watchDoneToday(DateTime today) {
+    final window = _boardDayWindow(today, today);
+    final query = _boardQuery()
+      ..where(
+        _db.quests.completedAt.isBiggerOrEqualValue(window.start) &
+            _db.quests.completedAt.isSmallerThanValue(window.end) &
+            (_db.quests.missionId.isNull() | _db.missions.status.equalsValue(MissionStatus.closed).not()),
+      )
+      ..orderBy([OrderingTerm.desc(_db.quests.completedAt), OrderingTerm.desc(_db.quests.id)]);
+    return query.watch().map(_toBoardQuests);
+  }
+
+  /// Done Quests completed from the Board_Day [fromDay] up to and including the
+  /// Board_Day [toDay], newest first. Reads only.
+  Future<List<HistoryQuest>> history(DateTime fromDay, DateTime toDay) async {
+    final window = _boardDayWindow(fromDay, toDay);
+    final query = _boardQuery()
+      ..where(
+        _db.quests.completedAt.isBiggerOrEqualValue(window.start) &
+            _db.quests.completedAt.isSmallerThanValue(window.end),
+      )
+      ..orderBy([OrderingTerm.desc(_db.quests.completedAt), OrderingTerm.desc(_db.quests.id)]);
+    final rows = await query.get();
+    return [
+      for (final row in rows)
+        HistoryQuest(
+          id: row.readTable(_db.quests).id,
+          name: row.readTable(_db.quests).name,
+          difficulty: row.readTable(_db.quests).difficulty,
+          awardedXp: row.readTable(_db.quests).awardedXp ?? 0,
+          completedAt: row.readTable(_db.quests).completedAt!,
+          missionName: row.readTableOrNull(_db.missions)?.name,
+        ),
+    ];
+  }
+
+  JoinedSelectStatement<HasResultSet, dynamic> _boardQuery() {
+    return _db.select(_db.quests).join([
+      leftOuterJoin(_db.missions, _db.missions.id.equalsExp(_db.quests.missionId)),
+    ]);
+  }
+
+  List<BoardQuest> _toBoardQuests(List<TypedResult> rows) {
+    return [
+      for (final row in rows)
+        BoardQuest(
+          quest: row.readTable(_db.quests).toModel(),
+          missionName: row.readTableOrNull(_db.missions)?.name,
+        ),
+    ];
+  }
+
+  /// From the start of the Board_Day [first] to the start of the day after [last].
+  ({DateTime start, DateTime end}) _boardDayWindow(DateTime first, DateTime last) {
+    return (
+      start: boardDayStartOf(first),
+      end: boardDayStartOf(DateTime(last.year, last.month, last.day + 1)),
+    );
   }
 
   Future<MissionProgress> _progress(int missionId) async {
