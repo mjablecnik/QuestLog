@@ -54,7 +54,7 @@ Build the Questlog domain layer in a new Flutter project at `/workspace/questlog
     - Month-based Cadences keep the anchor's day of month, clamped to the target month's last day, always computed from the anchor
     - _Requirements: 8.3, 8.4, 8.5, 8.7_
 
-  - [ ] 2.6 Write property tests for Occurrences
+  - [x] 2.6 Write property tests for Occurrences
     - **Property 7: Occurrences are strictly increasing and computed from the anchor**
     - For any anchor, Cadence and indices `j < k`, occurrence `j` is strictly before occurrence `k`; month-based results equal the anchor's day clamped to the month length (31st, Feb 29)
     - Unit cases: Monthly anchor Jan 31 yields Feb 28/29, Mar 31; Yearly anchor Feb 29 yields Feb 28 in non-leap years; Biweekly steps 14 days
