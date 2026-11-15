@@ -197,7 +197,7 @@ Build the Questlog domain layer in a new Flutter project at `/workspace/questlog
 - [x] 8. Checkpoint — Quests, Missions and settings
   - Ensure all tests pass, ask the user if questions arise.
 
-- [ ] 9. Implement the Recurrence_Service
+- [x] 9. Implement the Recurrence_Service
   - [x] 9.1 Implement Recurring_Rule management
     - `lib/services/recurrence_service.dart`: `create`, `update`, `delete`
     - Validation: name 1–80, at least one quest template, Monthly posting day 1–28
@@ -219,7 +219,7 @@ Build the Questlog domain layer in a new Flutter project at `/workspace/questlog
     - Unit: `skippedNextPosting` is true when posted early and false when the rule was already due; `closedPreviousInstance` reflects whether an `open` Instance existed
     - _Requirements: 10.1, 10.2, 10.3, 10.4, 10.7_
 
-  - [ ] 9.4 Write Recurrence_Service tests
+  - [x] 9.4 Write Recurrence_Service tests
     - **Property 8: Reconciliation posts at most once per rule and is idempotent**
     - For any rules and any gap since the last launch, `reconcile()` posts at most one Instance per rule and a second run on the same Board_Day posts none
     - **Validates: Requirements 9.1, 9.2, 9.3, 9.7**
@@ -232,7 +232,7 @@ Build the Questlog domain layer in a new Flutter project at `/workspace/questlog
     - Unit: Instance Quests copy the templates in order; a rule due at 03:59 posts only after 04:00; editing a rule changes only the next Instance; deleting a rule keeps the open Instance as an ordinary Mission and Reconciliation never posts it again; validation errors for Monthly day 29 and rules without templates
     - _Requirements: 8.2, 8.6, 9.4, 11.1, 11.2, 11.3_
 
-  - [ ] 9.5 Implement rule streams
+  - [x] 9.5 Implement rule streams
     - `watchRules()` returning `RuleSummary`: id, name, Cadence, Anchor_Date, Mission_Bonus, ordered quest templates (`RuleQuest`), Next_Occurrence date and whether an `open` Instance exists
     - Test that the summary reflects a manual posting, an edit of the templates and a deletion
     - _Requirements: 11.4, 11.5_
