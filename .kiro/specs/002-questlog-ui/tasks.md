@@ -26,13 +26,13 @@ Build the Questlog screens on top of the finished domain layer from `001-questlo
     - _Requirements: 19.7_
 
 - [ ] 2. Implement Design_Tokens, typography and theme
-  - [ ] 2.1 Implement tokens, typography and theme
+  - [x] 2.1 Implement tokens, typography and theme
     - `lib/ui/theme/tokens.dart`: `QuestlogPalette.guildBoard` and `daylight` with the values in `.design/DESIGN.md`, `Space`, `Radii`, `Metrics`, `Motion`
     - `lib/ui/theme/typography.dart`: `displayFamilyName`, `buildDisplayTextTheme`, `buildBodyTextTheme` as two separate roles, with tabular figures for XP
     - `lib/ui/theme/questlog_theme.dart`: `buildTheme` for dark and light with brass selection and cursor colours, sheet and dialog shapes, snackbar and pressed states
     - _Requirements: 13.4, 13.6, 15.1, 15.2, 15.3, 15.4, 15.7_
 
-  - [ ] 2.2 Write theme tests
+  - [x] 2.2 Write theme tests
     - **Property 7: Text contrast**
     - For every text and background pair used by the design, in both palettes, the contrast ratio is at least 4.5:1
     - **Validates: Requirements 15.1, 16.6**
@@ -40,50 +40,50 @@ Build the Questlog screens on top of the finished domain layer from `001-questlo
     - _Requirements: 13.4_
 
 - [ ] 3. Implement the pure UI logic
-  - [ ] 3.1 Implement reordering helper
+  - [x] 3.1 Implement reordering helper
     - `lib/ui/state/reorder.dart`: `moveWithinSubset(shownIds, oldIndex, newIndex)` with Flutter's `ReorderableList` index semantics
     - _Requirements: 4.2, 4.6_
 
-  - [ ] 3.2 Write property tests for reordering
+  - [x] 3.2 Write property tests for reordering
     - **Property 1: Reordering a subset preserves everything else**
     - For any list of ids and any valid old and new index, the result is a permutation with the moved id at the target position and all others in their original relative order
     - **Validates: Requirements 4.2, 4.6**
 
-  - [ ] 3.3 Implement form validators and error text
+  - [x] 3.3 Implement form validators and error text
     - `lib/ui/forms/validators.dart`: `FieldError`, `validateName`, `validateNote`, `validateHeroName`, `validateRuleQuests`
     - `lib/ui/forms/error_text.dart`: `fieldErrorText`, `domainErrorText` (added after task 4.1 provides the strings)
     - _Requirements: 5.4, 9.3, 9.4, 11.4, 12.9, 18.1, 18.3_
 
-  - [ ] 3.4 Write property tests for validators
+  - [x] 3.4 Write property tests for validators
     - **Property 2: Client validation agrees with the domain**
     - For any string, each validator accepts exactly what the matching service accepts (name 1–80 trimmed, note ≤ 500, hero name ≤ 40 trimmed); compare against the services from spec 001 on an in-memory database
     - **Validates: Requirements 5.4, 9.3, 9.4, 11.4, 12.9, 19.2**
 
-  - [ ] 3.5 Implement posting day
+  - [x] 3.5 Implement posting day
     - `lib/ui/forms/posting_day.dart`: `PostingDay` hierarchy, `requestedAnchor`, `postingDayOf`, `defaultPostingDay`
     - _Requirements: 12.6, 12.7, 12.8_
 
-  - [ ] 3.6 Write property tests for posting day
+  - [x] 3.6 Write property tests for posting day
     - **Property 3: Posting day yields a valid requested anchor**
     - For any Cadence, posting day and today, the requested anchor is on or after today, less than one period later, matches the posting day, and `postingDayOf` returns the posting day again; Monthly day 28 and Yearly Feb 29 are covered as examples
     - **Validates: Requirements 12.6, 12.7, 12.8**
 
-  - [ ] 3.7 Implement reward events
+  - [x] 3.7 Implement reward events
     - `lib/ui/state/reward_queue.dart`: `RewardEvent` (`QuestReward`, `MissionReward`), `rewardForQuest`, `rewardForMission`, `RewardQueue` notifier with `push` and `dismissCurrent`, showing one event at a time
     - _Requirements: 7.1, 7.3, 7.4, 7.6, 7.9_
 
-  - [ ] 3.8 Write property tests for rewards
+  - [x] 3.8 Write property tests for rewards
     - **Property 4: Reward events reflect the service result**
     - For any completion results, `levelUp` is true exactly when the level rose, the XP is carried unchanged and the mission-complete offer matches `missionReadyToComplete`
     - **Validates: Requirements 7.1, 7.3, 7.4, 7.6**
     - Unit: events pushed in quick succession are shown in order, one at a time
     - _Requirements: 7.9_
 
-  - [ ] 3.9 Implement the Board_Day signal
+  - [x] 3.9 Implement the Board_Day signal
     - `lib/ui/state/board_day.dart`: `untilNextBoardDay(now)` built on `core/board_day.dart`, `BoardDayNotifier` that schedules a timer in the foreground, cancels it on pause and re-evaluates on resume
     - _Requirements: 17.1, 17.2, 17.3, 17.4_
 
-  - [ ] 3.10 Write tests for the Board_Day signal
+  - [x] 3.10 Write tests for the Board_Day signal
     - **Property 5: Next Board_Day is always in the future and 04:00**
     - For any local instant including DST changes, `untilNextBoardDay` is positive and lands on a local 04:00
     - **Validates: Requirements 17.1, 17.2**
@@ -91,20 +91,20 @@ Build the Questlog screens on top of the finished domain layer from `001-questlo
     - _Requirements: 17.2, 17.3_
 
 - [ ] 4. Add localization
-  - [ ] 4.1 Write the translations
+  - [x] 4.1 Write the translations
     - `lib/l10n/app_cs.arb` (template) and `app_en.arb` with every user-facing string used by this spec: tabs, Hero_Bar, board, quest and mission sheets, rewards, missions, detail, settings, rule sheet, font sheet, confirmations, snackbars and errors
     - Use ICU plurals for counts of Quests (Czech `one`/`few`/`other`) and the Czech wording quoted in the requirements
     - Run `flutter gen-l10n`
     - _Requirements: 14.1, 14.5, 14.6_
 
-  - [ ] 4.2 Write localization tests
+  - [x] 4.2 Write localization tests
     - **Property 6: Czech and English plural forms**
     - For any non-negative count, the Czech label uses `one` for 1, `few` for 2–4 and `other` otherwise, and the English label uses `one` for 1 and `other` otherwise
     - **Validates: Requirements 14.5**
     - Unit: every key in `app_cs.arb` exists in `app_en.arb` and the reverse; `domainErrorText` never contains exception text
     - _Requirements: 14.1, 14.6_
 
-- [ ] 5. Checkpoint — Foundations
+- [x] 5. Checkpoint — Foundations
   - Ensure all tests pass, ask the user if questions arise.
 
 - [ ] 6. Implement shared widgets
