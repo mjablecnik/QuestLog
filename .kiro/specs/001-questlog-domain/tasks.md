@@ -25,7 +25,7 @@ Build the Questlog domain layer in a new Flutter project at `/workspace/questlog
     - Run `scripts/check.sh` and confirm it passes on the empty project
     - _Requirements: 14.2, 14.3, 14.4_
 
-- [ ] 2. Implement the pure core rules
+- [x] 2. Implement the pure core rules
   - [x] 2.1 Implement Clock, board day and errors
     - `lib/core/clock.dart`: `Clock` interface and `SystemClock`
     - `lib/core/board_day.dart`: `dayStart` (4 hours), `boardDayStart(DateTime now)` and `todayOf(DateTime now)` built with the `DateTime(y, m, d, 4)` constructor
