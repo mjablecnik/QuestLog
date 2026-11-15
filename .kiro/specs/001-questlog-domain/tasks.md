@@ -60,11 +60,11 @@ Build the Questlog domain layer in a new Flutter project at `/workspace/questlog
     - Unit cases: Monthly anchor Jan 31 yields Feb 28/29, Mar 31; Yearly anchor Feb 29 yields Feb 28 in non-leap years; Biweekly steps 14 days
     - **Validates: Requirements 8.3, 8.4, 8.5**
 
-- [ ] 3. Checkpoint — Core rules
+- [x] 3. Checkpoint — Core rules
   - Ensure all tests pass, ask the user if questions arise.
 
 - [ ] 4. Implement the database
-  - [ ] 4.1 Define tables, preferences and the database
+  - [x] 4.1 Define tables, preferences and the database
     - `lib/data/preferences.dart`: `AppLanguage`, `AppTheme`, `DisplayFont`
     - `lib/data/tables.dart`: Drift tables `Missions`, `Quests`, `RecurringRules`, `RuleQuests`, `AppState` exactly as in the Data Models section of `design.md` (CHECK constraints, indexes, foreign keys)
     - `lib/data/database.dart`: `QuestlogDatabase` with `schemaVersion = 1`, `PRAGMA foreign_keys = ON` in `beforeOpen`, creation of the singleton `app_state` row (Total_XP 0, default settings) in `onCreate`, a lazily opened file database via `path_provider`, and a `QuestlogDatabase.forTesting(QueryExecutor)` constructor
