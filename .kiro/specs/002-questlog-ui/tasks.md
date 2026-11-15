@@ -227,11 +227,11 @@ Build the Questlog screens on top of the finished domain layer from `001-questlo
     - Widget: rows show next date and quest count; the pill dims after a manual posting; manual posting shows the skipped-posting message and the closed-Mission message when applicable; Cadence chips switch the picker and keep name and templates; Monthly day limited to 1–28; validation keeps input; delete confirmation wording; saved rule appears with its next date
     - _Requirements: 12.1, 12.2, 12.3, 12.4, 12.7, 12.8, 12.9, 12.10, 12.12_
 
-  - [ ] 13.5 Implement the temporary display-font picker
+  - [x] 13.5 Implement the temporary display-font picker
     - `lib/ui/screens/settings/font_section.dart` and `lib/ui/sheets/font_sheet.dart`: row "Písmo titulků" showing the current font, sheet of six rows each in its own face with sample, character note and brass tick, applying the font at once through Settings_Service
     - _Requirements: 13.1, 13.2, 13.3, 13.4, 13.5_
 
-  - [ ] 13.6 Write font picker tests
+  - [x] 13.6 Write font picker tests
     - Widget: six rows in the right order; choosing a font stores it and changes the title style family at once; body text keeps the Figtree family
     - _Requirements: 13.2, 13.3, 13.4_
 
