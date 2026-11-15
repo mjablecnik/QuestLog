@@ -86,7 +86,7 @@ Build the Questlog domain layer in a new Flutter project at `/workspace/questlog
     - Add `XpChange` and result types to `lib/data/models.dart`
     - _Requirements: 2.2, 2.6, 6.5, 6.6, 6.7_
 
-  - [ ] 5.2 Write Xp_Engine tests
+  - [x] 5.2 Write Xp_Engine tests
     - Unit: positive delta raises Total_XP and reports Level change across 100 XP; negative delta across a Level boundary reports the lower Level; delta below zero clamps at 0
     - Unit: `watchProgress` emits a new value after `apply`
     - _Requirements: 6.5, 6.6, 6.7, 2.6_
