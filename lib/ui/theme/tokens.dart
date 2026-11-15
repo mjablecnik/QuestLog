@@ -147,6 +147,25 @@ abstract final class Metrics {
 
   /// Height of one skeleton placeholder row.
   static const double skeletonRow = 72;
+
+  /// Height of one row of the Mission menu.
+  static const double menuItem = 46;
+
+  /// Height of the progress bar on the Mission detail header.
+  static const double detailBar = 10;
+
+  /// Diameter of the seal on a completed Mission.
+  static const double detailSeal = 48;
+
+  /// Stroke and dash lengths of the dashed "add quest" outline.
+  static const double dashStroke = 1.5;
+  static const double dashLength = 6;
+  static const double dashGap = 4;
+
+  /// Rule row in Settings: tinted icon tile, "Post now" pill, add-row plus.
+  static const double ruleIcon = 40;
+  static const double postPill = 30;
+  static const double addPlus = 26;
 }
 
 /// Transition durations and the shared curve.
