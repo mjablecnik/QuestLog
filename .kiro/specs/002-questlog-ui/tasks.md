@@ -113,22 +113,22 @@ Build the Questlog screens on top of the finished domain layer from `001-questlo
     - Every tappable widget has a 44×44 hit area, a pressed state and a semantic label
     - _Requirements: 3.9, 3.10, 15.8, 16.1, 16.2, 16.3, 16.4, 16.5, 16.9, 18.4_
 
-  - [ ] 6.2 Implement card widgets
+  - [x] 6.2 Implement card widgets
     - `lib/ui/widgets/cards/`: `CheckCircle` (28px painted, 44px hit area), `DifficultyPips`, `ProgressRing` (r 24, stroke 5, round caps, no stroke at 0), `QuestCard` (open and done variants, light-theme outline) and `MissionCard` (remaining XP, "Připraveno k dokončení" state, bonus caption)
     - _Requirements: 3.2, 3.3, 3.4, 3.5, 8.2, 8.3, 8.4, 15.5, 15.6, 16.1_
 
-  - [ ] 6.3 Write card widget tests
+  - [x] 6.3 Write card widget tests
     - **Property 8: Progress ring geometry**
     - For any `done` in `0..total`, the ring sweep equals `done / total` and no stroke is drawn at 0
     - **Validates: Requirements 8.2, 8.3**
     - Widget: Quest_Card shows the Mission chip or "bez mise", correct pips and XP, strike-through and completion time when done; Mission_Card shows remaining XP or the ready caption; check circle hit area is at least 44×44
     - _Requirements: 3.2, 3.3, 3.5, 8.4, 16.1_
 
-  - [ ] 6.4 Implement Hero_Bar
+  - [x] 6.4 Implement Hero_Bar
     - `lib/ui/widgets/hero/`: `LevelBadge` and `HeroBar` reading Xp_Engine progress and the hero name, with an animated progress bar that fills to the end before wrapping on a Level-up, tabular XP figures and the gear button
     - _Requirements: 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 1.3_
 
-  - [ ] 6.5 Write Hero_Bar tests
+  - [x] 6.5 Write Hero_Bar tests
     - Widget: with and without a hero name, current / threshold text, remaining XP, progress animation and wrap on Level-up using fake time
     - _Requirements: 2.1, 2.2, 2.3, 2.4, 2.5_
 
