@@ -219,11 +219,11 @@ Build the Questlog screens on top of the finished domain layer from `001-questlo
     - Widget: group order; hero name saved on blur and shown in the Hero_Bar; 41 characters show an error and do not save; switching language changes visible strings at once with scroll position kept and no empty flash; theme switch applies at once; version comes from the platform info stub
     - _Requirements: 11.1, 11.3, 11.4, 11.5, 11.6, 11.7, 11.8, 14.3_
 
-  - [ ] 13.3 Implement recurring rules in Settings
+  - [x] 13.3 Implement recurring rules in Settings
     - `lib/ui/screens/settings/rules_section.dart` and `lib/ui/sheets/rule_sheet.dart`: rule rows with "cadence · N questů · příště date" and the "Vyvěsit teď" or "Vyvěšeno" pill, dashed add row, messages for manual posting driven by `PostResult.skippedNextPosting` and `PostResult.closedPreviousInstance`, Rule_Sheet with six Cadence chips, posting-day picker that changes with the Cadence, Mission_Bonus selector, quest template rows, help line, edit note, validation, "Uložit pravidlo", and "Smazat pravidlo" with confirmation
     - _Requirements: 12.1, 12.2, 12.3, 12.4, 12.5, 12.6, 12.7, 12.8, 12.9, 12.10, 12.11, 12.12_
 
-  - [ ] 13.4 Write recurring rule UI tests
+  - [x] 13.4 Write recurring rule UI tests
     - Widget: rows show next date and quest count; the pill dims after a manual posting; manual posting shows the skipped-posting message and the closed-Mission message when applicable; Cadence chips switch the picker and keep name and templates; Monthly day limited to 1–28; validation keeps input; delete confirmation wording; saved rule appears with its next date
     - _Requirements: 12.1, 12.2, 12.3, 12.4, 12.7, 12.8, 12.9, 12.10, 12.12_
 
