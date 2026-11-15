@@ -198,7 +198,7 @@ Build the Questlog domain layer in a new Flutter project at `/workspace/questlog
   - Ensure all tests pass, ask the user if questions arise.
 
 - [ ] 9. Implement the Recurrence_Service
-  - [ ] 9.1 Implement Recurring_Rule management
+  - [x] 9.1 Implement Recurring_Rule management
     - `lib/services/recurrence_service.dart`: `create`, `update`, `delete`
     - Validation: name 1–80, at least one quest template, Monthly posting day 1–28
     - On create and on Cadence or posting-day change: `firstAnchor(...)` with Today and the rule's `last_posted_on`, `next_index = 0`
@@ -207,13 +207,13 @@ Build the Questlog domain layer in a new Flutter project at `/workspace/questlog
     - Add `RecurringRule`, `RuleDraft`, `RuleQuestDraft`, `RuleSummary` to `lib/data/models.dart`
     - _Requirements: 8.1, 8.2, 8.6, 8.7, 8.8, 11.1, 11.2, 11.3_
 
-  - [ ] 9.2 Implement Posting and automatic Reconciliation
+  - [x] 9.2 Implement Posting and automatic Reconciliation
     - Private `_postInstance(rule)`: close the rule's earlier `open` Instance (`status = closed`, delete its open Quests, keep done Quests, no bonus), insert the Mission with the rule's name and bonus and one Quest per template in order, set `last_posted_on = Today`
     - `reconcile()`: in one transaction post each rule whose `occurrenceDate(anchor, cadence, next_index)` is Today or earlier, exactly once, then set `next_index = firstIndexAfter(..., Today)`; return the posted Missions
     - No timers or background work in this service
     - _Requirements: 9.1, 9.2, 9.3, 9.4, 9.5, 9.6, 9.7, 9.8, 9.9, 15.2_
 
-  - [ ] 9.3 Implement manual Posting
+  - [x] 9.3 Implement manual Posting
     - `postNow(ruleId)`: call `_postInstance`; if the Next_Occurrence date is after Today advance `next_index` by one, otherwise set it to `firstIndexAfter(..., Today)`
     - Return `PostResult` with the new Mission, `skippedNextPosting` (true when the Next_Occurrence was after Today) and `closedPreviousInstance` (true when an earlier `open` Instance was closed); add `PostResult` to `lib/data/models.dart`
     - Unit: `skippedNextPosting` is true when posted early and false when the rule was already due; `closedPreviousInstance` reflects whether an `open` Instance existed

@@ -1,3 +1,4 @@
+import '../core/cadence.dart';
 import '../core/xp_rules.dart';
 import 'preferences.dart';
 
@@ -312,4 +313,116 @@ class HistoryMission {
   final String name;
   final int awardedBonus;
   final DateTime completedAt;
+}
+
+/// A quest template of a Recurring_Rule, as the user enters it.
+class RuleQuestDraft {
+  const RuleQuestDraft({required this.name, required this.difficulty});
+
+  final String name;
+  final Difficulty difficulty;
+}
+
+/// Input for creating or editing a Recurring_Rule.
+class RuleDraft {
+  const RuleDraft({
+    required this.name,
+    required this.cadence,
+    required this.requestedAnchor,
+    required this.bonus,
+    required this.quests,
+  });
+
+  final String name;
+  final Cadence cadence;
+
+  /// A date in the series the user asked for; the service turns it into the real
+  /// Anchor_Date (the first Occurrence on or after Today).
+  final DateTime requestedAnchor;
+  final MissionBonus bonus;
+  final List<RuleQuestDraft> quests;
+}
+
+/// A stored quest template, in posting order.
+class RuleQuest {
+  const RuleQuest({
+    required this.name,
+    required this.difficulty,
+    required this.sortOrder,
+  });
+
+  final String name;
+  final Difficulty difficulty;
+  final int sortOrder;
+}
+
+/// A stored Recurring_Rule with its quest templates.
+class RecurringRule {
+  const RecurringRule({
+    required this.id,
+    required this.name,
+    required this.cadence,
+    required this.anchorDate,
+    required this.nextIndex,
+    required this.bonus,
+    required this.lastPostedOn,
+    required this.createdAt,
+    required this.quests,
+  });
+
+  final int id;
+  final String name;
+  final Cadence cadence;
+  final DateTime anchorDate;
+
+  /// Index of the Next_Occurrence in the series that starts at [anchorDate].
+  final int nextIndex;
+  final MissionBonus bonus;
+  final DateTime? lastPostedOn;
+  final DateTime createdAt;
+  final List<RuleQuest> quests;
+}
+
+/// A Recurring_Rule as the Settings screen lists and edits it.
+class RuleSummary {
+  const RuleSummary({
+    required this.id,
+    required this.name,
+    required this.cadence,
+    required this.anchorDate,
+    required this.bonus,
+    required this.quests,
+    required this.nextOccurrence,
+    required this.hasOpenInstance,
+  });
+
+  final int id;
+  final String name;
+  final Cadence cadence;
+  final DateTime anchorDate;
+  final MissionBonus bonus;
+  final List<RuleQuest> quests;
+
+  /// The date of the Next_Occurrence.
+  final DateTime nextOccurrence;
+
+  /// True while an `open` Instance of the rule exists.
+  final bool hasOpenInstance;
+}
+
+/// Outcome of posting a rule by hand.
+class PostResult {
+  const PostResult({
+    required this.mission,
+    required this.skippedNextPosting,
+    required this.closedPreviousInstance,
+  });
+
+  final Mission mission;
+
+  /// True when the nearest automatic Posting was skipped because it was still ahead.
+  final bool skippedNextPosting;
+
+  /// True when an earlier `open` Instance of the rule was closed.
+  final bool closedPreviousInstance;
 }
