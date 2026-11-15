@@ -1,0 +1,545 @@
+/*
+ * Questlog — shared design tokens and components for the artboards.
+ *
+ * Every artboard in `artboards/` links this file, so a token changed here changes every
+ * screen. The dark "Guild Board" theme is the default; `.phone.light` switches a frame
+ * to the "Daylight" variant.
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&display=swap');
+
+:root {
+  /* Guild Board — dark */
+  --board: #121a17;
+  --board-raised: #1a2522;
+  --board-line: rgba(236, 230, 216, 0.08);
+  --text: #ece6d8;
+  --text-dim: rgba(236, 230, 216, 0.62);
+  --text-faint: rgba(236, 230, 216, 0.42);
+
+  --parchment: #f1e7d3;
+  --parchment-edge: #e3d6bb;
+  --ink: #1f2a26;
+  --ink-dim: rgba(31, 42, 38, 0.6);
+  --ink-faint: rgba(31, 42, 38, 0.38);
+
+  --brass: #d8ae5a;
+  --brass-soft: rgba(216, 174, 90, 0.18);
+  --ink-on-brass: #2a1f0a;
+  --destructive: #d96b5a;
+  --ink-on-destructive: #fff4f1;
+
+  --scrim: rgba(8, 12, 10, 0.72);
+  --sheet: #1a2522;
+  --field: rgba(236, 230, 216, 0.06);
+  --field-active: rgba(216, 174, 90, 0.1);
+
+  --radius-card: 14px;
+  --radius-field: 12px;
+  /* Two type roles on purpose, even though both resolve to Figtree today: every title and
+     XP figure goes through --font-display, so swapping the display face later is a
+     one-line change here (and one `GoogleFonts.*` call in Flutter). */
+  --font-display: 'Figtree', system-ui, -apple-system, sans-serif;
+  --font-body: 'Figtree', system-ui, -apple-system, sans-serif;
+}
+
+.phone.light {
+  --board: #f4eee1;
+  --board-raised: #fbf7ee;
+  --board-line: rgba(31, 42, 38, 0.08);
+  --text: #1f2a26;
+  --text-dim: rgba(31, 42, 38, 0.62);
+  --text-faint: rgba(31, 42, 38, 0.42);
+
+  --parchment: #fffdf7;
+  --parchment-edge: #e9dfc9;
+
+  --brass: #b4832a;
+  --brass-soft: rgba(180, 131, 42, 0.14);
+  --ink-on-brass: #fff8e8;
+
+  --scrim: rgba(31, 42, 38, 0.5);
+  --sheet: #fbf7ee;
+  --field: rgba(31, 42, 38, 0.05);
+  --field-active: rgba(180, 131, 42, 0.1);
+}
+
+/* ---------- frame ---------- */
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  background: #000;
+}
+
+.phone {
+  position: relative;
+  width: 390px;
+  height: 844px;
+  overflow: hidden;
+  background: var(--board);
+  color: var(--text);
+  font-size: 15px;
+  line-height: 1.35;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+.phone * { box-sizing: border-box; }
+
+.statusbar {
+  height: 54px;
+  flex: none;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding: 0 28px 10px;
+  font-size: 15px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.statusbar .right { display: flex; gap: 6px; align-items: center; }
+.statusbar svg { display: block; }
+
+.home-indicator {
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 134px;
+  height: 5px;
+  border-radius: 3px;
+  background: var(--text);
+  opacity: 0.85;
+}
+
+.content {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  padding: 0 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* ---------- typography ---------- */
+
+.display {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+.lbl {
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--text-faint);
+}
+
+.num { font-variant-numeric: tabular-nums; }
+
+/* ---------- hero bar ---------- */
+
+.hero {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.hero .level {
+  width: 52px;
+  height: 52px;
+  flex: none;
+  border-radius: 50%;
+  border: 2px solid var(--brass);
+  display: grid;
+  place-items: center;
+  color: var(--brass);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 22px;
+  background: var(--brass-soft);
+}
+
+.hero .meta { flex: 1; min-width: 0; }
+.hero .name { font-size: 17px; font-weight: 600; }
+.hero .xp-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--text-dim);
+  margin-top: 3px;
+}
+.xp-bar {
+  height: 6px;
+  border-radius: 3px;
+  background: var(--board-line);
+  margin-top: 7px;
+  overflow: hidden;
+}
+.xp-bar > i {
+  display: block;
+  height: 100%;
+  border-radius: 3px;
+  background: var(--brass);
+}
+
+/* ---------- page title & sections ---------- */
+
+.title-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+.title-row h1 {
+  margin: 0;
+  font-size: 32px;
+}
+.title-row .count {
+  font-size: 13px;
+  color: var(--text-dim);
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.section-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+/* ---------- quest card (parchment slip) ---------- */
+
+.quest {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px 14px 14px;
+  border-radius: var(--radius-card);
+  background: var(--parchment);
+  color: var(--ink);
+  box-shadow:
+    0 1px 0 var(--parchment-edge) inset,
+    0 10px 24px rgba(0, 0, 0, 0.28);
+  position: relative;
+}
+.phone.light .quest {
+  box-shadow: 0 1px 0 #fff inset, 0 6px 18px rgba(31, 42, 38, 0.1), 0 0 0 1px var(--parchment-edge);
+}
+
+.quest .check {
+  width: 28px;
+  height: 28px;
+  flex: none;
+  border-radius: 50%;
+  border: 2px solid var(--ink-faint);
+  display: grid;
+  place-items: center;
+}
+.quest .body { flex: 1; min-width: 0; }
+.quest .name {
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+}
+.quest .sub {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+  font-size: 12.5px;
+  color: var(--ink-dim);
+}
+.quest .reward {
+  flex: none;
+  text-align: right;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 17px;
+  color: var(--brass);
+  font-variant-numeric: tabular-nums;
+}
+.phone.light .quest .reward { color: var(--brass); }
+
+/* a mission chip inside a quest card */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(31, 42, 38, 0.08);
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+/* difficulty pips: 1–3 diamonds */
+.pips { display: inline-flex; gap: 3px; }
+.pips i {
+  width: 7px;
+  height: 7px;
+  transform: rotate(45deg);
+  border-radius: 1px;
+  background: var(--ink-faint);
+}
+.pips i.on { background: var(--brass); }
+
+/* completed quest — turned in, dimmed */
+.quest.done {
+  background: var(--board-raised);
+  color: var(--text-dim);
+  box-shadow: none;
+  border: 1px solid var(--board-line);
+}
+.quest.done .check {
+  background: var(--brass);
+  border-color: var(--brass);
+  color: var(--ink-on-brass);
+}
+.quest.done .name { text-decoration: line-through; text-decoration-color: var(--text-faint); }
+.quest.done .sub { color: var(--text-faint); }
+.quest.done .chip { background: var(--board-line); color: var(--text-dim); }
+.quest.done .reward { opacity: 0.7; }
+
+/* ---------- mission card ---------- */
+
+.mission {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  border-radius: var(--radius-card);
+  background: var(--board-raised);
+  border: 1px solid var(--board-line);
+}
+.mission .ring { flex: none; position: relative; width: 56px; height: 56px; }
+.mission .ring svg { display: block; }
+.mission .ring .frac {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 1px;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--text);
+}
+.mission .ring .frac small { font-size: 10px; color: var(--text-faint); font-family: var(--font-body); font-weight: 600; }
+.mission .body { flex: 1; min-width: 0; }
+.mission .name { font-size: 17px; font-weight: 600; }
+.mission .sub { margin-top: 3px; font-size: 12.5px; color: var(--text-dim); }
+.mission .reward {
+  flex: none;
+  text-align: right;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--brass);
+}
+.mission .reward small {
+  display: block;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  margin-top: 2px;
+}
+.mission.done { opacity: 0.72; }
+
+/* ---------- tab bar & FAB ---------- */
+
+.tabbar {
+  flex: none;
+  height: 84px;
+  padding: 10px 20px 0;
+  border-top: 1px solid var(--board-line);
+  background: var(--board-raised);
+  display: flex;
+  justify-content: space-around;
+}
+.tab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-faint);
+  width: 90px;
+}
+.tab.on { color: var(--brass); }
+.tab svg { display: block; }
+
+.fab {
+  position: absolute;
+  right: 20px;
+  bottom: 104px;
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: var(--brass);
+  color: var(--ink-on-brass);
+  display: grid;
+  place-items: center;
+  box-shadow: 0 10px 26px rgba(216, 174, 90, 0.35);
+}
+
+/* ---------- forms (sheets) ---------- */
+
+.sheet {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--sheet);
+  border-radius: 24px 24px 0 0;
+  padding: 10px 20px 36px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  box-shadow: 0 -20px 60px rgba(0, 0, 0, 0.4);
+}
+.sheet .grabber {
+  width: 36px;
+  height: 5px;
+  border-radius: 3px;
+  background: var(--text-faint);
+  margin: 0 auto;
+}
+.sheet-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.sheet-head h2 { margin: 0; font-size: 24px; }
+.sheet-head .cancel { font-size: 15px; color: var(--text-dim); font-weight: 500; }
+
+.field-group { display: flex; flex-direction: column; gap: 7px; }
+.field {
+  min-height: 48px;
+  border-radius: var(--radius-field);
+  background: var(--field);
+  display: flex;
+  align-items: center;
+  padding: 0 14px;
+  font-size: 16px;
+  color: var(--text);
+}
+.field.placeholder { color: var(--text-faint); }
+.field.active { background: var(--field-active); box-shadow: inset 0 0 0 1px var(--brass); }
+.field.multiline { min-height: 72px; align-items: flex-start; padding-top: 13px; }
+
+.segmented {
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  border-radius: var(--radius-field);
+  background: var(--field);
+}
+.seg {
+  flex: 1;
+  height: 44px;
+  border-radius: 9px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-dim);
+}
+.seg small { font-size: 11px; font-weight: 600; color: var(--text-faint); font-variant-numeric: tabular-nums; }
+.seg.on { background: var(--brass-soft); color: var(--brass); box-shadow: inset 0 0 0 1px var(--brass); }
+.seg.on small { color: var(--brass); }
+
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.pick {
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--board-line);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-dim);
+  background: var(--field);
+}
+.pick.on { background: var(--brass-soft); border-color: var(--brass); color: var(--brass); font-weight: 600; }
+
+.btn {
+  height: 54px;
+  border-radius: var(--radius-field);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 16px;
+  font-weight: 700;
+  background: var(--brass);
+  color: var(--ink-on-brass);
+}
+.btn.ghost { background: var(--field); color: var(--text); font-weight: 600; }
+.btn.danger { background: transparent; color: var(--destructive); border: 1px solid var(--destructive); font-weight: 600; }
+
+/* ---------- misc ---------- */
+
+.back {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 15px;
+  color: var(--brass);
+  font-weight: 500;
+}
+.nav-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 30px;
+}
+.icon-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--field);
+  color: var(--text);
+}
+
+.progress {
+  height: 8px;
+  border-radius: 4px;
+  background: var(--board-line);
+  overflow: hidden;
+}
+.progress > i { display: block; height: 100%; background: var(--brass); border-radius: 4px; }
+
+.scrim {
+  position: absolute;
+  inset: 0;
+  background: var(--scrim);
+}
+
+/* gear in the hero bar — the way into Settings */
+.hero .gear { flex: none; color: var(--text-dim); }
+
+/* recurring-mission rule rows in Settings — tap the row to edit, the pill posts it now */
+.rule .post {
+  flex: none; height: 30px; padding: 0 12px; border-radius: 15px; display: flex; align-items: center;
+  font-size: 12.5px; font-weight: 600; color: var(--brass); border: 1px solid var(--brass); background: var(--brass-soft);
+}

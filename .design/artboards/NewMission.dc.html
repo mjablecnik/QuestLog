@@ -1,0 +1,97 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="../theme.css">
+  <style>
+    .field .caret { width: 2px; height: 20px; background: var(--brass); margin-left: 1px; }
+    /* quest builder rows inside the sheet */
+    .builder { display: flex; flex-direction: column; gap: 8px; }
+    .builder .row {
+      display: flex; align-items: center; gap: 10px; height: 44px; padding: 0 10px 0 14px;
+      border-radius: var(--radius-field); background: var(--field); font-size: 15px;
+    }
+    .builder .row .t { flex: 1; }
+    .builder .row .xp { font-family: var(--font-display); font-weight: 700; color: var(--brass); font-size: 15px; }
+    .builder .row .x { width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; color: var(--text-faint); }
+    .builder .row.add { color: var(--text-faint); background: transparent; border: 1.5px dashed var(--text-faint); }
+    .field-group .help { font-size: 12px; color: var(--text-faint); }
+  </style>
+</helmet>
+
+<div class="phone">
+  <div class="statusbar">
+    <span>9:41</span>
+    <span class="right">
+      <svg width="18" height="12" viewBox="0 0 18 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="0.8"/><rect x="5" y="5.5" width="3" height="6.5" rx="0.8"/><rect x="10" y="3" width="3" height="9" rx="0.8"/><rect x="15" y="0" width="3" height="12" rx="0.8"/></svg>
+      <svg width="16" height="12" viewBox="0 0 16 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M1.5 4.2a9.5 9.5 0 0 1 13 0"/><path d="M4 7a5.8 5.8 0 0 1 8 0"/><path d="M6.6 9.7a2 2 0 0 1 2.8 0"/></svg>
+      <svg width="27" height="13" viewBox="0 0 27 13"><rect x="0.5" y="0.5" width="22" height="12" rx="3" fill="none" stroke="currentColor" opacity="0.5"/><rect x="2" y="2" width="19" height="9" rx="1.8" fill="currentColor"/><rect x="24" y="4" width="2" height="5" rx="1" fill="currentColor" opacity="0.5"/></svg>
+    </span>
+  </div>
+
+  <div class="content">
+    <div class="hero">
+      <div class="level">4</div>
+      <div class="meta">
+        <div class="name">Martin · Úroveň 4</div>
+        <div class="xp-row"><span class="num">1 240 / 1 500 XP</span><span class="num">260 XP do úrovně 5</span></div>
+        <div class="xp-bar"><i style="width: 83%"></i></div>
+      </div>
+      <span class="icon-btn gear"><svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="2.6"/><path d="M10 2.5l1.2 2.1 2.4-.4.9 2.3 2.3.9-.4 2.4 2.1 1.2-2.1 1.2.4 2.4-2.3.9-.9 2.3-2.4-.4L10 17.5l-1.2-2.1-2.4.4-.9-2.3-2.3-.9.4-2.4L1.5 10l2.1-1.2-.4-2.4 2.3-.9.9-2.3 2.4.4z"/></svg></span>
+    </div>
+    <div class="title-row">
+      <h1 class="display">Mise</h1>
+      <span class="count">3 rozehrané · 1 dokončená</span>
+    </div>
+  </div>
+
+  <div class="scrim"></div>
+
+  <div class="sheet">
+    <div class="grabber"></div>
+    <div class="sheet-head">
+      <span class="cancel">Zrušit</span>
+      <h2 class="display">Nová mise</h2>
+      <span class="cancel" style="visibility: hidden">Zrušit</span>
+    </div>
+
+    <div class="field-group">
+      <span class="lbl">Název mise</span>
+      <div class="field">Velký podzimní úklid</div>
+    </div>
+
+    <div class="field-group">
+      <span class="lbl">Odměna za dokončení</span>
+      <div class="segmented">
+        <div class="seg">Malá<small>+50 XP</small></div>
+        <div class="seg on">Střední<small>+100 XP</small></div>
+        <div class="seg">Velká<small>+200 XP</small></div>
+      </div>
+      <span class="help">Navíc k XP za jednotlivé questy.</span>
+    </div>
+
+    <div class="field-group">
+      <span class="lbl">Questy v misi · 3</span>
+      <div class="builder">
+        <div class="row"><span class="t">Vytřídit skříň</span><span class="xp">+25</span><span class="x"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 2l8 8M10 2l-8 8"/></svg></span></div>
+        <div class="row"><span class="t">Umýt okna</span><span class="xp">+50</span><span class="x"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 2l8 8M10 2l-8 8"/></svg></span></div>
+        <div class="row"><span class="t">Vyprat záclony</span><span class="xp">+25</span><span class="x"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 2l8 8M10 2l-8 8"/></svg></span></div>
+        <div class="row add"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 2v10M2 7h10"/></svg><span class="t">Přidat další quest…</span></div>
+      </div>
+    </div>
+
+    <div class="btn">
+      <svg width="18" height="18" viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 23V4"/><path d="M6 4h14l-3 5 3 5H6"/></svg>
+      Zahájit misi
+    </div>
+  </div>
+
+  <div class="home-indicator"></div>
+</div>
+</x-dc>
+</body>
+</html>

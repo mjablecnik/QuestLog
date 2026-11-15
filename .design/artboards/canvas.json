@@ -1,0 +1,108 @@
+{
+  "artboards": [
+    {
+      "file": "QuestBoard.dc.html",
+      "x": 0,
+      "y": 0,
+      "w": 390,
+      "h": 844,
+      "title": "Nástěnka · questy"
+    },
+    {
+      "file": "SwipeActions.dc.html",
+      "x": 470,
+      "y": 0,
+      "w": 390,
+      "h": 844,
+      "title": "Nástěnka · swipe upravit / smazat"
+    },
+    {
+      "file": "QuestComplete.dc.html",
+      "x": 940,
+      "y": 0,
+      "w": 390,
+      "h": 844,
+      "title": "Quest splněn"
+    },
+    {
+      "file": "NewQuest.dc.html",
+      "x": 1410,
+      "y": 0,
+      "w": 390,
+      "h": 844,
+      "title": "Nový quest"
+    },
+    {
+      "file": "Missions.dc.html",
+      "x": 0,
+      "y": 944,
+      "w": 390,
+      "h": 844,
+      "title": "Mise"
+    },
+    {
+      "file": "MissionDetail.dc.html",
+      "x": 470,
+      "y": 944,
+      "w": 390,
+      "h": 844,
+      "title": "Detail mise"
+    },
+    {
+      "file": "NewMission.dc.html",
+      "x": 940,
+      "y": 944,
+      "w": 390,
+      "h": 844,
+      "title": "Nová mise"
+    },
+    {
+      "file": "EmptyBoard.dc.html",
+      "x": 1410,
+      "y": 944,
+      "w": 390,
+      "h": 844,
+      "title": "Prázdná nástěnka"
+    },
+    {
+      "file": "QuestBoardLight.dc.html",
+      "x": 1880,
+      "y": 0,
+      "w": 390,
+      "h": 844,
+      "title": "Nástěnka · světlá varianta"
+    },
+    {
+      "file": "Settings.dc.html",
+      "x": 2350,
+      "y": 0,
+      "w": 390,
+      "h": 844,
+      "title": "Nastavení"
+    },
+    {
+      "file": "RecurringMission.dc.html",
+      "x": 2820,
+      "y": 0,
+      "w": 390,
+      "h": 844,
+      "title": "Pravidelná mise"
+    },
+    {
+      "file": "FontPicker.dc.html",
+      "x": 3290,
+      "y": 0,
+      "w": 390,
+      "h": 844,
+      "title": "Písmo titulků (dočasné)"
+    },
+    {
+      "file": "TypeOptions.dc.html",
+      "x": 0,
+      "y": 1888,
+      "w": 1260,
+      "h": 760,
+      "title": "Varianty písma titulků"
+    }
+  ]
+}

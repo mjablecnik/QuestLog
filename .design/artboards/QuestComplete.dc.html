@@ -1,0 +1,105 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="../theme.css">
+  <style>
+    /* reward moment shown for ~1.5 s after a quest is checked off */
+    .reward-card {
+      position: absolute; left: 28px; right: 28px; top: 212px;
+      background: var(--parchment); color: var(--ink);
+      border-radius: 22px; padding: 34px 24px 24px;
+      display: flex; flex-direction: column; align-items: center; gap: 10px; text-align: center;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.55), 0 1px 0 var(--parchment-edge) inset;
+    }
+    .seal {
+      width: 96px; height: 96px; border-radius: 50%; background: var(--brass); color: var(--ink-on-brass);
+      display: grid; place-items: center; position: relative;
+      box-shadow: 0 0 0 10px var(--brass-soft), 0 0 0 20px rgba(216,174,90,0.08);
+    }
+    .rays { position: absolute; inset: -46px; pointer-events: none; }
+    .reward-card .xp { font-family: var(--font-display); font-weight: 800; font-size: 48px; letter-spacing: -0.02em; color: var(--brass); line-height: 1; margin-top: 10px; font-variant-numeric: tabular-nums; }
+    .reward-card .xp small { font-size: 20px; font-weight: 600; margin-left: 4px; }
+    .reward-card .what { font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase; font-weight: 700; color: var(--ink-dim); }
+    .reward-card .quest-name { font-family: var(--font-display); font-weight: 700; font-size: 24px; letter-spacing: -0.02em; }
+    .mission-progress {
+      width: 100%; margin-top: 10px; padding: 12px 14px; border-radius: 12px; background: rgba(31,42,38,0.06);
+      display: flex; flex-direction: column; gap: 8px; text-align: left; font-size: 13px;
+    }
+    .mission-progress .row { display: flex; justify-content: space-between; font-weight: 600; }
+    .mission-progress .row span:last-child { color: var(--ink-dim); font-weight: 500; }
+    .mission-progress .progress { background: rgba(31,42,38,0.1); }
+    .reward-card .btn { width: 100%; margin-top: 8px; }
+    .reward-card .xp-ghost { font-size: 12px; color: var(--ink-faint); }
+  </style>
+</helmet>
+
+<div class="phone">
+  <div class="statusbar">
+    <span>9:41</span>
+    <span class="right">
+      <svg width="18" height="12" viewBox="0 0 18 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="0.8"/><rect x="5" y="5.5" width="3" height="6.5" rx="0.8"/><rect x="10" y="3" width="3" height="9" rx="0.8"/><rect x="15" y="0" width="3" height="12" rx="0.8"/></svg>
+      <svg width="16" height="12" viewBox="0 0 16 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M1.5 4.2a9.5 9.5 0 0 1 13 0"/><path d="M4 7a5.8 5.8 0 0 1 8 0"/><path d="M6.6 9.7a2 2 0 0 1 2.8 0"/></svg>
+      <svg width="27" height="13" viewBox="0 0 27 13"><rect x="0.5" y="0.5" width="22" height="12" rx="3" fill="none" stroke="currentColor" opacity="0.5"/><rect x="2" y="2" width="19" height="9" rx="1.8" fill="currentColor"/><rect x="24" y="4" width="2" height="5" rx="1" fill="currentColor" opacity="0.5"/></svg>
+    </span>
+  </div>
+
+  <div class="content">
+    <div class="hero">
+      <div class="level">4</div>
+      <div class="meta">
+        <div class="name">Martin · Úroveň 4</div>
+        <div class="xp-row"><span class="num">1 265 / 1 500 XP</span><span class="num">235 XP do úrovně 5</span></div>
+        <div class="xp-bar"><i style="width: 84%"></i></div>
+      </div>
+      <span class="icon-btn gear"><svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="2.6"/><path d="M10 2.5l1.2 2.1 2.4-.4.9 2.3 2.3.9-.4 2.4 2.1 1.2-2.1 1.2.4 2.4-2.3.9-.9 2.3-2.4-.4L10 17.5l-1.2-2.1-2.4.4-.9-2.3-2.3-.9.4-2.4L1.5 10l2.1-1.2-.4-2.4 2.3-.9.9-2.3 2.4.4z"/></svg></span>
+    </div>
+    <div class="title-row">
+      <h1 class="display">Nástěnka</h1>
+      <span class="count">3 otevřené · sobota 15. 11.</span>
+    </div>
+    <div class="section">
+      <div class="section-head"><span class="lbl">Vyvěšené questy</span><span class="lbl" style="color: var(--brass)">+85 XP</span></div>
+      <div class="quest"><div class="check"></div><div class="body"><div class="name">Vynést odpadky</div><div class="sub"><span class="chip">Úklid</span></div></div><div class="reward">+10</div></div>
+      <div class="quest"><div class="check"></div><div class="body"><div class="name">Zaplatit zálohu na elektřinu</div><div class="sub"><span>bez mise</span></div></div><div class="reward">+25</div></div>
+      <div class="quest"><div class="check"></div><div class="body"><div class="name">Doběhnout 5 km</div><div class="sub"><span class="chip">Kondice</span></div></div><div class="reward">+50</div></div>
+    </div>
+  </div>
+
+  <div class="tabbar">
+    <div class="tab on"><svg width="26" height="26" viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h12a2 2 0 0 1 2 2v16l-3-2-3 2-3-2-3 2-3-2V5a2 2 0 0 1 2-2z"/><path d="M9 9h8M9 13h8M9 17h5"/></svg><span>Questy</span></div>
+    <div class="tab"><svg width="26" height="26" viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 23V4"/><path d="M6 4h14l-3 5 3 5H6"/></svg><span>Mise</span></div>
+  </div>
+
+  <div class="scrim"></div>
+
+  <div class="reward-card">
+    <div class="seal">
+      <svg class="rays" viewBox="0 0 188 188" fill="none" stroke="#d8ae5a" stroke-width="2" stroke-linecap="round" opacity="0.7">
+        <path d="M94 6v16M94 166v16M6 94h16M166 94h16M32 32l11 11M145 145l11 11M32 156l11-11M145 43l11-11"/>
+        <path d="M60 14l4 12M128 14l-4 12M14 60l12 4M14 128l12-4M174 60l-12 4M174 128l-12-4M60 174l4-12M128 174l-4-12" opacity="0.5"/>
+      </svg>
+      <svg width="46" height="46" viewBox="0 0 46 46" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M10 24l8 8 18-19"/></svg>
+    </div>
+    <div class="xp">+25<small>XP</small></div>
+    <div class="what">Quest splněn</div>
+    <div class="quest-name">Zamést podlahu</div>
+
+    <div class="mission-progress">
+      <div class="row"><span>Mise · Úklid</span><span>3 z 5 questů</span></div>
+      <div class="progress"><i style="width: 60%"></i></div>
+      <div class="xp-ghost">Dokončení mise přinese dalších +100 XP</div>
+    </div>
+
+    <div class="btn">Pokračovat</div>
+  </div>
+
+  <div class="home-indicator"></div>
+</div>
+</x-dc>
+</body>
+</html>

@@ -1,0 +1,122 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="../theme.css">
+  <style>
+    .ring circle.track { stroke: var(--board-line); }
+    .ring circle.fill { stroke: var(--brass); stroke-linecap: round; transform: rotate(-90deg); transform-origin: 50% 50%; }
+    .mission.done .ring .frac { color: var(--brass); }
+  </style>
+</helmet>
+
+<div class="phone">
+  <div class="statusbar">
+    <span>9:41</span>
+    <span class="right">
+      <svg width="18" height="12" viewBox="0 0 18 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="0.8"/><rect x="5" y="5.5" width="3" height="6.5" rx="0.8"/><rect x="10" y="3" width="3" height="9" rx="0.8"/><rect x="15" y="0" width="3" height="12" rx="0.8"/></svg>
+      <svg width="16" height="12" viewBox="0 0 16 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M1.5 4.2a9.5 9.5 0 0 1 13 0"/><path d="M4 7a5.8 5.8 0 0 1 8 0"/><path d="M6.6 9.7a2 2 0 0 1 2.8 0"/></svg>
+      <svg width="27" height="13" viewBox="0 0 27 13"><rect x="0.5" y="0.5" width="22" height="12" rx="3" fill="none" stroke="currentColor" opacity="0.5"/><rect x="2" y="2" width="19" height="9" rx="1.8" fill="currentColor"/><rect x="24" y="4" width="2" height="5" rx="1" fill="currentColor" opacity="0.5"/></svg>
+    </span>
+  </div>
+
+  <div class="content">
+    <div class="hero">
+      <div class="level">4</div>
+      <div class="meta">
+        <div class="name">Martin · Úroveň 4</div>
+        <div class="xp-row"><span class="num">1 240 / 1 500 XP</span><span class="num">260 XP do úrovně 5</span></div>
+        <div class="xp-bar"><i style="width: 83%"></i></div>
+      </div>
+      <span class="icon-btn gear"><svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="2.6"/><path d="M10 2.5l1.2 2.1 2.4-.4.9 2.3 2.3.9-.4 2.4 2.1 1.2-2.1 1.2.4 2.4-2.3.9-.9 2.3-2.4-.4L10 17.5l-1.2-2.1-2.4.4-.9-2.3-2.3-.9.4-2.4L1.5 10l2.1-1.2-.4-2.4 2.3-.9.9-2.3 2.4.4z"/></svg></span>
+    </div>
+
+    <div class="title-row">
+      <h1 class="display">Mise</h1>
+      <span class="count">3 rozehrané · 1 dokončená</span>
+    </div>
+
+    <div class="section">
+      <div class="section-head"><span class="lbl">Rozehrané</span></div>
+
+      <div class="mission">
+        <div class="ring">
+          <svg width="56" height="56" viewBox="0 0 56 56" fill="none" stroke-width="5">
+            <circle class="track" cx="28" cy="28" r="24"/>
+            <circle class="fill" cx="28" cy="28" r="24" stroke-dasharray="60.3 150.8"/>
+          </svg>
+          <div class="frac">2<small>/5</small></div>
+        </div>
+        <div class="body">
+          <div class="name">Úklid</div>
+          <div class="sub">Zbývá: odpadky, podlaha, okna</div>
+        </div>
+        <div class="reward">+100<small>za dokončení</small></div>
+      </div>
+
+      <div class="mission">
+        <div class="ring">
+          <svg width="56" height="56" viewBox="0 0 56 56" fill="none" stroke-width="5">
+            <circle class="track" cx="28" cy="28" r="24"/>
+            <circle class="fill" cx="28" cy="28" r="24" stroke-dasharray="50.3 150.8"/>
+          </svg>
+          <div class="frac">1<small>/3</small></div>
+        </div>
+        <div class="body">
+          <div class="name">Kondice</div>
+          <div class="sub">Zbývá: běh 5 km, plavání</div>
+        </div>
+        <div class="reward">+150<small>za dokončení</small></div>
+      </div>
+
+      <div class="mission">
+        <div class="ring">
+          <svg width="56" height="56" viewBox="0 0 56 56" fill="none" stroke-width="5">
+            <circle class="track" cx="28" cy="28" r="24"/>
+            <circle class="fill" cx="28" cy="28" r="24" stroke-dasharray="0 150.8" style="stroke: none"/>
+          </svg>
+          <div class="frac">0<small>/4</small></div>
+        </div>
+        <div class="body">
+          <div class="name">Daně 2026</div>
+          <div class="sub">Zatím bez splněného questu</div>
+        </div>
+        <div class="reward">+200<small>za dokončení</small></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-head"><span class="lbl">Dokončeno dnes</span></div>
+
+      <div class="mission done">
+        <div class="ring">
+          <svg width="56" height="56" viewBox="0 0 56 56" fill="none" stroke-width="5">
+            <circle class="track" cx="28" cy="28" r="24"/>
+            <circle class="fill" cx="28" cy="28" r="24" stroke-dasharray="150.8 150.8"/>
+          </svg>
+          <div class="frac"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10.5l4 4 8-9"/></svg></div>
+        </div>
+        <div class="body">
+          <div class="name">Příprava na dovolenou</div>
+          <div class="sub">6 questů · dokončeno dnes v 7:52</div>
+        </div>
+        <div class="reward">+150<small>získáno</small></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="fab"><svg width="26" height="26" viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M13 4v18M4 13h18"/></svg></div>
+
+  <div class="tabbar">
+    <div class="tab"><svg width="26" height="26" viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h12a2 2 0 0 1 2 2v16l-3-2-3 2-3-2-3 2-3-2V5a2 2 0 0 1 2-2z"/><path d="M9 9h8M9 13h8M9 17h5"/></svg><span>Questy</span></div>
+    <div class="tab on"><svg width="26" height="26" viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 23V4"/><path d="M6 4h14l-3 5 3 5H6"/></svg><span>Mise</span></div>
+  </div>
+  <div class="home-indicator"></div>
+</div>
+</x-dc>
+</body>
+</html>

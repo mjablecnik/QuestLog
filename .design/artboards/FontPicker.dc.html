@@ -1,0 +1,179 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="../theme.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Sora:wght@600;700&family=Unbounded:wght@600;700&family=Cinzel:wght@600;700&family=Outfit:wght@600;700&display=swap">
+  <style>
+
+    .group { display: flex; flex-direction: column; gap: 8px; }
+    .group .segmented .seg { height: 40px; flex-direction: row; gap: 6px; }
+    .rule {
+      display: flex; align-items: center; gap: 12px; padding: 12px 14px;
+      border-radius: var(--radius-card); background: var(--board-raised); border: 1px solid var(--board-line);
+    }
+    .rule .cal {
+      width: 40px; height: 40px; flex: none; border-radius: 10px; background: var(--brass-soft); color: var(--brass);
+      display: grid; place-items: center;
+    }
+    .rule .body { flex: 1; min-width: 0; }
+    .rule .name { font-size: 15px; font-weight: 600; }
+    .rule .sub { font-size: 12.5px; color: var(--text-dim); margin-top: 2px; }
+    .rule .chev { color: var(--text-faint); }
+    .add-row {
+      display: flex; align-items: center; gap: 12px; padding: 11px 14px;
+      border: 1.5px dashed var(--text-faint); border-radius: var(--radius-card); color: var(--text-dim); font-weight: 500; font-size: 14px;
+    }
+    .add-row .plus { width: 26px; height: 26px; border-radius: 50%; border: 1.5px dashed var(--text-faint); display: grid; place-items: center; }
+    .field.pickerish { justify-content: space-between; }
+    .field.pickerish .val { display: flex; align-items: center; gap: 8px; color: var(--brass); font-weight: 600; }
+    .field.pickerish svg { color: var(--text-faint); }
+    .about { display: flex; justify-content: space-between; font-size: 13px; color: var(--text-faint); padding: 0 2px; }
+
+    /* temporary display-face picker — removed once Martin settles on one */
+    .opts { display: flex; flex-direction: column; gap: 8px; }
+    .opt {
+      display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: var(--radius-field);
+      background: var(--field); border: 1px solid transparent;
+    }
+    .opt.on { background: var(--field-active); border-color: var(--brass); }
+    .opt .body { flex: 1; min-width: 0; }
+    .opt .sample { font-size: 22px; line-height: 1.15; letter-spacing: -0.01em; }
+    .opt .meta { font-size: 12px; color: var(--text-faint); margin-top: 3px; }
+    .opt .tick { width: 24px; flex: none; color: var(--brass); display: grid; place-items: center; }
+    .brass { color: var(--brass); }
+    .sheet .help { font-size: 12px; color: var(--text-faint); }
+  </style>
+</helmet>
+
+<div class="phone">
+  <div class="statusbar">
+    <span>9:41</span>
+    <span class="right">
+      <svg width="18" height="12" viewBox="0 0 18 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="0.8"/><rect x="5" y="5.5" width="3" height="6.5" rx="0.8"/><rect x="10" y="3" width="3" height="9" rx="0.8"/><rect x="15" y="0" width="3" height="12" rx="0.8"/></svg>
+      <svg width="16" height="12" viewBox="0 0 16 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M1.5 4.2a9.5 9.5 0 0 1 13 0"/><path d="M4 7a5.8 5.8 0 0 1 8 0"/><path d="M6.6 9.7a2 2 0 0 1 2.8 0"/></svg>
+      <svg width="27" height="13" viewBox="0 0 27 13"><rect x="0.5" y="0.5" width="22" height="12" rx="3" fill="none" stroke="currentColor" opacity="0.5"/><rect x="2" y="2" width="19" height="9" rx="1.8" fill="currentColor"/><rect x="24" y="4" width="2" height="5" rx="1" fill="currentColor" opacity="0.5"/></svg>
+    </span>
+  </div>
+
+  <div class="content">
+    <div class="nav-row">
+      <span class="back"><svg width="12" height="20" viewBox="0 0 12 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2L2 10l8 8"/></svg>Nástěnka</span>
+    </div>
+
+    <div class="title-row"><h1 class="display">Nastavení</h1></div>
+
+    <div class="group">
+      <span class="lbl">Jazyk</span>
+      <div class="segmented">
+        <div class="seg on">Čeština</div>
+        <div class="seg">English</div>
+      </div>
+    </div>
+
+    <div class="group">
+      <span class="lbl">Vzhled</span>
+      <div class="segmented">
+        <div class="seg"><svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="8" cy="8" r="3.2"/><path d="M8 1.5v1.6M8 12.9v1.6M1.5 8h1.6M12.9 8h1.6M3.4 3.4l1.1 1.1M11.5 11.5l1.1 1.1M3.4 12.6l1.1-1.1M11.5 4.5l1.1-1.1"/></svg>Světlý</div>
+        <div class="seg"><svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M13.5 10A6 6 0 0 1 6 2.5a6 6 0 1 0 7.5 7.5z"/></svg>Tmavý</div>
+        <div class="seg on"><svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><rect x="2" y="3" width="12" height="8.5" rx="1.6"/><path d="M5.5 14h5"/></svg>Systém</div>
+      </div>
+    </div>
+
+    <div class="group">
+      <div class="section-head"><span class="lbl">Pravidelné mise</span><span class="lbl">3 aktivní</span></div>
+
+      <div class="rule">
+        <div class="cal"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9a7 7 0 0 1 12-4.5M17 11a7 7 0 0 1-12 4.5"/><path d="M15 1.5v3.5h-3.5M5 18.5V15h3.5"/></svg></div>
+        <div class="body">
+          <div class="name">Úklid</div>
+          <div class="sub">Měsíčně, 1. den · 5 questů · příště 1. 12.</div>
+        </div>
+        <span class="post">Vyvěsit teď</span>
+      </div>
+      <div class="rule">
+        <div class="cal"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9a7 7 0 0 1 12-4.5M17 11a7 7 0 0 1-12 4.5"/><path d="M15 1.5v3.5h-3.5M5 18.5V15h3.5"/></svg></div>
+        <div class="body">
+          <div class="name">Týdenní nákup</div>
+          <div class="sub">Týdně, pondělí · 3 questy · ručně, příště 24. 11.</div>
+        </div>
+        <span class="post" style="opacity:.45; border-color: transparent">Vyvěšeno</span>
+      </div>
+      <div class="rule">
+        <div class="cal"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9a7 7 0 0 1 12-4.5M17 11a7 7 0 0 1-12 4.5"/><path d="M15 1.5v3.5h-3.5M5 18.5V15h3.5"/></svg></div>
+        <div class="body">
+          <div class="name">Daňové přiznání</div>
+          <div class="sub">Ročně, 1. 3. · 4 questy · příště 1. 3. 2027</div>
+        </div>
+        <span class="post">Vyvěsit teď</span>
+      </div>
+
+      <div class="add-row"><span class="plus"><svg width="12" height="12" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 2v10M2 7h10"/></svg></span>Přidat pravidelnou misi</div>
+      <span style="font-size: 12px; color: var(--text-faint)">Ručně vyvěšená mise nahradí nejbližší automatickou.</span>
+    </div>
+
+    <div class="group">
+      <span class="lbl">Dočasné · zmizí po výběru</span>
+      <div class="field pickerish">
+        <span>Písmo titulků a čísel</span>
+        <span class="val">Figtree<svg width="8" height="14" viewBox="0 0 8 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 1.5L6.5 7l-5 5.5"/></svg></span>
+      </div>
+    </div>
+
+    <div class="group">
+      <span class="lbl">O aplikaci</span>
+      <div class="about"><span>Questlog</span><span class="num">verze 0.1.0</span></div>
+    </div>
+  </div>
+
+
+</body>
+</html>
+
+  <div class="scrim"></div>
+
+  <div class="sheet">
+    <div class="grabber"></div>
+    <div class="sheet-head">
+      <span class="cancel">Zavřít</span>
+      <h2 class="display">Písmo titulků</h2>
+      <span class="cancel" style="visibility: hidden">Zavřít</span>
+    </div>
+    <div class="opts">
+      <div class="opt on">
+        <div class="body"><div class="sample" style="font-family: 'Figtree', sans-serif; font-weight: 700">Nástěnka · <span class="brass">+25</span></div><div class="meta">Figtree · Jedno písmo v celé aplikaci</div></div>
+        <span class="tick"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 9.5l3.5 3.5 7.5-8"/></svg></span>
+      </div>
+      <div class="opt">
+        <div class="body"><div class="sample" style="font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; font-variation-settings: 'opsz' 96">Nástěnka · <span class="brass">+25</span></div><div class="meta">Bricolage Grotesque · Grotesk s charakterem</div></div>
+        <span class="tick"></span>
+      </div>
+      <div class="opt">
+        <div class="body"><div class="sample" style="font-family: 'Sora', sans-serif; font-weight: 700">Nástěnka · <span class="brass">+25</span></div><div class="meta">Sora · Geometrický, technický</div></div>
+        <span class="tick"></span>
+      </div>
+      <div class="opt">
+        <div class="body"><div class="sample" style="font-family: 'Outfit', sans-serif; font-weight: 700">Nástěnka · <span class="brass">+25</span></div><div class="meta">Outfit · Měkký geometrický</div></div>
+        <span class="tick"></span>
+      </div>
+      <div class="opt">
+        <div class="body"><div class="sample" style="font-family: 'Unbounded', sans-serif; font-weight: 700; font-size: 20px">Nástěnka · <span class="brass">+25</span></div><div class="meta">Unbounded · Široký, herní</div></div>
+        <span class="tick"></span>
+      </div>
+      <div class="opt">
+        <div class="body"><div class="sample" style="font-family: 'Cinzel', serif; font-weight: 700">Nástěnka · <span class="brass">+25</span></div><div class="meta">Cinzel · Tesané kapitálky</div></div>
+        <span class="tick"></span>
+      </div>
+    </div>
+    <span class="help">Mění jen titulky a čísla — text a ovládání zůstávají ve Figtree. Volba se projeví okamžitě v celé aplikaci.</span>
+  </div>
+
+  <div class="home-indicator"></div>
+</div>
+</x-dc>
+</body>
+</html>

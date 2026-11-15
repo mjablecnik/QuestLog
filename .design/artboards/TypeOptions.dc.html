@@ -1,0 +1,95 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="../theme.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Sora:wght@600;700&family=Unbounded:wght@600;700&family=Cinzel:wght@600;700&family=Outfit:wght@600;700&display=swap">
+  <style>
+    /* six candidate display faces, each applied to the same set of elements */
+    .board { box-sizing: border-box; width: 1260px; height: 760px; background: var(--board); color: var(--text); padding: 36px 40px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px 24px; align-content: start; }
+    .board * { box-sizing: border-box; }
+    .opt { display: flex; flex-direction: column; gap: 14px; padding: 20px; border-radius: 18px; background: var(--board-raised); border: 1px solid var(--board-line); }
+    .opt .tag { display: flex; justify-content: space-between; align-items: baseline; }
+    .opt .tag b { font-size: 15px; font-weight: 600; }
+    .opt .tag span { font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-faint); font-weight: 600; }
+    .opt .desc { font-size: 12.5px; color: var(--text-dim); margin-top: -6px; }
+    .opt .display { font-variation-settings: normal; letter-spacing: 0; }
+    .opt .hero { gap: 12px; }
+    .opt .hero .level { width: 44px; height: 44px; font-size: 19px; }
+    .opt .hero .name { font-size: 15px; }
+    .opt .title-row h1 { font-size: 30px; }
+    .opt .quest { padding: 12px 14px; }
+    .opt .sheet-title { font-size: 22px; }
+  </style>
+</helmet>
+
+<div class="board">
+
+  <!-- A -->
+  <div class="opt" style="--font-display: 'Figtree', system-ui, sans-serif;">
+    <div class="tag"><b>A · Figtree (jen jedno písmo)</b><span>sans · 700</span></div>
+    <div class="desc">Celá appka v jednom písmu. Nejblíž nativnímu iOS, nejklidnější — herní nálada pak stojí jen na barvách a pečetích.</div>
+    <div class="hero"><div class="level display" style="font-weight: 800">4</div><div class="meta"><div class="name">Martin · Úroveň 4</div><div class="xp-row"><span class="num">1 240 / 1 500 XP</span></div><div class="xp-bar"><i style="width: 83%"></i></div></div></div>
+    <div class="title-row"><h1 class="display" style="font-weight: 700; letter-spacing: -0.02em">Nástěnka</h1><span class="count">4 otevřené</span></div>
+    <div class="quest"><div class="check"></div><div class="body"><div class="name">Zamést podlahu</div><div class="sub"><span class="chip">Úklid</span></div></div><div class="reward display" style="font-weight: 800">+25</div></div>
+    <div class="sheet-title display" style="font-weight: 700; letter-spacing: -0.01em">Nový quest</div>
+  </div>
+
+  <!-- B -->
+  <div class="opt" style="--font-display: 'Bricolage Grotesque', system-ui, sans-serif;">
+    <div class="tag"><b>B · Bricolage Grotesque</b><span>grotesk s charakterem · 800</span></div>
+    <div class="desc">Současný, trochu „hranatý" grotesk s osobitými tvary. Moderní herní UI bez fantasy klišé.</div>
+    <div class="hero"><div class="level display" style="font-weight: 800">4</div><div class="meta"><div class="name">Martin · Úroveň 4</div><div class="xp-row"><span class="num">1 240 / 1 500 XP</span></div><div class="xp-bar"><i style="width: 83%"></i></div></div></div>
+    <div class="title-row"><h1 class="display" style="font-weight: 800; font-variation-settings: 'opsz' 96; letter-spacing: -0.02em">Nástěnka</h1><span class="count">4 otevřené</span></div>
+    <div class="quest"><div class="check"></div><div class="body"><div class="name">Zamést podlahu</div><div class="sub"><span class="chip">Úklid</span></div></div><div class="reward display" style="font-weight: 800">+25</div></div>
+    <div class="sheet-title display" style="font-weight: 700; font-variation-settings: 'opsz' 48">Nový quest</div>
+  </div>
+
+  <!-- C -->
+  <div class="opt" style="--font-display: 'Sora', system-ui, sans-serif;">
+    <div class="tag"><b>C · Sora</b><span>geometrický sans · 700</span></div>
+    <div class="desc">Čistý geometrický sans se širšími tvary. Působí technicky a „appkově", čísla jsou velmi čitelná.</div>
+    <div class="hero"><div class="level display" style="font-weight: 700">4</div><div class="meta"><div class="name">Martin · Úroveň 4</div><div class="xp-row"><span class="num">1 240 / 1 500 XP</span></div><div class="xp-bar"><i style="width: 83%"></i></div></div></div>
+    <div class="title-row"><h1 class="display" style="font-weight: 700; letter-spacing: -0.03em">Nástěnka</h1><span class="count">4 otevřené</span></div>
+    <div class="quest"><div class="check"></div><div class="body"><div class="name">Zamést podlahu</div><div class="sub"><span class="chip">Úklid</span></div></div><div class="reward display" style="font-weight: 700">+25</div></div>
+    <div class="sheet-title display" style="font-weight: 700; letter-spacing: -0.02em">Nový quest</div>
+  </div>
+
+  <!-- D -->
+  <div class="opt" style="--font-display: 'Outfit', system-ui, sans-serif;">
+    <div class="tag"><b>D · Outfit</b><span>měkký geometrický sans · 700</span></div>
+    <div class="desc">Kulatější a přátelštější než Sora, pořád moderní. Dobře sedí k Figtree v textu.</div>
+    <div class="hero"><div class="level display" style="font-weight: 700">4</div><div class="meta"><div class="name">Martin · Úroveň 4</div><div class="xp-row"><span class="num">1 240 / 1 500 XP</span></div><div class="xp-bar"><i style="width: 83%"></i></div></div></div>
+    <div class="title-row"><h1 class="display" style="font-weight: 700; letter-spacing: -0.02em">Nástěnka</h1><span class="count">4 otevřené</span></div>
+    <div class="quest"><div class="check"></div><div class="body"><div class="name">Zamést podlahu</div><div class="sub"><span class="chip">Úklid</span></div></div><div class="reward display" style="font-weight: 700">+25</div></div>
+    <div class="sheet-title display" style="font-weight: 700; letter-spacing: -0.01em">Nový quest</div>
+  </div>
+
+  <!-- E -->
+  <div class="opt" style="--font-display: 'Unbounded', system-ui, sans-serif;">
+    <div class="tag"><b>E · Unbounded</b><span>široký display sans · 700</span></div>
+    <div class="desc">Široké, výrazné, „herní" — nejvíc připomíná titulky z moderních her. Zabere víc místa, tak jen na titulky a XP.</div>
+    <div class="hero"><div class="level display" style="font-weight: 700; font-size: 17px">4</div><div class="meta"><div class="name">Martin · Úroveň 4</div><div class="xp-row"><span class="num">1 240 / 1 500 XP</span></div><div class="xp-bar"><i style="width: 83%"></i></div></div></div>
+    <div class="title-row"><h1 class="display" style="font-weight: 700; font-size: 26px">Nástěnka</h1><span class="count">4 otevřené</span></div>
+    <div class="quest"><div class="check"></div><div class="body"><div class="name">Zamést podlahu</div><div class="sub"><span class="chip">Úklid</span></div></div><div class="reward display" style="font-weight: 700; font-size: 15px">+25</div></div>
+    <div class="sheet-title display" style="font-weight: 700; font-size: 19px">Nový quest</div>
+  </div>
+
+  <!-- F -->
+  <div class="opt" style="--font-display: 'Cinzel', Georgia, serif;">
+    <div class="tag"><b>F · Cinzel</b><span>kapitálky · 700</span></div>
+    <div class="desc">Přiznaně RPG — tesané kapitálky jako z fantasy her. Nejvíc „questové", ale nejdál od iOS a hůř snáší dlouhé české názvy.</div>
+    <div class="hero"><div class="level display" style="font-weight: 700">4</div><div class="meta"><div class="name">Martin · Úroveň 4</div><div class="xp-row"><span class="num">1 240 / 1 500 XP</span></div><div class="xp-bar"><i style="width: 83%"></i></div></div></div>
+    <div class="title-row"><h1 class="display" style="font-weight: 700; font-size: 27px">Nástěnka</h1><span class="count">4 otevřené</span></div>
+    <div class="quest"><div class="check"></div><div class="body"><div class="name">Zamést podlahu</div><div class="sub"><span class="chip">Úklid</span></div></div><div class="reward display" style="font-weight: 700">+25</div></div>
+    <div class="sheet-title display" style="font-weight: 700; font-size: 20px">Nový quest</div>
+  </div>
+
+</div>
+</x-dc>
+</body>
+</html>

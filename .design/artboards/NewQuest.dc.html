@@ -1,0 +1,95 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="../theme.css">
+  <style>
+    .field .caret { width: 2px; height: 20px; background: var(--brass); margin-left: 1px; }
+    .field-group .help { font-size: 12px; color: var(--text-faint); }
+  </style>
+</helmet>
+
+<div class="phone">
+  <div class="statusbar">
+    <span>9:41</span>
+    <span class="right">
+      <svg width="18" height="12" viewBox="0 0 18 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="0.8"/><rect x="5" y="5.5" width="3" height="6.5" rx="0.8"/><rect x="10" y="3" width="3" height="9" rx="0.8"/><rect x="15" y="0" width="3" height="12" rx="0.8"/></svg>
+      <svg width="16" height="12" viewBox="0 0 16 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M1.5 4.2a9.5 9.5 0 0 1 13 0"/><path d="M4 7a5.8 5.8 0 0 1 8 0"/><path d="M6.6 9.7a2 2 0 0 1 2.8 0"/></svg>
+      <svg width="27" height="13" viewBox="0 0 27 13"><rect x="0.5" y="0.5" width="22" height="12" rx="3" fill="none" stroke="currentColor" opacity="0.5"/><rect x="2" y="2" width="19" height="9" rx="1.8" fill="currentColor"/><rect x="24" y="4" width="2" height="5" rx="1" fill="currentColor" opacity="0.5"/></svg>
+    </span>
+  </div>
+
+  <div class="content">
+    <div class="hero">
+      <div class="level">4</div>
+      <div class="meta">
+        <div class="name">Martin · Úroveň 4</div>
+        <div class="xp-row"><span class="num">1 240 / 1 500 XP</span><span class="num">260 XP do úrovně 5</span></div>
+        <div class="xp-bar"><i style="width: 83%"></i></div>
+      </div>
+      <span class="icon-btn gear"><svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="2.6"/><path d="M10 2.5l1.2 2.1 2.4-.4.9 2.3 2.3.9-.4 2.4 2.1 1.2-2.1 1.2.4 2.4-2.3.9-.9 2.3-2.4-.4L10 17.5l-1.2-2.1-2.4.4-.9-2.3-2.3-.9.4-2.4L1.5 10l2.1-1.2-.4-2.4 2.3-.9.9-2.3 2.4.4z"/></svg></span>
+    </div>
+    <div class="title-row">
+      <h1 class="display">Nástěnka</h1>
+      <span class="count">4 otevřené · sobota 15. 11.</span>
+    </div>
+    <div class="section">
+      <div class="section-head"><span class="lbl">Vyvěšené questy</span><span class="lbl" style="color: var(--brass)">+110 XP</span></div>
+      <div class="quest"><div class="check"></div><div class="body"><div class="name">Vynést odpadky</div><div class="sub"><span class="chip">Úklid</span></div></div><div class="reward">+10</div></div>
+    </div>
+  </div>
+
+  <div class="scrim"></div>
+
+  <div class="sheet">
+    <div class="grabber"></div>
+    <div class="sheet-head">
+      <span class="cancel">Zrušit</span>
+      <h2 class="display">Nový quest</h2>
+      <span class="cancel" style="visibility: hidden">Zrušit</span>
+    </div>
+
+    <div class="field-group">
+      <span class="lbl">Co je třeba vykonat</span>
+      <div class="field active">Pověsit prádlo<span class="caret"></span></div>
+    </div>
+
+    <div class="field-group">
+      <span class="lbl">Obtížnost</span>
+      <div class="segmented">
+        <div class="seg">Snadný<small>+10 XP</small></div>
+        <div class="seg on">Běžný<small>+25 XP</small></div>
+        <div class="seg">Těžký<small>+50 XP</small></div>
+      </div>
+    </div>
+
+    <div class="field-group">
+      <span class="lbl">Součást mise</span>
+      <div class="chips">
+        <span class="pick">Bez mise</span>
+        <span class="pick on">Úklid</span>
+        <span class="pick">Kondice</span>
+        <span class="pick">Daně 2026</span>
+      </div>
+    </div>
+
+    <div class="field-group">
+      <span class="lbl">Poznámka</span>
+      <div class="field multiline placeholder">Nepovinné — kde, jak, na co nezapomenout…</div>
+    </div>
+
+    <div class="btn">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2v14M5 6l4-4 4 4"/></svg>
+      Vyvěsit quest
+    </div>
+  </div>
+
+  <div class="home-indicator"></div>
+</div>
+</x-dc>
+</body>
+</html>
