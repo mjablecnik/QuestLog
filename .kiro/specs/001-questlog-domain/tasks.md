@@ -43,7 +43,7 @@ Build the Questlog domain layer in a new Flutter project at `/workspace/questlog
     - `lib/core/xp_rules.dart`: `Difficulty` (10/25/50), `MissionBonus` (50/100/200) with `xp` getters, `levelThreshold`, `xpToReachLevel`, `levelFor`, `progressFor`, `LevelProgress`
     - _Requirements: 6.1, 6.2, 6.3, 6.4_
 
-  - [ ] 2.4 Write property tests for levels
+  - [x] 2.4 Write property tests for levels
     - **Property 1: Level derivation is consistent with thresholds**
     - For any non-negative Total_XP, `levelFor` returns the largest Level with `xpToReachLevel(L) <= Total_XP`, XP-into-level is in `[0, threshold)`, and `levelFor` never decreases as Total_XP grows
     - Unit cases: 0 XP is Level 1, 99 XP is Level 1, 100 XP is Level 2, 249 XP is Level 2, 250 XP is Level 3
