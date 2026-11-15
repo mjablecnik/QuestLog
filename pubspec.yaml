@@ -38,6 +38,12 @@ dependencies:
   path_provider: ^2.1.6
   path: ^1.9.1
   flutter_riverpod: ^3.5.0
+  flutter_svg: ^2.4.0
+  flutter_slidable: ^5.2.0
+  intl: ^0.20.3
+  package_info_plus: ^10.2.2
+  flutter_localizations:
+    sdk: flutter
 
 dev_dependencies:
   flutter_test:

@@ -7,7 +7,7 @@ Build the Questlog screens on top of the finished domain layer from `001-questlo
 ## Tasks
 
 - [ ] 1. Add dependencies, assets and localization setup
-  - [ ] 1.1 Add packages and configuration
+  - [x] 1.1 Add packages and configuration
     - Run `git config --global --add safe.directory /opt/flutter` if flutter fails with dubious ownership (skill `sandbox-flutter`)
     - Add `flutter_svg`, `flutter_slidable`, `intl`, `package_info_plus` and `flutter_localizations` (SDK) to `pubspec.yaml`; commit the updated `pubspec.lock`
     - Create `l10n.yaml` with `arb-dir: lib/l10n`, `template-arb-file: app_cs.arb`, `output-localization-file: app_localizations.dart`, `synthetic-package: false`, `output-dir: lib/l10n`
