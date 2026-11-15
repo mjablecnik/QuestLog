@@ -6,7 +6,7 @@ Build the Questlog domain layer in a new Flutter project at `/workspace/questlog
 
 ## Tasks
 
-- [ ] 1. Scaffold the Flutter project
+- [x] 1. Scaffold the Flutter project
   - [x] 1.1 Create the project and dependencies
     - Run `git init` in `/workspace/questlog/` and set the commit author to `Martin Jablečník <martin.jablecnik@email.cz>` (see the Git note below)
     - Run `git config --global --add safe.directory /opt/flutter` if flutter fails with dubious ownership (see skill `sandbox-flutter`)
@@ -17,7 +17,7 @@ Build the Questlog domain layer in a new Flutter project at `/workspace/questlog
     - Delete the generated `test/widget_test.dart`
     - _Requirements: 14.1, 14.5, 14.6_
 
-  - [ ] 1.2 Add repository hygiene files and check scripts
+  - [x] 1.2 Add repository hygiene files and check scripts
     - Create `.env.example` containing only a comment that the app has no environment variables, and extend `.gitignore` with `.env`, `.env.*`, `!.env.example`
     - Copy `check-structure.sh` from `/workspace/tool-configs/templates/scripts/` to `scripts/check-structure.sh` and fill in its marked placeholders
     - Create `scripts/check.sh` (bash, `set -euo pipefail`, Script Portability pattern) running `flutter analyze`, `flutter test` and `scripts/check-structure.sh`
