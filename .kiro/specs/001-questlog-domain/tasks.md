@@ -79,7 +79,7 @@ Build the Questlog domain layer in a new Flutter project at `/workspace/questlog
     - If `NativeDatabase.memory()` fails on Linux for a missing SQLite library, install it or use `sqlite3` with a bundled build before continuing
     - _Requirements: 13.2, 13.3, 13.5_
 
-- [ ] 5. Implement the Xp_Engine and Settings_Service
+- [x] 5. Implement the Xp_Engine and Settings_Service
   - [x] 5.1 Implement Xp_Engine
     - `lib/services/xp_engine.dart`: `readTotal`, `apply(delta)` (clamped at zero, returns `XpChange` with before/after totals and Levels), `watchProgress`
     - `apply` must run inside the caller's transaction (accept the active transaction through the database's zone)
@@ -96,7 +96,7 @@ Build the Questlog domain layer in a new Flutter project at `/workspace/questlog
     - Add `AppSettings` to `lib/data/models.dart`
     - _Requirements: 12.1, 12.2, 12.3, 12.4, 12.5, 12.6, 12.7, 12.8_
 
-  - [ ] 5.4 Write Settings_Service tests
+  - [x] 5.4 Write Settings_Service tests
     - Defaults: language `system`, theme `system`, font Figtree, name empty
     - Hero name of 41 characters throws `ValidationError`; whitespace-only name is stored as empty
     - `resolveLanguage('system', 'de')` returns `en`; `'cs'` returns `cs`
