@@ -168,12 +168,12 @@ Build the Questlog domain layer in a new Flutter project at `/workspace/questlog
     - Name validation, Quests created in given order, adding a Quest to a `completed` or `closed` Mission is rejected, deleting a Mission removes all its Quests and leaves Total_XP unchanged, editing the bonus of a `completed` Mission leaves the recorded bonus
     - _Requirements: 4.1, 4.2, 4.4, 4.5, 4.7_
 
-  - [ ] 7.3 Implement Mission completion
+  - [x] 7.3 Implement Mission completion
     - `complete(id)`: require `open`, at least one Quest and all Quests done, else `InvalidStateError`; set `completed`, `completed_at`, `awarded_bonus`, `XpEngine.apply(+bonus)`, return `CompleteMissionResult`
     - Completion is never triggered automatically by Quest completion
     - _Requirements: 5.1, 5.2, 5.3, 5.4, 5.5, 5.6, 5.7_
 
-  - [ ] 7.4 Write Mission completion property tests
+  - [x] 7.4 Write Mission completion property tests
     - **Property 12: Mission completion requires every quest done**
     - For any Mission, `complete` succeeds if and only if the Mission is `open`, has at least one Quest and all Quests are done
     - **Validates: Requirements 5.1, 5.3, 5.4, 5.5, 5.6**
