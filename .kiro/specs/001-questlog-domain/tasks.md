@@ -194,7 +194,7 @@ Build the Questlog domain layer in a new Flutter project at `/workspace/questlog
     - For any set of done Quests and `completed` Missions and any date range, the History_Query returns exactly the items completed in the range, newest first, and never reopened or deleted items
     - **Validates: Requirements 15.1, 15.3, 15.4, 15.5, 15.7**
 
-- [ ] 8. Checkpoint — Quests, Missions and settings
+- [x] 8. Checkpoint — Quests, Missions and settings
   - Ensure all tests pass, ask the user if questions arise.
 
 - [ ] 9. Implement the Recurrence_Service
