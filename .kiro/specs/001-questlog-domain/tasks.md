@@ -237,13 +237,13 @@ Build the Questlog domain layer in a new Flutter project at `/workspace/questlog
     - Test that the summary reflects a manual posting, an edit of the templates and a deletion
     - _Requirements: 11.4, 11.5_
 
-- [ ] 10. Wire providers and verify end to end
+- [x] 10. Wire providers and verify end to end
   - [x] 10.1 Implement Riverpod providers
     - `lib/services/providers.dart`: providers for `QuestlogDatabase`, `Clock`, `XpEngine`, each service, and stream providers for the `watch*` methods
     - Keep `lib/main.dart` as the minimal `ProviderScope` app; the UI replaces it in spec 002
     - _Requirements: 13.6, 14.1_
 
-  - [ ] 10.2 Write an end-to-end domain test
+  - [x] 10.2 Write an end-to-end domain test
     - Scenario on an in-memory database with a `FixedClock`: create rule and quests, `reconcile()`, complete all Quests, complete the Mission, cross a Level boundary, advance the clock across 04:00, check board and history, post manually and confirm the skipped automatic posting
     - _Requirements: 2.2, 5.2, 7.3, 9.1, 10.6, 15.1_
 
