@@ -1,0 +1,1333 @@
+{
+  "@@locale": "cs",
+  "app_name": "Questlog",
+  "@app_name": {
+    "description": "Application name shown on the splash and in the About group."
+  },
+  "app_splashLoading": "Nástěnka se připravuje…",
+  "@app_splashLoading": {
+    "description": "Text under the logo on the splash screen while the database opens and Reconciliation runs."
+  },
+  "app_tabQuests": "Questy",
+  "@app_tabQuests": {
+    "description": "Label of the Quests tab in the bottom tab bar."
+  },
+  "app_tabMissions": "Mise",
+  "@app_tabMissions": {
+    "description": "Label of the Missions tab in the bottom tab bar."
+  },
+  "app_postedMissions": "Vyvěšeno: {names}",
+  "@app_postedMissions": {
+    "description": "Snackbar after Reconciliation posted recurring missions. names is a comma-separated list of Mission names.",
+    "placeholders": {
+      "names": {
+        "type": "String"
+      }
+    }
+  },
+  "app_reconcileFailed": "Pravidelné mise se nepodařilo zkontrolovat.",
+  "@app_reconcileFailed": {
+    "description": "Inline banner text when Reconciliation failed with a storage error; shown next to a retry button."
+  },
+  "common_cancel": "Zrušit",
+  "@common_cancel": {
+    "description": "Generic cancel button."
+  },
+  "common_delete": "Smazat",
+  "@common_delete": {
+    "description": "Generic delete button and swipe action."
+  },
+  "common_edit": "Upravit",
+  "@common_edit": {
+    "description": "Generic edit button and swipe action."
+  },
+  "common_save": "Uložit",
+  "@common_save": {
+    "description": "Primary button of sheets in edit mode."
+  },
+  "common_retry": "Zkusit znovu",
+  "@common_retry": {
+    "description": "Retry button on banners and snackbars."
+  },
+  "common_ok": "OK",
+  "@common_ok": {
+    "description": "Generic acknowledge button."
+  },
+  "common_close": "Zavřít",
+  "@common_close": {
+    "description": "Generic close button."
+  },
+  "common_continue": "Pokračovat",
+  "@common_continue": {
+    "description": "Secondary button of the Reward_Card; dismisses it."
+  },
+  "common_back": "Zpět",
+  "@common_back": {
+    "description": "Semantic label of back buttons."
+  },
+  "common_discard": "Zahodit",
+  "@common_discard": {
+    "description": "Destructive button of the discard-changes confirmation."
+  },
+  "common_remove": "Odebrat",
+  "@common_remove": {
+    "description": "Generic remove button."
+  },
+  "common_plusXp": "+{xp} XP",
+  "@common_plusXp": {
+    "description": "XP figure with a plus sign, e.g. on cards and difficulty options.",
+    "placeholders": {
+      "xp": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "common_xp": "{xp} XP",
+  "@common_xp": {
+    "description": "XP figure without a sign.",
+    "placeholders": {
+      "xp": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "common_questCount": "{count, plural, one{{count} quest} few{{count} questy} other{{count} questů}}",
+  "@common_questCount": {
+    "description": "Count of Quests with a correctly pluralised noun (Czech one/few/other). Property 6 of spec 002 tests this key.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "common_loading": "Načítání…",
+  "@common_loading": {
+    "description": "Semantic label of skeleton cards while data loads."
+  },
+  "common_today": "dnes",
+  "@common_today": {
+    "description": "Lower-case word for the current Board_Day."
+  },
+  "common_yesterday": "včera",
+  "@common_yesterday": {
+    "description": "Lower-case word for the previous day in meta rows."
+  },
+  "hero_level": "Úroveň {level}",
+  "@hero_level": {
+    "description": "Hero_Bar Level line.",
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "hero_nameAndLevel": "{name} · Úroveň {level}",
+  "@hero_nameAndLevel": {
+    "description": "Hero_Bar line when a hero name is set.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "hero_xpProgress": "{current} / {threshold} XP",
+  "@hero_xpProgress": {
+    "description": "XP earned inside the current Level over the Level threshold.",
+    "placeholders": {
+      "current": {
+        "type": "int",
+        "format": "decimalPattern"
+      },
+      "threshold": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "hero_xpRemaining": "{xp} XP do úrovně {level}",
+  "@hero_xpRemaining": {
+    "description": "XP remaining until the next Level; level is the NEXT Level number.",
+    "placeholders": {
+      "xp": {
+        "type": "int",
+        "format": "decimalPattern"
+      },
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "hero_settingsLabel": "Nastavení",
+  "@hero_settingsLabel": {
+    "description": "Semantic label of the gear button in the Hero_Bar."
+  },
+  "hero_levelBadgeLabel": "Úroveň {level}",
+  "@hero_levelBadgeLabel": {
+    "description": "Semantic label of the Level badge.",
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "hero_progressLabel": "Postup úrovně: {current} z {threshold} XP",
+  "@hero_progressLabel": {
+    "description": "Semantic label of the Hero_Bar progress bar.",
+    "placeholders": {
+      "current": {
+        "type": "int",
+        "format": "decimalPattern"
+      },
+      "threshold": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "board_title": "Nástěnka",
+  "@board_title": {
+    "description": "Title of the Board_Screen."
+  },
+  "board_subtitle": "{count, plural, one{{count} otevřený} few{{count} otevřené} other{{count} otevřených}} · {date}",
+  "@board_subtitle": {
+    "description": "Subtitle under the board title; date is already formatted in the locale (e.g. 'sobota 15. 11.').",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "board_openSection": "Vyvěšené questy",
+  "@board_openSection": {
+    "description": "Section label above the open Quests."
+  },
+  "board_doneSection": "Splněno dnes",
+  "@board_doneSection": {
+    "description": "Section label above the Quests done on the current Board_Day."
+  },
+  "board_doneSummary": "{count, plural, one{{count} quest} few{{count} questy} other{{count} questů}} · {xp} XP",
+  "@board_doneSummary": {
+    "description": "Right-hand summary of a Quest section: number of Quests and their XP.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "xp": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "board_emptyTitle": "Nástěnka je prázdná",
+  "@board_emptyTitle": {
+    "description": "Empty-state heading of the Board_Screen."
+  },
+  "board_emptyBody": "Klepni na tlačítko + a vyvěs první quest — třeba něco, co jsi dnes stejně chtěl udělat. Za každý splněný získáš XP.",
+  "@board_emptyBody": {
+    "description": "Empty-state guidance of the Board_Screen; points to the add button."
+  },
+  "board_noMission": "bez mise",
+  "@board_noMission": {
+    "description": "Meta-row text of a Quest without a Mission."
+  },
+  "board_swipeHint": "Tažením doleva upravíš nebo smažeš · klepnutím na kroužek splníš",
+  "@board_swipeHint": {
+    "description": "One-line hint under the open list."
+  },
+  "board_rewardWithdrawn": "Vráceno {xp} XP",
+  "@board_rewardWithdrawn": {
+    "description": "Snackbar after reopening a done Quest.",
+    "placeholders": {
+      "xp": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "board_rewardWithdrawnMissionReopened": "Vráceno {xp} XP · mise je znovu otevřená",
+  "@board_rewardWithdrawnMissionReopened": {
+    "description": "Snackbar after reopening a Quest that also reopened its completed Mission.",
+    "placeholders": {
+      "xp": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "quest_completedTodayAt": "dnes {time}",
+  "@quest_completedTodayAt": {
+    "description": "Completion time of a Quest done today; time is formatted in the locale.",
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "quest_completedYesterday": "včera",
+  "@quest_completedYesterday": {
+    "description": "Completion label of a Quest done on the previous day."
+  },
+  "quest_completedOn": "{date}",
+  "@quest_completedOn": {
+    "description": "Completion date of a Quest done earlier; date is formatted in the locale.",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "quest_difficultyEasy": "Snadný",
+  "@quest_difficultyEasy": {
+    "description": "Difficulty name."
+  },
+  "quest_difficultyNormal": "Běžný",
+  "@quest_difficultyNormal": {
+    "description": "Difficulty name."
+  },
+  "quest_difficultyHard": "Těžký",
+  "@quest_difficultyHard": {
+    "description": "Difficulty name."
+  },
+  "a11y_openSettings": "Otevřít nastavení",
+  "@a11y_openSettings": {
+    "description": "Semantic label of the gear."
+  },
+  "a11y_addQuest": "Vyvěsit quest",
+  "@a11y_addQuest": {
+    "description": "Semantic label of the add button on the Board_Screen."
+  },
+  "a11y_addMission": "Zahájit misi",
+  "@a11y_addMission": {
+    "description": "Semantic label of the add button on the Missions_Screen."
+  },
+  "a11y_completeQuest": "Splnit quest {name}",
+  "@a11y_completeQuest": {
+    "description": "Semantic label of the check circle of an open Quest.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "a11y_reopenQuest": "Znovu otevřít quest {name}",
+  "@a11y_reopenQuest": {
+    "description": "Semantic label of the check circle of a done Quest.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "a11y_dragHandle": "Změnit pořadí questu {name}",
+  "@a11y_dragHandle": {
+    "description": "Semantic label of the drag handle.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "a11y_dragHint": "Podrž a táhni",
+  "@a11y_dragHint": {
+    "description": "Semantic hint of the drag handle."
+  },
+  "a11y_editQuest": "Upravit quest {name}",
+  "@a11y_editQuest": {
+    "description": "Semantic label of the swipe action.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "a11y_deleteQuest": "Smazat quest {name}",
+  "@a11y_deleteQuest": {
+    "description": "Semantic label of the swipe action.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "a11y_editMission": "Upravit misi {name}",
+  "@a11y_editMission": {
+    "description": "Semantic label of the swipe action.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "a11y_deleteMission": "Smazat misi {name}",
+  "@a11y_deleteMission": {
+    "description": "Semantic label of the swipe action.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "a11y_openMission": "Otevřít misi {name}",
+  "@a11y_openMission": {
+    "description": "Semantic label of a Mission_Card.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "a11y_missionMenu": "Nabídka mise",
+  "@a11y_missionMenu": {
+    "description": "Semantic label of the three-dots button."
+  },
+  "a11y_questMission": "Mise {name}",
+  "@a11y_questMission": {
+    "description": "Semantic label of the Mission chip on a Quest_Card.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "a11y_difficulty": "Obtížnost: {name}",
+  "@a11y_difficulty": {
+    "description": "Semantic label of the difficulty pips.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "a11y_missionProgress": "Splněno {done} z {total} questů",
+  "@a11y_missionProgress": {
+    "description": "Semantic label of the progress ring or bar.",
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "a11y_questCompleted": "Quest {name} splněn, +{xp} XP",
+  "@a11y_questCompleted": {
+    "description": "Announcement after completing a Quest.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "xp": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "a11y_questReopened": "Quest {name} je znovu otevřený",
+  "@a11y_questReopened": {
+    "description": "Announcement after reopening a Quest.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "a11y_missionCompleted": "Mise {name} splněna, bonus +{xp} XP",
+  "@a11y_missionCompleted": {
+    "description": "Announcement after completing a Mission.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "xp": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "a11y_missionReopened": "Mise {name} je znovu otevřená",
+  "@a11y_missionReopened": {
+    "description": "Announcement after a Mission went back to open.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "a11y_levelUp": "Nová úroveň {level}",
+  "@a11y_levelUp": {
+    "description": "Announcement of a Level-up.",
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "a11y_selectedOption": "{label}, vybráno",
+  "@a11y_selectedOption": {
+    "description": "Semantic label of a selected segment or chip.",
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "a11y_dismissReward": "Zavřít odměnu",
+  "@a11y_dismissReward": {
+    "description": "Semantic label of the scrim behind the Reward_Card."
+  },
+  "a11y_closeSheet": "Zavřít formulář",
+  "@a11y_closeSheet": {
+    "description": "Semantic label of the sheet grabber."
+  },
+  "a11y_removeRow": "Odebrat řádek",
+  "@a11y_removeRow": {
+    "description": "Semantic label of the remove button of a quest row."
+  },
+  "a11y_pickPostingDay": "Vybrat den vyvěšení",
+  "@a11y_pickPostingDay": {
+    "description": "Semantic label of the posting-day row."
+  },
+  "a11y_currentChoice": "aktuální volba",
+  "@a11y_currentChoice": {
+    "description": "Semantic suffix of the ticked font row."
+  },
+  "quest_sheetCreateTitle": "Nový quest",
+  "@quest_sheetCreateTitle": {
+    "description": "Quest_Sheet title in create mode."
+  },
+  "quest_sheetEditTitle": "Upravit quest",
+  "@quest_sheetEditTitle": {
+    "description": "Quest_Sheet title in edit mode."
+  },
+  "quest_nameLabel": "Co je třeba vykonat",
+  "@quest_nameLabel": {
+    "description": "Label of the Quest name field."
+  },
+  "quest_namePlaceholder": "Pověsit prádlo",
+  "@quest_namePlaceholder": {
+    "description": "Placeholder example in the Quest name field."
+  },
+  "quest_difficultyLabel": "Obtížnost",
+  "@quest_difficultyLabel": {
+    "description": "Label of the Difficulty selector."
+  },
+  "quest_missionLabel": "Součást mise",
+  "@quest_missionLabel": {
+    "description": "Label of the Mission picker."
+  },
+  "quest_missionNone": "Bez mise",
+  "@quest_missionNone": {
+    "description": "First option of the Mission picker."
+  },
+  "quest_noteLabel": "Poznámka",
+  "@quest_noteLabel": {
+    "description": "Label of the note field."
+  },
+  "quest_notePlaceholder": "Nepovinné — kde, jak, na co nezapomenout…",
+  "@quest_notePlaceholder": {
+    "description": "Placeholder of the note field."
+  },
+  "quest_createAction": "Vyvěsit quest",
+  "@quest_createAction": {
+    "description": "Primary button of the Quest_Sheet in create mode."
+  },
+  "quest_doneLockedHint": "U splněného questu jde změnit jen název a poznámku.",
+  "@quest_doneLockedHint": {
+    "description": "Hint under the disabled Difficulty selector and Mission picker when a done Quest is edited."
+  },
+  "quest_deleteTitle": "Smazat quest?",
+  "@quest_deleteTitle": {
+    "description": "Title of the Quest deletion confirmation."
+  },
+  "quest_deleteBody": "Quest „{name}“ bude smazán.",
+  "@quest_deleteBody": {
+    "description": "Body of the Quest deletion confirmation.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "quest_deleteDoneBody": "Quest „{name}“ bude smazán. Už získané XP ti zůstanou.",
+  "@quest_deleteDoneBody": {
+    "description": "Body of the deletion confirmation of a done Quest.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "sheet_discardTitle": "Zahodit změny?",
+  "@sheet_discardTitle": {
+    "description": "Title of the discard-changes confirmation."
+  },
+  "sheet_discardBody": "Co jsi zadal, se neuloží.",
+  "@sheet_discardBody": {
+    "description": "Body of the discard-changes confirmation."
+  },
+  "sheet_keepEditing": "Pokračovat v úpravách",
+  "@sheet_keepEditing": {
+    "description": "Cancel button of the discard-changes confirmation."
+  },
+  "reward_questComplete": "QUEST SPLNĚNO",
+  "@reward_questComplete": {
+    "description": "Caption of the Reward_Card for a Quest (upper case)."
+  },
+  "reward_levelUp": "NOVÁ ÚROVEŇ",
+  "@reward_levelUp": {
+    "description": "Caption of the Level-up Reward_Card (upper case)."
+  },
+  "reward_missionComplete": "MISE SPLNĚNA",
+  "@reward_missionComplete": {
+    "description": "Caption of the Reward_Card for a Mission (upper case)."
+  },
+  "reward_levelUpBody": "Dosáhl jsi úrovně {level}",
+  "@reward_levelUpBody": {
+    "description": "Line on the Level-up Reward_Card.",
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "reward_levelNumber": "{level}",
+  "@reward_levelNumber": {
+    "description": "Big Level number on the Level-up Reward_Card.",
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "reward_missionLine": "Mise · {name}",
+  "@reward_missionLine": {
+    "description": "Line naming the Mission under a Quest reward.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "reward_missionProgress": "{done} z {total} questů",
+  "@reward_missionProgress": {
+    "description": "Mission progress text on the Reward_Card.",
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "reward_missionRemaining": "Zbývá {xp} XP",
+  "@reward_missionRemaining": {
+    "description": "Remaining XP of the Mission on the Reward_Card.",
+    "placeholders": {
+      "xp": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "reward_missionBonusHint": "Dokončení mise přinese dalších +{xp} XP",
+  "@reward_missionBonusHint": {
+    "description": "Hint on the Quest Reward_Card about the Mission bonus.",
+    "placeholders": {
+      "xp": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "reward_missionReady": "Všechny questy jsou splněné — dokonči misi a získej bonus.",
+  "@reward_missionReady": {
+    "description": "Text when the Mission is ready to be completed."
+  },
+  "reward_completeMission": "Dokončit misi",
+  "@reward_completeMission": {
+    "description": "Primary button of the Reward_Card and Mission_Detail_Screen."
+  },
+  "reward_missionBonusLabel": "Bonus za misi",
+  "@reward_missionBonusLabel": {
+    "description": "Label next to the bonus XP on the Mission Reward_Card."
+  },
+  "missions_title": "Mise",
+  "@missions_title": {
+    "description": "Title of the Missions_Screen."
+  },
+  "missions_openCount": "{count, plural, one{{count} rozehraná} few{{count} rozehrané} other{{count} rozehraných}}",
+  "@missions_openCount": {
+    "description": "Count of open Missions.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "missions_doneCount": "{count, plural, one{{count} dokončená} few{{count} dokončené} other{{count} dokončených}}",
+  "@missions_doneCount": {
+    "description": "Count of Missions completed today.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "missions_sectionOpen": "Rozehrané",
+  "@missions_sectionOpen": {
+    "description": "Section label above the open Missions."
+  },
+  "missions_sectionDoneToday": "Dokončeno dnes",
+  "@missions_sectionDoneToday": {
+    "description": "Section label of Missions completed on the current Board_Day."
+  },
+  "missions_remaining": "Zbývá: {xp} XP",
+  "@missions_remaining": {
+    "description": "Remaining XP on a Mission_Card.",
+    "placeholders": {
+      "xp": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "missions_bonusCaption": "za dokončení",
+  "@missions_bonusCaption": {
+    "description": "Caption under the bonus on an open Mission_Card."
+  },
+  "missions_earnedCaption": "získáno",
+  "@missions_earnedCaption": {
+    "description": "Caption under the bonus of a Mission completed today."
+  },
+  "missions_readyToComplete": "Připraveno k dokončení",
+  "@missions_readyToComplete": {
+    "description": "Mission_Card text when all Quests are done."
+  },
+  "missions_completedLine": "{count, plural, one{{count} quest} few{{count} questy} other{{count} questů}} · dokončeno dnes v {time}",
+  "@missions_completedLine": {
+    "description": "Meta line of a Mission completed today.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "missions_emptyTitle": "Zatím žádné mise",
+  "@missions_emptyTitle": {
+    "description": "Empty-state heading of the Missions_Screen."
+  },
+  "missions_emptyBody": "Mise je větší cíl složený z questů. Za její dokončení získáš bonusové XP.",
+  "@missions_emptyBody": {
+    "description": "Empty-state guidance of the Missions_Screen."
+  },
+  "missions_emptyAction": "Zahájit misi",
+  "@missions_emptyAction": {
+    "description": "Button of the Missions_Screen empty state."
+  },
+  "missions_recurringCaption": "Pravidelná mise",
+  "@missions_recurringCaption": {
+    "description": "Caption of a Mission that is an Instance of a rule."
+  },
+  "mission_sheetCreateTitle": "Nová mise",
+  "@mission_sheetCreateTitle": {
+    "description": "Mission_Sheet title in create mode."
+  },
+  "mission_sheetEditTitle": "Upravit misi",
+  "@mission_sheetEditTitle": {
+    "description": "Mission_Sheet title in edit mode."
+  },
+  "mission_nameLabel": "Název mise",
+  "@mission_nameLabel": {
+    "description": "Label of the Mission name field."
+  },
+  "mission_namePlaceholder": "Velký podzimní úklid",
+  "@mission_namePlaceholder": {
+    "description": "Placeholder example in the Mission name field."
+  },
+  "mission_bonusLabel": "Odměna za dokončení",
+  "@mission_bonusLabel": {
+    "description": "Label of the Mission_Bonus selector."
+  },
+  "mission_bonusSmall": "Malá",
+  "@mission_bonusSmall": {
+    "description": "Mission_Bonus name."
+  },
+  "mission_bonusMedium": "Střední",
+  "@mission_bonusMedium": {
+    "description": "Mission_Bonus name."
+  },
+  "mission_bonusLarge": "Velká",
+  "@mission_bonusLarge": {
+    "description": "Mission_Bonus name."
+  },
+  "mission_bonusHelp": "Navíc k XP za jednotlivé questy.",
+  "@mission_bonusHelp": {
+    "description": "Help line under the Mission_Bonus selector."
+  },
+  "mission_questsLabel": "Questy v misi · {count}",
+  "@mission_questsLabel": {
+    "description": "Label above the quest rows of a Mission or rule.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "mission_questNamePlaceholder": "Název questu",
+  "@mission_questNamePlaceholder": {
+    "description": "Placeholder of a quest row name field."
+  },
+  "mission_addQuest": "Přidat quest",
+  "@mission_addQuest": {
+    "description": "Dashed row below the quest rows of the Mission_Sheet and Rule_Sheet."
+  },
+  "mission_createAction": "Zahájit misi",
+  "@mission_createAction": {
+    "description": "Primary button of the Mission_Sheet in create mode."
+  },
+  "mission_editBonusNote": "Už získaný bonus se nezmění.",
+  "@mission_editBonusNote": {
+    "description": "Note in the Mission_Sheet when the bonus of a completed Mission is edited."
+  },
+  "mission_editQuestsNote": "Questy mise se upravují na jejím detailu.",
+  "@mission_editQuestsNote": {
+    "description": "Note in the Mission_Sheet edit mode, where quest rows are hidden."
+  },
+  "mission_detailKicker": "Mise",
+  "@mission_detailKicker": {
+    "description": "Small caps label above the Mission name on the detail screen."
+  },
+  "mission_progressText": "{done} z {total} questů splněno",
+  "@mission_progressText": {
+    "description": "Progress line on the Mission_Detail_Screen.",
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "mission_bonusOnCompletion": "+{xp} XP za dokončení mise",
+  "@mission_bonusOnCompletion": {
+    "description": "Bonus line on the Mission_Detail_Screen.",
+    "placeholders": {
+      "xp": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "mission_sectionRemaining": "Zbývá",
+  "@mission_sectionRemaining": {
+    "description": "Section label above the open Quests of a Mission."
+  },
+  "mission_sectionDone": "Splněno",
+  "@mission_sectionDone": {
+    "description": "Section label above the done Quests of a Mission."
+  },
+  "mission_sectionSummary": "{count, plural, one{{count} quest} few{{count} questy} other{{count} questů}} · {xp} XP",
+  "@mission_sectionSummary": {
+    "description": "Right-hand summary of a Mission detail section.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "xp": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "mission_menuEdit": "Upravit misi",
+  "@mission_menuEdit": {
+    "description": "Menu item."
+  },
+  "mission_menuAddQuest": "Přidat quest",
+  "@mission_menuAddQuest": {
+    "description": "Menu item."
+  },
+  "mission_menuDelete": "Smazat misi",
+  "@mission_menuDelete": {
+    "description": "Menu item, destructive."
+  },
+  "mission_addQuestToMission": "Přidat quest do mise",
+  "@mission_addQuestToMission": {
+    "description": "Dashed row below the open Quests on the detail screen."
+  },
+  "mission_completeAction": "Dokončit misi",
+  "@mission_completeAction": {
+    "description": "Primary button when all Quests of the Mission are done."
+  },
+  "mission_completedTitle": "Mise splněna",
+  "@mission_completedTitle": {
+    "description": "Heading of the completed state."
+  },
+  "mission_completedBonus": "Získán bonus +{xp} XP",
+  "@mission_completedBonus": {
+    "description": "Completed state: the bonus that was awarded.",
+    "placeholders": {
+      "xp": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "mission_completedOn": "Dokončeno {date}",
+  "@mission_completedOn": {
+    "description": "Completed state: the completion date, formatted in the locale.",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "mission_bonusWithdrawn": "Bonus byl odebrán, mise je znovu otevřená.",
+  "@mission_bonusWithdrawn": {
+    "description": "Notice shown after a Quest of a completed Mission was reopened."
+  },
+  "mission_emptyTitle": "Mise zatím nemá žádné questy",
+  "@mission_emptyTitle": {
+    "description": "Empty-state heading of the detail screen."
+  },
+  "mission_emptyBody": "Klepni na „Přidat quest“ a vyvěs první krok.",
+  "@mission_emptyBody": {
+    "description": "Empty-state guidance of the detail screen."
+  },
+  "mission_deleteTitle": "Smazat misi?",
+  "@mission_deleteTitle": {
+    "description": "Title of the Mission deletion confirmation."
+  },
+  "mission_deleteBody": "{count, plural, =0{Mise „{name}“ bude smazána. Už získané XP ti zůstanou.} one{Mise „{name}“ bude smazána včetně {count} questu. Už získané XP ti zůstanou.} other{Mise „{name}“ bude smazána včetně {count} questů. Už získané XP ti zůstanou.}}",
+  "@mission_deleteBody": {
+    "description": "Body of the Mission deletion confirmation naming the Quest count.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "settings_title": "Nastavení",
+  "@settings_title": {
+    "description": "Title of the Settings_Screen."
+  },
+  "settings_groupProfile": "Profil",
+  "@settings_groupProfile": {
+    "description": "Group label."
+  },
+  "settings_groupLanguage": "Jazyk",
+  "@settings_groupLanguage": {
+    "description": "Group label."
+  },
+  "settings_groupAppearance": "Vzhled",
+  "@settings_groupAppearance": {
+    "description": "Group label."
+  },
+  "settings_groupRules": "Pravidelné mise",
+  "@settings_groupRules": {
+    "description": "Group label."
+  },
+  "settings_groupTemporary": "Dočasné",
+  "@settings_groupTemporary": {
+    "description": "Group label of the temporary display-font picker."
+  },
+  "settings_temporaryHint": "zmizí po výběru",
+  "@settings_temporaryHint": {
+    "description": "Small text next to the Temporary group label."
+  },
+  "settings_groupAbout": "O aplikaci",
+  "@settings_groupAbout": {
+    "description": "Group label."
+  },
+  "settings_heroNameLabel": "Jméno hrdiny",
+  "@settings_heroNameLabel": {
+    "description": "Label of the hero name field."
+  },
+  "settings_heroNamePlaceholder": "Jak ti máme říkat?",
+  "@settings_heroNamePlaceholder": {
+    "description": "Placeholder of the hero name field."
+  },
+  "settings_heroNameCounter": "{current} / {max}",
+  "@settings_heroNameCounter": {
+    "description": "Character counter of the hero name field.",
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "settings_totalXp": "Celkem {xp} XP",
+  "@settings_totalXp": {
+    "description": "Total_XP in small type next to the hero name.",
+    "placeholders": {
+      "xp": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "settings_languageCs": "Čeština",
+  "@settings_languageCs": {
+    "description": "Segment label; language names stay native in both languages."
+  },
+  "settings_languageEn": "English",
+  "@settings_languageEn": {
+    "description": "Segment label; language names stay native in both languages."
+  },
+  "settings_themeLight": "Světlý",
+  "@settings_themeLight": {
+    "description": "Theme segment."
+  },
+  "settings_themeDark": "Tmavý",
+  "@settings_themeDark": {
+    "description": "Theme segment."
+  },
+  "settings_themeSystem": "Systém",
+  "@settings_themeSystem": {
+    "description": "Theme segment."
+  },
+  "settings_version": "verze {version}",
+  "@settings_version": {
+    "description": "Version line in the About group.",
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "settings_rulesActive": "{count, plural, one{{count} aktivní} few{{count} aktivní} other{{count} aktivních}}",
+  "@settings_rulesActive": {
+    "description": "Number of recurring rules next to the group label.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "rule_addRow": "Přidat pravidelnou misi",
+  "@rule_addRow": {
+    "description": "Dashed add row in the rules list."
+  },
+  "rule_addHint": "Ručně vyvěšená mise nahradí nejbližší automatickou.",
+  "@rule_addHint": {
+    "description": "Help line under the add row."
+  },
+  "rule_postNow": "Vyvěsit teď",
+  "@rule_postNow": {
+    "description": "Pill on a rule row."
+  },
+  "rule_posted": "Vyvěšeno",
+  "@rule_posted": {
+    "description": "Dimmed pill on a rule row that has an open Instance."
+  },
+  "rule_cadenceDaily": "Denně",
+  "@rule_cadenceDaily": {
+    "description": "Cadence chip."
+  },
+  "rule_cadenceWeekly": "Týdně",
+  "@rule_cadenceWeekly": {
+    "description": "Cadence chip."
+  },
+  "rule_cadenceBiweekly": "Každé 2 týdny",
+  "@rule_cadenceBiweekly": {
+    "description": "Cadence chip."
+  },
+  "rule_cadenceMonthly": "Měsíčně",
+  "@rule_cadenceMonthly": {
+    "description": "Cadence chip."
+  },
+  "rule_cadenceQuarterly": "Čtvrtletně",
+  "@rule_cadenceQuarterly": {
+    "description": "Cadence chip."
+  },
+  "rule_cadenceYearly": "Ročně",
+  "@rule_cadenceYearly": {
+    "description": "Cadence chip."
+  },
+  "rule_detailDaily": "Denně",
+  "@rule_detailDaily": {
+    "description": "Cadence part of a rule row line for Daily."
+  },
+  "rule_detailWeekly": "Týdně, {weekday}",
+  "@rule_detailWeekly": {
+    "description": "Cadence part of a rule row line; weekday is a localized weekday name.",
+    "placeholders": {
+      "weekday": {
+        "type": "String"
+      }
+    }
+  },
+  "rule_detailBiweekly": "Každé 2 týdny, {weekday}",
+  "@rule_detailBiweekly": {
+    "description": "Cadence part of a rule row line; weekday is a localized weekday name.",
+    "placeholders": {
+      "weekday": {
+        "type": "String"
+      }
+    }
+  },
+  "rule_detailMonthly": "Měsíčně, {day}. den",
+  "@rule_detailMonthly": {
+    "description": "Cadence part of a rule row line.",
+    "placeholders": {
+      "day": {
+        "type": "int"
+      }
+    }
+  },
+  "rule_detailQuarterly": "Čtvrtletně, {date}",
+  "@rule_detailQuarterly": {
+    "description": "Cadence part of a rule row line; date is formatted day and month.",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "rule_detailYearly": "Ročně, {date}",
+  "@rule_detailYearly": {
+    "description": "Cadence part of a rule row line; date is formatted day and month.",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "rule_line": "{cadence} · {count, plural, one{{count} quest} few{{count} questy} other{{count} questů}} · příště {date}",
+  "@rule_line": {
+    "description": "Rule row line; cadence is the rule_detail* text, date the formatted Next_Occurrence.",
+    "placeholders": {
+      "cadence": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "rule_lineManual": "{cadence} · {count, plural, one{{count} quest} few{{count} questy} other{{count} questů}} · ručně, příště {date}",
+  "@rule_lineManual": {
+    "description": "Rule row line after a manual posting skipped the nearest automatic one.",
+    "placeholders": {
+      "cadence": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "rule_postedMessage": "Mise „{name}“ vyvěšena.",
+  "@rule_postedMessage": {
+    "description": "Snackbar after posting a rule by hand.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "rule_postedSkippedNote": "Nejbližší plánované vyvěšení se přeskočí.",
+  "@rule_postedSkippedNote": {
+    "description": "Sentence appended to the posted message when PostResult.skippedNextPosting."
+  },
+  "rule_postedClosedNote": "Nedokončená předchozí mise byla uzavřena bez bonusu.",
+  "@rule_postedClosedNote": {
+    "description": "Sentence appended to the posted message when PostResult.closedPreviousInstance."
+  },
+  "rule_sheetTitle": "Pravidelná mise",
+  "@rule_sheetTitle": {
+    "description": "Rule_Sheet title in create mode."
+  },
+  "rule_sheetEditTitle": "Upravit pravidlo",
+  "@rule_sheetEditTitle": {
+    "description": "Rule_Sheet title in edit mode."
+  },
+  "rule_nameLabel": "Název mise",
+  "@rule_nameLabel": {
+    "description": "Label of the rule name field."
+  },
+  "rule_cadenceLabel": "Opakování",
+  "@rule_cadenceLabel": {
+    "description": "Label above the Cadence chips."
+  },
+  "rule_postingDayLabel": "Vyvěsit vždy",
+  "@rule_postingDayLabel": {
+    "description": "Label of the posting-day row."
+  },
+  "rule_postingMonthDay": "{day}. den v měsíci",
+  "@rule_postingMonthDay": {
+    "description": "Value of the posting-day row for Monthly.",
+    "placeholders": {
+      "day": {
+        "type": "int"
+      }
+    }
+  },
+  "rule_postingDayWeekdayTitle": "Den v týdnu",
+  "@rule_postingDayWeekdayTitle": {
+    "description": "Title of the weekday picker."
+  },
+  "rule_postingDayMonthTitle": "Den v měsíci",
+  "@rule_postingDayMonthTitle": {
+    "description": "Title of the day-of-month picker (1 to 28)."
+  },
+  "rule_postingDayDateTitle": "Datum",
+  "@rule_postingDayDateTitle": {
+    "description": "Title of the date picker for Quarterly and Yearly."
+  },
+  "rule_helpNoCarryOver": "Nedokončené questy z minulého období se nepřenášejí. Ruční vyvěšení (v Nastavení) nahradí nejbližší automatické.",
+  "@rule_helpNoCarryOver": {
+    "description": "Help line in the Rule_Sheet."
+  },
+  "rule_editNote": "Změny se projeví až u příště vyvěšené mise.",
+  "@rule_editNote": {
+    "description": "Note in the Rule_Sheet edit mode."
+  },
+  "rule_saveAction": "Uložit pravidlo",
+  "@rule_saveAction": {
+    "description": "Primary button of the Rule_Sheet."
+  },
+  "rule_deleteAction": "Smazat pravidlo",
+  "@rule_deleteAction": {
+    "description": "Destructive button of the Rule_Sheet."
+  },
+  "rule_deleteTitle": "Smazat pravidlo?",
+  "@rule_deleteTitle": {
+    "description": "Title of the rule deletion confirmation."
+  },
+  "rule_deleteBody": "Právě vyvěšená mise zůstane, ale podle pravidla „{name}“ se už další mise vyvěšovat nebudou.",
+  "@rule_deleteBody": {
+    "description": "Body of the rule deletion confirmation.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "font_rowLabel": "Písmo titulků",
+  "@font_rowLabel": {
+    "description": "Row label in the Temporary group and title of the Font_Sheet."
+  },
+  "font_sample": "Nástěnka · +25",
+  "@font_sample": {
+    "description": "Sample text set in each font's own face."
+  },
+  "font_help": "Mění jen titulky a čísla — text a ovládání zůstávají ve Figtree. Volba se projeví okamžitě v celé aplikaci.",
+  "@font_help": {
+    "description": "Help line of the Font_Sheet."
+  },
+  "font_nameFigtree": "Figtree",
+  "@font_nameFigtree": {
+    "description": "Font name (proper noun)."
+  },
+  "font_nameBricolage": "Bricolage Grotesque",
+  "@font_nameBricolage": {
+    "description": "Font name (proper noun)."
+  },
+  "font_nameSora": "Sora",
+  "@font_nameSora": {
+    "description": "Font name (proper noun)."
+  },
+  "font_nameOutfit": "Outfit",
+  "@font_nameOutfit": {
+    "description": "Font name (proper noun)."
+  },
+  "font_nameUnbounded": "Unbounded",
+  "@font_nameUnbounded": {
+    "description": "Font name (proper noun)."
+  },
+  "font_nameCinzel": "Cinzel",
+  "@font_nameCinzel": {
+    "description": "Font name (proper noun)."
+  },
+  "font_noteFigtree": "Klidné, univerzální",
+  "@font_noteFigtree": {
+    "description": "Two-word character note."
+  },
+  "font_noteBricolage": "Osobitý grotesk",
+  "@font_noteBricolage": {
+    "description": "Two-word character note."
+  },
+  "font_noteSora": "Geometrický, technický",
+  "@font_noteSora": {
+    "description": "Two-word character note."
+  },
+  "font_noteOutfit": "Měkký geometrický",
+  "@font_noteOutfit": {
+    "description": "Two-word character note."
+  },
+  "font_noteUnbounded": "Široký, herní",
+  "@font_noteUnbounded": {
+    "description": "Two-word character note."
+  },
+  "font_noteCinzel": "Tesané kapitálky",
+  "@font_noteCinzel": {
+    "description": "Two-word character note."
+  },
+  "error_nameRequired": "Zadej název.",
+  "@error_nameRequired": {
+    "description": "FieldError.required."
+  },
+  "error_nameTooLong": "Název může mít nejvýše 80 znaků.",
+  "@error_nameTooLong": {
+    "description": "FieldError.tooLong."
+  },
+  "error_noteTooLong": "Poznámka může mít nejvýše 500 znaků.",
+  "@error_noteTooLong": {
+    "description": "FieldError.noteTooLong."
+  },
+  "error_heroNameTooLong": "Jméno může mít nejvýše 40 znaků.",
+  "@error_heroNameTooLong": {
+    "description": "FieldError.heroNameTooLong."
+  },
+  "error_noQuestTemplate": "Přidej alespoň jeden quest s názvem.",
+  "@error_noQuestTemplate": {
+    "description": "FieldError.noQuestTemplate."
+  },
+  "error_missionNotOpen": "Tato mise už není otevřená. Vyber jinou, nebo žádnou.",
+  "@error_missionNotOpen": {
+    "description": "FieldError.missionNotOpen."
+  },
+  "error_validation": "Zadaná hodnota není platná.",
+  "@error_validation": {
+    "description": "DomainError ValidationError."
+  },
+  "error_itemChanged": "Položka se mezitím změnila. Seznam jsme obnovili.",
+  "@error_itemChanged": {
+    "description": "DomainError NotFoundError and InvalidStateError."
+  },
+  "error_storage": "Data se nepodařilo uložit. Nic se nezměnilo.",
+  "@error_storage": {
+    "description": "DomainError StorageError; shown with a retry action."
+  },
+  "error_unknown": "Něco se pokazilo.",
+  "@error_unknown": {
+    "description": "Fallback for any unexpected error."
+  }
+}
