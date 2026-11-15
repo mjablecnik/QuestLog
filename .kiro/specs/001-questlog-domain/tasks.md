@@ -104,7 +104,7 @@ Build the Questlog domain layer in a new Flutter project at `/workspace/questlog
     - _Requirements: 12.2, 12.3, 12.4, 12.5, 12.6, 12.7, 12.8_
 
 - [ ] 6. Implement the Quest_Service
-  - [ ] 6.1 Implement Quest creation, editing and deletion
+  - [x] 6.1 Implement Quest creation, editing and deletion
     - `lib/services/quest_service.dart`: `create`, `update`, `delete` with validation (name 1–80 trimmed, note ≤ 500), Mission existence and `open` check, `sort_order = max + 1`
     - Editing a done Quest changes only name and note
     - Deleting a Quest never touches Total_XP

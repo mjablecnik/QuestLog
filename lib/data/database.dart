@@ -6,6 +6,7 @@ import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 
 import '../core/cadence.dart';
+import '../core/errors.dart';
 import '../core/xp_rules.dart';
 import 'models.dart';
 import 'preferences.dart';
@@ -23,6 +24,23 @@ class QuestlogDatabase extends _$QuestlogDatabase {
 
   @override
   int get schemaVersion => 1;
+
+  /// Runs [action] in a transaction (joining the active one, if any).
+  ///
+  /// A [DomainError] thrown by [action] rolls the transaction back and is
+  /// rethrown as is; a SQLite failure is rolled back and rethrown as a
+  /// [StorageError], so callers only ever see domain errors.
+  Future<T> runTransaction<T>(Future<T> Function() action) async {
+    try {
+      return await transaction(action);
+    } on DomainError {
+      rethrow;
+    } on SqliteException catch (error) {
+      throw StorageError(error);
+    } on DriftWrappedException catch (error) {
+      throw StorageError(error);
+    }
+  }
 
   @override
   MigrationStrategy get migration => MigrationStrategy(

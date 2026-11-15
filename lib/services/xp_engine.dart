@@ -22,7 +22,7 @@ class XpEngine {
 
   /// Adds [delta] (which may be negative) to Total_XP, clamped at zero.
   Future<XpChange> apply(int delta) {
-    return _db.transaction(() async {
+    return _db.runTransaction(() async {
       final before = await readTotal();
       final after = before + delta < 0 ? 0 : before + delta;
       if (after != before) {

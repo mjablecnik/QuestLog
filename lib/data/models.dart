@@ -1,3 +1,4 @@
+import '../core/xp_rules.dart';
 import 'preferences.dart';
 
 /// Lifecycle state of a Mission.
@@ -68,4 +69,48 @@ class AppSettings {
   @override
   String toString() =>
       'AppSettings($heroName, $language, $theme, $displayFont)';
+}
+
+/// A one-off task, standalone or part of a Mission.
+class Quest {
+  const Quest({
+    required this.id,
+    required this.name,
+    required this.note,
+    required this.difficulty,
+    required this.missionId,
+    required this.sortOrder,
+    required this.createdAt,
+    required this.completedAt,
+    required this.awardedXp,
+  });
+
+  final int id;
+  final String name;
+  final String? note;
+  final Difficulty difficulty;
+  final int? missionId;
+  final int sortOrder;
+  final DateTime createdAt;
+  final DateTime? completedAt;
+
+  /// XP recorded at completion; null while the Quest is open.
+  final int? awardedXp;
+
+  bool get isDone => completedAt != null;
+}
+
+/// Input for creating or editing a Quest.
+class QuestDraft {
+  const QuestDraft({
+    required this.name,
+    required this.difficulty,
+    this.note,
+    this.missionId,
+  });
+
+  final String name;
+  final String? note;
+  final Difficulty difficulty;
+  final int? missionId;
 }
