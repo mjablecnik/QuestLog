@@ -115,7 +115,7 @@ Build the Questlog domain layer in a new Flutter project at `/workspace/questlog
     - Name boundaries (empty, whitespace only, 80 and 81 characters), note boundary (500 and 501), unknown Mission, `completed` and `closed` Mission, done-Quest edit ignoring Difficulty and Mission changes, delete leaving Total_XP unchanged
     - _Requirements: 1.2, 1.3, 1.4, 1.5, 1.7, 1.8_
 
-  - [ ] 6.3 Implement completion and reopening
+  - [x] 6.3 Implement completion and reopening
     - `complete(id)` in one transaction: mark done, `completed_at` from the Clock, `awarded_xp` from the Difficulty at that moment, `XpEngine.apply(+xp)`, return `CompleteQuestResult` with Levels, Mission progress and `missionReadyToComplete`
     - Completing an already done Quest is a no-op returning the existing result without awarding XP
     - `reopen(id)` in one transaction: clear completion, `XpEngine.apply(-awarded_xp)`; when the parent Mission is `completed`, set it back to `open` and subtract its `awarded_bonus`, clearing the bonus fields

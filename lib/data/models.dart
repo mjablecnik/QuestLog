@@ -114,3 +114,67 @@ class QuestDraft {
   final Difficulty difficulty;
   final int? missionId;
 }
+
+/// Done and total Quest counts of a Mission and the XP its open Quests still award.
+class MissionProgress {
+  const MissionProgress({
+    required this.done,
+    required this.total,
+    required this.remainingXp,
+  });
+
+  final int done;
+  final int total;
+  final int remainingXp;
+
+  @override
+  bool operator ==(Object other) =>
+      other is MissionProgress &&
+      other.done == done &&
+      other.total == total &&
+      other.remainingXp == remainingXp;
+
+  @override
+  int get hashCode => Object.hash(done, total, remainingXp);
+
+  @override
+  String toString() => 'MissionProgress($done/$total, $remainingXp XP left)';
+}
+
+/// Outcome of completing a Quest.
+class CompleteQuestResult {
+  const CompleteQuestResult({
+    required this.awardedXp,
+    required this.levelBefore,
+    required this.levelAfter,
+    required this.mission,
+    required this.missionReadyToComplete,
+  });
+
+  /// XP awarded by this call; 0 when the Quest was already done.
+  final int awardedXp;
+  final int levelBefore;
+  final int levelAfter;
+
+  /// Progress of the parent Mission, or null for a standalone Quest.
+  final MissionProgress? mission;
+
+  /// True when the Mission is open, has Quests and all of them are now done.
+  final bool missionReadyToComplete;
+}
+
+/// Outcome of reopening a Quest.
+class ReopenQuestResult {
+  const ReopenQuestResult({
+    required this.revokedXp,
+    required this.missionReopened,
+    required this.levelAfter,
+  });
+
+  /// The XP recorded at completion that was taken back; 0 when the Quest was open.
+  final int revokedXp;
+
+  /// True when the parent Mission was `completed` and went back to `open`.
+  final bool missionReopened;
+  final int levelAfter;
+}
