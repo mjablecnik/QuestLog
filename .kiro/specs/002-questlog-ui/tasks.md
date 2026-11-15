@@ -211,11 +211,11 @@ Build the Questlog screens on top of the finished domain layer from `001-questlo
     - _Requirements: 10.1, 10.2, 10.3, 10.4, 10.5, 10.6, 10.8, 10.9, 10.11_
 
 - [ ] 13. Implement the Settings_Screen
-  - [ ] 13.1 Implement profile, language, theme and About
+  - [x] 13.1 Implement profile, language, theme and About
     - `lib/ui/screens/settings/`: group layout in the required order, hero-name field with 40-character limit saved on blur or submit with inline error, Total_XP in small type, language segmented control highlighting the Effective_Language, theme segmented control with icons, About with the app name and version
     - _Requirements: 11.1, 11.2, 11.3, 11.4, 11.5, 11.6, 11.7, 11.8, 14.3, 14.4_
 
-  - [ ] 13.2 Write Settings_Screen tests
+  - [x] 13.2 Write Settings_Screen tests
     - Widget: group order; hero name saved on blur and shown in the Hero_Bar; 41 characters show an error and do not save; switching language changes visible strings at once with scroll position kept and no empty flash; theme switch applies at once; version comes from the platform info stub
     - _Requirements: 11.1, 11.3, 11.4, 11.5, 11.6, 11.7, 11.8, 14.3_
 
