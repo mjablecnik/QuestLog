@@ -130,6 +130,17 @@ abstract final class Metrics {
   static const double menuWidth = 196;
   static const double iconSize = 24;
   static const double iconSmall = 18;
+
+  /// Pinned blank slip of the empty state.
+  static const double slipWidth = 170;
+  static const double slipHeight = 110;
+  static const double slipPin = 14;
+
+  /// Bottom space a snackbar leaves for the tab bar and the add button.
+  static const double snackClearance = 96;
+
+  /// Height of one skeleton placeholder row.
+  static const double skeletonRow = 72;
 }
 
 /// Transition durations and the shared curve.
@@ -151,6 +162,12 @@ abstract final class Motion {
 
   /// Replacement for every slide, scale and ray animation under reduced motion.
   static const Duration reducedFade = Duration(milliseconds: 150);
+
+  /// One breath of the skeleton pulse.
+  static const Duration pulse = Duration(milliseconds: 1100);
+
+  /// How long a snackbar stays before it dismisses itself.
+  static const Duration snack = Duration(milliseconds: 4000);
 
   static const Duration none = Duration.zero;
 
