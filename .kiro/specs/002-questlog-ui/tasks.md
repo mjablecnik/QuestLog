@@ -162,7 +162,7 @@ Build the Questlog screens on top of the finished domain layer from `001-questlo
     - _Requirements: 1.1, 1.2, 1.5, 1.6, 1.7_
 
 - [ ] 8. Implement the Board_Screen
-  - [ ] 8.1 Implement the quest list and board
+  - [x] 8.1 Implement the quest list and board
     - `lib/ui/screens/board/`: `BoardScreen` with `HeroBar`, skeletons, empty state, FAB and a `QuestList` of open Quests (reorderable on long press, `Slidable` with "Upravit" and "Smazat") followed by the Quests done today
     - Check taps call `QuestService.complete` or `reopen`, push a reward event or a withdrawal message, and restore the card with an error message on failure
     - Reorder uses `moveWithinSubset`, shows the new order at once, calls `QuestService.reorder` and restores the previous order on failure
@@ -170,7 +170,7 @@ Build the Questlog screens on top of the finished domain layer from `001-questlo
     - A not-found or invalid-state error from a service refreshes the list and shows the item-changed message
     - _Requirements: 3.1, 3.6, 3.7, 3.8, 3.9, 3.10, 3.11, 3.12, 3.13, 4.1, 4.2, 4.3, 4.4, 4.5, 4.7, 6.1, 6.7, 6.8, 6.9, 18.2_
 
-  - [ ] 8.2 Write Board_Screen tests
+  - [x] 8.2 Write Board_Screen tests
     - Widget: open Quests in manual order and done Quests below; completing shows the Reward_Card and moves the card; unchecking moves it back with a withdrawal message (and the Mission-reopened note); drag-and-drop persists the new order and a cancelled drag persists nothing; a failing reorder restores the order; empty state and skeletons; clock advanced past 04:00 removes yesterday's done Quests
     - _Requirements: 3.1, 3.6, 3.7, 3.8, 3.10, 3.12, 3.13, 4.2, 4.3, 4.4, 4.5_
 
