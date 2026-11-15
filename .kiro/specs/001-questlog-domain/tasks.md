@@ -111,7 +111,7 @@ Build the Questlog domain layer in a new Flutter project at `/workspace/questlog
     - Add `Quest`, `QuestDraft` to `lib/data/models.dart`
     - _Requirements: 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 3.1_
 
-  - [ ] 6.2 Write Quest creation and editing tests
+  - [x] 6.2 Write Quest creation and editing tests
     - Name boundaries (empty, whitespace only, 80 and 81 characters), note boundary (500 and 501), unknown Mission, `completed` and `closed` Mission, done-Quest edit ignoring Difficulty and Mission changes, delete leaving Total_XP unchanged
     - _Requirements: 1.2, 1.3, 1.4, 1.5, 1.7, 1.8_
 

@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart' hide isNull, isNotNull;
 import 'package:glados/glados.dart';
 import 'package:questlog/core/cadence.dart';
+import 'package:questlog/core/errors.dart';
 import 'package:questlog/core/xp_rules.dart';
 import 'package:questlog/data/database.dart';
 import 'package:questlog/data/models.dart';
@@ -178,6 +179,34 @@ void main() {
 
     test('a Quest cannot reference a missing Mission', () async {
       await expectLater(insertQuest(missionId: 999), throwsA(anything));
+    });
+  });
+
+  group('runTransaction', () {
+    test('maps a SQLite constraint failure to StorageError', () async {
+      await expectLater(
+        db.runTransaction(() => db.into(db.quests).insert(
+              QuestsCompanion.insert(
+                name: 'Orphan',
+                difficulty: Difficulty.easy,
+                missionId: const Value(999),
+                sortOrder: 0,
+                createdAt: now,
+              ),
+            )),
+        throwsA(isA<StorageError>()),
+      );
+    });
+
+    test('rethrows a DomainError unchanged and rolls the transaction back', () async {
+      await expectLater(
+        db.runTransaction(() async {
+          await insertMission();
+          throw const InvalidStateError('boom');
+        }),
+        throwsA(isA<InvalidStateError>()),
+      );
+      expect(await count(db.missions), 0);
     });
   });
 }
