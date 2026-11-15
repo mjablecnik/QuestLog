@@ -63,7 +63,7 @@ Build the Questlog domain layer in a new Flutter project at `/workspace/questlog
 - [x] 3. Checkpoint — Core rules
   - Ensure all tests pass, ask the user if questions arise.
 
-- [ ] 4. Implement the database
+- [x] 4. Implement the database
   - [x] 4.1 Define tables, preferences and the database
     - `lib/data/preferences.dart`: `AppLanguage`, `AppTheme`, `DisplayFont`
     - `lib/data/tables.dart`: Drift tables `Missions`, `Quests`, `RecurringRules`, `RuleQuests`, `AppState` exactly as in the Data Models section of `design.md` (CHECK constraints, indexes, foreign keys)
@@ -71,7 +71,7 @@ Build the Questlog domain layer in a new Flutter project at `/workspace/questlog
     - Run `dart run build_runner build` and `dart run drift_dev schema dump lib/data/database.dart drift_schemas/` to produce version 1
     - _Requirements: 13.1, 13.2, 13.4, 13.5, 13.6_
 
-  - [ ] 4.2 Add test helpers and database tests
+  - [x] 4.2 Add test helpers and database tests
     - `test/helpers/test_database.dart`: factory returning a `QuestlogDatabase` over `NativeDatabase.memory()`
     - Test: a fresh database has Total_XP 0 and the default settings
     - Test: a transaction that throws leaves all tables unchanged
