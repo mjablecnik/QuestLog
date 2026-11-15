@@ -247,7 +247,7 @@ Build the Questlog domain layer in a new Flutter project at `/workspace/questlog
     - Scenario on an in-memory database with a `FixedClock`: create rule and quests, `reconcile()`, complete all Quests, complete the Mission, cross a Level boundary, advance the clock across 04:00, check board and history, post manually and confirm the skipped automatic posting
     - _Requirements: 2.2, 5.2, 7.3, 9.1, 10.6, 15.1_
 
-- [ ] 11. Checkpoint — Domain complete
+- [x] 11. Checkpoint — Domain complete
   - Run `scripts/check.sh` and ensure analysis, all tests and the structure check pass, ask the user if questions arise.
 
 ## Notes
