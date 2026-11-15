@@ -1,0 +1,5 @@
+// The one place that names the app on iOS. Change these two values before the
+// App Store build; Info.plist and the Runner target read them.
+// (The RunnerTests target keeps its own literal bundle id, com.jablecnik.questlog.RunnerTests.)
+APP_BUNDLE_IDENTIFIER = com.jablecnik.questlog
+APP_DISPLAY_NAME = Questlog

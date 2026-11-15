@@ -21,7 +21,7 @@ Build the Questlog screens on top of the finished domain layer from `001-questlo
     - Add a test that loads every declared font family and icon asset and fails when one is missing
     - _Requirements: 13.5, 15.8, 19.6_
 
-  - [ ] 1.3 Make the bundle identifier and display name configurable
+  - [x] 1.3 Make the bundle identifier and display name configurable
     - Set the display name `Questlog` and the bundle identifier `com.jablecnik.questlog` (same prefix as TimeLog's `com.jablecnik.timelogApp`) in `ios/Runner/Info.plist` and the Xcode project in one place; document in the project README where the user changes them
     - _Requirements: 19.7_
 

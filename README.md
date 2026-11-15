@@ -13,3 +13,10 @@ scripts/check.sh              # analyze + tests + structure check
 ```
 
 The specs live in `.kiro/specs/`, the visual design in `.design/`.
+
+## iOS bundle identifier and display name
+
+Both are set in one place: `ios/Flutter/AppIdentity.xcconfig` (`APP_BUNDLE_IDENTIFIER`,
+`APP_DISPLAY_NAME`). `Info.plist` and the Runner target read them, so change them there
+before the iOS build. The `RunnerTests` target keeps its own literal identifier
+(`com.jablecnik.questlog.RunnerTests`); it is not shipped.
