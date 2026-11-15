@@ -14,7 +14,7 @@ Build the Questlog screens on top of the finished domain layer from `001-questlo
     - Create the directories listed under Project Structure in `design.md` (`lib/ui/...`, `lib/l10n/`, `assets/fonts/`, `assets/icons/`, `test/ui/`, `test/goldens/`)
     - _Requirements: 14.1, 19.1, 19.6_
 
-  - [ ] 1.2 Bundle fonts and SVG icons
+  - [x] 1.2 Bundle fonts and SVG icons
     - Obtain the static TTF files for Figtree (400–800) and for Bricolage Grotesque, Sora, Outfit, Unbounded and Cinzel (600–800), all SIL Open Font Licence, from Google Fonts into `assets/fonts/`; if the sandbox has no network access, stop and ask the user to place the files there
     - Declare every family and weight under `flutter: fonts:` in `pubspec.yaml`, and declare `assets/icons/`
     - Draw the SVG icons listed in `design.md` on a 24px grid with `currentColor` strokes into `assets/icons/`
