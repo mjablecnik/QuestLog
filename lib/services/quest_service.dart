@@ -151,6 +151,29 @@ class QuestService {
     });
   }
 
+  /// Puts exactly the Quests in [orderedIds] into that relative order.
+  ///
+  /// The positions the subset occupies are reused, so every other Quest keeps
+  /// its place. An unknown or duplicate id is rejected before anything is written.
+  Future<void> reorder(List<int> orderedIds) async {
+    if (orderedIds.toSet().length != orderedIds.length) {
+      throw const ValidationError('orderedIds', 'contains a duplicate id');
+    }
+    if (orderedIds.isEmpty) return;
+    await _db.runTransaction(() async {
+      final rows =
+          await (_db.select(_db.quests)..where((q) => q.id.isIn(orderedIds))).get();
+      if (rows.length != orderedIds.length) {
+        throw const ValidationError('orderedIds', 'contains an unknown id');
+      }
+      final positions = rows.map((row) => row.sortOrder).toList()..sort();
+      for (var i = 0; i < orderedIds.length; i++) {
+        await (_db.update(_db.quests)..where((q) => q.id.equals(orderedIds[i])))
+            .write(QuestsCompanion(sortOrder: Value(positions[i])));
+      }
+    });
+  }
+
   Future<MissionProgress> _progress(int missionId) async {
     final rows =
         await (_db.select(_db.quests)..where((q) => q.missionId.equals(missionId))).get();

@@ -134,7 +134,7 @@ Build the Questlog domain layer in a new Flutter project at `/workspace/questlog
     - Unit: awarded XP stays at the completion-time value, and a Difficulty change on a done Quest is ignored; `missionReadyToComplete` is true only when the last Quest is completed; Level change is reported
     - _Requirements: 2.3, 2.4_
 
-  - [ ] 6.5 Implement reordering
+  - [x] 6.5 Implement reordering
     - `reorder(orderedIds)`: validate ids (unknown or duplicate → `ValidationError`, no writes), collect the subset's current `sort_order` values, sort them, assign them in the requested order, all in one transaction
     - _Requirements: 3.2, 3.3, 3.4, 3.5_
 
