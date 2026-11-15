@@ -1,0 +1,50 @@
+{
+  "run_id": "2026-11-15-1405",
+  "spec": "001-questlog-domain",
+  "target": ".",
+  "started_at": "2026-11-15T14:05:00Z",
+  "phases": {
+    "impl": {
+      "status": "done",
+      "start_sha": "9ed0099",
+      "end_sha": "01f7b80",
+      "issues_opened": 0,
+      "finished_at": "2026-11-15T14:50:00Z"
+    },
+    "build": {
+      "status": "pending",
+      "start_sha": null,
+      "end_sha": null,
+      "issues_opened": 0,
+      "finished_at": null
+    },
+    "cases": {
+      "status": "pending",
+      "start_sha": null,
+      "end_sha": null,
+      "issues_opened": 0,
+      "finished_at": null
+    },
+    "verify": {
+      "status": "pending",
+      "start_sha": null,
+      "end_sha": null,
+      "issues_opened": 0,
+      "finished_at": null
+    },
+    "docs": {
+      "status": "pending",
+      "start_sha": null,
+      "end_sha": null,
+      "issues_opened": 0,
+      "finished_at": null
+    },
+    "report": {
+      "status": "pending",
+      "start_sha": null,
+      "end_sha": null,
+      "issues_opened": 0,
+      "finished_at": null
+    }
+  }
+}
