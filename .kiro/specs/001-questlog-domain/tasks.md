@@ -7,7 +7,7 @@ Build the Questlog domain layer in a new Flutter project at `/workspace/questlog
 ## Tasks
 
 - [ ] 1. Scaffold the Flutter project
-  - [ ] 1.1 Create the project and dependencies
+  - [x] 1.1 Create the project and dependencies
     - Run `git init` in `/workspace/questlog/` and set the commit author to `Martin Jablečník <martin.jablecnik@email.cz>` (see the Git note below)
     - Run `git config --global --add safe.directory /opt/flutter` if flutter fails with dubious ownership (see skill `sandbox-flutter`)
     - Run `flutter create --org com.jablecnik --project-name questlog --platforms=ios,linux .` in `/workspace/questlog/` (keep the existing `.design/` and `.kiro/`)
