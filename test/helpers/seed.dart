@@ -27,3 +27,26 @@ Future<int> seedMission(
         ),
       );
 }
+
+/// Inserts a Quest row directly, optionally already done.
+Future<int> seedQuest(
+  QuestlogDatabase db, {
+  String name = 'Quest',
+  Difficulty difficulty = Difficulty.normal,
+  int? missionId,
+  int sortOrder = 1,
+  DateTime? completedAt,
+  int? awardedXp,
+}) {
+  return db.into(db.quests).insert(
+        QuestsCompanion.insert(
+          name: name,
+          difficulty: difficulty,
+          missionId: Value(missionId),
+          sortOrder: sortOrder,
+          createdAt: DateTime(2026, 11, 1, 12),
+          completedAt: Value(completedAt),
+          awardedXp: Value(awardedXp ?? (completedAt == null ? null : difficulty.xp)),
+        ),
+      );
+}

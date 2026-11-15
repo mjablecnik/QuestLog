@@ -103,7 +103,7 @@ Build the Questlog domain layer in a new Flutter project at `/workspace/questlog
     - Each setter emits the new `AppSettings` on `watch`
     - _Requirements: 12.2, 12.3, 12.4, 12.5, 12.6, 12.7, 12.8_
 
-- [ ] 6. Implement the Quest_Service
+- [x] 6. Implement the Quest_Service
   - [x] 6.1 Implement Quest creation, editing and deletion
     - `lib/services/quest_service.dart`: `create`, `update`, `delete` with validation (name 1–80 trimmed, note ≤ 500), Mission existence and `open` check, `sort_order = max + 1`
     - Editing a done Quest changes only name and note
@@ -152,7 +152,7 @@ Build the Questlog domain layer in a new Flutter project at `/workspace/questlog
     - Add `boardDayStartOf(today)` to `lib/core/board_day.dart` with a unit test across a DST change
     - _Requirements: 7.1, 7.2, 7.3, 7.9, 7.10, 15.4, 15.6, 15.7_
 
-  - [ ] 6.8 Write board stream and history tests
+  - [x] 6.8 Write board stream and history tests
     - Quests done before 04:00 today belong to the previous Board_Day and drop out when `watchDoneToday` is called with the next `today`; done Quests of `closed` Missions are excluded from the board but present in history
     - `BoardQuest.missionName` is set for Mission Quests and null for standalone Quests
     - History range filter, newest-first order, reopened Quest absent, no write side effects
