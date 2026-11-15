@@ -136,11 +136,11 @@ Build the Questlog screens on top of the finished domain layer from `001-questlo
     - `lib/ui/widgets/sheet/`: `showQuestlogSheet` (grabber, "Zrušit", centred title, brass primary button, discard confirmation when `isDirty`), `confirmDestructive`
     - _Requirements: 5.3, 5.8, 9.2, 9.8, 18.5_
 
-  - [ ] 6.7 Implement the Reward_Card and overlay
+  - [x] 6.7 Implement the Reward_Card and overlay
     - `lib/ui/widgets/reward/`: `RewardCard` (seal with rays, "+N XP", caption, name, mission block, Level-up variant, "Dokončit misi" and "Pokračovat") and `RewardOverlay` consuming `RewardQueue`, auto-dismissing after 2.5 s unless the mission-complete offer is shown, plain fade under reduced motion
     - _Requirements: 7.1, 7.2, 7.3, 7.4, 7.5, 7.6, 7.7, 7.8, 7.9, 16.5_
 
-  - [ ] 6.8 Write reward and sheet widget tests
+  - [x] 6.8 Write reward and sheet widget tests
     - Widget: quest, mission and level-up variants render the right text; auto-dismiss at 2.5 s and no auto-dismiss with the mission offer; tapping the scrim dismisses; queued events appear one after another; reduced motion uses a fade; dirty sheet asks before discarding and clean sheet does not
     - _Requirements: 5.8, 7.1, 7.3, 7.4, 7.5, 7.8, 7.9_
 
