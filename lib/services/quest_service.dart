@@ -7,6 +7,7 @@ import '../core/xp_rules.dart';
 import '../core/validation.dart';
 import '../data/database.dart';
 import '../data/mappers.dart';
+import '../data/quest_writes.dart';
 import '../data/models.dart';
 import 'xp_engine.dart';
 
@@ -28,16 +29,14 @@ class QuestService {
       if (missionId != null) {
         await _requireOpenMission(missionId);
       }
-      final id = await _db.into(_db.quests).insert(
-            QuestsCompanion.insert(
-              name: name,
-              note: Value(note),
-              difficulty: draft.difficulty,
-              missionId: Value(missionId),
-              sortOrder: await _nextSortOrder(),
-              createdAt: _clock.now(),
-            ),
-          );
+      final id = await insertQuestLast(
+        _db,
+        name: name,
+        note: note,
+        difficulty: draft.difficulty,
+        missionId: missionId,
+        createdAt: _clock.now(),
+      );
       return (await _load(id)).toModel();
     });
   }
@@ -192,7 +191,7 @@ class QuestService {
   /// [today] comes from the caller, so a consumer can refresh the window when the
   /// Board_Day changes. Quests of `closed` Missions are left out.
   Stream<List<BoardQuest>> watchDoneToday(DateTime today) {
-    final window = _boardDayWindow(today, today);
+    final window = boardDayRange(today, today);
     final query = _boardQuery()
       ..where(
         _db.quests.completedAt.isBiggerOrEqualValue(window.start) &
@@ -206,7 +205,7 @@ class QuestService {
   /// Done Quests completed from the Board_Day [fromDay] up to and including the
   /// Board_Day [toDay], newest first. Reads only.
   Future<List<HistoryQuest>> history(DateTime fromDay, DateTime toDay) async {
-    final window = _boardDayWindow(fromDay, toDay);
+    final window = boardDayRange(fromDay, toDay);
     final query = _boardQuery()
       ..where(
         _db.quests.completedAt.isBiggerOrEqualValue(window.start) &
@@ -241,14 +240,6 @@ class QuestService {
           missionName: row.readTableOrNull(_db.missions)?.name,
         ),
     ];
-  }
-
-  /// From the start of the Board_Day [first] to the start of the day after [last].
-  ({DateTime start, DateTime end}) _boardDayWindow(DateTime first, DateTime last) {
-    return (
-      start: boardDayStartOf(first),
-      end: boardDayStartOf(DateTime(last.year, last.month, last.day + 1)),
-    );
   }
 
   Future<MissionProgress> _progress(int missionId) async {
@@ -290,11 +281,5 @@ class QuestService {
     if (mission.status != MissionStatus.open) {
       throw InvalidStateError('mission $missionId is ${mission.status.name}, not open');
     }
-  }
-
-  Future<int> _nextSortOrder() async {
-    final maxOrder = _db.quests.sortOrder.max();
-    final row = await (_db.selectOnly(_db.quests)..addColumns([maxOrder])).getSingle();
-    return (row.read(maxOrder) ?? 0) + 1;
   }
 }

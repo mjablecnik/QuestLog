@@ -14,3 +14,16 @@ extension QuestRowMapping on QuestRow {
         awardedXp: awardedXp,
       );
 }
+
+extension MissionRowMapping on MissionRow {
+  Mission toModel() => Mission(
+        id: id,
+        name: name,
+        bonus: bonus,
+        status: status,
+        ruleId: ruleId,
+        createdAt: createdAt,
+        completedAt: completedAt,
+        awardedBonus: awardedBonus,
+      );
+}

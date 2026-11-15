@@ -207,3 +207,109 @@ class HistoryQuest {
   final DateTime completedAt;
   final String? missionName;
 }
+
+/// A group of Quests with a bonus for completing all of them.
+class Mission {
+  const Mission({
+    required this.id,
+    required this.name,
+    required this.bonus,
+    required this.status,
+    required this.ruleId,
+    required this.createdAt,
+    required this.completedAt,
+    required this.awardedBonus,
+  });
+
+  final int id;
+  final String name;
+  final MissionBonus bonus;
+  final MissionStatus status;
+
+  /// The Recurring_Rule this Mission is an Instance of, or null for a one-off Mission.
+  final int? ruleId;
+  final DateTime createdAt;
+  final DateTime? completedAt;
+
+  /// The bonus recorded at completion; null unless the Mission is `completed`.
+  final int? awardedBonus;
+}
+
+/// Input for creating a Mission together with its first Quests.
+class MissionDraft {
+  const MissionDraft({
+    required this.name,
+    required this.bonus,
+    this.quests = const [],
+  });
+
+  final String name;
+  final MissionBonus bonus;
+  final List<QuestDraft> quests;
+}
+
+/// One row of the Missions screen, also used for the "completed today" section
+/// and the Mission picker.
+class MissionSummary {
+  const MissionSummary({
+    required this.id,
+    required this.name,
+    required this.bonus,
+    required this.status,
+    required this.done,
+    required this.total,
+    required this.remainingXp,
+    required this.ruleId,
+    required this.completedAt,
+    required this.awardedBonus,
+  });
+
+  final int id;
+  final String name;
+  final MissionBonus bonus;
+  final MissionStatus status;
+  final int done;
+  final int total;
+
+  /// The sum of the XP of the Mission's open Quests.
+  final int remainingXp;
+  final int? ruleId;
+  final DateTime? completedAt;
+  final int? awardedBonus;
+}
+
+/// A Mission with all of its Quests, including those completed on earlier days.
+class MissionDetail {
+  const MissionDetail({required this.mission, required this.quests});
+
+  final Mission mission;
+  final List<Quest> quests;
+}
+
+/// Outcome of completing a Mission.
+class CompleteMissionResult {
+  const CompleteMissionResult({
+    required this.awardedBonus,
+    required this.levelBefore,
+    required this.levelAfter,
+  });
+
+  final int awardedBonus;
+  final int levelBefore;
+  final int levelAfter;
+}
+
+/// A `completed` Mission as the history query returns it.
+class HistoryMission {
+  const HistoryMission({
+    required this.id,
+    required this.name,
+    required this.awardedBonus,
+    required this.completedAt,
+  });
+
+  final int id;
+  final String name;
+  final int awardedBonus;
+  final DateTime completedAt;
+}

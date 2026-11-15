@@ -159,7 +159,7 @@ Build the Questlog domain layer in a new Flutter project at `/workspace/questlog
     - _Requirements: 7.1, 7.2, 7.3, 7.9, 7.10, 15.4, 15.6, 15.7_
 
 - [ ] 7. Implement the Mission_Service
-  - [ ] 7.1 Implement Mission creation, editing, deletion and adding Quests
+  - [x] 7.1 Implement Mission creation, editing, deletion and adding Quests
     - `lib/services/mission_service.dart`: `create` (Mission plus initial Quests in one transaction, ordered after existing Quests), `update` (name and bonus; recorded bonus of a `completed` Mission unchanged), `delete` (cascade, Total_XP unchanged), `addQuest` (only to `open` Missions)
     - Add `Mission`, `MissionStatus`, `MissionDraft`, `MissionSummary`, `MissionDetail` to `lib/data/models.dart` with the fields in `design.md` — `Mission` and `MissionSummary` expose `ruleId`, `completedAt` and `awardedBonus`, which 002 needs for the recurring caption, the completion date and the "completed today" bonus
     - _Requirements: 4.1, 4.2, 4.3, 4.4, 4.5, 4.6, 4.7_

@@ -32,3 +32,12 @@ DateTime boardDayStartOf(DateTime today) {
     dayStart.inMinutes % 60,
   );
 }
+
+/// The half-open time range `[start, end)` covering the Board_Days from [first]
+/// to [last] inclusive, both given as calendar dates.
+({DateTime start, DateTime end}) boardDayRange(DateTime first, DateTime last) {
+  return (
+    start: boardDayStartOf(first),
+    end: boardDayStartOf(DateTime(last.year, last.month, last.day + 1)),
+  );
+}
