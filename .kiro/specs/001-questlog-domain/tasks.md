@@ -49,7 +49,7 @@ Build the Questlog domain layer in a new Flutter project at `/workspace/questlog
     - Unit cases: 0 XP is Level 1, 99 XP is Level 1, 100 XP is Level 2, 249 XP is Level 2, 250 XP is Level 3
     - **Validates: Requirements 6.1, 6.2, 6.3, 6.4, 6.6**
 
-  - [ ] 2.5 Implement Cadence and Occurrence arithmetic
+  - [x] 2.5 Implement Cadence and Occurrence arithmetic
     - `lib/core/cadence.dart`: `Cadence` enum, `occurrenceDate(anchor, cadence, k)`, `firstIndexAfter(anchor, cadence, date)`, `firstAnchor(cadence, requested, today:, lastPosted:)`
     - Month-based Cadences keep the anchor's day of month, clamped to the target month's last day, always computed from the anchor
     - _Requirements: 8.3, 8.4, 8.5, 8.7_
