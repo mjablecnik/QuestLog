@@ -91,7 +91,7 @@ Build the Questlog domain layer in a new Flutter project at `/workspace/questlog
     - Unit: `watchProgress` emits a new value after `apply`
     - _Requirements: 6.5, 6.6, 6.7, 2.6_
 
-  - [ ] 5.3 Implement Settings_Service
+  - [x] 5.3 Implement Settings_Service
     - `lib/services/settings_service.dart`: `watch`, `setHeroName` (trim, max 40 characters, empty allowed), `setLanguage`, `setTheme`, `setDisplayFont`, `resolveLanguage(setting, deviceLanguageCode)` (system resolves to `cs` or `en`, otherwise `en`)
     - Add `AppSettings` to `lib/data/models.dart`
     - _Requirements: 12.1, 12.2, 12.3, 12.4, 12.5, 12.6, 12.7, 12.8_
