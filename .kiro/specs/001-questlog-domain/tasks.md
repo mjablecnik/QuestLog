@@ -121,7 +121,7 @@ Build the Questlog domain layer in a new Flutter project at `/workspace/questlog
     - `reopen(id)` in one transaction: clear completion, `XpEngine.apply(-awarded_xp)`; when the parent Mission is `completed`, set it back to `open` and subtract its `awarded_bonus`, clearing the bonus fields
     - _Requirements: 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 2.7, 2.8, 2.9_
 
-  - [ ] 6.4 Write completion property and unit tests
+  - [x] 6.4 Write completion property and unit tests
     - **Property 2: Completing then reopening a Quest restores Total_XP**
     - For any open Quest and starting Total_XP, complete followed by reopen leaves Total_XP and Quest state unchanged
     - **Validates: Requirements 2.2, 2.5, 2.9**
