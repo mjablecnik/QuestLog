@@ -158,7 +158,7 @@ Build the Questlog domain layer in a new Flutter project at `/workspace/questlog
     - History range filter, newest-first order, reopened Quest absent, no write side effects
     - _Requirements: 7.1, 7.2, 7.3, 7.9, 7.10, 15.4, 15.6, 15.7_
 
-- [ ] 7. Implement the Mission_Service
+- [x] 7. Implement the Mission_Service
   - [x] 7.1 Implement Mission creation, editing, deletion and adding Quests
     - `lib/services/mission_service.dart`: `create` (Mission plus initial Quests in one transaction, ordered after existing Quests), `update` (name and bonus; recorded bonus of a `completed` Mission unchanged), `delete` (cascade, Total_XP unchanged), `addQuest` (only to `open` Missions)
     - Add `Mission`, `MissionStatus`, `MissionDraft`, `MissionSummary`, `MissionDetail` to `lib/data/models.dart` with the fields in `design.md` — `Mission` and `MissionSummary` expose `ruleId`, `completedAt` and `awardedBonus`, which 002 needs for the recurring caption, the completion date and the "completed today" bonus
@@ -183,12 +183,12 @@ Build the Questlog domain layer in a new Flutter project at `/workspace/questlog
     - Unit: reopening a Quest of a `completed` Mission reopens the Mission and removes exactly the recorded bonus
     - _Requirements: 2.7, 5.7_
 
-  - [ ] 7.5 Implement Mission streams and history
+  - [x] 7.5 Implement Mission streams and history
     - `watchOpen()` (done count, total count, remaining Quest XP), `watchDetail(id)` (all Quests including those completed on earlier days), `watchCompletedToday(today)` (same caller-supplied Board_Day rule as `watchDoneToday`; summaries carry the awarded Mission_Bonus), `history(fromDay, toDay)` returning `HistoryMission` newest first
     - `closed` Missions and their Quests never appear in any stream
     - _Requirements: 4.8, 7.4, 7.5, 7.6, 7.10, 15.5, 15.6_
 
-  - [ ] 7.6 Write Mission stream and history tests
+  - [x] 7.6 Write Mission stream and history tests
     - Summary counts and remaining XP, old done Quests visible in an open Mission's detail, `completed` Mission visible until 04:00 the next day then absent, `closed` Mission absent
     - **Property 13: History contains exactly the finished items in range**
     - For any set of done Quests and `completed` Missions and any date range, the History_Query returns exactly the items completed in the range, newest first, and never reopened or deleted items
