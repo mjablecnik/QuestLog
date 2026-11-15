@@ -17,7 +17,7 @@ class AppShellPlaceholder extends StatelessWidget {
     return Scaffold(
       body: Center(
         child: Text(
-          AppLocalizations.of(context)!.app_name,
+          AppLocalizations.of(context).app_name,
           style: context.displayText.headlineLarge,
         ),
       ),
@@ -38,7 +38,7 @@ class QuestlogApp extends ConsumerWidget {
     final locale = ref.watch(effectiveLocaleProvider);
     final DisplayFont font = ref.watch(displayFontProvider);
     return MaterialApp(
-      onGenerateTitle: (context) => AppLocalizations.of(context)!.app_name,
+      onGenerateTitle: (context) => AppLocalizations.of(context).app_name,
       debugShowCheckedModeBanner: false,
       localizationsDelegates: const [
         AppLocalizations.delegate,

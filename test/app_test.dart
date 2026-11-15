@@ -16,7 +16,7 @@ class _Probe extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) =>
-      Scaffold(body: Text(AppLocalizations.of(context)!.app_tabQuests));
+      Scaffold(body: Text(AppLocalizations.of(context).app_tabQuests));
 }
 
 void main() {

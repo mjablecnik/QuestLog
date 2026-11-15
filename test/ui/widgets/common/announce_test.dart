@@ -60,7 +60,7 @@ void main() {
       Builder(
         builder: (BuildContext c) {
           ctx = c;
-          l10n = AppLocalizations.of(c)!;
+          l10n = AppLocalizations.of(c);
           return const SizedBox();
         },
       ),
