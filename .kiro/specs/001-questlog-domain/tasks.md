@@ -39,7 +39,7 @@ Build the Questlog domain layer in a new Flutter project at `/workspace/questlog
     - Unit cases: 03:59 belongs to the previous day, 04:00 starts the new day, 00:30 belongs to the previous day
     - **Validates: Requirements 7.2, 7.3, 7.7, 7.8**
 
-  - [ ] 2.3 Implement XP rules
+  - [x] 2.3 Implement XP rules
     - `lib/core/xp_rules.dart`: `Difficulty` (10/25/50), `MissionBonus` (50/100/200) with `xp` getters, `levelThreshold`, `xpToReachLevel`, `levelFor`, `progressFor`, `LevelProgress`
     - _Requirements: 6.1, 6.2, 6.3, 6.4_
 
