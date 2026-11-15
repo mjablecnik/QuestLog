@@ -138,7 +138,7 @@ Build the Questlog domain layer in a new Flutter project at `/workspace/questlog
     - `reorder(orderedIds)`: validate ids (unknown or duplicate → `ValidationError`, no writes), collect the subset's current `sort_order` values, sort them, assign them in the requested order, all in one transaction
     - _Requirements: 3.2, 3.3, 3.4, 3.5_
 
-  - [ ] 6.6 Write reorder tests
+  - [x] 6.6 Write reorder tests
     - **Property 6: Reordering a subset preserves all other positions**
     - For any set of Quests and any permutation of a subset, the subset ends in the requested relative order and every other Quest keeps its position
     - **Validates: Requirements 3.2, 3.3, 3.4**
