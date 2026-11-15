@@ -131,6 +131,12 @@ abstract final class Metrics {
   static const double iconSize = 24;
   static const double iconSmall = 18;
 
+  /// Ring around the level badge.
+  static const double badgeBorder = 2;
+
+  /// Painted size of a round icon button inside its 44px hit area.
+  static const double iconButton = 32;
+
   /// Pinned blank slip of the empty state.
   static const double slipWidth = 170;
   static const double slipHeight = 110;
