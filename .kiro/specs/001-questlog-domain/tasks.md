@@ -238,7 +238,7 @@ Build the Questlog domain layer in a new Flutter project at `/workspace/questlog
     - _Requirements: 11.4, 11.5_
 
 - [ ] 10. Wire providers and verify end to end
-  - [ ] 10.1 Implement Riverpod providers
+  - [x] 10.1 Implement Riverpod providers
     - `lib/services/providers.dart`: providers for `QuestlogDatabase`, `Clock`, `XpEngine`, each service, and stream providers for the `watch*` methods
     - Keep `lib/main.dart` as the minimal `ProviderScope` app; the UI replaces it in spec 002
     - _Requirements: 13.6, 14.1_
