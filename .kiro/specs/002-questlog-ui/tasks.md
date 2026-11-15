@@ -175,12 +175,12 @@ Build the Questlog screens on top of the finished domain layer from `001-questlo
     - _Requirements: 3.1, 3.6, 3.7, 3.8, 3.10, 3.12, 3.13, 4.2, 4.3, 4.4, 4.5_
 
 - [ ] 9. Implement the Quest_Sheet and quest deletion
-  - [ ] 9.1 Implement the Quest_Sheet
+  - [x] 9.1 Implement the Quest_Sheet
     - `lib/ui/sheets/quest_sheet.dart`: name, Difficulty selector (default Běžný), note, Mission picker with "bez mise" first, preset Mission, create and edit modes, disabled Difficulty and Mission for done Quests, inline errors from `validators.dart`, invalid-state error beside the picker, discard confirmation
     - Wire "Smazat" to `confirmDestructive` with the done-Quest wording and `QuestService.delete`
     - _Requirements: 5.1, 5.2, 5.3, 5.4, 5.5, 5.6, 5.7, 5.8, 5.9, 6.2, 6.3, 6.4, 6.7, 6.8_
 
-  - [ ] 9.2 Write Quest_Sheet tests
+  - [x] 9.2 Write Quest_Sheet tests
     - Widget: create mode focuses the name field; empty, 81-character name and 501-character note show inline errors and keep input and do not call the service; edit of a done Quest disables Difficulty and Mission; preset Mission; success closes the sheet and the card appears; dirty dismissal asks first; deletion confirmation text differs for done Quests
     - _Requirements: 5.1, 5.4, 5.5, 5.6, 5.7, 5.8, 6.3, 6.4_
 
