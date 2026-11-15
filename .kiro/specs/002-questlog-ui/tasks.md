@@ -132,7 +132,7 @@ Build the Questlog screens on top of the finished domain layer from `001-questlo
     - Widget: with and without a hero name, current / threshold text, remaining XP, progress animation and wrap on Level-up using fake time
     - _Requirements: 2.1, 2.2, 2.3, 2.4, 2.5_
 
-  - [ ] 6.6 Implement sheet scaffold and confirmation dialog
+  - [x] 6.6 Implement sheet scaffold and confirmation dialog
     - `lib/ui/widgets/sheet/`: `showQuestlogSheet` (grabber, "Zrušit", centred title, brass primary button, discard confirmation when `isDirty`), `confirmDestructive`
     - _Requirements: 5.3, 5.8, 9.2, 9.8, 18.5_
 
