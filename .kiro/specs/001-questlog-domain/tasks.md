@@ -33,7 +33,7 @@ Build the Questlog domain layer in a new Flutter project at `/workspace/questlog
     - Add `test/helpers/fixed_clock.dart` with a settable `FixedClock`
     - _Requirements: 7.7, 7.8, 13.7_
 
-  - [ ] 2.2 Write unit and property tests for the board day
+  - [x] 2.2 Write unit and property tests for the board day
     - **Property 11: Board_Day boundary is the most recent 04:00**
     - For any local instant, including instants around DST changes, `boardDayStart` returns the most recent 04:00 at or before it and `todayOf` returns that boundary's calendar date
     - Unit cases: 03:59 belongs to the previous day, 04:00 starts the new day, 00:30 belongs to the previous day
