@@ -80,7 +80,7 @@ Build the Questlog domain layer in a new Flutter project at `/workspace/questlog
     - _Requirements: 13.2, 13.3, 13.5_
 
 - [ ] 5. Implement the Xp_Engine and Settings_Service
-  - [ ] 5.1 Implement Xp_Engine
+  - [x] 5.1 Implement Xp_Engine
     - `lib/services/xp_engine.dart`: `readTotal`, `apply(delta)` (clamped at zero, returns `XpChange` with before/after totals and Levels), `watchProgress`
     - `apply` must run inside the caller's transaction (accept the active transaction through the database's zone)
     - Add `XpChange` and result types to `lib/data/models.dart`
