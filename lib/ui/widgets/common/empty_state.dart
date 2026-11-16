@@ -28,14 +28,20 @@ class EmptyState extends StatelessWidget {
   final String? actionLabel;
   final VoidCallback? onAction;
 
+  static const double _liftAboveMiddle = 90;
+
   @override
   Widget build(BuildContext context) {
     final p = context.palette;
     return Center(
       child: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(
-          horizontal: Space.s24,
-          vertical: Space.s32,
+        // The artboard lifts the block above the middle (90px extra below) so it
+        // clears the floating add button.
+        padding: const EdgeInsets.fromLTRB(
+          Space.s24,
+          Space.s32,
+          Space.s24,
+          Space.s32 + _liftAboveMiddle,
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
