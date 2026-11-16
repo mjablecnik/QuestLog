@@ -56,25 +56,22 @@ class HeroBar extends ConsumerWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Flexible(
-                child: Text(
-                  l10n.hero_xpProgress(
-                    progress.xpIntoLevel,
-                    progress.threshold,
-                  ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: xpStyle,
-                ),
+              Text(
+                l10n.hero_xpProgress(progress.xpIntoLevel, progress.threshold),
+                maxLines: 1,
+                style: xpStyle,
               ),
               const SizedBox(width: Space.s8),
+              // The remaining XP wraps instead of losing the next level to an
+              // ellipsis when big figures leave too little room on one line.
               Flexible(
                 child: Text(
                   l10n.hero_xpRemaining(
                     progress.threshold - progress.xpIntoLevel,
                     progress.level + 1,
                   ),
-                  maxLines: 1,
+                  maxLines: 2,
+                  textAlign: TextAlign.end,
                   overflow: TextOverflow.ellipsis,
                   style: xpStyle,
                 ),

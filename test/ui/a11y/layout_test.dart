@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:questlog/data/preferences.dart';
@@ -32,6 +33,34 @@ Future<void> expectNoOverflow(WidgetTester tester) async {
 }
 
 void main() {
+  for (final MapEntry<String, Locale> language in <String, Locale>{
+    'cs': const Locale('cs'),
+    'en': const Locale('en'),
+  }.entries) {
+    a11yTest('hero bar keeps the next level readable with 12 345 XP, '
+        '${language.key}', (
+      WidgetTester tester,
+      void Function(A11yEnv) track,
+    ) async {
+      track(
+        await A11yEnv.pump(
+          tester,
+          Subject.board,
+          locale: language.value,
+          startXp: 12345,
+        ),
+      );
+      // Level 21 with 255 XP to go: the line may wrap, never be cut off.
+      final Finder remaining = find.textContaining('255');
+      expect(remaining, findsOneWidget);
+      final RenderParagraph paragraph = tester.renderObject<RenderParagraph>(
+        remaining,
+      );
+      expect(paragraph.didExceedMaxLines, isFalse);
+      expect(tester.takeException(), isNull);
+    });
+  }
+
   const Map<String, Locale> locales = <String, Locale>{
     'cs': Locale('cs'),
     'en': Locale('en'),

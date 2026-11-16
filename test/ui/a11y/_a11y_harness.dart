@@ -108,6 +108,7 @@ class A11yEnv {
     bool reduceMotion = false,
     QuestlogPalette palette = QuestlogPalette.guildBoard,
     DisplayFont font = DisplayFont.figtree,
+    int startXp = 0,
   }) async {
     await _loadFont(tester, 'Figtree', <int>[400, 500, 600, 700, 800]);
     if (font == DisplayFont.unbounded) {
@@ -118,7 +119,7 @@ class A11yEnv {
     addTearDown(tester.view.reset);
     final QuestlogDatabase db = createTestDatabase();
     final FixedClock clock = FixedClock(a11yNow);
-    final int missionId = await _seed(tester, db, clock);
+    final int missionId = await _seed(tester, db, clock, startXp);
 
     final Widget home = switch (subject) {
       Subject.board => BoardScreen(onOpenSettings: () {}),
@@ -178,8 +179,10 @@ class A11yEnv {
     WidgetTester tester,
     QuestlogDatabase db,
     FixedClock clock,
+    int startXp,
   ) async {
     final int? id = await tester.runAsync(() async {
+      if (startXp > 0) await XpEngine(db).apply(startXp);
       final MissionService missions = MissionService(db, XpEngine(db), clock);
       final Mission long = await missions.create(
         const MissionDraft(
