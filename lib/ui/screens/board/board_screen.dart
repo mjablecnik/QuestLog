@@ -126,7 +126,9 @@ class _TitleRow extends StatelessWidget {
               child: Text(
                 l.board_subtitle(openCount!, date),
                 textAlign: TextAlign.end,
-                maxLines: 1,
+                // Two lines: with a two-digit count the Czech line is wider
+                // than the space beside the title and must not lose the date.
+                maxLines: 2,
                 overflow: TextOverflow.ellipsis,
                 style: context.bodyText.bodySmall!.copyWith(color: p.textDim),
               ),
