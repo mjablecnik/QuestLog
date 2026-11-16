@@ -91,16 +91,19 @@ class QuestCard extends StatelessWidget {
 
     final BorderRadius radius = BorderRadius.circular(Radii.card);
     final Color ground = done ? p.boardRaised : p.parchment;
-    final Color outline = done
-        ? p.boardLine
-        : (p.isLight ? p.parchmentEdge : p.parchment);
+    // Daylight draws the parchment-edge outline on every Quest card, done ones
+    // included, and its shadow too (the artboard does); the dark done card has
+    // the faint board line and no shadow.
+    final Color outline = p.isLight
+        ? p.parchmentEdge
+        : (done ? p.boardLine : p.parchment);
 
     return DecoratedBox(
       decoration: BoxDecoration(
         color: ground,
         borderRadius: radius,
         border: Border.all(color: outline, width: Metrics.hairline),
-        boxShadow: done
+        boxShadow: done && !p.isLight
             ? null
             : <BoxShadow>[
                 BoxShadow(
