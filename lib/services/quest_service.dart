@@ -127,6 +127,7 @@ class QuestService {
       var change = await _xp.apply(-revoked);
 
       var missionReopened = false;
+      var revokedBonus = 0;
       final missionId = quest.missionId;
       if (missionId != null) {
         final mission = await (_db.select(_db.missions)..where((m) => m.id.equals(missionId)))
@@ -139,7 +140,8 @@ class QuestService {
               awardedBonus: Value(null),
             ),
           );
-          change = await _xp.apply(-(mission.awardedBonus ?? 0));
+          revokedBonus = mission.awardedBonus ?? 0;
+          change = await _xp.apply(-revokedBonus);
           missionReopened = true;
         }
       }
@@ -147,6 +149,7 @@ class QuestService {
         revokedXp: revoked,
         missionReopened: missionReopened,
         levelAfter: change.levelAfter,
+        revokedBonus: revokedBonus,
       );
     });
   }

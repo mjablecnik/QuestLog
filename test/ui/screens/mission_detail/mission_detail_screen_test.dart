@@ -258,6 +258,11 @@ void main() {
 
       expect(find.text(en.mission_completedTitle), findsNothing);
       expect(find.text(en.mission_bonusWithdrawn), findsOneWidget);
+      // The message counts everything taken back: the Quest and the bonus.
+      expect(
+        find.text(en.board_rewardWithdrawnMissionReopened(25 + 100)),
+        findsOneWidget,
+      );
       expect(find.text(en.mission_bonusOnCompletion(100)), findsOneWidget);
       expect(find.text(en.mission_progressText(2, 3)), findsOneWidget);
       expect(find.text(en.mission_addQuestToMission), findsOneWidget);

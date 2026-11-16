@@ -249,6 +249,7 @@ void main() {
 
       expect(result.missionReopened, isTrue);
       expect(result.revokedXp, 25);
+      expect(result.revokedBonus, 100);
       expect(await xp.readTotal(), 0);
       final mission = await db.select(db.missions).getSingle();
       expect(mission.status, MissionStatus.open);

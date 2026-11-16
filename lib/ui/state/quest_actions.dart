@@ -52,7 +52,9 @@ Future<void> toggleQuest(
       Haptics.light();
       announceQuestReopened(context, l10n, quest.name);
       final String text = result.missionReopened
-          ? l10n.board_rewardWithdrawnMissionReopened(result.revokedXp)
+          ? l10n.board_rewardWithdrawnMissionReopened(
+              result.revokedXp + result.revokedBonus,
+            )
           : l10n.board_rewardWithdrawn(result.revokedXp);
       if (clearance == null) {
         showQuestlogSnack(context, text);

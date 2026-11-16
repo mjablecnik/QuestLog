@@ -170,6 +170,7 @@ class ReopenQuestResult {
     required this.revokedXp,
     required this.missionReopened,
     required this.levelAfter,
+    this.revokedBonus = 0,
   });
 
   /// The XP recorded at completion that was taken back; 0 when the Quest was open.
@@ -178,6 +179,9 @@ class ReopenQuestResult {
   /// True when the parent Mission was `completed` and went back to `open`.
   final bool missionReopened;
   final int levelAfter;
+
+  /// The Mission_Bonus taken back with the Mission; 0 when it stayed as it was.
+  final int revokedBonus;
 }
 
 /// A Quest as the board shows it: the Quest plus the name of its Mission.
