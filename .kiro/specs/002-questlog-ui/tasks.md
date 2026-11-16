@@ -185,7 +185,7 @@ Build the Questlog screens on top of the finished domain layer from `001-questlo
     - _Requirements: 5.1, 5.4, 5.5, 5.6, 5.7, 5.8, 6.3, 6.4_
 
 - [ ] 10. Implement the Missions_Screen and Mission_Sheet
-  - [ ] 10.1 Implement the Missions_Screen
+  - [x] 10.1 Implement the Missions_Screen
     - `lib/ui/screens/missions/missions_screen.dart`: open Mission_Cards, section "Dokončeno dnes" with earned bonus, skeletons, empty state with a create button, FAB, swipe actions with the Mission deletion confirmation, tap to open detail
     - _Requirements: 6.5, 6.6, 6.7, 6.8, 6.9, 8.1, 8.2, 8.4, 8.5, 8.6, 8.7, 8.8, 8.9, 8.10_
 
@@ -193,7 +193,7 @@ Build the Questlog screens on top of the finished domain layer from `001-questlo
     - `lib/ui/sheets/mission_sheet.dart`: name, Mission_Bonus selector (default Střední), removable quest rows with name and Difficulty plus "Přidat quest" row, empty rows ignored, edit mode with only name and bonus and the earned-bonus note for completed Missions, discard confirmation
     - _Requirements: 9.1, 9.2, 9.3, 9.4, 9.5, 9.6, 9.7, 9.8, 9.9_
 
-  - [ ] 10.3 Write Missions_Screen and Mission_Sheet tests
+  - [x] 10.3 Write Missions_Screen and Mission_Sheet tests
     - Widget: open Missions listed with ring and remaining XP; the ready state caption; "Dokončeno dnes" contains only today's completed Missions and empties after 04:00; empty state button opens the sheet; sheet validation, empty quest rows ignored, row removal, edit mode hides quest rows; Mission deletion confirmation names the Quest count
     - _Requirements: 6.6, 8.1, 8.4, 8.5, 8.6, 8.7, 9.3, 9.4, 9.5, 9.6_
 
