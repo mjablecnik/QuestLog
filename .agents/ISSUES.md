@@ -1,5 +1,14 @@
 # Issues
 
+## [LOW] The iOS-only cases have not been run
+- Run: 2026-11-15-1405
+- Phase: verify
+- Status: OPEN
+- What: the sandbox has only Linux desktop, so UC-008 (edge-swipe back on every pushed screen), the keyboard half of UC-029 and UC-145 (software keyboard with every sheet, safe areas, home indicator), the felt half of UC-144 (haptics) and UC-169 (`flutter build ios` plus an on-device walk of UC-001/008/127/144/145) were not executed. The haptic platform calls themselves are asserted by `test/ui/haptics_flow_test.dart`.
+- Impact: nothing in the iOS build or on a real device is confirmed; everything else in the catalogue passed on the real Linux app.
+- Tried: nothing, by design (Pass L of the walkthrough is a hand-over list).
+- Next: Martin builds for iOS and walks those cases on a device; the keyboard clearance of the sheets and the safe-area padding are the likeliest places to find something.
+
 ## [LOW] The reward caption differs between DESIGN.md and the requirements
 - Run: 2026-11-15-1405
 - Phase: cases
