@@ -244,7 +244,7 @@ Build the Questlog screens on top of the finished domain layer from `001-questlo
     - Confirm every screen and sheet has a widget test on the in-memory database (the catalogue of tasks 6–13)
     - _Requirements: 16.1, 16.2, 16.3, 16.4, 16.5, 16.7, 16.8, 19.3_
 
-  - [ ] 14.2 Write token-usage and icon checks
+  - [x] 14.2 Write token-usage and icon checks
     - Add a test that scans `lib/ui/` for literal `Color(0x…)` values, literal `Duration(milliseconds:` values and `Icons.` usages outside `lib/ui/theme/` and fails when found
     - _Requirements: 15.4, 15.8_
 
