@@ -388,6 +388,11 @@ class _HeroNameFieldState extends ConsumerState<_HeroNameField> {
               decoration: InputDecoration(
                 border: InputBorder.none,
                 isDense: true,
+                // The field itself is at least as tall as the 44 px hit area,
+                // so a tap anywhere in the painted box focuses it.
+                contentPadding: const EdgeInsets.symmetric(
+                  vertical: Space.s12 + Space.s2,
+                ),
                 hintText: l.settings_heroNamePlaceholder,
                 hintStyle: context.bodyText.bodyLarge!.copyWith(
                   fontSize: 16,
