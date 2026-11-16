@@ -113,7 +113,7 @@ void main() {
     expect(find.text(l10n.rule_addRow), findsOneWidget);
     expect(find.text(l10n.rule_addHint), findsOneWidget);
     expect(find.text(l10n.rule_postNow), findsNothing);
-    expect(find.text(l10n.settings_rulesActive(0)), findsOneWidget);
+    expect(find.text(l10n.settings_rulesActive(0).toUpperCase()), findsOneWidget);
   });
 
   testWidgets('a rule row shows cadence, quest count and the next date', (
@@ -130,7 +130,7 @@ void main() {
       findsOneWidget,
     );
     expect(find.text(l10n.rule_postNow), findsOneWidget);
-    expect(find.text(l10n.settings_rulesActive(1)), findsOneWidget);
+    expect(find.text(l10n.settings_rulesActive(1).toUpperCase()), findsOneWidget);
   });
 
   testWidgets(

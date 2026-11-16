@@ -71,7 +71,7 @@ class RulesSection extends ConsumerWidget {
               ),
             ),
             Text(
-              l.settings_rulesActive(rules.length),
+              l.settings_rulesActive(rules.length).toUpperCase(),
               style: labelStyle.copyWith(color: p.textDim),
             ),
           ],

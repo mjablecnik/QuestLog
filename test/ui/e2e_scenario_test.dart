@@ -260,7 +260,7 @@ void main() {
       await _tap(tester, find.text(cs.rule_saveAction));
       expect(find.text(cs.rule_sheetTitle), findsNothing);
       expect(find.text('Water plants'), findsOneWidget);
-      expect(find.text(cs.settings_rulesActive(1)), findsOneWidget);
+      expect(find.text(cs.settings_rulesActive(1).toUpperCase()), findsOneWidget);
       expect(find.text(cs.rule_postNow), findsOneWidget);
 
       await _tap(tester, find.text(cs.rule_postNow));
