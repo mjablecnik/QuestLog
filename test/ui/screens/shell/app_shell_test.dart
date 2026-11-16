@@ -9,8 +9,10 @@ import 'package:questlog/core/errors.dart';
 import 'package:questlog/core/xp_rules.dart';
 import 'package:questlog/data/database.dart';
 import 'package:questlog/data/models.dart';
+import 'package:questlog/data/preferences.dart';
 import 'package:questlog/services/providers.dart';
 import 'package:questlog/services/recurrence_service.dart';
+import 'package:questlog/services/settings_service.dart';
 import 'package:questlog/ui/screens/board/board_screen.dart';
 import 'package:questlog/ui/screens/missions/missions_screen.dart';
 import 'package:questlog/ui/screens/settings/settings_screen.dart';
@@ -424,6 +426,22 @@ void main() {
       await settle(tester);
       expect(find.byType(SnackBar), findsOneWidget);
       expect(find.text('Posted: Weekly review, Pay rent'), findsOneWidget);
+    });
+
+    shellTest('the message follows the stored language, not the device one', (
+      tester,
+    ) async {
+      // The device says English; the stored setting says Czech. Reconciliation
+      // finishes before the first settings emission, so the message must not
+      // use the language the tree runs in at that moment.
+      await pumpApp(
+        tester,
+        seed: () => SettingsService(db).setLanguage(AppLanguage.cs),
+        prime: (s) => s.posted = <Mission>[_mission(1, 'Weekly review')],
+      );
+      await settle(tester);
+      expect(find.text('Vyvěšeno: Weekly review'), findsOneWidget);
+      expect(find.text('Posted: Weekly review'), findsNothing);
     });
 
     shellTest('no message when nothing was posted', (tester) async {

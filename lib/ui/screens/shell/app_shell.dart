@@ -105,7 +105,16 @@ class _AppShellState extends ConsumerState<AppShell>
       _failed = posted == null;
     });
     if (posted != null && posted.isNotEmpty) {
-      final l10n = AppLocalizations.of(context);
+      // Reconciliation can finish before the first settings emission, when the
+      // widget tree still runs in the device language, so the stored language
+      // is resolved explicitly instead of read from the context.
+      try {
+        await ref.read(settingsProvider.future);
+      } catch (_) {
+        // Defaults apply: the message is shown in the device language.
+      }
+      if (!mounted) return;
+      final l10n = lookupAppLocalizations(ref.read(effectiveLocaleProvider));
       ref
           .read(snackbarProvider.notifier)
           .show(
