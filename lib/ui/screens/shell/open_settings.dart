@@ -8,8 +8,14 @@ import '../settings/settings_screen.dart';
 /// edge-swipe back gesture, from the theme's page transitions) is the same
 /// everywhere. The tab underneath stays mounted, so closing Settings returns to
 /// it with its scroll position unchanged.
+///
+/// Settings messages sit close to the bottom edge, so they are cleared when the
+/// route closes instead of lingering over the tab bar of the screen below.
 Future<void> openSettings(BuildContext context) {
-  return Navigator.of(
-    context,
-  ).push<void>(MaterialPageRoute<void>(builder: (_) => const SettingsScreen()));
+  final ScaffoldMessengerState messenger = ScaffoldMessenger.of(context);
+  return Navigator.of(context)
+      .push<void>(
+        MaterialPageRoute<void>(builder: (_) => const SettingsScreen()),
+      )
+      .whenComplete(messenger.clearSnackBars);
 }
