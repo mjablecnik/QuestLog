@@ -1,5 +1,23 @@
 # Issues
 
+## [LOW] The bundled fonts ship without their licence files
+- Run: 2026-11-15-1405
+- Phase: docs
+- Status: OPEN
+- What: the comment in `pubspec.yaml` says the SIL OFL licences are in `assets/fonts/OFL-*.txt`, but no such file exists in `assets/fonts/` or in git.
+- Impact: the OFL asks for the licence to travel with the fonts when they are redistributed (an App Store build embeds them); the comment points at files that are not there.
+- Tried: nothing; the documentation phase may not touch pubspec or assets.
+- Next: add the OFL text for each family to `assets/fonts/` (and surface it in the app if wanted), or fix the comment; the five temporary families disappear anyway once the display font is chosen.
+
+## [LOW] No project licence has been chosen
+- Run: 2026-11-15-1405
+- Phase: docs
+- Status: OPEN
+- What: the repository has no LICENSE file and `pubspec.yaml` is `publish_to: 'none'`; the README licence section therefore states "all rights reserved" instead of a licence type.
+- Impact: none for a private app; the README wording is a placeholder if the project is ever shared.
+- Tried: nothing; choosing a licence is Martin's decision.
+- Next: Martin picks a licence (or confirms "all rights reserved"), then README.md gets the type and a LICENSE file is added.
+
 ## [LOW] The iOS-only cases have not been run
 - Run: 2026-11-15-1405
 - Phase: verify
