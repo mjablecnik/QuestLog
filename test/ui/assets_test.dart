@@ -13,6 +13,7 @@ const _fontWeights = <String, List<int>>{
 };
 
 const _icons = <String>[
+  'arrow_up',
   'auto',
   'check',
   'chevron_left',
