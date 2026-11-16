@@ -35,3 +35,9 @@
 - Problem: `pkill -f flutter_tester` or `pgrep -f "check.sh"` in a monitor matches the very shell running it (kills it / never exits). Long test files also hit the default test timeout.
 - Solution: wait on a PID with `kill -0`, never pkill by pattern; run `timeout N flutter test --timeout 60s <file>` in the foreground.
 - Source: impl, 2026-11-16
+
+## Headless screenshots and long codegen in the sandbox
+- Project: questlog
+- Problem: `import`/`xwd` are not installed, and `dart run build_runner build` (~50 s, 296 outputs) trips the 2-minute tool timeout when run in the foreground.
+- Solution: `scrot -o file.png` inside `xvfb-run -a` (run the release bundle `build/linux/x64/release/bundle/questlog` in the same script, sleep ~12 s, scrot, kill). Run build_runner in the background with `timeout 500` and poll its log.
+- Source: build, 2026-11-16 01:20

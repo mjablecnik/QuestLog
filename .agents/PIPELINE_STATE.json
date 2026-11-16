@@ -12,11 +12,11 @@
       "finished_at": "2026-11-16T01:05:00Z"
     },
     "build": {
-      "status": "pending",
-      "start_sha": null,
+      "status": "done",
+      "start_sha": "5b7c666",
       "end_sha": null,
       "issues_opened": 0,
-      "finished_at": null
+      "finished_at": "2026-11-16T01:22:00Z"
     },
     "cases": {
       "status": "pending",
