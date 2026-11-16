@@ -33,11 +33,11 @@
       "finished_at": "2026-11-16T10:00:00Z"
     },
     "docs": {
-      "status": "pending",
-      "start_sha": null,
-      "end_sha": null,
-      "issues_opened": 0,
-      "finished_at": null
+      "status": "done",
+      "start_sha": "992d3db",
+      "end_sha": "2aab09d",
+      "issues_opened": 2,
+      "finished_at": "2026-11-16T10:12:47Z"
     },
     "report": {
       "status": "pending",
