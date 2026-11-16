@@ -4,33 +4,17 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'data/preferences.dart';
 import 'l10n/app_localizations.dart';
+import 'ui/screens/shell/app_shell.dart';
 import 'ui/state/ui_providers.dart';
 import 'ui/theme/questlog_theme.dart';
 import 'ui/theme/tokens.dart';
 
-/// Placeholder home until the app shell (task 7.2) replaces it.
-class AppShellPlaceholder extends StatelessWidget {
-  const AppShellPlaceholder({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Text(
-          AppLocalizations.of(context).app_name,
-          style: context.displayText.headlineLarge,
-        ),
-      ),
-    );
-  }
-}
-
 /// The application root: theme, locale and localization follow the settings
 /// live, so a change applies to every screen without rebuilding navigation.
 class QuestlogApp extends ConsumerWidget {
-  const QuestlogApp({super.key, this.home = const AppShellPlaceholder()});
+  const QuestlogApp({super.key, this.home = const AppShell()});
 
-  /// The root screen; swapped for the real `AppShell` in one line.
+  /// The root screen; tests swap in a probe.
   final Widget home;
 
   @override
