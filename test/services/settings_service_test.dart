@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:drift/native.dart';
 import 'package:glados/glados.dart';
 import 'package:questlog/core/errors.dart';
 import 'package:questlog/data/database.dart';
@@ -119,5 +122,26 @@ void main() {
       expect(emitted, hasLength(5));
       await sub.cancel();
     });
+  });
+
+  test('a settings write the database rejects is a StorageError', () async {
+    final Directory dir = await Directory.systemTemp.createTemp('questlog_ro');
+    final File file = File('${dir.path}/questlog.sqlite');
+    final QuestlogDatabase seeded = QuestlogDatabase.forTesting(NativeDatabase(file));
+    await seeded.customSelect('SELECT 1').get();
+    await seeded.close();
+    await Process.run('chmod', <String>['444', file.path]);
+    final QuestlogDatabase readOnly = QuestlogDatabase.forTesting(
+      NativeDatabase.createInBackground(file),
+    );
+    try {
+      await expectLater(
+        SettingsService(readOnly).setTheme(AppTheme.dark),
+        throwsA(isA<StorageError>()),
+      );
+    } finally {
+      await readOnly.close();
+      await dir.delete(recursive: true);
+    }
   });
 }

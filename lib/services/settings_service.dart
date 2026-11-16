@@ -60,6 +60,6 @@ class SettingsService {
   }
 
   Future<void> _write(AppStateCompanion change) async {
-    await _db.update(_db.appState).write(change);
+    await _db.runTransaction(() => _db.update(_db.appState).write(change));
   }
 }
