@@ -6,7 +6,7 @@ Build the Questlog screens on top of the finished domain layer from `001-questlo
 
 ## Tasks
 
-- [ ] 1. Add dependencies, assets and localization setup
+- [x] 1. Add dependencies, assets and localization setup
   - [x] 1.1 Add packages and configuration
     - Run `git config --global --add safe.directory /opt/flutter` if flutter fails with dubious ownership (skill `sandbox-flutter`)
     - Add `flutter_svg`, `flutter_slidable`, `intl`, `package_info_plus` and `flutter_localizations` (SDK) to `pubspec.yaml`; commit the updated `pubspec.lock`
@@ -25,7 +25,7 @@ Build the Questlog screens on top of the finished domain layer from `001-questlo
     - Set the display name `Questlog` and the bundle identifier `com.jablecnik.questlog` (same prefix as TimeLog's `com.jablecnik.timelogApp`) in `ios/Runner/Info.plist` and the Xcode project in one place; document in the project README where the user changes them
     - _Requirements: 19.7_
 
-- [ ] 2. Implement Design_Tokens, typography and theme
+- [x] 2. Implement Design_Tokens, typography and theme
   - [x] 2.1 Implement tokens, typography and theme
     - `lib/ui/theme/tokens.dart`: `QuestlogPalette.guildBoard` and `daylight` with the values in `.design/DESIGN.md`, `Space`, `Radii`, `Metrics`, `Motion`
     - `lib/ui/theme/typography.dart`: `displayFamilyName`, `buildDisplayTextTheme`, `buildBodyTextTheme` as two separate roles, with tabular figures for XP
@@ -39,7 +39,7 @@ Build the Questlog screens on top of the finished domain layer from `001-questlo
     - Unit: `buildTheme` succeeds for both palettes and for each `DisplayFont`; the body family stays Figtree when the display font changes
     - _Requirements: 13.4_
 
-- [ ] 3. Implement the pure UI logic
+- [x] 3. Implement the pure UI logic
   - [x] 3.1 Implement reordering helper
     - `lib/ui/state/reorder.dart`: `moveWithinSubset(shownIds, oldIndex, newIndex)` with Flutter's `ReorderableList` index semantics
     - _Requirements: 4.2, 4.6_
@@ -90,7 +90,7 @@ Build the Questlog screens on top of the finished domain layer from `001-questlo
     - Unit with `FixedClock` and fake timers: the notifier changes state when the clock passes 04:00, cancels while backgrounded and re-evaluates on resume
     - _Requirements: 17.2, 17.3_
 
-- [ ] 4. Add localization
+- [x] 4. Add localization
   - [x] 4.1 Write the translations
     - `lib/l10n/app_cs.arb` (template) and `app_en.arb` with every user-facing string used by this spec: tabs, Hero_Bar, board, quest and mission sheets, rewards, missions, detail, settings, rule sheet, font sheet, confirmations, snackbars and errors
     - Use ICU plurals for counts of Quests (Czech `one`/`few`/`other`) and the Czech wording quoted in the requirements
@@ -107,7 +107,7 @@ Build the Questlog screens on top of the finished domain layer from `001-questlo
 - [x] 5. Checkpoint — Foundations
   - Ensure all tests pass, ask the user if questions arise.
 
-- [ ] 6. Implement shared widgets
+- [x] 6. Implement shared widgets
   - [x] 6.1 Implement common widgets
     - `lib/ui/widgets/common/`: `AppIcon` (flutter_svg), `QuestlogSegmented`, `EmptyState` (pinned blank slip), `SkeletonList` (static under reduced motion), snackbar host, haptic helper and a semantic announcement helper that announces Quest and Mission completion and reopening
     - Every tappable widget has a 44×44 hit area, a pressed state and a semantic label
@@ -144,7 +144,7 @@ Build the Questlog screens on top of the finished domain layer from `001-questlo
     - Widget: quest, mission and level-up variants render the right text; auto-dismiss at 2.5 s and no auto-dismiss with the mission offer; tapping the scrim dismisses; queued events appear one after another; reduced motion uses a fade; dirty sheet asks before discarding and clean sheet does not
     - _Requirements: 5.8, 7.1, 7.3, 7.4, 7.5, 7.8, 7.9_
 
-- [ ] 7. Implement the application shell
+- [x] 7. Implement the application shell
   - [x] 7.1 Implement UI providers and the app root
     - `lib/ui/state/ui_providers.dart`: settings stream, effective locale (via `resolveLanguage` and the device locale), theme mode, display font, app version (`package_info_plus`), snackbar notifier
     - `lib/app.dart`: `QuestlogApp` with `MaterialApp`, localization delegates, theme and dark theme, `themeMode`, locale and `CupertinoPageTransitionsBuilder` so the edge-swipe back works
@@ -161,7 +161,7 @@ Build the Questlog screens on top of the finished domain layer from `001-questlo
     - Widget: splash then Board; exactly two tabs; Reconciliation runs once at start and once per resume; posted Missions produce a message; a failing Reconciliation shows data and a retry banner; switching tabs keeps each tab's scroll position
     - _Requirements: 1.1, 1.2, 1.5, 1.6, 1.7_
 
-- [ ] 8. Implement the Board_Screen
+- [x] 8. Implement the Board_Screen
   - [x] 8.1 Implement the quest list and board
     - `lib/ui/screens/board/`: `BoardScreen` with `HeroBar`, skeletons, empty state, FAB and a `QuestList` of open Quests (reorderable on long press, `Slidable` with "Upravit" and "Smazat") followed by the Quests done today
     - Check taps call `QuestService.complete` or `reopen`, push a reward event or a withdrawal message, and restore the card with an error message on failure
@@ -174,7 +174,7 @@ Build the Questlog screens on top of the finished domain layer from `001-questlo
     - Widget: open Quests in manual order and done Quests below; completing shows the Reward_Card and moves the card; unchecking moves it back with a withdrawal message (and the Mission-reopened note); drag-and-drop persists the new order and a cancelled drag persists nothing; a failing reorder restores the order; empty state and skeletons; clock advanced past 04:00 removes yesterday's done Quests
     - _Requirements: 3.1, 3.6, 3.7, 3.8, 3.10, 3.12, 3.13, 4.2, 4.3, 4.4, 4.5_
 
-- [ ] 9. Implement the Quest_Sheet and quest deletion
+- [x] 9. Implement the Quest_Sheet and quest deletion
   - [x] 9.1 Implement the Quest_Sheet
     - `lib/ui/sheets/quest_sheet.dart`: name, Difficulty selector (default Běžný), note, Mission picker with "bez mise" first, preset Mission, create and edit modes, disabled Difficulty and Mission for done Quests, inline errors from `validators.dart`, invalid-state error beside the picker, discard confirmation
     - Wire "Smazat" to `confirmDestructive` with the done-Quest wording and `QuestService.delete`
@@ -184,7 +184,7 @@ Build the Questlog screens on top of the finished domain layer from `001-questlo
     - Widget: create mode focuses the name field; empty, 81-character name and 501-character note show inline errors and keep input and do not call the service; edit of a done Quest disables Difficulty and Mission; preset Mission; success closes the sheet and the card appears; dirty dismissal asks first; deletion confirmation text differs for done Quests
     - _Requirements: 5.1, 5.4, 5.5, 5.6, 5.7, 5.8, 6.3, 6.4_
 
-- [ ] 10. Implement the Missions_Screen and Mission_Sheet
+- [x] 10. Implement the Missions_Screen and Mission_Sheet
   - [x] 10.1 Implement the Missions_Screen
     - `lib/ui/screens/missions/missions_screen.dart`: open Mission_Cards, section "Dokončeno dnes" with earned bonus, skeletons, empty state with a create button, FAB, swipe actions with the Mission deletion confirmation, tap to open detail
     - _Requirements: 6.5, 6.6, 6.7, 6.8, 6.9, 8.1, 8.2, 8.4, 8.5, 8.6, 8.7, 8.8, 8.9, 8.10_
@@ -197,10 +197,10 @@ Build the Questlog screens on top of the finished domain layer from `001-questlo
     - Widget: open Missions listed with ring and remaining XP; the ready state caption; "Dokončeno dnes" contains only today's completed Missions and empties after 04:00; empty state button opens the sheet; sheet validation, empty quest rows ignored, row removal, edit mode hides quest rows; Mission deletion confirmation names the Quest count
     - _Requirements: 6.6, 8.1, 8.4, 8.5, 8.6, 8.7, 9.3, 9.4, 9.5, 9.6_
 
-- [ ] 11. Checkpoint — Board and missions
+- [x] 11. Checkpoint — Board and missions
   - Ensure all tests pass, ask the user if questions arise.
 
-- [ ] 12. Implement the Mission_Detail_Screen
+- [x] 12. Implement the Mission_Detail_Screen
   - [x] 12.1 Implement the Mission_Detail_Screen
     - `lib/ui/screens/mission_detail/`: header with large progress and bonus, all Quests including older done ones (reorderable open Quests, same toggle behaviour as the board), `···` menu (Upravit misi, Přidat quest, Smazat misi last and destructive), "Dokončit misi" button when every Quest is done, completed state with seal, bonus and date, the reopen notice when the bonus is withdrawn, "Pravidelná mise" caption for Instances, empty state for a Mission without Quests, pop when the Mission disappears
     - Completing a Mission calls `MissionService.complete`, pushes the Mission reward and updates the screen
@@ -210,7 +210,7 @@ Build the Questlog screens on top of the finished domain layer from `001-questlo
     - Widget: all Quests listed including older done ones; "Dokončit misi" appears only when all Quests are done and at least one exists; completing shows the Mission reward and the completed state; reopening a Quest of a completed Mission shows the open state and the withdrawn-bonus notice; menu items and order; deletion returns to Missions; "Přidat quest" presets the Mission; screen pops when the Mission is deleted; recurring caption
     - _Requirements: 10.1, 10.2, 10.3, 10.4, 10.5, 10.6, 10.8, 10.9, 10.11_
 
-- [ ] 13. Implement the Settings_Screen
+- [x] 13. Implement the Settings_Screen
   - [x] 13.1 Implement profile, language, theme and About
     - `lib/ui/screens/settings/`: group layout in the required order, hero-name field with 40-character limit saved on blur or submit with inline error, Total_XP in small type, language segmented control highlighting the Effective_Language, theme segmented control with icons, About with the app name and version
     - _Requirements: 11.1, 11.2, 11.3, 11.4, 11.5, 11.6, 11.7, 11.8, 14.3, 14.4_
@@ -235,8 +235,8 @@ Build the Questlog screens on top of the finished domain layer from `001-questlo
     - Widget: six rows in the right order; choosing a font stores it and changes the title style family at once; body text keeps the Figtree family
     - _Requirements: 13.2, 13.3, 13.4_
 
-- [ ] 14. Verify cross-cutting requirements
-  - [ ] 14.1 Write layout, touch-target and accessibility tests
+- [x] 14. Verify cross-cutting requirements
+  - [x] 14.1 Write layout, touch-target and accessibility tests
     - Pump Board, Missions, Mission detail and Settings at widths 320 and 430 and at text scale 1.3 in Czech and English, and assert no overflow
     - Walk each screen's tappable widgets and assert a hit area of at least 44×44, a semantic label and a pressed state
     - Assert that completing and reopening a Quest and a Mission produce a semantic announcement
@@ -248,7 +248,7 @@ Build the Questlog screens on top of the finished domain layer from `001-questlo
     - Add a test that scans `lib/ui/` for literal `Color(0x…)` values, literal `Duration(milliseconds:` values and `Icons.` usages outside `lib/ui/theme/` and fails when found
     - _Requirements: 15.4, 15.8_
 
-  - [ ]* 14.3 Add golden tests
+  - [x]* 14.3 Add golden tests
     - Golden comparison of the Board_Screen, Missions_Screen and Settings_Screen in dark and light, with the bundled fonts, run on Linux
     - _Requirements: 19.4_
 
@@ -256,7 +256,7 @@ Build the Questlog screens on top of the finished domain layer from `001-questlo
     - On an in-memory database with a `FixedClock`: create a Mission with Quests, complete all Quests, complete the Mission and cross a Level boundary, check the Hero_Bar and the "Dokončeno dnes" section, advance the clock past 04:00 and check both lists, switch language and theme, post a rule by hand
     - _Requirements: 3.6, 7.3, 7.6, 8.5, 8.6, 10.6, 12.3, 14.3, 17.3_
 
-- [ ] 15. Checkpoint — UI complete
+- [x] 15. Checkpoint — UI complete
   - Run `scripts/check.sh` and ensure analysis, all tests and the structure check pass; run the app once under Xvfb on Linux (`xvfb-run -a flutter run -d linux`) to confirm it starts; ask the user if questions arise.
 
 ## Task Dependency Graph

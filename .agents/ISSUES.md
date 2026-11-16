@@ -1,5 +1,14 @@
 # Issues
 
+## [LOW] Two accessibility strings in the ARB files are unused
+- Run: 2026-11-15-1405
+- Phase: impl
+- Status: OPEN
+- What: `a11y_dragHandle` and `a11y_openSettings` exist in app_cs.arb and app_en.arb but no widget reads them. The Board drag affordance is spoken through the hint `a11y_dragHint`, and the gear is labelled with `settings_title`.
+- Impact: none for users; dead translation keys, and requirement 16.3 (spoken drag handle, gear) is met through the other strings (covered by test/ui/a11y/semantic_labels_test.dart).
+- Tried: kept them, because removing keys touches both language files and the generated localizations for no behaviour change.
+- Next: either use them as the semantic labels (drag handle, gear) or delete them from both ARB files.
+
 ## [MEDIUM] Approved palette fails 4.5:1 text contrast for several pairs
 - Run: 2026-11-15-1405
 - Phase: impl

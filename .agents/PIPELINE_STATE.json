@@ -1,15 +1,15 @@
 {
   "run_id": "2026-11-15-1405",
-  "spec": "001-questlog-domain",
+  "spec": "002-questlog-ui",
   "target": ".",
   "started_at": "2026-11-15T14:05:00Z",
   "phases": {
     "impl": {
       "status": "done",
-      "start_sha": "9ed0099",
-      "end_sha": "01f7b80",
-      "issues_opened": 0,
-      "finished_at": "2026-11-15T14:50:00Z"
+      "start_sha": "a117d8c",
+      "end_sha": "757dd43",
+      "issues_opened": 2,
+      "finished_at": "2026-11-16T01:05:00Z"
     },
     "build": {
       "status": "pending",
