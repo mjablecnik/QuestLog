@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
+import 'package:drift/remote.dart' show DriftRemoteException;
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 
@@ -29,7 +30,8 @@ class QuestlogDatabase extends _$QuestlogDatabase {
   ///
   /// A [DomainError] thrown by [action] rolls the transaction back and is
   /// rethrown as is; a SQLite failure is rolled back and rethrown as a
-  /// [StorageError], so callers only ever see domain errors.
+  /// [StorageError] (also when it comes back from the database isolate), so
+  /// callers only ever see domain errors.
   Future<T> runTransaction<T>(Future<T> Function() action) async {
     try {
       return await transaction(action);
@@ -39,6 +41,10 @@ class QuestlogDatabase extends _$QuestlogDatabase {
       throw StorageError(error);
     } on DriftWrappedException catch (error) {
       throw StorageError(error);
+    } on DriftRemoteException catch (error) {
+      // The file database runs in a background isolate, which reports every
+      // SQLite failure this way instead of as the SqliteException itself.
+      throw StorageError(error.remoteCause);
     }
   }
 

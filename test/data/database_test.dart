@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:drift/drift.dart' hide isNull, isNotNull;
+import 'package:drift/native.dart';
 import 'package:glados/glados.dart';
 import 'package:questlog/core/cadence.dart';
 import 'package:questlog/core/errors.dart';
@@ -207,6 +210,34 @@ void main() {
         throwsA(isA<InvalidStateError>()),
       );
       expect(await count(db.missions), 0);
+    });
+
+    test('maps a failure reported by the database isolate to StorageError', () async {
+      final Directory dir = await Directory.systemTemp.createTemp('questlog_ro');
+      final File file = File('${dir.path}/questlog.sqlite');
+      final QuestlogDatabase seeded = QuestlogDatabase.forTesting(NativeDatabase(file));
+      await seeded.customSelect('SELECT 1').get();
+      await seeded.close();
+      await Process.run('chmod', <String>['444', file.path]);
+      final QuestlogDatabase readOnly = QuestlogDatabase.forTesting(
+        NativeDatabase.createInBackground(file),
+      );
+      try {
+        await expectLater(
+          readOnly.runTransaction(() => readOnly.into(readOnly.quests).insert(
+                QuestsCompanion.insert(
+                  name: 'Nope',
+                  difficulty: Difficulty.easy,
+                  sortOrder: 0,
+                  createdAt: now,
+                ),
+              )),
+          throwsA(isA<StorageError>()),
+        );
+      } finally {
+        await readOnly.close();
+        await dir.delete(recursive: true);
+      }
     });
   });
 }
