@@ -40,11 +40,11 @@
       "finished_at": "2026-11-16T10:12:47Z"
     },
     "report": {
-      "status": "pending",
-      "start_sha": null,
-      "end_sha": null,
+      "status": "done",
+      "start_sha": "b70c9bd",
+      "end_sha": "6a82dcd",
       "issues_opened": 0,
-      "finished_at": null
+      "finished_at": "2026-11-16T10:30:00Z"
     }
   }
 }
