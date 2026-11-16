@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -88,5 +89,20 @@ void main() {
         .map((a) => a.substring('assets/icons/'.length, a.length - 4))
         .toSet();
     expect(declared, _icons.toSet());
+  });
+
+  test('no code draws an icon from an icon font', () {
+    final RegExp fontIcon = RegExp(r'\b(Icons|CupertinoIcons)\.|[^A-Za-z]Icon\(|IconData\(');
+    final List<String> offences = <String>[];
+    for (final File file in Directory('lib').listSync(recursive: true).whereType<File>()) {
+      if (!file.path.endsWith('.dart')) continue;
+      final List<String> lines = file.readAsLinesSync();
+      for (int i = 0; i < lines.length; i++) {
+        if (fontIcon.hasMatch(lines[i].replaceFirst(RegExp(r'//.*$'), ''))) {
+          offences.add('${file.path}:${i + 1}');
+        }
+      }
+    }
+    expect(offences, isEmpty);
   });
 }
