@@ -195,7 +195,7 @@ void main() {
 
     await tapCheck(tester, 'Reopen quest Sweep');
 
-    expect(find.text('25 XP withdrawn · mission reopened'), findsOneWidget);
+    expect(find.text('125 XP withdrawn · mission reopened'), findsOneWidget);
     expect(find.text('Cleanup'), findsOneWidget);
     expect(check('Complete quest Sweep'), findsOneWidget);
   });
