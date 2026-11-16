@@ -7,6 +7,7 @@ import 'package:questlog/data/models.dart';
 import 'package:questlog/l10n/app_localizations_cs.dart';
 import 'package:questlog/l10n/app_localizations_en.dart';
 import 'package:questlog/services/providers.dart';
+import 'package:questlog/ui/state/ui_providers.dart';
 import 'package:questlog/ui/sheets/quest_sheet.dart';
 import 'package:questlog/ui/state/reward_queue.dart';
 import 'package:questlog/ui/theme/tokens.dart';
@@ -376,6 +377,24 @@ void main() {
 
       expect(find.text(homeLabel), findsOneWidget);
       expect(find.text('Cleaning'), findsNothing);
+      // A deletion made on screen is not a stale row: no message.
+      expect(f.container.read(snackbarProvider), isNull);
+    });
+
+    detailTest('a Mission that is already gone closes with the message', (
+      tester,
+    ) async {
+      final (DetailFixture f, int _) = await pumpDetail(
+        tester,
+        seed: (DetailFixture f) async {
+          final int id = await _seedThree(f);
+          await f.container.read(missionServiceProvider).delete(id);
+          return id;
+        },
+      );
+
+      expect(find.text(homeLabel), findsOneWidget);
+      expect(f.container.read(snackbarProvider)?.text, en.error_itemChanged);
     });
   });
 }

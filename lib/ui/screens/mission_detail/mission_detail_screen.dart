@@ -9,6 +9,7 @@ import '../../sheets/mission_sheet.dart';
 import '../../sheets/quest_sheet.dart';
 import '../../state/board_day.dart';
 import '../../state/quest_actions.dart';
+import '../../state/ui_providers.dart';
 import '../../state/reorder.dart';
 import '../../theme/questlog_theme.dart';
 import '../../theme/tokens.dart';
@@ -43,6 +44,10 @@ class MissionDetailScreen extends ConsumerStatefulWidget {
 
 class _MissionDetailScreenState extends ConsumerState<MissionDetailScreen> {
   bool _closing = false;
+
+  /// Whether the Mission was ever shown. A detail that closes without ever
+  /// having loaded was opened from a stale row.
+  bool _loaded = false;
   bool _completing = false;
   bool _bonusWithdrawn = false;
 
@@ -62,12 +67,23 @@ class _MissionDetailScreenState extends ConsumerState<MissionDetailScreen> {
     final ModalRoute<dynamic>? route = ModalRoute.of(context);
     if (route == null) return;
     _closing = true;
+    if (!_loaded) _reportStaleOpen();
     final NavigatorState navigator = Navigator.of(context);
     if (route.isCurrent) {
       navigator.pop();
     } else {
       navigator.removeRoute(route);
     }
+  }
+
+  /// The Mission opened from the list is gone: say so and query every list
+  /// again, so the stale row leaves the Missions screen.
+  void _reportStaleOpen() {
+    final db = ref.read(databaseProvider);
+    db.markTablesUpdated(db.allTables);
+    ref
+        .read(snackbarProvider.notifier)
+        .show(SnackMessage(AppLocalizations.of(context).error_itemChanged));
   }
 
   void _onDetail(
@@ -80,6 +96,7 @@ class _MissionDetailScreenState extends ConsumerState<MissionDetailScreen> {
       _scheduleClose();
       return;
     }
+    _loaded = true;
     final MissionStatus? before = previous?.value?.mission.status;
     final MissionStatus after = detail.mission.status;
     final bool reopened =
@@ -167,6 +184,7 @@ class _MissionDetailScreenState extends ConsumerState<MissionDetailScreen> {
       _onDetail,
     );
     final MissionDetail? detail = async.value;
+    if (detail != null) _loaded = true;
     if (async is AsyncData<MissionDetail?> && detail == null) _scheduleClose();
 
     return Scaffold(
