@@ -5,6 +5,7 @@ import '../../theme/tokens.dart';
 
 /// Names of the bundled SVG icons in `assets/icons/`.
 abstract final class IconAsset {
+  static const arrowUp = 'arrow_up';
   static const auto = 'auto';
   static const check = 'check';
   static const chevronLeft = 'chevron_left';

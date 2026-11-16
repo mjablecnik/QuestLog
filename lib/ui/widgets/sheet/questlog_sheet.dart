@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
 import '../../../l10n/app_localizations.dart';
+import '../common/app_icon.dart';
 import '../../theme/questlog_theme.dart';
 import '../../theme/tokens.dart';
 import 'confirm_destructive.dart';
@@ -87,6 +88,7 @@ class QuestlogSheet extends StatefulWidget {
     required this.title,
     required this.primaryLabel,
     required this.child,
+    this.primaryIcon,
     this.onPrimary,
     this.primaryEnabled = true,
     this.isDirty = false,
@@ -97,6 +99,10 @@ class QuestlogSheet extends StatefulWidget {
 
   /// Already localized label of the brass button ("Vyvěsit quest", "Uložit").
   final String primaryLabel;
+
+  /// Optional [IconAsset] shown before the label of the brass button (the
+  /// artboards give the create sheets one).
+  final String? primaryIcon;
 
   /// Scrollable body. Keep it free of its own vertical scrollables.
   final Widget child;
@@ -250,6 +256,7 @@ class _QuestlogSheetState extends State<QuestlogSheet> {
             ),
             child: _PrimaryButton(
               label: widget.primaryLabel,
+              icon: widget.primaryIcon,
               onPressed: canSubmit ? _submit : null,
             ),
           ),
@@ -368,9 +375,14 @@ class _Header extends StatelessWidget {
 }
 
 class _PrimaryButton extends StatelessWidget {
-  const _PrimaryButton({required this.label, required this.onPressed});
+  const _PrimaryButton({
+    required this.label,
+    required this.onPressed,
+    this.icon,
+  });
 
   final String label;
+  final String? icon;
   final VoidCallback? onPressed;
 
   @override
@@ -401,7 +413,16 @@ class _PrimaryButton extends StatelessWidget {
           context.bodyText.titleMedium,
         ),
       ),
-      child: Text(label, textAlign: TextAlign.center),
+      child: icon == null
+          ? Text(label, textAlign: TextAlign.center)
+          : Row(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                AppIcon(icon!, size: 18),
+                const SizedBox(width: Space.s8),
+                Flexible(child: Text(label, textAlign: TextAlign.center)),
+              ],
+            ),
     );
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:questlog/core/errors.dart';
 import 'package:questlog/core/xp_rules.dart';
@@ -211,6 +212,11 @@ void main() {
         findsOneWidget,
       );
       expect(find.text(l10n.common_delete), findsNothing);
+      // The artboard gives the create button an up arrow before the label.
+      expect(
+        find.descendant(of: _primary, matching: find.byType(SvgPicture)),
+        findsOneWidget,
+      );
       // Default difficulty is Normal, with the XP captions.
       expect(find.text('+10 XP'), findsOneWidget);
       expect(find.text('+25 XP'), findsOneWidget);
@@ -464,6 +470,11 @@ void main() {
       );
       expect(find.text('Old name'), findsOneWidget);
       expect(find.text(l10n.common_delete), findsOneWidget);
+      // Only the create button carries the arrow.
+      expect(
+        find.descendant(of: _primary, matching: find.byType(SvgPicture)),
+        findsNothing,
+      );
     });
 
     testWidgets('editing an open quest saves difficulty and mission', (

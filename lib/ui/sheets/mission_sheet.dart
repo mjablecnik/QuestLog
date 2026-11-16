@@ -226,6 +226,7 @@ class _MissionSheetState extends ConsumerState<MissionSheet> {
           ? l10n.mission_sheetEditTitle
           : l10n.mission_sheetCreateTitle,
       primaryLabel: _isEdit ? l10n.common_save : l10n.mission_createAction,
+      primaryIcon: _isEdit ? null : IconAsset.missions,
       isDirty: _isDirty,
       onPrimary: _submit,
       child: Column(

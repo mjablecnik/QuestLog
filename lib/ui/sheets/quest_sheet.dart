@@ -12,6 +12,7 @@ import '../forms/validators.dart';
 import '../theme/questlog_theme.dart';
 import '../theme/tokens.dart';
 import '../widgets/cards/difficulty_pips.dart';
+import '../widgets/common/app_icon.dart';
 import '../widgets/common/questlog_segmented.dart';
 import '../widgets/sheet/confirm_destructive.dart';
 import '../widgets/sheet/questlog_sheet.dart';
@@ -196,6 +197,7 @@ class _QuestSheetState extends ConsumerState<QuestSheet> {
           ? l10n.quest_sheetEditTitle
           : l10n.quest_sheetCreateTitle,
       primaryLabel: _isEditing ? l10n.common_save : l10n.quest_createAction,
+      primaryIcon: _isEditing ? null : IconAsset.arrowUp,
       isDirty: _isDirty,
       onPrimary: _save,
       child: Column(
