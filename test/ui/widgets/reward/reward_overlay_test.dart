@@ -147,6 +147,25 @@ void main() {
       await _end(tester);
     });
 
+    testWidgets('the XP unit is set smaller than the figure', (tester) async {
+      final c = await _pump(tester);
+      await _show(tester, c, _quest(xp: 1250));
+      final Text figure = tester.widget<Text>(
+        find.descendant(
+          of: find.byType(RewardCard),
+          matching: find.byWidgetPredicate(
+            (Widget w) => w is Text && w.textSpan?.toPlainText() == '+1,250 XP',
+          ),
+        ),
+      );
+      final TextSpan root = figure.textSpan! as TextSpan;
+      expect(root.text, '+1,250');
+      final TextSpan unit = root.children!.single as TextSpan;
+      expect(unit.text, ' XP');
+      expect(unit.style!.fontSize, lessThan(root.style!.fontSize!));
+      await _end(tester);
+    });
+
     testWidgets('quest without a mission has no progress block', (
       tester,
     ) async {

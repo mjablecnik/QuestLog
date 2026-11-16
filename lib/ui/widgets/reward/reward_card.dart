@@ -113,9 +113,8 @@ class RewardCard extends StatelessWidget {
               ),
               FittedBox(
                 fit: BoxFit.scaleDown,
-                child: Text(
-                  l10n.common_plusXp(xp),
-                  textAlign: TextAlign.center,
+                child: _XpFigure(
+                  text: l10n.common_plusXp(xp),
                   style: display.displayLarge!.copyWith(color: p.brass),
                 ),
               ),
@@ -175,6 +174,36 @@ class RewardCard extends StatelessWidget {
 
 /// The brass seal: a tick, or the new Level number in the level-up variant,
 /// inside soft halos and a burst of rays.
+/// "+25 XP" with the unit set smaller than the figure, as on the artboard.
+class _XpFigure extends StatelessWidget {
+  const _XpFigure({required this.text, required this.style});
+
+  /// The localized "+N XP"; the unit is everything after the last space.
+  final String text;
+  final TextStyle style;
+
+  @override
+  Widget build(BuildContext context) {
+    final int split = text.lastIndexOf(' ');
+    if (split < 0) {
+      return Text(text, textAlign: TextAlign.center, style: style);
+    }
+    return Text.rich(
+      TextSpan(
+        text: text.substring(0, split),
+        style: style,
+        children: <InlineSpan>[
+          TextSpan(
+            text: text.substring(split),
+            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+          ),
+        ],
+      ),
+      textAlign: TextAlign.center,
+    );
+  }
+}
+
 class _Seal extends StatelessWidget {
   const _Seal({required this.levelNumber, required this.rays});
 
@@ -314,7 +343,7 @@ class _MissionBlock extends StatelessWidget {
               child: LinearProgressIndicator(
                 value: fraction,
                 minHeight: Metrics.heroBar,
-                backgroundColor: p.inkFaint.withValues(alpha: 0.3),
+                backgroundColor: p.ink.withValues(alpha: 0.10),
                 valueColor: AlwaysStoppedAnimation<Color>(p.brass),
               ),
             ),
