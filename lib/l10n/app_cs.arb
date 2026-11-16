@@ -1266,11 +1266,11 @@
   "@font_nameCinzel": {
     "description": "Font name (proper noun)."
   },
-  "font_noteFigtree": "Klidné, univerzální",
+  "font_noteFigtree": "Jedno písmo v celé aplikaci",
   "@font_noteFigtree": {
     "description": "Two-word character note."
   },
-  "font_noteBricolage": "Osobitý grotesk",
+  "font_noteBricolage": "Grotesk s charakterem",
   "@font_noteBricolage": {
     "description": "Two-word character note."
   },

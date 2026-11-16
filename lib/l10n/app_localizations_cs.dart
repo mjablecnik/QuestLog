@@ -970,10 +970,10 @@ class AppLocalizationsCs extends AppLocalizations {
   String get font_nameCinzel => 'Cinzel';
 
   @override
-  String get font_noteFigtree => 'Klidné, univerzální';
+  String get font_noteFigtree => 'Jedno písmo v celé aplikaci';
 
   @override
-  String get font_noteBricolage => 'Osobitý grotesk';
+  String get font_noteBricolage => 'Grotesk s charakterem';
 
   @override
   String get font_noteSora => 'Geometrický, technický';

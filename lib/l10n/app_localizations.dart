@@ -1391,13 +1391,13 @@ abstract class AppLocalizations {
   /// Two-word character note.
   ///
   /// In cs, this message translates to:
-  /// **'Klidné, univerzální'**
+  /// **'Jedno písmo v celé aplikaci'**
   String get font_noteFigtree;
 
   /// Two-word character note.
   ///
   /// In cs, this message translates to:
-  /// **'Osobitý grotesk'**
+  /// **'Grotesk s charakterem'**
   String get font_noteBricolage;
 
   /// Two-word character note.
