@@ -5,6 +5,7 @@ import 'package:questlog/app.dart';
 import 'package:questlog/data/preferences.dart';
 import 'package:questlog/l10n/app_localizations.dart';
 import 'package:questlog/services/providers.dart';
+import 'package:questlog/ui/screens/shell/app_shell.dart';
 import 'package:questlog/ui/state/ui_providers.dart';
 import 'package:questlog/ui/theme/questlog_theme.dart';
 import 'package:questlog/ui/theme/tokens.dart';
@@ -118,29 +119,37 @@ void main() {
     expect(context().palette, QuestlogPalette.daylight);
   });
 
-  testWidgets('default home is the placeholder with the localized title', (
+  testWidgets('default home is the shell, localized by the device locale', (
     tester,
   ) async {
     final db = createTestDatabase();
-    final container = ProviderContainer(
-      overrides: [
-        databaseProvider.overrideWithValue(db),
-        deviceLocaleProvider.overrideWithValue(const Locale('cs')),
-      ],
-    );
-    addTearDown(() async {
-      await tester.pumpWidget(const SizedBox());
-      container.dispose();
-      await db.close();
-    });
     await tester.pumpWidget(
-      UncontrolledProviderScope(
-        container: container,
+      ProviderScope(
+        overrides: [
+          databaseProvider.overrideWithValue(db),
+          deviceLocaleProvider.overrideWithValue(const Locale('cs')),
+        ],
         child: const QuestlogApp(),
       ),
     );
     await tester.pumpAndSettle();
-    expect(find.byType(AppShellPlaceholder), findsOneWidget);
-    expect(find.text('Questlog'), findsOneWidget);
+    expect(find.byType(AppShell), findsOneWidget);
+    final BuildContext context = tester.element(find.byType(AppShell));
+    expect(AppLocalizations.of(context).localeName, 'cs');
+
+    // Disposed inside the body: the binding checks for pending timers
+    // (Board_Day) before tear-downs run.
+    // First let the real Reconciliation and the Drift streams finish.
+    await tester.runAsync(
+      () => Future<void>.delayed(const Duration(milliseconds: 100)),
+    );
+    await tester.pump();
+    await tester.runAsync(
+      () => Future<void>.delayed(const Duration(milliseconds: 100)),
+    );
+    await tester.pump();
+    await tester.pumpWidget(const SizedBox());
+    await tester.pump(const Duration(milliseconds: 10));
+    await tester.runAsync(db.close);
   });
 }
