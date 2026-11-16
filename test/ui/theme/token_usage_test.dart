@@ -53,6 +53,16 @@ void main() {
     expect(_offences(RegExp(r'Duration\(\s*milliseconds\s*:')), isEmpty);
   });
 
+  // A non-zero number written directly in a padding, margin, gap or radius.
+  final RegExp literalSpacing = RegExp(
+    r'(EdgeInsets\.[a-zA-Z]+|BorderRadius\.(circular|all)|Radius\.circular)\([^)]*?(?<![A-Za-z_.0-9])[1-9][0-9]*(\.[0-9]+)?\s*[,)]'
+    r'|SizedBox\((width|height):\s*[1-9]',
+  );
+
+  test('no literal spacing or radius outside lib/ui/theme', () {
+    expect(_offences(literalSpacing), isEmpty);
+  });
+
   test('no Material Icons.* outside lib/ui/theme', () {
     expect(_offences(RegExp(r'\bIcons\.[a-zA-Z]')), isEmpty);
   });
@@ -66,5 +76,10 @@ void main() {
       isTrue,
     );
     expect(RegExp(r'\bIcons\.[a-zA-Z]').hasMatch('Icon(Icons.add)'), isTrue);
+    expect(literalSpacing.hasMatch('padding: EdgeInsets.all(16),'), isTrue);
+    expect(literalSpacing.hasMatch('padding: EdgeInsets.only(top: 8),'), isTrue);
+    expect(literalSpacing.hasMatch('const SizedBox(height: 18),'), isTrue);
+    expect(literalSpacing.hasMatch('BorderRadius.circular(1)'), isTrue);
+    expect(literalSpacing.hasMatch('EdgeInsets.all(Space.s16)'), isFalse);
   });
 }
