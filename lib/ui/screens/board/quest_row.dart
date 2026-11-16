@@ -41,7 +41,7 @@ class QuestRow extends StatelessWidget {
     );
 
     return Padding(
-      padding: const EdgeInsets.fromLTRB(Space.s20, 0, Space.s20, Space.s12),
+      padding: const EdgeInsets.fromLTRB(Space.s20, 0, Space.s20, Space.s10),
       child: LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
           // Two actions of Metrics.swipeAction each, as a share of the card.

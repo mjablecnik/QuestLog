@@ -9,7 +9,7 @@ import '../../sheets/quest_sheet.dart';
 import '../../state/board_day.dart';
 import '../../theme/questlog_theme.dart';
 import '../../theme/tokens.dart';
-import '../../widgets/common/app_icon.dart';
+import '../../widgets/common/add_fab.dart';
 import '../../widgets/common/empty_state.dart';
 import '../../widgets/common/skeleton_list.dart';
 import '../../widgets/hero/hero_bar.dart';
@@ -62,32 +62,35 @@ class _BoardScreenState extends ConsumerState<BoardScreen> {
 
     return Scaffold(
       backgroundColor: p.board,
-      floatingActionButton: FloatingActionButton(
-        heroTag: null,
-        tooltip: l.a11y_addQuest,
-        backgroundColor: p.brass,
-        foregroundColor: p.inkOnBrass,
-        shape: const CircleBorder(),
-        onPressed: () => showQuestSheet(context),
-        child: AppIcon(IconAsset.plus, color: p.inkOnBrass),
-      ),
       body: SafeArea(
         bottom: false,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+        child: Stack(
           children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.fromLTRB(
-                Space.s20,
-                Space.s8,
-                Space.s20,
-                Space.s16,
-              ),
-              child: HeroBar(onOpenSettings: widget.onOpenSettings),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(
+                    Space.s20,
+                    Space.s4,
+                    Space.s20,
+                    Space.s18,
+                  ),
+                  child: HeroBar(onOpenSettings: widget.onOpenSettings),
+                ),
+                _TitleRow(openCount: open?.length, today: today),
+                const SizedBox(height: Space.s10),
+                Expanded(child: body),
+              ],
             ),
-            _TitleRow(openCount: open?.length, today: today),
-            const SizedBox(height: Space.s12),
-            Expanded(child: body),
+            Positioned(
+              right: Space.s20,
+              bottom: Space.s20,
+              child: AddFab(
+                label: l.a11y_addQuest,
+                onPressed: () => showQuestSheet(context),
+              ),
+            ),
           ],
         ),
       ),

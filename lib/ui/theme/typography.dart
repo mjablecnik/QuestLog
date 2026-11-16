@@ -15,6 +15,10 @@ const List<String> _fallbackFamilies = <String>[
   'sans-serif',
 ];
 
+/// Line heights of the artboards: `.phone` sets 1.35, `.display` 1.1.
+const double _bodyLineHeight = 1.35;
+const double _displayLineHeight = 1.1;
+
 /// Tabular figures keep XP numbers from jittering while they count up.
 const List<FontFeature> _tabularFigures = <FontFeature>[
   FontFeature.tabularFigures(),
@@ -49,6 +53,7 @@ TextStyle _display(
   color: color,
   fontSize: size,
   fontWeight: weight,
+  height: _displayLineHeight,
   letterSpacing: -0.02 * size,
   fontFeatures: _tabularFigures,
 );
@@ -81,6 +86,7 @@ TextStyle _body(
   color: color,
   fontSize: size,
   fontWeight: weight,
+  height: _bodyLineHeight,
   letterSpacing: letterSpacing,
 );
 

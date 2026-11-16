@@ -86,6 +86,31 @@ void main() {
     expect(b.bodyLarge!.color, p.text);
   });
 
+  test('line heights follow the artboards: 1.35 body, 1.1 display', () {
+    final QuestlogPalette p = palettes.first;
+    final TextTheme d = buildDisplayTextTheme(DisplayFont.figtree, p);
+    final TextTheme b = buildBodyTextTheme(p);
+    for (final TextStyle? style in <TextStyle?>[
+      d.displayLarge,
+      d.headlineLarge,
+      d.headlineMedium,
+      d.titleLarge,
+      d.titleMedium,
+    ]) {
+      expect(style!.height, 1.1);
+    }
+    for (final TextStyle? style in <TextStyle?>[
+      b.bodyLarge,
+      b.bodyMedium,
+      b.bodySmall,
+      b.titleMedium,
+      b.labelLarge,
+      b.labelSmall,
+    ]) {
+      expect(style!.height, 1.35);
+    }
+  });
+
   test('selection, cursor and handles are brass; sheets have no handle', () {
     for (final QuestlogPalette p in palettes) {
       final ThemeData t = buildTheme(palette: p, font: DisplayFont.figtree);

@@ -136,7 +136,8 @@ class QuestCard extends StatelessWidget {
                 const SizedBox(width: Space.s6),
                 Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: Space.s4),
+                    // With the card's own 8 this makes the artboard's 14 above and below.
+                    padding: const EdgeInsets.symmetric(vertical: Space.s6),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisSize: MainAxisSize.min,

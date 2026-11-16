@@ -33,7 +33,7 @@ class BoardSectionHeader extends StatelessWidget {
         Space.s20,
         Space.s8,
         Space.s20,
-        Space.s12,
+        Space.s10,
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.baseline,

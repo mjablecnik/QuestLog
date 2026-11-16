@@ -111,10 +111,7 @@ void main() {
       // ---- 1. Create a Mission with two Quests (requirements 3.6, 9) -------
       await _tap(tester, find.byKey(_missionsTab));
       expect(find.text(en.missions_emptyTitle), findsOneWidget);
-      await _tap(
-        tester,
-        find.byKey(const ValueKey<String>('missions-add-fab')),
-      );
+      await _tap(tester, find.byKey(const ValueKey<String>('add-fab')));
       expect(find.text(en.mission_sheetCreateTitle), findsOneWidget);
 
       await tester.enterText(

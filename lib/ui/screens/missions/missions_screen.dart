@@ -13,13 +13,13 @@ import '../../state/quest_actions.dart';
 import '../../theme/questlog_theme.dart';
 import '../../theme/tokens.dart';
 import '../../widgets/cards/mission_card.dart';
+import '../../widgets/common/add_fab.dart';
 import '../../widgets/common/empty_state.dart';
 import '../../widgets/common/skeleton_list.dart';
 import '../../widgets/hero/hero_bar.dart';
 import '../../widgets/sheet/confirm_destructive.dart';
 import '../mission_detail/mission_detail_screen.dart';
 import '../settings/settings_screen.dart';
-import 'add_fab.dart';
 import 'mission_swipe_row.dart';
 
 /// The "Mise" tab: open Missions with their progress, the Missions completed
@@ -141,9 +141,11 @@ class _MissionsScreenState extends ConsumerState<MissionsScreen> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
                 Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: Space.s20,
-                    vertical: Space.s8,
+                  padding: const EdgeInsets.fromLTRB(
+                    Space.s20,
+                    Space.s4,
+                    Space.s20,
+                    Space.s18,
                   ),
                   child: HeroBar(onOpenSettings: _openSettings),
                 ),
@@ -151,7 +153,7 @@ class _MissionsScreenState extends ConsumerState<MissionsScreen> {
                   openCount: openList?.length ?? 0,
                   doneCount: doneList?.length ?? 0,
                 ),
-                const SizedBox(height: Space.s12),
+                const SizedBox(height: Space.s10),
                 Expanded(child: body),
               ],
             ),
@@ -238,7 +240,7 @@ class _MissionList extends StatelessWidget {
 
     Widget row(MissionSummary m, {String? time}) => Padding(
       key: ValueKey<int>(m.id),
-      padding: const EdgeInsets.only(bottom: Space.s12),
+      padding: const EdgeInsets.only(bottom: Space.s10),
       child: MissionSwipeRow(
         missionName: m.name,
         leaving: leaving.contains(m.id),
@@ -292,7 +294,7 @@ class _SectionLabel extends StatelessWidget {
     return Semantics(
       header: true,
       child: Padding(
-        padding: const EdgeInsets.only(bottom: Space.s12),
+        padding: const EdgeInsets.only(top: Space.s8, bottom: Space.s10),
         child: Text(
           text.toUpperCase(),
           style: context.bodyText.labelSmall!.copyWith(

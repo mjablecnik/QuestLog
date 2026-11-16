@@ -290,7 +290,7 @@ void main() {
         },
       );
 
-      await tester.tap(find.byKey(const ValueKey<String>('missions-add-fab')));
+      await tester.tap(find.byKey(const ValueKey<String>('add-fab')));
       await tester.pumpAndSettle();
 
       expect(find.byType(MissionSheet), findsOneWidget);

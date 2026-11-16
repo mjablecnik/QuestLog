@@ -94,8 +94,10 @@ abstract final class Space {
   static const double s4 = 4;
   static const double s6 = 6;
   static const double s8 = 8;
+  static const double s10 = 10;
   static const double s12 = 12;
   static const double s16 = 16;
+  static const double s18 = 18;
   static const double s20 = 20;
   static const double s24 = 24;
   static const double s32 = 32;
@@ -122,7 +124,7 @@ abstract final class Metrics {
   static const double ringStroke = 5;
   static const double swipeAction = 84;
   static const double levelBadge = 52;
-  static const double fab = 56;
+  static const double fab = 58;
   static const double pip = 7;
   static const double hairline = 1;
   static const double grabberWidth = 36;
