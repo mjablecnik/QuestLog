@@ -252,7 +252,7 @@ Build the Questlog screens on top of the finished domain layer from `001-questlo
     - Golden comparison of the Board_Screen, Missions_Screen and Settings_Screen in dark and light, with the bundled fonts, run on Linux
     - _Requirements: 19.4_
 
-  - [ ] 14.4 Write an end-to-end UI scenario
+  - [x] 14.4 Write an end-to-end UI scenario
     - On an in-memory database with a `FixedClock`: create a Mission with Quests, complete all Quests, complete the Mission and cross a Level boundary, check the Hero_Bar and the "Dokončeno dnes" section, advance the clock past 04:00 and check both lists, switch language and theme, post a rule by hand
     - _Requirements: 3.6, 7.3, 7.6, 8.5, 8.6, 10.6, 12.3, 14.3, 17.3_
 
