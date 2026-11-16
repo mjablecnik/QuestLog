@@ -135,7 +135,12 @@ class _SegmentState<T> extends State<_Segment<T>> {
             color: background,
             borderRadius: BorderRadius.circular(Radii.control - Space.s4),
             border: on
-                ? Border.all(color: p.brass, width: Metrics.hairline)
+                // The selected option is already filled, so its pressed state
+                // is a heavier outline.
+                ? Border.all(
+                    color: p.brass,
+                    width: _pressed ? Metrics.hairline * 2 : Metrics.hairline,
+                  )
                 : null,
           ),
           child: Opacity(
