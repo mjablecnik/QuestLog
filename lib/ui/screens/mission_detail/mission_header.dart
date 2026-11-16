@@ -152,8 +152,11 @@ class _ProgressBar extends StatelessWidget {
               builder: (BuildContext context, double value, Widget? child) =>
                   Align(
                     alignment: Alignment.centerLeft,
+                    // heightFactor 1: a child-less ColoredBox takes the smallest
+                    // size, which is zero high under loose constraints.
                     child: FractionallySizedBox(
                       widthFactor: value,
+                      heightFactor: 1,
                       child: child,
                     ),
                   ),

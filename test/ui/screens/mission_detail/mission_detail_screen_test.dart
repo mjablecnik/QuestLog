@@ -9,6 +9,7 @@ import 'package:questlog/l10n/app_localizations_en.dart';
 import 'package:questlog/services/providers.dart';
 import 'package:questlog/ui/sheets/quest_sheet.dart';
 import 'package:questlog/ui/state/reward_queue.dart';
+import 'package:questlog/ui/theme/tokens.dart';
 
 import '_harness.dart';
 
@@ -109,6 +110,32 @@ void main() {
       expect(find.text(en.missions_recurringCaption), findsOneWidget);
       expect(f.db, isNotNull);
       expect(id, greaterThan(0));
+    });
+
+    detailTest('the progress bar fill is visible and proportional', (
+      tester,
+    ) async {
+      final (DetailFixture f, int id) = await pumpDetail(
+        tester,
+        seed: _seedThree,
+      );
+      await completeQuests(tester, f, id, <String>['Sweep the floor']);
+
+      final Finder fill = find.descendant(
+        of: find.byType(FractionallySizedBox),
+        matching: find.byType(ColoredBox),
+      );
+      expect(fill, findsOneWidget);
+      final Finder track = find.byWidgetPredicate(
+        (Widget w) => w is SizedBox && w.height == Metrics.detailBar,
+      );
+      expect(track, findsOneWidget);
+      // A fill with zero height is invisible although the text says 1 of 3.
+      expect(tester.getSize(fill).height, Metrics.detailBar);
+      expect(
+        tester.getSize(fill).width / tester.getSize(track).width,
+        closeTo(1 / 3, 0.01),
+      );
     });
 
     detailTest('a one-off Mission has no recurring caption', (tester) async {
