@@ -13,10 +13,19 @@ import 'reward_queue.dart';
 
 /// Shows the message for a failed service call.
 ///
-/// A not-found or invalid-state error means the list was stale: the streams
-/// refresh it by themselves, so only the "item changed" message is shown.
+/// A not-found or invalid-state error means the list was stale. The streams
+/// normally refresh it by themselves; every table is marked as updated as well
+/// so that every list queries again, even after a change the watchers were not
+/// told about, as the message "the list was refreshed" promises.
 void showDomainError(BuildContext context, Object error, {double? clearance}) {
   final l10n = AppLocalizations.of(context);
+  if (error is NotFoundError || error is InvalidStateError) {
+    final db = ProviderScope.containerOf(
+      context,
+      listen: false,
+    ).read(databaseProvider);
+    db.markTablesUpdated(db.allTables);
+  }
   final String text = error is DomainError
       ? domainErrorText(l10n, error)
       : l10n.error_unknown;

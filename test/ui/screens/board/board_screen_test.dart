@@ -149,6 +149,27 @@ void main() {
     );
   });
 
+  boardTest(h, 'a not-found error also reloads a list that went stale', (
+    tester,
+  ) async {
+    await h.pump(tester);
+    await tester.runAsync(() => seedQuest(h.db, name: 'Alpha'));
+    await h.settle(tester);
+    // A raw statement does not notify the table watchers, so the board still
+    // shows the card of a row that is already gone.
+    await tester.runAsync(
+      () => h.db.customStatement('DELETE FROM quests WHERE name = ?', <Object>[
+        'Alpha',
+      ]),
+    );
+    h.service.completeError = const NotFoundError('quest', 1);
+
+    await tapCheck(tester, 'Complete quest Alpha');
+    await h.settle(tester);
+
+    expect(check('Complete quest Alpha'), findsNothing);
+  });
+
   boardTest(h, 'unchecking moves the card back and shows the withdrawal', (
     tester,
   ) async {
