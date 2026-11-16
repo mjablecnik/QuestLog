@@ -137,14 +137,14 @@ class BlankSlip extends StatelessWidget {
                   ],
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.fromLTRB(22, 26, 22, 0),
+                  padding: const EdgeInsets.fromLTRB(Space.s22, Space.s26, Space.s22, 0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       _Rule(color: p.inkFaint),
-                      const SizedBox(height: 18),
+                      const SizedBox(height: Space.s18),
                       _Rule(color: p.inkFaint),
-                      const SizedBox(height: 18),
+                      const SizedBox(height: Space.s18),
                       FractionallySizedBox(
                         widthFactor: 0.6,
                         child: _Rule(color: p.inkFaint),
@@ -188,10 +188,10 @@ class _Rule extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 2,
+      height: Space.s2,
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.3),
-        borderRadius: BorderRadius.circular(1),
+        borderRadius: BorderRadius.circular(Metrics.hairline),
       ),
     );
   }
