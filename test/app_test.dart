@@ -20,6 +20,46 @@ class _Probe extends StatelessWidget {
       Scaffold(body: Text(AppLocalizations.of(context).app_tabQuests));
 }
 
+/// A pushed screen that remembers how often it was created and scrolled.
+class _Pushed extends StatefulWidget {
+  const _Pushed({required this.onInit});
+
+  final VoidCallback onInit;
+
+  @override
+  State<_Pushed> createState() => _PushedState();
+}
+
+class _PushedState extends State<_Pushed> {
+  final ScrollController controller = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    widget.onInit();
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) => Scaffold(
+    body: ListView(
+      controller: controller,
+      children: <Widget>[
+        for (int i = 0; i < 40; i++)
+          SizedBox(
+            height: 60,
+            child: Text(AppLocalizations.of(context).app_tabQuests),
+          ),
+      ],
+    ),
+  );
+}
+
 void main() {
   testWidgets('settings change locale, theme and font at once', (tester) async {
     final db = createTestDatabase();
@@ -85,6 +125,62 @@ void main() {
     await settings.setLanguage(AppLanguage.en);
     await tester.pumpAndSettle();
     expect(find.text('Quests'), findsOneWidget);
+  });
+
+  testWidgets('a setting change restyles screens already pushed without '
+      'rebuilding the stack', (tester) async {
+    final db = createTestDatabase();
+    final container = ProviderContainer(
+      overrides: [
+        databaseProvider.overrideWithValue(db),
+        deviceLocaleProvider.overrideWithValue(const Locale('en')),
+      ],
+    );
+    addTearDown(() async {
+      await tester.pumpWidget(const SizedBox());
+      container.dispose();
+      await db.close();
+    });
+    final settings = container.read(settingsServiceProvider);
+    int created = 0;
+
+    await tester.pumpWidget(
+      UncontrolledProviderScope(
+        container: container,
+        child: const QuestlogApp(home: _Probe()),
+      ),
+    );
+    await tester.pumpAndSettle();
+    final NavigatorState navigator = Navigator.of(
+      tester.element(find.byType(_Probe)),
+    );
+    // The detail, then Settings on top of it.
+    navigator.push(
+      MaterialPageRoute<void>(builder: (_) => _Pushed(onInit: () => created++)),
+    );
+    await tester.pumpAndSettle();
+    final ScrollController controller = tester
+        .state<_PushedState>(find.byType(_Pushed))
+        .controller;
+    controller.jumpTo(300);
+    navigator.push(MaterialPageRoute<void>(builder: (_) => const Scaffold()));
+    await tester.pumpAndSettle();
+
+    await settings.setLanguage(AppLanguage.cs);
+    await settings.setTheme(AppTheme.dark);
+    await tester.pumpAndSettle();
+    navigator.pop();
+    await tester.pumpAndSettle();
+
+    final BuildContext context = tester.element(find.byType(_Pushed));
+    expect(context.palette, QuestlogPalette.guildBoard);
+    expect(find.text('Questy'), findsWidgets);
+    expect(
+      created,
+      1,
+      reason: 'the pushed screen was not rebuilt from scratch',
+    );
+    expect(controller.offset, 300, reason: 'the scroll position is kept');
   });
 
   testWidgets('system theme follows the device brightness live', (
