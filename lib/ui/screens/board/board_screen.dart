@@ -95,6 +95,13 @@ class _BoardScreenState extends ConsumerState<BoardScreen> {
   }
 }
 
+/// The date beside the Board title: "sobota 15. 11." in Czech, as drawn in the
+/// artboards, and the spelled-out weekday and month in other languages.
+String boardDateLabel(DateTime date, String locale) {
+  if (locale == 'cs') return DateFormat('EEEE d. M.', 'cs').format(date);
+  return DateFormat.MMMMEEEEd(locale).format(date);
+}
+
 class _TitleRow extends StatelessWidget {
   const _TitleRow({required this.openCount, required this.today});
 
@@ -106,7 +113,7 @@ class _TitleRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final p = context.palette;
     final AppLocalizations l = AppLocalizations.of(context);
-    final String date = DateFormat.MMMMEEEEd(l.localeName).format(today);
+    final String date = boardDateLabel(today, l.localeName);
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: Space.s20),
       child: Row(
