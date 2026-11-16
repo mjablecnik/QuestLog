@@ -201,12 +201,12 @@ Build the Questlog screens on top of the finished domain layer from `001-questlo
   - Ensure all tests pass, ask the user if questions arise.
 
 - [ ] 12. Implement the Mission_Detail_Screen
-  - [ ] 12.1 Implement the Mission_Detail_Screen
+  - [x] 12.1 Implement the Mission_Detail_Screen
     - `lib/ui/screens/mission_detail/`: header with large progress and bonus, all Quests including older done ones (reorderable open Quests, same toggle behaviour as the board), `···` menu (Upravit misi, Přidat quest, Smazat misi last and destructive), "Dokončit misi" button when every Quest is done, completed state with seal, bonus and date, the reopen notice when the bonus is withdrawn, "Pravidelná mise" caption for Instances, empty state for a Mission without Quests, pop when the Mission disappears
     - Completing a Mission calls `MissionService.complete`, pushes the Mission reward and updates the screen
     - _Requirements: 4.6, 10.1, 10.2, 10.3, 10.4, 10.5, 10.6, 10.7, 10.8, 10.9, 10.10, 10.11_
 
-  - [ ] 12.2 Write Mission_Detail_Screen tests
+  - [x] 12.2 Write Mission_Detail_Screen tests
     - Widget: all Quests listed including older done ones; "Dokončit misi" appears only when all Quests are done and at least one exists; completing shows the Mission reward and the completed state; reopening a Quest of a completed Mission shows the open state and the withdrawn-bonus notice; menu items and order; deletion returns to Missions; "Přidat quest" presets the Mission; screen pops when the Mission is deleted; recurring caption
     - _Requirements: 10.1, 10.2, 10.3, 10.4, 10.5, 10.6, 10.8, 10.9, 10.11_
 
