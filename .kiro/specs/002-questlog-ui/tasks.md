@@ -152,12 +152,12 @@ Build the Questlog screens on top of the finished domain layer from `001-questlo
     - Stream providers wrap every `watch*` of the services, so each screen stays bound to the observable queries
     - _Requirements: 1.8, 11.7, 11.8, 14.2, 14.3, 14.4, 15.2, 17.5_
 
-  - [ ] 7.2 Implement the app shell, splash and tabs
+  - [x] 7.2 Implement the app shell, splash and tabs
     - `lib/ui/screens/shell/`: `AppShell` with splash until the database is open and Reconciliation finished, two-tab bottom bar (Questy, Mise), lifecycle observer running Reconciliation once per resume, message for posted Missions, retry banner on storage errors, `RewardOverlay` above the tabs
     - Settings opens as a pushed screen from the gear and returns to the same tab with scroll position kept
     - _Requirements: 1.1, 1.2, 1.4, 1.5, 1.6, 1.7, 17.3_
 
-  - [ ] 7.3 Write shell tests
+  - [x] 7.3 Write shell tests
     - Widget: splash then Board; exactly two tabs; Reconciliation runs once at start and once per resume; posted Missions produce a message; a failing Reconciliation shows data and a retry banner; switching tabs keeps each tab's scroll position
     - _Requirements: 1.1, 1.2, 1.5, 1.6, 1.7_
 
