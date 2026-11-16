@@ -455,4 +455,21 @@ void main() {
     ]);
     expect(find.byType(SnackBar), findsOneWidget);
   });
+
+  boardTest(h, 'a rejected reorder also reloads a list that went stale', (
+    tester,
+  ) async {
+    await seedThree(tester);
+    await tester.runAsync(
+      () => h.db.customStatement('DELETE FROM quests WHERE name = ?', <Object>[
+        'Beta',
+      ]),
+    );
+    h.service.reorderError = const ValidationError('order', 'ids differ');
+
+    await dragCard(tester, 'Alpha', 200);
+
+    expect(find.text('Beta'), findsNothing);
+    expect(find.text('Alpha'), findsOneWidget);
+  });
 }
