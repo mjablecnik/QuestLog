@@ -5,9 +5,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'data/preferences.dart';
 import 'l10n/app_localizations.dart';
 import 'ui/screens/shell/app_shell.dart';
+import 'ui/state/quest_actions.dart';
 import 'ui/state/ui_providers.dart';
 import 'ui/theme/questlog_theme.dart';
 import 'ui/theme/tokens.dart';
+import 'ui/widgets/reward/reward_overlay.dart';
 
 /// The application root: theme, locale and localization follow the settings
 /// live, so a change applies to every screen without rebuilding navigation.
@@ -37,8 +39,20 @@ class QuestlogApp extends ConsumerWidget {
       themeMode: ref.watch(themeModeProvider),
       // The application-level Localizations does not tag its subtree, so screen
       // readers would keep the device voice without this.
-      builder: (context, child) =>
-          Semantics(localeForSubtree: locale, child: child),
+      // The reward overlay lives here, above the Navigator, so a reward earned
+      // on a pushed route (Mission detail) is not hidden behind that route.
+      builder: (context, child) => Semantics(
+        localeForSubtree: locale,
+        child: Stack(
+          fit: StackFit.expand,
+          children: <Widget>[
+            ?child,
+            RewardOverlay(
+              onCompleteMission: (id) => completeMission(context, ref, id),
+            ),
+          ],
+        ),
+      ),
       home: home,
     );
   }

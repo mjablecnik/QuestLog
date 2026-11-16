@@ -7,11 +7,9 @@ import '../../../data/models.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../services/providers.dart';
 import '../../state/board_day.dart';
-import '../../state/quest_actions.dart';
 import '../../state/ui_providers.dart';
 import '../../theme/questlog_theme.dart';
 import '../../widgets/common/snackbar_host.dart';
-import '../../widgets/reward/reward_overlay.dart';
 import '../board/board_screen.dart';
 import '../missions/missions_screen.dart';
 import 'open_settings.dart';
@@ -20,7 +18,8 @@ import 'reconcile_banner.dart';
 import 'splash_screen.dart';
 
 /// Root screen: splash until the first Reconciliation has finished, then the
-/// two tabs (Questy, Mise) with the reward overlay stacked above them.
+/// two tabs (Questy, Mise). The reward overlay is hosted by `QuestlogApp`, above
+/// the Navigator, so it also covers pushed routes.
 ///
 /// Reconciliation runs at start, once per return from the background, when the
 /// Board_Day changes, and on retry. Requests made in the same turn are
@@ -145,30 +144,22 @@ class _AppShellState extends ConsumerState<AppShell>
   }
 
   Widget _buildTabs(BuildContext context) {
-    return Stack(
-      fit: StackFit.expand,
+    return Column(
       children: <Widget>[
-        Column(
-          children: <Widget>[
-            Expanded(
-              // Both tabs stay mounted, so each keeps its scroll position.
-              child: IndexedStack(
-                index: _tab.index,
-                children: <Widget>[
-                  BoardScreen(onOpenSettings: () => openSettings(context)),
-                  MissionsScreen(onOpenSettings: () => openSettings(context)),
-                ],
-              ),
-            ),
-            if (_failed) ReconcileBanner(onRetry: _requestReconcile),
-            QuestlogTabBar(
-              current: _tab,
-              onSelected: (tab) => setState(() => _tab = tab),
-            ),
-          ],
+        Expanded(
+          // Both tabs stay mounted, so each keeps its scroll position.
+          child: IndexedStack(
+            index: _tab.index,
+            children: <Widget>[
+              BoardScreen(onOpenSettings: () => openSettings(context)),
+              MissionsScreen(onOpenSettings: () => openSettings(context)),
+            ],
+          ),
         ),
-        RewardOverlay(
-          onCompleteMission: (id) => completeMission(context, ref, id),
+        if (_failed) ReconcileBanner(onRetry: _requestReconcile),
+        QuestlogTabBar(
+          current: _tab,
+          onSelected: (tab) => setState(() => _tab = tab),
         ),
       ],
     );
