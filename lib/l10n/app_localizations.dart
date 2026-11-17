@@ -1064,6 +1064,12 @@ abstract class AppLocalizations {
   /// **'Vyšší kontrast'**
   String get settings_paletteHighContrast;
 
+  /// Row in the About group that opens the open-source licences page.
+  ///
+  /// In cs, this message translates to:
+  /// **'Licence'**
+  String get settings_licenses;
+
   /// Group label.
   ///
   /// In cs, this message translates to:

@@ -259,14 +259,73 @@ class _AboutRow extends ConsumerWidget {
       color: context.palette.textFaint,
       fontSize: 13,
     );
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: Space.s2),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          Text(l.app_name, style: style),
-          if (version != null) Text(l.settings_version(version), style: style),
-        ],
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: <Widget>[
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: Space.s2),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Text(l.app_name, style: style),
+              if (version != null)
+                Text(l.settings_version(version), style: style),
+            ],
+          ),
+        ),
+        const SizedBox(height: Space.s8),
+        _LicensesRow(version: version),
+      ],
+    );
+  }
+}
+
+/// Opens Flutter's licence page, which lists the framework, package and
+/// bundled-font licences.
+class _LicensesRow extends StatelessWidget {
+  const _LicensesRow({required this.version});
+
+  final String? version;
+
+  @override
+  Widget build(BuildContext context) {
+    final p = context.palette;
+    final l = AppLocalizations.of(context);
+    return Semantics(
+      button: true,
+      label: l.settings_licenses,
+      excludeSemantics: true,
+      child: InkWell(
+        borderRadius: BorderRadius.circular(Radii.control),
+        onTap: () {
+          showLicensePage(
+            context: context,
+            applicationName: l.app_name,
+            applicationVersion: version,
+          );
+        },
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(minHeight: Metrics.touchTarget),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: Space.s2),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Text(
+                  l.settings_licenses,
+                  style: context.bodyText.bodyMedium!.copyWith(
+                    color: p.brassText,
+                  ),
+                ),
+                AppIcon(
+                  IconAsset.chevronRight,
+                  size: Metrics.iconSize,
+                  color: p.brassText,
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }

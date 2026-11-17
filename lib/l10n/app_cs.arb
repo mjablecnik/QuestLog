@@ -964,6 +964,10 @@
   "@settings_paletteHighContrast": {
     "description": "Segment of the temporary palette switch: the higher-contrast palette."
   },
+  "settings_licenses": "Licence",
+  "@settings_licenses": {
+    "description": "Row in the About group that opens the open-source licences page."
+  },
   "settings_groupAbout": "O aplikaci",
   "@settings_groupAbout": {
     "description": "Group label."

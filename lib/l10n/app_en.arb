@@ -172,6 +172,7 @@
   "settings_themeDark": "Dark",
   "settings_themeSystem": "System",
   "settings_version": "version {version}",
+  "settings_licenses": "Licenses",
   "settings_rulesActive": "{count} active",
   "rule_addRow": "Add a recurring mission",
   "rule_addHint": "A mission posted by hand replaces the nearest automatic one.",
