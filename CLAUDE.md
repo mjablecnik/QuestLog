@@ -75,6 +75,17 @@ and the `font_*` ARB keys. The `display_font` column of `app_state` needs a sche
 migration to drop it (plus a new dump in `drift_schemas/`), or can stay unused.
 Figtree stays as the body face either way.
 
+## Temporary palette switch
+
+Settings has a "Palette" control (Original / Higher contrast), same lifetime as the font
+picker. Remove once Martin has chosen: `lib/ui/screens/settings/palette_section.dart`,
+`lib/ui/state/palette_choice.dart`, `lib/data/palette_choice_store.dart`, the palette
+selection in `lib/app.dart` and `lib/main.dart`, the losing palettes in `tokens.dart`, the
+`settings_palette*` ARB keys and their tests. If higher contrast wins, copy its values into
+`guildBoard`/`daylight`, keep or drop `brassText`/`brassOnParchment`, and delete
+`_knownGaps` in `test/ui/theme/contrast_test.dart`. The choice lives in `palette_choice.txt`
+beside the database (not in it), so no migration is involved.
+
 ## Sandbox gotchas
 
 - Only Linux desktop/web run here; the iOS build and device checks are Martin's.

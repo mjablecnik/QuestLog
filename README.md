@@ -37,6 +37,8 @@ Questlog is a personal gamified to-do app for one user, built with Flutter for i
   weekly, biweekly, monthly, quarterly or yearly).
 - **Two looks and two languages**: the dark "Guild Board" and the light "Daylight" theme
   (or follow the system), in Czech or English.
+  Two temporary Settings controls (a title-font picker and a palette switch between the
+  original and a higher-contrast look) exist only until the final choices are made.
 - **Local only**: data lives in a SQLite file on the device through Drift. There is no
   server, no account and no network access.
 

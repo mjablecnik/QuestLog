@@ -82,6 +82,20 @@ numbers; body text and controls always stay in Figtree. It exists until the fina
 chosen, after which the picker, the five other font families and their ARB keys are
 removed.
 
+### Temporary palette switch
+
+Settings has a "Palette" control (Original / Higher contrast) under Appearance. Higher
+contrast swaps both themes for `guildBoardHighContrast` and `daylightHighContrast` in
+`lib/ui/theme/tokens.dart`: darker dim text, dark text on destructive fills, and brass used
+as text drawn from the `brassText` / `brassOnParchment` roles, so every body-text pair reaches
+4.5:1. Original is the default and renders exactly as before (both roles equal `brass`
+there). The choice is kept in `palette_choice.txt` next to the database, not in the
+database, so removing the switch needs no schema migration. Once the final palette is
+chosen, delete `palette_section.dart`, `lib/ui/state/palette_choice.dart`,
+`lib/data/palette_choice_store.dart`, the loser's palettes, the `settings_palette*` ARB
+keys and their tests; if the high-contrast palette wins, fold its values into the original
+and drop the extra roles.
+
 ## Testing
 
 The tests are headless and need no display (also true for the golden tests); only running

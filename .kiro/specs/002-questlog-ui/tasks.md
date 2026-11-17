@@ -288,6 +288,7 @@ Build the Questlog screens on top of the finished domain layer from `001-questlo
 - The iOS build is done by the user. The bundle identifier is `com.jablecnik.questlog` (confirmed by the user, following TimeLog's `com.jablecnik.timelogApp`) and is set in one place (task 1.3).
 - Fonts are bundled, not fetched. If the sandbox cannot download the TTF files, ask the user to place them in `assets/fonts/`.
 - The font picker is temporary: once the user chooses a font, remove `font_section.dart`, `font_sheet.dart`, the `DisplayFont` setting and the five unused font families in one change.
+- Temporary, added after verification: a Settings "Palette" switch (Original / Higher contrast) lets the user compare the approved palette with a higher-contrast one in real use (`palette_section.dart`, `lib/ui/state/palette_choice.dart`, `lib/data/palette_choice_store.dart`; choice stored in a file beside the database, no schema change). Remove it together with the font picker once both choices are made.
 - A history screen is deliberately not part of this spec; the data is retained and `History_Query` exists in the services, so a small later spec can add the screen.
 - Where the artboards in `.design/artboards/` and these requirements differ, the requirements win; update the artboard afterwards.
 - Git: the repository exists from 001 task 1.1; commit each completed task as one Conventional Commit per `code-git.md` — no tool-attribution trailers, no remote/push.
