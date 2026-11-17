@@ -10,6 +10,8 @@ void main() {
   final List<QuestlogPalette> palettes = <QuestlogPalette>[
     QuestlogPalette.guildBoard,
     QuestlogPalette.daylight,
+    QuestlogPalette.guildBoardHighContrast,
+    QuestlogPalette.daylightHighContrast,
   ];
 
   test('buildTheme succeeds for both palettes and every display font', () {

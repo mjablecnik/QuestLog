@@ -76,6 +76,15 @@ final List<_Pair> _brassPairs = <_Pair>[
   ('brass/parchment', (p) => p.brass, (p) => p.parchment),
 ];
 
+/// Brass roles of the temporary higher-contrast palette: text and icon
+/// strokes use [QuestlogPalette.brassText] / [QuestlogPalette.brassOnParchment].
+final List<_Pair> _highContrastBrassPairs = <_Pair>[
+  ('brassText/board', (p) => p.brassText, (p) => p.board),
+  ('brassText/boardRaised', (p) => p.brassText, (p) => p.boardRaised),
+  ('brassText/sheet', (p) => p.brassText, (p) => p.sheet),
+  ('brassOnParchment/parchment', (p) => p.brassOnParchment, (p) => p.parchment),
+];
+
 /// Pairs below their threshold in the approved palette: `palette/pair` ->
 /// floor the ratio must not drop under. Remove an entry once the palette fixes it.
 const Map<String, double> _knownGaps = <String, double>{
@@ -137,6 +146,28 @@ void main() {
 
   group('brass as text or accent reaches 3:1', () {
     _checkPairs(palettes, _brassPairs, 3.0);
+  });
+
+  // Temporary palette switch: the higher-contrast variants have no gaps, so
+  // none of their keys may appear in _knownGaps.
+  final Map<String, QuestlogPalette> highContrast = <String, QuestlogPalette>{
+    'guildBoardHighContrast': QuestlogPalette.guildBoardHighContrast,
+    'daylightHighContrast': QuestlogPalette.daylightHighContrast,
+  };
+
+  group('higher-contrast palette: body text pairs reach 4.5:1, no gaps', () {
+    _checkPairs(highContrast, _bodyPairs, 4.5);
+  });
+
+  group('higher-contrast palette: brass text roles reach 4.5:1, no gaps', () {
+    _checkPairs(highContrast, _highContrastBrassPairs, 4.5);
+  });
+
+  test('the original palettes keep brass text roles equal to brass', () {
+    for (final QuestlogPalette p in palettes.values) {
+      expect(p.brassText, p.brass);
+      expect(p.brassOnParchment, p.brass);
+    }
   });
 
   test('contrast helper matches known values', () {
