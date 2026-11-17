@@ -43,6 +43,7 @@ lib/
 assets/fonts, assets/icons   bundled static TTFs (+ licenses/ OFL texts) and 24px SVG icons (nothing fetched at runtime)
 drift_schemas/               schema dump per version (currently v1)
 scripts/                     check.sh, check-structure.sh (max 15 source files per directory)
+screenshots/                 README screenshots (English, dark theme, real app at 2x); retake them after visible UI changes
 test/                        mirrors lib/ (core, data, services, ui) + goldens/, helpers/
 .kiro/specs/                 001 domain, 002 UI: requirements, design, tasks
 .design/                     approved visual contract (DESIGN.md, artboards/, screens/)

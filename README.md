@@ -13,6 +13,7 @@
 ## 📖 Table of Contents
 
 - [Description](#-description)
+- [Screenshots](#-screenshots)
 - [Prerequisites](#-prerequisites)
 - [Installation](#-installation)
 - [Usage](#-usage)
@@ -45,6 +46,12 @@ Questlog is a personal gamified to-do app for one user, built with Flutter for i
   server, no account and no network access.
 
 The board day rolls over at 04:00, so a late evening still belongs to the same day.
+
+## 📸 Screenshots
+
+<a href="screenshots/01-board.png"><img src="screenshots/01-board.png" width="31%" alt="The Board with posted quests"></a>&nbsp;&nbsp;&nbsp;<a href="screenshots/02-quest-completed.png"><img src="screenshots/02-quest-completed.png" width="31%" alt="Reward card after completing a quest"></a>&nbsp;&nbsp;&nbsp;<a href="screenshots/03-missions.png"><img src="screenshots/03-missions.png" width="31%" alt="Missions with progress rings"></a>
+
+<a href="screenshots/04-mission-detail.png"><img src="screenshots/04-mission-detail.png" width="31%" alt="A mission with its remaining and done quests"></a>&nbsp;&nbsp;&nbsp;<a href="screenshots/05-new-quest.png"><img src="screenshots/05-new-quest.png" width="31%" alt="The new quest sheet"></a>&nbsp;&nbsp;&nbsp;<a href="screenshots/06-recurring-mission.png"><img src="screenshots/06-recurring-mission.png" width="31%" alt="Setting up a recurring mission"></a>
 
 ## 🔧 Prerequisites
 
