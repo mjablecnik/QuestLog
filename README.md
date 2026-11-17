@@ -112,4 +112,4 @@ Give a ⭐️ if this project helped you!
 ## 📝 License
 
 Copyright © 2026 Martin Jablečník.
-No licence has been chosen yet; all rights reserved.
+This project is licensed under the [GNU General Public License v3.0](./LICENSE).

@@ -12,7 +12,7 @@
 ## [LOW] No project licence has been chosen
 - Run: 2026-11-15-1405
 - Phase: docs
-- Status: OPEN
+- Status: RESOLVED (2026-11-15-1405)
 - What: the repository has no LICENSE file and `pubspec.yaml` is `publish_to: 'none'`; the README licence section therefore states "all rights reserved" instead of a licence type.
 - Impact: none for a private app; the README wording is a placeholder if the project is ever shared.
 - Tried: nothing; choosing a licence is Martin's decision.
