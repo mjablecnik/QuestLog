@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:questlog/core/font_licenses.dart';
 import 'package:questlog/data/database.dart';
 import 'package:questlog/data/preferences.dart';
 import 'package:questlog/l10n/app_localizations.dart';
@@ -218,5 +219,48 @@ void main() {
     await open(tester, version: '4.5.6');
     expect(find.text('version 4.5.6'), findsOneWidget);
     expect(find.text('Questlog'), findsOneWidget);
+  });
+  settingsTest('the Licenses row opens the licence page with the fonts', (
+    tester,
+  ) async {
+    await open(tester, version: '4.5.6');
+    registerFontLicenses();
+    final row = find.text('Licenses');
+    await tester.scrollUntilVisible(
+      row,
+      200,
+      scrollable: find.byType(Scrollable).first,
+    );
+    expect(row, findsOneWidget);
+    await tester.pump(const Duration(milliseconds: 500));
+    final target = find.ancestor(of: row, matching: find.byType(InkWell));
+    expect(tester.getSize(target).height, greaterThanOrEqualTo(44));
+
+    await tester.tap(row);
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(find.byType(LicensePage), findsOneWidget);
+    expect(find.text('4.5.6'), findsOneWidget);
+
+    // The registry streams in on real async.
+    for (var i = 0; i < 20; i++) {
+      await tester.runAsync(
+        () => Future<void>.delayed(const Duration(milliseconds: 50)),
+      );
+      await tester.pump();
+    }
+    expect(find.text('Figtree (font)'), findsOneWidget);
+
+    await tester.tap(find.text('Figtree (font)'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    for (var i = 0; i < 10; i++) {
+      await tester.runAsync(
+        () => Future<void>.delayed(const Duration(milliseconds: 50)),
+      );
+      await tester.pump();
+    }
+    expect(find.textContaining('SIL Open Font License'), findsWidgets);
+    expect(find.textContaining('The Figtree Project Authors'), findsWidgets);
   });
 }
