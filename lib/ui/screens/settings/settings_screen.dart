@@ -319,8 +319,8 @@ class _LicensesRow extends StatelessWidget {
                 ),
                 AppIcon(
                   IconAsset.chevronRight,
-                  size: Metrics.iconSize,
-                  color: p.brassText,
+                  size: Metrics.iconSmall,
+                  color: p.textFaint,
                 ),
               ],
             ),
