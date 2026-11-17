@@ -69,8 +69,9 @@ flutter:
 
   assets:
     - assets/icons/
+    - assets/fonts/licenses/
 
-  # Static instances of the SIL OFL families (licences in assets/fonts/OFL-*.txt).
+  # Static instances of the SIL OFL families (licences in assets/fonts/licenses/<Family>-OFL.txt).
   # Figtree is the body face and the default display face; the other five exist
   # only for the temporary display-font picker.
   fonts:
