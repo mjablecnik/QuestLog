@@ -3,7 +3,7 @@
 ## [LOW] The bundled fonts ship without their licence files
 - Run: 2026-11-15-1405
 - Phase: docs
-- Status: OPEN
+- Status: RESOLVED (2026-11-15-1405)
 - What: the comment in `pubspec.yaml` says the SIL OFL licences are in `assets/fonts/OFL-*.txt`, but no such file exists in `assets/fonts/` or in git.
 - Impact: the OFL asks for the licence to travel with the fonts when they are redistributed (an App Store build embeds them); the comment points at files that are not there.
 - Tried: nothing; the documentation phase may not touch pubspec or assets.

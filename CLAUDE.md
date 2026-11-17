@@ -40,7 +40,7 @@ lib/
   ui/                   theme/ (tokens, typography), state/, screens/, sheets/,
                         widgets/ (cards, common, hero, reward, sheet), forms/
   l10n/                 ARB files (cs, en) + generated localizations
-assets/fonts, assets/icons   bundled static TTFs and 24px SVG icons (nothing fetched at runtime)
+assets/fonts, assets/icons   bundled static TTFs (+ licenses/ OFL texts) and 24px SVG icons (nothing fetched at runtime)
 drift_schemas/               schema dump per version (currently v1)
 scripts/                     check.sh, check-structure.sh (max 15 source files per directory)
 test/                        mirrors lib/ (core, data, services, ui) + goldens/, helpers/
@@ -71,7 +71,9 @@ Settings has a "Title font" row and a `FontSheet` offering six display faces (Fi
 Bricolage Grotesque, Sora, Outfit, Unbounded, Cinzel) so Martin can choose one. Once he
 has, remove: `lib/ui/screens/settings/font_section.dart`, `lib/ui/sheets/font_sheet.dart`,
 `displayFontProvider`, the five unchosen families in `pubspec.yaml` and `assets/fonts/`,
-and the `font_*` ARB keys. The `display_font` column of `app_state` needs a schema v2
+the licence files and `lib/core/font_licenses.dart` entries of those five families
+(`assets/fonts/licenses/<Family>-OFL.txt`, SIL OFL: they must leave together with their
+fonts), and the `font_*` ARB keys. The `display_font` column of `app_state` needs a schema v2
 migration to drop it (plus a new dump in `drift_schemas/`), or can stay unused.
 Figtree stays as the body face either way.
 

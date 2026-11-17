@@ -39,6 +39,8 @@ Questlog is a personal gamified to-do app for one user, built with Flutter for i
   (or follow the system), in Czech or English.
   Two temporary Settings controls (a title-font picker and a palette switch between the
   original and a higher-contrast look) exist only until the final choices are made.
+- **Licences**: the bundled fonts are under the SIL Open Font License; their texts ship in
+  `assets/fonts/licenses/` and are listed under Settings → About → Licenses.
 - **Local only**: data lives in a SQLite file on the device through Drift. There is no
   server, no account and no network access.
 

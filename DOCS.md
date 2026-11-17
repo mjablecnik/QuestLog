@@ -32,6 +32,7 @@ questlog/
 │   └── l10n/                app_cs.arb (template), app_en.arb, generated localizations
 ├── assets/
 │   ├── fonts/               static TTFs: Figtree plus five temporary display families
+│   │   └── licenses/        one SIL OFL text per family, `<Family>-OFL.txt`
 │   └── icons/               24px SVG icons drawn with currentColor strokes
 ├── drift_schemas/           drift_schema_v1.json, the schema dump per version
 ├── test/                    mirrors lib/ (core, data, services, ui); goldens/, helpers/
@@ -79,8 +80,18 @@ projects.
 Settings has a "Title font" row that opens a sheet with six display faces (Figtree,
 Bricolage Grotesque, Sora, Outfit, Unbounded, Cinzel). It only changes titles and
 numbers; body text and controls always stay in Figtree. It exists until the final font is
-chosen, after which the picker, the five other font families and their ARB keys are
-removed.
+chosen, after which the picker, the five other font families, their licence files in
+`assets/fonts/licenses/` (and entries in `lib/core/font_licenses.dart`) and their ARB keys
+are removed.
+
+### Font licences
+
+Every bundled font family is under the SIL Open Font License 1.1, which requires the licence
+text to travel with the fonts. The unmodified texts from `google/fonts` are bundled as
+`assets/fonts/licenses/<Family>-OFL.txt` and registered with Flutter's `LicenseRegistry` at
+app start (`registerFontLicenses` in `lib/core/font_licenses.dart`). Settings → About →
+"Licenses" opens Flutter's licence page, which lists them as "<Family> (font)" beside the
+framework and package licences. A test fails when a font file has no licence file.
 
 ### Temporary palette switch
 
