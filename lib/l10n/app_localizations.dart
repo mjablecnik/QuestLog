@@ -1046,6 +1046,24 @@ abstract class AppLocalizations {
   /// **'zmizí po výběru'**
   String get settings_temporaryHint;
 
+  /// Label of the temporary colour-palette switch.
+  ///
+  /// In cs, this message translates to:
+  /// **'Paleta'**
+  String get settings_paletteLabel;
+
+  /// Segment of the temporary palette switch: the approved palette.
+  ///
+  /// In cs, this message translates to:
+  /// **'Původní'**
+  String get settings_paletteOriginal;
+
+  /// Segment of the temporary palette switch: the higher-contrast palette.
+  ///
+  /// In cs, this message translates to:
+  /// **'Vyšší kontrast'**
+  String get settings_paletteHighContrast;
+
   /// Group label.
   ///
   /// In cs, this message translates to:

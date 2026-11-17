@@ -740,6 +740,15 @@ class AppLocalizationsCs extends AppLocalizations {
   String get settings_temporaryHint => 'zmizí po výběru';
 
   @override
+  String get settings_paletteLabel => 'Paleta';
+
+  @override
+  String get settings_paletteOriginal => 'Původní';
+
+  @override
+  String get settings_paletteHighContrast => 'Vyšší kontrast';
+
+  @override
   String get settings_groupAbout => 'O aplikaci';
 
   @override

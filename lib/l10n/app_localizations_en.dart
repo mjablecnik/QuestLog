@@ -714,6 +714,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settings_temporaryHint => 'removed once you choose';
 
   @override
+  String get settings_paletteLabel => 'Palette';
+
+  @override
+  String get settings_paletteOriginal => 'Original';
+
+  @override
+  String get settings_paletteHighContrast => 'Higher contrast';
+
+  @override
   String get settings_groupAbout => 'About';
 
   @override

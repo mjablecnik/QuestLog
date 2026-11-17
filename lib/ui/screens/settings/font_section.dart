@@ -62,7 +62,7 @@ class FontSection extends ConsumerWidget {
                       Text(
                         fontName,
                         style: context.bodyText.titleMedium!.copyWith(
-                          color: p.brass,
+                          color: p.brassText,
                         ),
                       ),
                       const SizedBox(width: Space.s8),

@@ -15,10 +15,11 @@ import '../../widgets/common/app_icon.dart';
 import '../../widgets/common/questlog_segmented.dart';
 import '../../widgets/common/snackbar_host.dart';
 import 'font_section.dart';
+import 'palette_section.dart';
 import 'rules_section.dart';
 
 /// Pushed settings screen: profile, language, appearance, recurring rules,
-/// the temporary font picker and About.
+/// the temporary palette switch, the temporary font picker and About.
 ///
 /// Every value is read from streams that already hold the stored settings, so
 /// a change of language or theme repaints this screen in place: the list keeps
@@ -68,6 +69,7 @@ class SettingsScreen extends ConsumerWidget {
                     label: l.settings_groupAppearance,
                     child: const _ThemeControl(),
                   ),
+                  const PaletteSection(),
                   const SizedBox(height: Space.s24),
                   // These two draw their own group headers.
                   const RulesSection(),
@@ -117,13 +119,13 @@ class _BackRow extends StatelessWidget {
                   AppIcon(
                     IconAsset.chevronLeft,
                     size: Metrics.iconSize,
-                    color: p.brass,
+                    color: p.brassText,
                   ),
                   const SizedBox(width: Space.s4),
                   Text(
                     l.common_back,
                     style: context.bodyText.bodyMedium!.copyWith(
-                      color: p.brass,
+                      color: p.brassText,
                     ),
                   ),
                 ],

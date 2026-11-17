@@ -952,6 +952,18 @@
   "@settings_temporaryHint": {
     "description": "Small text next to the Temporary group label."
   },
+  "settings_paletteLabel": "Paleta",
+  "@settings_paletteLabel": {
+    "description": "Label of the temporary colour-palette switch."
+  },
+  "settings_paletteOriginal": "Původní",
+  "@settings_paletteOriginal": {
+    "description": "Segment of the temporary palette switch: the approved palette."
+  },
+  "settings_paletteHighContrast": "Vyšší kontrast",
+  "@settings_paletteHighContrast": {
+    "description": "Segment of the temporary palette switch: the higher-contrast palette."
+  },
   "settings_groupAbout": "O aplikaci",
   "@settings_groupAbout": {
     "description": "Group label."
