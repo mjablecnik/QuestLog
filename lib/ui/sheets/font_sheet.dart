@@ -297,7 +297,7 @@ class _FontRow extends StatelessWidget {
                               TextSpan(text: sample.substring(0, split)),
                               TextSpan(
                                 text: sample.substring(split),
-                                style: TextStyle(color: p.brass),
+                                style: TextStyle(color: p.brassText),
                               ),
                             ],
                           ),

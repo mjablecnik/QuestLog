@@ -34,7 +34,7 @@ class LevelBadge extends StatelessWidget {
               '$value',
               maxLines: 1,
               style: context.displayText.titleLarge!.copyWith(
-                color: p.brass,
+                color: p.brassText,
                 fontSize: _fontSize,
               ),
             ),

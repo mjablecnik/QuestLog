@@ -593,7 +593,7 @@ class _ChoiceTile extends StatelessWidget {
                 child: Text(
                   label,
                   style: context.bodyText.bodyLarge!.copyWith(
-                    color: selected ? palette.brass : palette.text,
+                    color: selected ? palette.brassText : palette.text,
                     fontWeight: selected ? FontWeight.w700 : null,
                   ),
                 ),
@@ -671,7 +671,7 @@ class _CadenceChip extends StatelessWidget {
                 child: Text(
                   label,
                   style: context.bodyText.bodyMedium!.copyWith(
-                    color: selected ? palette.brass : palette.textDim,
+                    color: selected ? palette.brassText : palette.textDim,
                     fontWeight: FontWeight.w600,
                   ),
                 ),

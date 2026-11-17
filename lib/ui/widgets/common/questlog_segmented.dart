@@ -105,7 +105,7 @@ class _SegmentState<T> extends State<_Segment<T>> {
     final p = context.palette;
     final o = widget.option;
     final bool on = widget.selected;
-    final Color foreground = on ? p.brass : p.textDim;
+    final Color foreground = on ? p.brassText : p.textDim;
     final Duration fade = MediaQuery.disableAnimationsOf(context)
         ? Motion.none
         : Motion.hover;

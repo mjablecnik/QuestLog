@@ -557,7 +557,7 @@ class _PickChip extends StatelessWidget {
   Widget build(BuildContext context) {
     final QuestlogPalette palette = context.palette;
     final BorderRadius radius = BorderRadius.circular(Radii.pill);
-    final Color foreground = selected ? palette.brass : palette.textDim;
+    final Color foreground = selected ? palette.brassText : palette.textDim;
     return ConstrainedBox(
       constraints: BoxConstraints(
         minHeight: Metrics.touchTarget,

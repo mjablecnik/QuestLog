@@ -66,7 +66,7 @@ class MissionHeader extends StatelessWidget {
           Text(
             l.mission_bonusOnCompletion(mission.bonus.xp),
             style: context.bodyText.bodyMedium!.copyWith(
-              color: p.brass,
+              color: p.brassText,
               fontWeight: FontWeight.w600,
             ),
           ),
@@ -250,7 +250,7 @@ class _CompletedBlock extends StatelessWidget {
                   Text(
                     l.mission_completedBonus(bonus),
                     style: context.bodyText.bodyMedium!.copyWith(
-                      color: p.brass,
+                      color: p.brassText,
                       fontWeight: FontWeight.w600,
                     ),
                   ),

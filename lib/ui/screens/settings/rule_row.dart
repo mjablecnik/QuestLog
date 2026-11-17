@@ -136,7 +136,7 @@ class _PostPill extends StatelessWidget {
   Widget build(BuildContext context) {
     final p = context.palette;
     final l = AppLocalizations.of(context);
-    final Color color = posted ? p.textFaint : p.brass;
+    final Color color = posted ? p.textFaint : p.brassText;
     return Semantics(
       button: true,
       label: semanticLabel,

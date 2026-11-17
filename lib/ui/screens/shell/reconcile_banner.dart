@@ -42,7 +42,7 @@ class ReconcileBanner extends StatelessWidget {
               TextButton(
                 onPressed: onRetry,
                 style: TextButton.styleFrom(
-                  foregroundColor: p.brass,
+                  foregroundColor: p.brassText,
                   minimumSize: const Size(
                     Metrics.touchTarget,
                     Metrics.touchTarget,

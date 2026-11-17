@@ -115,7 +115,9 @@ class RewardCard extends StatelessWidget {
                 fit: BoxFit.scaleDown,
                 child: _XpFigure(
                   text: l10n.common_plusXp(xp),
-                  style: display.displayLarge!.copyWith(color: p.brass),
+                  style: display.displayLarge!.copyWith(
+                    color: p.brassOnParchment,
+                  ),
                 ),
               ),
               const SizedBox(height: Space.s8),
@@ -132,7 +134,7 @@ class RewardCard extends StatelessWidget {
                 Text(
                   l10n.reward_levelUpBody(level),
                   textAlign: TextAlign.center,
-                  style: body.bodyMedium!.copyWith(color: p.brass),
+                  style: body.bodyMedium!.copyWith(color: p.brassOnParchment),
                 ),
               ],
               const SizedBox(height: Space.s8),

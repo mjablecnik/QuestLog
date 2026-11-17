@@ -20,6 +20,8 @@ class QuestlogPalette {
     required this.inkFaint,
     required this.brass,
     required this.brassSoft,
+    Color? brassText,
+    Color? brassOnParchment,
     required this.inkOnBrass,
     required this.destructive,
     required this.inkOnDestructive,
@@ -27,13 +29,21 @@ class QuestlogPalette {
     required this.sheet,
     required this.field,
     required this.fieldActive,
-  });
+  }) : brassText = brassText ?? brass,
+       brassOnParchment = brassOnParchment ?? brass;
 
   final Brightness brightness;
   final Color board, boardRaised, boardLine, text, textDim, textFaint;
   final Color parchment, parchmentEdge, ink, inkDim, inkFaint;
   final Color brass, brassSoft, inkOnBrass, destructive, inkOnDestructive;
   final Color scrim, sheet, field, fieldActive;
+
+  /// Brass as text or an icon stroke on the ground; equals [brass] in the
+  /// original palettes (temporary palette switch, see [QuestlogPalette.guildBoardHighContrast]).
+  final Color brassText;
+
+  /// Brass as text or an icon stroke on parchment.
+  final Color brassOnParchment;
 
   bool get isLight => brightness == Brightness.light;
 
@@ -81,6 +91,61 @@ class QuestlogPalette {
     inkOnBrass: Color(0xFFFFF8E8),
     destructive: Color(0xFFD96B5A),
     inkOnDestructive: Color(0xFFFFF4F1),
+    scrim: Color(0x801F2A26),
+    sheet: Color(0xFFFBF7EE),
+    field: Color(0x0D1F2A26),
+    fieldActive: Color(0x1AB4832A),
+  );
+
+  /// Temporary higher-contrast variant of [guildBoard]; only the text-bearing
+  /// roles differ. Removed with the palette switch once Martin has chosen.
+  static const QuestlogPalette guildBoardHighContrast = QuestlogPalette(
+    brightness: Brightness.dark,
+    board: Color(0xFF121A17),
+    boardRaised: Color(0xFF1A2522),
+    boardLine: Color(0x14ECE6D8),
+    text: Color(0xFFECE6D8),
+    textDim: Color(0x9EECE6D8),
+    textFaint: Color(0x6BECE6D8),
+    parchment: Color(0xFFF1E7D3),
+    parchmentEdge: Color(0xFFE3D6BB),
+    ink: Color(0xFF1F2A26),
+    inkDim: Color(0xB21F2A26),
+    inkFaint: Color(0x611F2A26),
+    brass: Color(0xFFD8AE5A),
+    brassSoft: Color(0x2ED8AE5A),
+    brassText: Color(0xFFD8AE5A),
+    brassOnParchment: Color(0xFF7F5A12),
+    inkOnBrass: Color(0xFF2A1F0A),
+    destructive: Color(0xFFD96B5A),
+    inkOnDestructive: Color(0xFF2B0F0A),
+    scrim: Color(0xB8080C0A),
+    sheet: Color(0xFF1A2522),
+    field: Color(0x0FECE6D8),
+    fieldActive: Color(0x1AD8AE5A),
+  );
+
+  /// Temporary higher-contrast variant of [daylight].
+  static const QuestlogPalette daylightHighContrast = QuestlogPalette(
+    brightness: Brightness.light,
+    board: Color(0xFFF4EEE1),
+    boardRaised: Color(0xFFFBF7EE),
+    boardLine: Color(0x141F2A26),
+    text: Color(0xFF1F2A26),
+    textDim: Color(0xA81F2A26),
+    textFaint: Color(0x6B1F2A26),
+    parchment: Color(0xFFFFFDF7),
+    parchmentEdge: Color(0xFFE9DFC9),
+    ink: Color(0xFF1F2A26),
+    inkDim: Color(0xAE1F2A26),
+    inkFaint: Color(0x611F2A26),
+    brass: Color(0xFFB4832A),
+    brassSoft: Color(0x24B4832A),
+    brassText: Color(0xFF86600F),
+    brassOnParchment: Color(0xFF86600F),
+    inkOnBrass: Color(0xFF2A1F0A),
+    destructive: Color(0xFFD96B5A),
+    inkOnDestructive: Color(0xFF2B0F0A),
     scrim: Color(0x801F2A26),
     sheet: Color(0xFFFBF7EE),
     field: Color(0x0D1F2A26),

@@ -101,7 +101,7 @@ class MissionCard extends StatelessWidget {
                         subText,
                         style: isReady
                             ? sub.copyWith(
-                                color: p.brass,
+                                color: p.brassText,
                                 fontWeight: FontWeight.w600,
                               )
                             : sub,
@@ -118,7 +118,7 @@ class MissionCard extends StatelessWidget {
                       '+$bonus',
                       style: context.displayText.titleMedium!.copyWith(
                         fontSize: 15,
-                        color: p.brass,
+                        color: p.brassText,
                       ),
                     ),
                     const SizedBox(height: Space.s2),
