@@ -23,7 +23,7 @@ questlog/
 │   ├── services/            quest, mission, recurrence and settings services, XP engine,
 │   │                        Riverpod providers
 │   ├── ui/
-│   │   ├── theme/           design tokens (two palettes), typography, ThemeData
+│   │   ├── theme/           design tokens (two themes, four temporary palettes), typography, ThemeData
 │   │   ├── state/           UI providers, reorder logic, reward queue, board-day signal
 │   │   ├── screens/         board, missions, mission_detail, settings, shell
 │   │   ├── sheets/          quest, mission, rule and font bottom sheets
@@ -99,17 +99,40 @@ framework and package licences. A test fails when a font file has no licence fil
 
 ### Temporary palette switch
 
-Settings has a "Palette" control (Original / Higher contrast) under Appearance. Higher
-contrast swaps both themes for `guildBoardHighContrast` and `daylightHighContrast` in
-`lib/ui/theme/tokens.dart`: darker dim text, dark text on destructive fills, and brass used
-as text drawn from the `brassText` / `brassOnParchment` roles, so every body-text pair reaches
-4.5:1. Original is the default and renders exactly as before (both roles equal `brass`
-there). The choice is kept in `palette_choice.txt` next to the database, not in the
-database, so removing the switch needs no schema migration. Once the final palette is
-chosen, delete `palette_section.dart`, `lib/ui/state/palette_choice.dart`,
-`lib/data/palette_choice_store.dart`, the loser's palettes, the `settings_palette*` ARB
-keys and their tests; if the high-contrast palette wins, fold its values into the original
-and drop the extra roles.
+Settings has a "Palette" group with four options in a 2x2 grid of swatch chips; each chip
+previews its palette in the current theme's brightness. The switch restyles the whole app at
+once, in both light and dark, and the choice survives a restart. In every palette `brass` is
+the accent colour (the name is kept to avoid churn).
+
+| Palette | Dark board / accent | Light board / accent | Notes |
+|---|---|---|---|
+| Original | `#121A17` / `#D8AE5A` | `#F4EEE1` / `#B4832A` | The approved design, unchanged and the default. |
+| Higher contrast | `#121A17` / `#D8AE5A` | `#F4EEE1` / `#B4832A` (text `#86600F`) | Same fills; darker dim text, dark text on destructive fills, darker accent text. |
+| Blue | `#0F1319` / `#78B4C4` | `#EDF1F6` / `#2B7287` | Cool paper slips; the dark one follows TimeLog's Midnight theme. |
+| Green | `#0C1B13` / `#5CC98F` | `#E7F0E4` / `#1E7A4B` | Experimental; forest ground, mint accent. |
+
+Higher contrast, Blue and Green all reach 4.5:1 on every body-text pair, 4.5:1 for accent used
+as text (`brassText` on boards, `brassOnParchment` on slips) and 3:1 for the accent as a fill.
+Original is the only palette with known gaps (`_knownGaps` in
+`test/ui/theme/contrast_test.dart`).
+
+Files: `lib/ui/screens/settings/palette_section.dart` (UI), `lib/ui/state/palette_choice.dart`
+(provider and the choice-to-palette mapping), `lib/data/palette_choice_store.dart` (the
+`PaletteChoice` enum and the file store), the palettes in `lib/ui/theme/tokens.dart`, and the
+`settings_palette*` ARB keys. The choice is kept in `palette_choice.txt` next to the database,
+not in the database, so removing the switch needs no schema migration. An unknown or missing
+value falls back to Original.
+
+**When Martin has chosen:**
+
+1. Fold the winner's values into `guildBoard` and `daylight` in `tokens.dart` and delete the
+   other palettes (and the extra roles if Original wins).
+2. Delete `palette_section.dart`, `lib/ui/state/palette_choice.dart`,
+   `lib/data/palette_choice_store.dart`, the palette selection in `lib/app.dart` and
+   `lib/main.dart`, and the `settings_palette*` ARB keys (then `flutter gen-l10n`).
+3. Delete their tests and the `board_blue_*` and `board_green_*` goldens, trim the palette
+   cases from `contrast_test.dart`, `theme_test.dart` and `layout_test.dart`, then regenerate
+   the remaining goldens (`flutter test --update-goldens test/goldens`).
 
 ## Testing
 

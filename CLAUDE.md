@@ -83,14 +83,19 @@ Figtree stays as the body face either way.
 
 ## Temporary palette switch
 
-Settings has a "Palette" control (Original / Higher contrast), same lifetime as the font
-picker. Remove once Martin has chosen: `lib/ui/screens/settings/palette_section.dart`,
+Settings has a "Palette" control with four options (Original, Higher contrast, Blue, Green),
+same lifetime as the font picker. In every palette `brass` is the accent colour. Remove once
+Martin has chosen: `lib/ui/screens/settings/palette_section.dart`,
 `lib/ui/state/palette_choice.dart`, `lib/data/palette_choice_store.dart`, the palette
-selection in `lib/app.dart` and `lib/main.dart`, the losing palettes in `tokens.dart`, the
-`settings_palette*` ARB keys and their tests. If higher contrast wins, copy its values into
-`guildBoard`/`daylight`, keep or drop `brassText`/`brassOnParchment`, and delete
-`_knownGaps` in `test/ui/theme/contrast_test.dart`. The choice lives in `palette_choice.txt`
-beside the database (not in it), so no migration is involved.
+selection in `lib/app.dart` and `lib/main.dart`, the losing palettes in `tokens.dart`
+(`guildBoardHighContrast`, `daylightHighContrast`, `blueDark/Light`, `greenDark/Light`), the
+`settings_palette*` ARB keys, their tests (`palette_section_test.dart`, the palette cases in
+`palette_choice_store_test.dart`, `contrast_test.dart`, `theme_test.dart`, `layout_test.dart`)
+and the `board_{blue,green}_*` goldens (regenerate `settings_*` goldens). The winner's values
+are folded into `guildBoard`/`daylight`; if a non-Original palette wins, keep or drop
+`brassText`/`brassOnParchment` and delete `_knownGaps` in `test/ui/theme/contrast_test.dart`.
+The choice lives in `palette_choice.txt` beside the database (not in it), so no migration is
+involved. The app icon and launch screen are not re-tinted by any palette.
 
 ## Sandbox gotchas
 

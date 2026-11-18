@@ -62,6 +62,25 @@ Same structure; only these change: `--board #F4EEE1`, `--board-raised #FBF7EE`,
 Quest cards gain a 1px `--parchment-edge` outline because the shadow alone is too weak
 on a light ground.
 
+### Palette experiments (temporary)
+
+Requested 2026-11-18: Settings lets Martin switch between four palettes while he lives with
+them, then pick one and delete the rest (same lifetime as the font picker). The structure of
+§ 2 stays; only colour values change, and `--brass` is always the accent.
+
+- **Original** — Guild Board and Daylight above, unchanged.
+- **Higher contrast** — the same hues with darker dim text, dark text on destructive fills and
+  accent text from separate `brassText` / `brassOnParchment` roles; every body pair reaches 4.5:1.
+- **Blue** — cool slate paper. Dark: board `#0F1319`, raised `#18202B`, text `#E6EAF2`, accent
+  `#78B4C4`, ink on accent `#08131A`; light: board `#EDF1F6`, accent `#2B7287`. The dark values
+  are taken from TimeLog's Midnight theme (`timelog_app/lib/core/theme.dart`: background
+  `#0F1319`, text `#E6EAF2`, accent `#78B4C4`, ink `#08131A`, panel white 4 %, border white 10 %).
+- **Green** (experimental) — forest ground, mint accent. Dark: board `#0C1B13`, raised
+  `#15291E`, text `#E4F0E6`, accent `#5CC98F`; light: board `#E7F0E4`, accent `#1E7A4B`.
+
+Blue and Green meet 4.5:1 for every text pair and 3:1 for the accent fill. The app icon and
+launch screen (§ 6) are not re-tinted. Values live in `lib/ui/theme/tokens.dart`.
+
 ### Shape
 
 Cards `14px`, fields and buttons `12px`, sheets `24px` top corners, reward card `22px`.
