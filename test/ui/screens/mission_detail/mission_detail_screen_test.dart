@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:questlog/ui/widgets/cards/difficulty_pips.dart';
 import 'package:intl/intl.dart';
 import 'package:questlog/core/cadence.dart';
 import 'package:questlog/core/xp_rules.dart';
@@ -61,8 +62,17 @@ void main() {
       ]) {
         expect(find.text(name), findsOneWidget, reason: name);
       }
-      // Open Quests show their difficulty, done ones when they were completed.
-      expect(find.text(en.quest_difficultyEasy), findsOneWidget);
+      // Open Quests show effort pips but never a tier name; done ones show when
+      // they were completed.
+      for (final String name in <String>[
+        en.quest_effortMoment,
+        en.quest_effortHour,
+        en.quest_effortPart,
+        en.quest_effortDay,
+      ]) {
+        expect(find.text(name), findsNothing, reason: name);
+      }
+      expect(find.byType(DifficultyPips), findsWidgets);
       expect(find.text(en.quest_completedTodayAt('08:52')), findsOneWidget);
       expect(
         find.text(

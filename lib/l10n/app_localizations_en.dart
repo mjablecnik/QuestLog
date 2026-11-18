@@ -232,13 +232,32 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get quest_difficultyEasy => 'Easy';
+  String get quest_effortMoment => 'Moment';
 
   @override
-  String get quest_difficultyNormal => 'Normal';
+  String get quest_effortHour => 'Hour';
 
   @override
-  String get quest_difficultyHard => 'Hard';
+  String get quest_effortPart => 'Part of a day';
+
+  @override
+  String get quest_effortDay => 'Full day';
+
+  @override
+  String get quest_effortMomentTime => 'up to ~30 min';
+
+  @override
+  String get quest_effortHourTime => 'up to ~2 h';
+
+  @override
+  String get quest_effortPartTime => '2–4 h';
+
+  @override
+  String get quest_effortDayTime => 'the whole day';
+
+  @override
+  String get quest_effortHint =>
+      'Pick by how much time it will take. A trip, waiting around or something unpleasant? Go one step up — effort earns more XP.';
 
   @override
   String get a11y_openSettings => 'Open settings';
@@ -301,8 +320,8 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String a11y_difficulty(String name) {
-    return 'Difficulty: $name';
+  String a11y_effort(int step, int total) {
+    return 'Effort $step of $total';
   }
 
   @override
@@ -378,7 +397,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get quest_namePlaceholder => 'Hang the laundry';
 
   @override
-  String get quest_difficultyLabel => 'Difficulty';
+  String get quest_effortLabel => 'Effort';
 
   @override
   String get quest_missionLabel => 'Part of a mission';

@@ -16,7 +16,7 @@ const String _swipeGroup = 'mission-detail-quests';
 /// One Quest of the Mission detail: a parchment slip while open, a dimmed
 /// raised card once done, with the swipe actions "Upravit" and "Smazat".
 ///
-/// An open Quest shows its difficulty (pips and name), a done one when it was
+/// An open Quest shows its effort pips (never a tier name), a done one when it was
 /// completed. The Mission is not repeated on the row, the screen is its page.
 class DetailQuestRow extends StatelessWidget {
   const DetailQuestRow({
@@ -117,19 +117,7 @@ class DetailQuestRow extends StatelessWidget {
                           else
                             const SizedBox.shrink()
                         else
-                          Row(
-                            children: <Widget>[
-                              DifficultyPips(quest.difficulty),
-                              const SizedBox(width: Space.s8),
-                              Flexible(
-                                child: Text(
-                                  difficultyName(l, quest.difficulty),
-                                  style: meta,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                            ],
-                          ),
+                          DifficultyPips(quest.difficulty),
                       ],
                     ),
                   ),

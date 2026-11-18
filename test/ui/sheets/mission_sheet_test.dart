@@ -293,6 +293,10 @@ void main() {
 
       await tester.tap(find.text('+50'));
       await tester.pump();
+      expect(find.text('+100'), findsOneWidget);
+
+      await tester.tap(find.text('+100'));
+      await tester.pump();
       expect(find.text('+10'), findsOneWidget);
     });
 

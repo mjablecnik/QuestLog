@@ -11,9 +11,8 @@ import '../forms/error_text.dart';
 import '../forms/validators.dart';
 import '../theme/questlog_theme.dart';
 import '../theme/tokens.dart';
-import '../widgets/cards/difficulty_pips.dart';
+import '../widgets/common/effort_picker.dart';
 import '../widgets/common/app_icon.dart';
-import '../widgets/common/questlog_segmented.dart';
 import '../widgets/sheet/confirm_destructive.dart';
 import '../widgets/sheet/questlog_sheet.dart';
 
@@ -221,20 +220,13 @@ class _QuestSheetState extends ConsumerState<QuestSheet> {
           ),
           const SizedBox(height: Space.s20),
           _FieldGroup(
-            label: l10n.quest_difficultyLabel,
-            child: QuestlogSegmented<Difficulty>(
+            label: l10n.quest_effortLabel,
+            help: l10n.quest_effortHint,
+            child: EffortPicker(
               enabled: !_isDone,
               selected: _difficulty,
               onChanged: (Difficulty value) =>
                   setState(() => _difficulty = value),
-              options: <SegmentedOption<Difficulty>>[
-                for (final Difficulty difficulty in Difficulty.values)
-                  SegmentedOption<Difficulty>(
-                    value: difficulty,
-                    label: difficultyName(l10n, difficulty),
-                    caption: l10n.common_plusXp(difficulty.xp),
-                  ),
-              ],
             ),
           ),
           const SizedBox(height: Space.s20),

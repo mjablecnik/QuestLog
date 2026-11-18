@@ -12,6 +12,7 @@ import '../forms/error_text.dart';
 import '../forms/validators.dart';
 import '../theme/questlog_theme.dart';
 import '../theme/tokens.dart';
+import '../widgets/cards/difficulty_pips.dart';
 import '../widgets/common/app_icon.dart';
 import '../widgets/common/questlog_segmented.dart';
 import '../widgets/sheet/questlog_sheet.dart';
@@ -449,7 +450,7 @@ class _TextBox extends StatelessWidget {
   }
 }
 
-/// One quest row: name field, Difficulty chip (tap to cycle) and remove button.
+/// One quest row: name field, effort chip (tap to cycle) and remove button.
 class _QuestRowTile extends StatelessWidget {
   const _QuestRowTile({
     super.key,
@@ -463,14 +464,6 @@ class _QuestRowTile extends StatelessWidget {
   final VoidCallback onChanged;
   final ValueChanged<Difficulty> onDifficultyChanged;
   final VoidCallback onRemove;
-
-  String _difficultyName(AppLocalizations l10n) {
-    return switch (row.difficulty) {
-      Difficulty.easy => l10n.quest_difficultyEasy,
-      Difficulty.normal => l10n.quest_difficultyNormal,
-      Difficulty.hard => l10n.quest_difficultyHard,
-    };
-  }
 
   Difficulty get _nextDifficulty {
     final List<Difficulty> all = Difficulty.values;
@@ -499,7 +492,7 @@ class _QuestRowTile extends StatelessWidget {
             Semantics(
               button: true,
               label:
-                  '${l10n.a11y_difficulty(_difficultyName(l10n))}, '
+                  '${l10n.a11y_effort(pipCount(row.difficulty), DifficultyPips.total)}, '
                   '${l10n.common_plusXp(row.difficulty.xp)}',
               excludeSemantics: true,
               onTap: () => onDifficultyChanged(_nextDifficulty),

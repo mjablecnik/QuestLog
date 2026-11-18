@@ -206,7 +206,7 @@ abstract class AppLocalizations {
   /// **'Odebrat'**
   String get common_remove;
 
-  /// XP figure with a plus sign, e.g. on cards and difficulty options.
+  /// XP figure with a plus sign, e.g. on cards and effort options.
   ///
   /// In cs, this message translates to:
   /// **'+{xp} XP'**
@@ -362,23 +362,59 @@ abstract class AppLocalizations {
   /// **'{date}'**
   String quest_completedOn(String date);
 
-  /// Difficulty name.
+  /// Effort step 1 name; shown only while creating or editing a quest, never in a list.
   ///
   /// In cs, this message translates to:
-  /// **'Snadný'**
-  String get quest_difficultyEasy;
+  /// **'Chvilka'**
+  String get quest_effortMoment;
 
-  /// Difficulty name.
+  /// Effort step 2 name.
   ///
   /// In cs, this message translates to:
-  /// **'Běžný'**
-  String get quest_difficultyNormal;
+  /// **'Hodinka'**
+  String get quest_effortHour;
 
-  /// Difficulty name.
+  /// Effort step 3 name.
   ///
   /// In cs, this message translates to:
-  /// **'Těžký'**
-  String get quest_difficultyHard;
+  /// **'Část dne'**
+  String get quest_effortPart;
+
+  /// Effort step 4 name.
+  ///
+  /// In cs, this message translates to:
+  /// **'Celý den'**
+  String get quest_effortDay;
+
+  /// Time description of effort step 1.
+  ///
+  /// In cs, this message translates to:
+  /// **'do ~30 min'**
+  String get quest_effortMomentTime;
+
+  /// Time description of effort step 2.
+  ///
+  /// In cs, this message translates to:
+  /// **'do ~2 h'**
+  String get quest_effortHourTime;
+
+  /// Time description of effort step 3.
+  ///
+  /// In cs, this message translates to:
+  /// **'2–4 h'**
+  String get quest_effortPartTime;
+
+  /// Time description of effort step 4.
+  ///
+  /// In cs, this message translates to:
+  /// **'celý den'**
+  String get quest_effortDayTime;
+
+  /// Hint under the effort picker: choose by time, go one step up for trips, waiting or unpleasant tasks.
+  ///
+  /// In cs, this message translates to:
+  /// **'Zvol podle toho, kolik času ti to zabere. Cesta, čekání nebo něco nepříjemného? Klidně o stupeň výš — za námahu patří víc XP.'**
+  String get quest_effortHint;
 
   /// Semantic label of the gear.
   ///
@@ -464,11 +500,11 @@ abstract class AppLocalizations {
   /// **'Mise {name}'**
   String a11y_questMission(String name);
 
-  /// Semantic label of the difficulty pips.
+  /// Semantic label of the effort pips; never names the step.
   ///
   /// In cs, this message translates to:
-  /// **'Obtížnost: {name}'**
-  String a11y_difficulty(String name);
+  /// **'Námaha {step} ze {total}'**
+  String a11y_effort(int step, int total);
 
   /// Semantic label of the progress ring or bar.
   ///
@@ -566,11 +602,11 @@ abstract class AppLocalizations {
   /// **'Pověsit prádlo'**
   String get quest_namePlaceholder;
 
-  /// Label of the Difficulty selector.
+  /// Label of the effort picker.
   ///
   /// In cs, this message translates to:
-  /// **'Obtížnost'**
-  String get quest_difficultyLabel;
+  /// **'Námaha'**
+  String get quest_effortLabel;
 
   /// Label of the Mission picker.
   ///
@@ -602,7 +638,7 @@ abstract class AppLocalizations {
   /// **'Vyvěsit quest'**
   String get quest_createAction;
 
-  /// Hint under the disabled Difficulty selector and Mission picker when a done Quest is edited.
+  /// Hint under the disabled effort picker and Mission picker when a done Quest is edited.
   ///
   /// In cs, this message translates to:
   /// **'U splněného questu jde změnit jen název a poznámku.'**

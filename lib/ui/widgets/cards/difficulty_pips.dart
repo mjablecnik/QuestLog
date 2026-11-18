@@ -7,23 +7,16 @@ import '../../../l10n/app_localizations.dart';
 import '../../theme/questlog_theme.dart';
 import '../../theme/tokens.dart';
 
-/// Number of filled pips for [difficulty]: one, two or three.
+/// Number of filled pips for [difficulty]: its effort step, one to four.
 int pipCount(Difficulty difficulty) => switch (difficulty) {
   Difficulty.easy => 1,
   Difficulty.normal => 2,
   Difficulty.hard => 3,
+  Difficulty.fullDay => 4,
 };
 
-/// Localized name of [difficulty].
-String difficultyName(AppLocalizations l, Difficulty difficulty) =>
-    switch (difficulty) {
-      Difficulty.easy => l.quest_difficultyEasy,
-      Difficulty.normal => l.quest_difficultyNormal,
-      Difficulty.hard => l.quest_difficultyHard,
-    };
-
-/// Three diamonds, of which one to three are filled brass. Difficulty is never
-/// colour coded.
+/// Four diamonds, of which one to four are filled brass. Effort is never
+/// colour coded and never named: the semantic label gives the step only.
 class DifficultyPips extends StatelessWidget {
   const DifficultyPips(this.difficulty, {super.key, this.emptyColor});
 
@@ -32,7 +25,7 @@ class DifficultyPips extends StatelessWidget {
   /// Colour of the unfilled pips; defaults to the faint ink of a parchment slip.
   final Color? emptyColor;
 
-  static const int total = 3;
+  static const int total = 4;
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +35,7 @@ class DifficultyPips extends StatelessWidget {
     final AppLocalizations l = AppLocalizations.of(context);
 
     return Semantics(
-      label: l.a11y_difficulty(difficultyName(l, difficulty)),
+      label: l.a11y_effort(filled, total),
       excludeSemantics: true,
       child: Row(
         mainAxisSize: MainAxisSize.min,

@@ -197,7 +197,7 @@ class A11yEnv {
               name: 'Domluvit instalatéra na výměnu starých rozvodů',
               difficulty: Difficulty.hard,
             ),
-            QuestDraft(name: 'Vynést suť', difficulty: Difficulty.normal),
+            QuestDraft(name: 'Vynést suť', difficulty: Difficulty.fullDay),
           ],
         ),
       );

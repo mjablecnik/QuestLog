@@ -14,7 +14,8 @@ import 'package:questlog/services/quest_service.dart';
 import 'package:questlog/ui/sheets/quest_sheet.dart';
 import 'package:questlog/ui/theme/questlog_theme.dart';
 import 'package:questlog/ui/theme/tokens.dart';
-import 'package:questlog/ui/widgets/common/questlog_segmented.dart';
+import 'package:questlog/ui/widgets/cards/difficulty_pips.dart';
+import 'package:questlog/ui/widgets/common/effort_picker.dart';
 
 import '../../helpers/fixed_clock.dart';
 import '../../helpers/seed.dart';
@@ -77,8 +78,11 @@ Future<_Fixture> _pumpHost(
   WidgetTester tester, {
   required Future<void> Function(BuildContext context) launch,
   Future<void> Function(QuestlogDatabase db)? seed,
+  Locale locale = const Locale('en'),
+  Size size = const Size(800, 1800),
+  double textScale = 1,
 }) async {
-  tester.view.physicalSize = const Size(800, 1800);
+  tester.view.physicalSize = size;
   tester.view.devicePixelRatio = 1;
   addTearDown(tester.view.reset);
 
@@ -115,9 +119,15 @@ Future<_Fixture> _pumpHost(
           palette: QuestlogPalette.guildBoard,
           font: DisplayFont.figtree,
         ),
-        locale: const Locale('en'),
+        locale: locale,
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
+        builder: (BuildContext context, Widget? child) => MediaQuery(
+          data: MediaQuery.of(
+            context,
+          ).copyWith(textScaler: TextScaler.linear(textScale)),
+          child: child!,
+        ),
         home: Scaffold(
           body: Builder(
             builder: (BuildContext context) => Center(
@@ -140,9 +150,15 @@ Future<_Fixture> _pumpCreate(
   WidgetTester tester, {
   int? presetMissionId,
   Future<void> Function(QuestlogDatabase db)? seed,
+  Locale locale = const Locale('en'),
+  Size size = const Size(800, 1800),
+  double textScale = 1,
 }) => _pumpHost(
   tester,
   seed: seed,
+  locale: locale,
+  size: size,
+  textScale: textScale,
   launch: (context) =>
       showQuestSheet(context, presetMissionId: presetMissionId),
 );
@@ -217,18 +233,81 @@ void main() {
         find.descendant(of: _primary, matching: find.byType(SvgPicture)),
         findsOneWidget,
       );
-      // Default difficulty is Normal, with the XP captions.
-      expect(find.text('+10 XP'), findsOneWidget);
-      expect(find.text('+25 XP'), findsOneWidget);
-      expect(find.text('+50 XP'), findsOneWidget);
+      // Default effort is the second step, with the XP of every step.
+      for (final String xp in <String>['+10 XP', '+25 XP', '+50 XP', '+100 XP']) {
+        expect(find.text(xp), findsOneWidget, reason: xp);
+      }
       expect(
-        tester
-            .widget<QuestlogSegmented<Difficulty>>(
-              find.byType(QuestlogSegmented<Difficulty>),
-            )
-            .selected,
+        tester.widget<EffortPicker>(find.byType(EffortPicker)).selected,
         Difficulty.normal,
       );
+    });
+
+    group('effort picker', () {
+      testWidgets('shows names, time descriptions, XP, four pips each and the hint (en)', (
+        tester,
+      ) async {
+        await _pumpCreate(tester);
+
+        for (final String text in <String>[
+          'Moment', 'up to ~30 min', '+10 XP',
+          'Hour', 'up to ~2 h', '+25 XP',
+          'Part of a day', '2–4 h', '+50 XP',
+          'Full day', 'the whole day', '+100 XP',
+          l10n.quest_effortLabel.toUpperCase(),
+          l10n.quest_effortHint,
+        ]) {
+          expect(find.text(text), findsOneWidget, reason: text);
+        }
+        expect(find.byType(DifficultyPips), findsNWidgets(4));
+        // 4 options x 4 pips; 1 + 2 + 3 + 4 of them filled.
+        expect(find.byKey(const ValueKey<String>('pip-on')), findsNWidgets(10));
+        expect(find.byKey(const ValueKey<String>('pip-off')), findsNWidgets(6));
+      });
+
+      testWidgets('shows names, time descriptions, XP and the hint (cs)', (
+        tester,
+      ) async {
+        await _pumpCreate(tester, locale: const Locale('cs'));
+
+        for (final String text in <String>[
+          'Chvilka', 'do ~30 min', '+10 XP',
+          'Hodinka', 'do ~2 h', '+25 XP',
+          'Část dne', '2–4 h', '+50 XP',
+          'Celý den', 'celý den', '+100 XP',
+          'NÁMAHA',
+          'Zvol podle toho, kolik času ti to zabere. Cesta, čekání nebo něco nepříjemného? Klidně o stupeň výš — za námahu patří víc XP.',
+        ]) {
+          expect(find.text(text), findsOneWidget, reason: text);
+        }
+      });
+
+      for (final Locale locale in const <Locale>[Locale('cs'), Locale('en')]) {
+        testWidgets('does not overflow on a 390 px screen at large text (${locale.languageCode})', (
+          tester,
+        ) async {
+          await _pumpCreate(
+            tester,
+            locale: locale,
+            size: const Size(390, 844),
+            textScale: 2,
+          );
+          expect(tester.takeException(), isNull);
+          expect(find.byType(EffortPicker), findsOneWidget);
+        });
+      }
+
+      testWidgets('picking the fourth step stores the whole-day tier', (
+        tester,
+      ) async {
+        final f = await _pumpCreate(tester);
+        await tester.enterText(_nameField, 'Drive to the notary');
+        await tester.tap(find.text('+100 XP'));
+        await tester.pump();
+        await _submit(tester);
+
+        expect((await f.quests()).single.difficulty, Difficulty.fullDay);
+      });
     });
 
     testWidgets('lists "no mission" first, then the open missions', (
@@ -501,11 +580,7 @@ void main() {
       final f = await _pumpEdit(tester, questId: 1, seed: seedDone);
 
       expect(
-        tester
-            .widget<QuestlogSegmented<Difficulty>>(
-              find.byType(QuestlogSegmented<Difficulty>),
-            )
-            .enabled,
+        tester.widget<EffortPicker>(find.byType(EffortPicker)).enabled,
         isFalse,
       );
       expect(find.text(l10n.quest_doneLockedHint), findsOneWidget);

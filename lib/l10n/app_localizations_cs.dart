@@ -242,13 +242,32 @@ class AppLocalizationsCs extends AppLocalizations {
   }
 
   @override
-  String get quest_difficultyEasy => 'Snadný';
+  String get quest_effortMoment => 'Chvilka';
 
   @override
-  String get quest_difficultyNormal => 'Běžný';
+  String get quest_effortHour => 'Hodinka';
 
   @override
-  String get quest_difficultyHard => 'Těžký';
+  String get quest_effortPart => 'Část dne';
+
+  @override
+  String get quest_effortDay => 'Celý den';
+
+  @override
+  String get quest_effortMomentTime => 'do ~30 min';
+
+  @override
+  String get quest_effortHourTime => 'do ~2 h';
+
+  @override
+  String get quest_effortPartTime => '2–4 h';
+
+  @override
+  String get quest_effortDayTime => 'celý den';
+
+  @override
+  String get quest_effortHint =>
+      'Zvol podle toho, kolik času ti to zabere. Cesta, čekání nebo něco nepříjemného? Klidně o stupeň výš — za námahu patří víc XP.';
 
   @override
   String get a11y_openSettings => 'Otevřít nastavení';
@@ -311,8 +330,8 @@ class AppLocalizationsCs extends AppLocalizations {
   }
 
   @override
-  String a11y_difficulty(String name) {
-    return 'Obtížnost: $name';
+  String a11y_effort(int step, int total) {
+    return 'Námaha $step ze $total';
   }
 
   @override
@@ -388,7 +407,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get quest_namePlaceholder => 'Pověsit prádlo';
 
   @override
-  String get quest_difficultyLabel => 'Obtížnost';
+  String get quest_effortLabel => 'Námaha';
 
   @override
   String get quest_missionLabel => 'Součást mise';

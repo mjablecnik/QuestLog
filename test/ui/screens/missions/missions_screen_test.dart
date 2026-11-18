@@ -182,6 +182,40 @@ void main() {
       await env.finish();
     });
 
+    testWidgets('a Mission card sums the XP of all four effort tiers and names none', (
+      tester,
+    ) async {
+      final _Env env = await _pump(
+        tester,
+        seed: (_Env env) async {
+          await env.run(
+            () => env.container.read(missionServiceProvider).create(
+              MissionDraft(
+                name: 'Move house',
+                bonus: MissionBonus.small,
+                quests: <QuestDraft>[
+                  for (final Difficulty d in Difficulty.values)
+                    QuestDraft(name: 'Step ${d.name}', difficulty: d),
+                ],
+              ),
+            ),
+          );
+        },
+      );
+
+      // 10 + 25 + 50 + 100.
+      expect(find.text(l10n.missions_remaining(185)), findsOneWidget);
+      for (final String name in <String>[
+        l10n.quest_effortMoment,
+        l10n.quest_effortHour,
+        l10n.quest_effortPart,
+        l10n.quest_effortDay,
+      ]) {
+        expect(find.text(name), findsNothing, reason: name);
+      }
+      await env.finish();
+    });
+
     testWidgets('a Mission with every Quest done shows the ready caption', (
       tester,
     ) async {

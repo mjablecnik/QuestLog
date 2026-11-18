@@ -79,7 +79,7 @@
   },
   "common_plusXp": "+{xp} XP",
   "@common_plusXp": {
-    "description": "XP figure with a plus sign, e.g. on cards and difficulty options.",
+    "description": "XP figure with a plus sign, e.g. on cards and effort options.",
     "placeholders": {
       "xp": {
         "type": "int",
@@ -284,17 +284,41 @@
       }
     }
   },
-  "quest_difficultyEasy": "Snadný",
-  "@quest_difficultyEasy": {
-    "description": "Difficulty name."
+  "quest_effortMoment": "Chvilka",
+  "@quest_effortMoment": {
+    "description": "Effort step 1 name; shown only while creating or editing a quest, never in a list."
   },
-  "quest_difficultyNormal": "Běžný",
-  "@quest_difficultyNormal": {
-    "description": "Difficulty name."
+  "quest_effortHour": "Hodinka",
+  "@quest_effortHour": {
+    "description": "Effort step 2 name."
   },
-  "quest_difficultyHard": "Těžký",
-  "@quest_difficultyHard": {
-    "description": "Difficulty name."
+  "quest_effortPart": "Část dne",
+  "@quest_effortPart": {
+    "description": "Effort step 3 name."
+  },
+  "quest_effortDay": "Celý den",
+  "@quest_effortDay": {
+    "description": "Effort step 4 name."
+  },
+  "quest_effortMomentTime": "do ~30 min",
+  "@quest_effortMomentTime": {
+    "description": "Time description of effort step 1."
+  },
+  "quest_effortHourTime": "do ~2 h",
+  "@quest_effortHourTime": {
+    "description": "Time description of effort step 2."
+  },
+  "quest_effortPartTime": "2–4 h",
+  "@quest_effortPartTime": {
+    "description": "Time description of effort step 3."
+  },
+  "quest_effortDayTime": "celý den",
+  "@quest_effortDayTime": {
+    "description": "Time description of effort step 4."
+  },
+  "quest_effortHint": "Zvol podle toho, kolik času ti to zabere. Cesta, čekání nebo něco nepříjemného? Klidně o stupeň výš — za námahu patří víc XP.",
+  "@quest_effortHint": {
+    "description": "Hint under the effort picker: choose by time, go one step up for trips, waiting or unpleasant tasks."
   },
   "a11y_openSettings": "Otevřít nastavení",
   "@a11y_openSettings": {
@@ -397,12 +421,15 @@
       }
     }
   },
-  "a11y_difficulty": "Obtížnost: {name}",
-  "@a11y_difficulty": {
-    "description": "Semantic label of the difficulty pips.",
+  "a11y_effort": "Námaha {step} ze {total}",
+  "@a11y_effort": {
+    "description": "Semantic label of the effort pips; never names the step.",
     "placeholders": {
-      "name": {
-        "type": "String"
+      "step": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
       }
     }
   },
@@ -516,9 +543,9 @@
   "@quest_namePlaceholder": {
     "description": "Placeholder example in the Quest name field."
   },
-  "quest_difficultyLabel": "Obtížnost",
-  "@quest_difficultyLabel": {
-    "description": "Label of the Difficulty selector."
+  "quest_effortLabel": "Námaha",
+  "@quest_effortLabel": {
+    "description": "Label of the effort picker."
   },
   "quest_missionLabel": "Součást mise",
   "@quest_missionLabel": {
@@ -542,7 +569,7 @@
   },
   "quest_doneLockedHint": "U splněného questu jde změnit jen název a poznámku.",
   "@quest_doneLockedHint": {
-    "description": "Hint under the disabled Difficulty selector and Mission picker when a done Quest is edited."
+    "description": "Hint under the disabled effort picker and Mission picker when a done Quest is edited."
   },
   "quest_deleteTitle": "Smazat quest?",
   "@quest_deleteTitle": {

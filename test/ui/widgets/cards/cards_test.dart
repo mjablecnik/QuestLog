@@ -26,13 +26,18 @@ void main() {
       expect(pipCount(Difficulty.easy), 1);
       expect(pipCount(Difficulty.normal), 2);
       expect(pipCount(Difficulty.hard), 3);
+      expect(pipCount(Difficulty.fullDay), 4);
+    });
+
+    test('there are four pips in total', () {
+      expect(DifficultyPips.total, 4);
     });
 
     for (final Difficulty d in Difficulty.values) {
-      testWidgets('${d.name}: ${pipCount(d)} filled of 3', (tester) async {
+      testWidgets('${d.name}: ${pipCount(d)} filled of 4', (tester) async {
         await pumpCards(tester, DifficultyPips(d));
         expect(_filledPips, findsNWidgets(pipCount(d)));
-        expect(_emptyPips, findsNWidgets(3 - pipCount(d)));
+        expect(_emptyPips, findsNWidgets(4 - pipCount(d)));
       });
     }
   });
@@ -141,7 +146,7 @@ void main() {
         expect(find.text('Clean-up'), findsOneWidget);
         expect(find.text(isCs ? 'bez mise' : 'no mission'), findsNothing);
         expect(_filledPips, findsNWidgets(2));
-        expect(_emptyPips, findsNWidgets(1));
+        expect(_emptyPips, findsNWidgets(2));
         expect(find.text('+25'), findsOneWidget);
         expect(
           _decorationOf(tester, 'Sweep'),

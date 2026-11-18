@@ -5,7 +5,11 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:questlog/core/errors.dart';
 import 'package:questlog/core/xp_rules.dart';
 import 'package:questlog/data/models.dart';
+import 'package:questlog/l10n/app_localizations.dart';
+import 'package:questlog/l10n/app_localizations_cs.dart';
+import 'package:questlog/l10n/app_localizations_en.dart';
 import 'package:questlog/ui/screens/board/board_screen.dart';
+import 'package:questlog/ui/widgets/cards/difficulty_pips.dart';
 import 'package:questlog/ui/state/reward_queue.dart';
 import 'package:questlog/ui/widgets/common/skeleton_list.dart';
 
@@ -42,6 +46,39 @@ void main() {
     expect(find.text('The board is empty'), findsOneWidget);
     expect(find.textContaining('Tap the + button'), findsOneWidget);
     expect(find.byTooltip('Post a quest'), findsOneWidget);
+  });
+
+  boardTest(h, 'shows XP and pips for the four effort tiers but never a tier name', (
+    tester,
+  ) async {
+    await h.pump(tester);
+    await h.seed(tester, () async {
+      var order = 1;
+      for (final Difficulty d in Difficulty.values) {
+        await seedQuest(h.db, name: 'Quest ${d.name}', difficulty: d, sortOrder: order++);
+      }
+    });
+    await h.settle(tester);
+
+    for (final String xp in <String>['+10', '+25', '+50', '+100']) {
+      expect(find.text(xp), findsOneWidget, reason: xp);
+    }
+    expect(find.byType(DifficultyPips), findsNWidgets(4));
+    expect(find.byKey(const ValueKey<String>('pip-on')), findsNWidgets(10));
+    for (final AppLocalizations l in <AppLocalizations>[AppLocalizationsEn(), AppLocalizationsCs()]) {
+      for (final String name in <String>[
+        l.quest_effortMoment,
+        l.quest_effortHour,
+        l.quest_effortPart,
+        l.quest_effortDay,
+        l.quest_effortMomentTime,
+        l.quest_effortHourTime,
+        l.quest_effortPartTime,
+        l.quest_effortDayTime,
+      ]) {
+        expect(find.text(name), findsNothing, reason: name);
+      }
+    }
   });
 
   boardTest(h, 'lists open quests in manual order, then done today', (
