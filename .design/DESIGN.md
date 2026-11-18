@@ -25,8 +25,9 @@ is pre-installed in the sandbox — never run `playwright install`.
 
 ## 1. Concept
 
-A **guild notice board**. Quests are light parchment slips pinned to a dark board;
-completing one "turns it in" — the slip dims and gets a brass seal. Missions are dark raised
+A **guild notice board**. In the light theme Quests are parchment slips pinned to the board; in
+the dark theme they are dark raised cards, because bright slips glare in the dark (changed
+2026-11-18 at Martin's request). Completing one "turns it in" — the card dims and gets a brass seal. Missions are dark raised
 cards with a brass progress ring; they differ from quests by *structure*, never by a second
 accent hue. Brass is the only accent and always means the same thing: reward, completion,
 primary action.
@@ -42,9 +43,12 @@ primary action.
 | `--board-line` | `rgba(236,230,216,0.08)` | dividers, track of progress bars |
 | `--text` | `#ECE6D8` | text on the board |
 | `--text-dim` / `--text-faint` | `0.62` / `0.42` alpha of `--text` | secondary text / caps labels |
-| `--parchment` | `#F1E7D3` | open quest card, reward card |
+| `--parchment` | `#F1E7D3` | reward card, empty-state slip (open quest card in the light theme only) |
 | `--parchment-edge` | `#E3D6BB` | 1px inset highlight on parchment |
 | `--ink` | `#1F2A26` | text on parchment |
+| `--slip`, `--slip-edge` | dark: `--board-raised`, `--board-line`; light: `--parchment`, `--parchment-edge` | quest card fill and 1px outline |
+| `--slip-text` / `--slip-text-dim` / `--slip-text-faint` | dark: `--text` / `--text-dim` / `--text-faint`; light: `--ink` / `--ink-dim` / `--ink-faint` | quest card name, meta, empty pips and the open check ring |
+| `--slip-done` | dark: transparent; light: `--board-raised` | done quest card fill |
 | `--ink-dim` / `--ink-faint` | `0.60` / `0.38` alpha of `--ink` | secondary text / empty pips on parchment |
 | `--brass` | `#D8AE5A` | XP, seals, FAB, primary button, active tab, progress fill |
 | `--brass-soft` | `rgba(216,174,90,0.18)` | selected segment / chip background, level badge fill |
@@ -61,6 +65,18 @@ Same structure; only these change: `--board #F4EEE1`, `--board-raised #FBF7EE`,
 (darkened for contrast on light grounds), `--ink-on-brass #FFF8E8`, `--sheet #FBF7EE`.
 Quest cards gain a 1px `--parchment-edge` outline because the shadow alone is too weak
 on a light ground.
+
+### Dark quest cards
+
+Changed 2026-11-18 at Martin's request (his choice of three proposals, "Tmavé karty"): in every
+dark palette an open Quest card is `--board-raised` with a 1px `--board-line` border and no
+shadow; its name is `--text`, the +XP and filled pips are the accent, empty pips and the open
+check ring are `--text-faint`. A done card is transparent with the same outline, dimmed text,
+a strikethrough and an accent-filled check, so open and done still read apart. A card lifted
+by drag gets a scrim shadow. The reward card and the empty-state slip stay parchment (they are
+celebratory or pinned paper, and short-lived). Light palettes are unchanged. The roles are
+`slip*` in `QuestlogPalette`; dark palettes derive them from `brightness`, so no palette
+restates them.
 
 ### Palette experiments (temporary)
 

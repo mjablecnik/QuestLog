@@ -1,5 +1,7 @@
 # Requirements Document
 
+> **Changed 2026-11-18 at Martin's request.** In the dark theme (every palette) open Quest_Cards are dark raised cards (raised ground, 1px board-line border, light text, accent for +XP and filled pips) instead of parchment slips; done Quest_Cards are transparent with the same outline. This overrides Requirement 15, criteria 5 and 6 for dark palettes. Light palettes, the Reward_Card and the empty-state slip stay parchment.
+
 > **Changed 2026-11-18 at Martin's request.** The Board_Screen lists only Quests without a Mission (see Requirement on the Board_Screen, criteria 1, 3 and 10, and the Quest_Sheet note on the snackbar); Mission Quests appear only on the Mission_Detail_Screen. This overrides "the board shows all open Quests" wherever it appears below.
 
 > **Changed 2026-11-18 at Martin's request.** The Difficulty selector became an **Effort** picker with four tiers (Chvilka +10, Hodinka +25, Část dne +50, Celý den +100; English Moment, Hour, Part of a day, Full day), default Hodinka, each option showing name, XP, four pips and a time description, with one hint line below. Pips are now four. Tier names appear only in the Quest_Sheet and never in a list, card or reward card; accessibility labels give the step ("effort 3 of 4"). The text below is superseded where it says three.

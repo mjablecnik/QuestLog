@@ -12,6 +12,8 @@ on the Linux desktop app (pipeline run `2026-11-15-1405`); `scripts/check.sh` is
 Quests have four effort tiers (10/25/50/100 XP, 2026-11-18, Martin's request; no migration).
 Board and Missions are strictly split (2026-11-18, Martin's request): the Board lists only quests
 without a mission, open and done alike; a mission's quests appear only in its detail.
+In the dark theme Quest cards are dark raised cards, not parchment slips (2026-11-18, Martin's
+request; `slip*` roles in `tokens.dart`); the light theme is unchanged.
 Not done: the iOS build and every on-device check — Martin does those himself (open LOW
 entry in `.agents/ISSUES.md`).
 
@@ -92,7 +94,7 @@ selection in `lib/app.dart` and `lib/main.dart`, the losing palettes in `tokens.
 `settings_palette*` ARB keys, their tests (`palette_section_test.dart`, the palette cases in
 `palette_choice_store_test.dart`, `contrast_test.dart`, `theme_test.dart`, `layout_test.dart`)
 and the `board_{blue,green}_*` goldens (regenerate `settings_*` goldens). The winner's values
-are folded into `guildBoard`/`daylight`; if a non-Original palette wins, keep or drop
+are folded into `guildBoard`/`daylight` (including the `slip*` roles, which dark palettes derive from `brightness` and light ones from the parchment values); if a non-Original palette wins, keep or drop
 `brassText`/`brassOnParchment` and delete `_knownGaps` in `test/ui/theme/contrast_test.dart`.
 The choice lives in `palette_choice.txt` beside the database (not in it), so no migration is
 involved. The app icon and launch screen are not re-tinted by any palette.

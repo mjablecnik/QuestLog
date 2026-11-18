@@ -108,8 +108,11 @@ the accent colour (the name is kept to avoid churn).
 |---|---|---|---|
 | Original | `#121A17` / `#D8AE5A` | `#F4EEE1` / `#B4832A` | The approved design, unchanged and the default. |
 | Higher contrast | `#121A17` / `#D8AE5A` | `#F4EEE1` / `#B4832A` (text `#86600F`) | Same fills; darker dim text, dark text on destructive fills, darker accent text. |
-| Blue | `#0F1319` / `#78B4C4` | `#EDF1F6` / `#2B7287` | Cool paper slips; the dark one follows TimeLog's Midnight theme. |
+| Blue | `#0F1319` / `#78B4C4` | `#EDF1F6` / `#2B7287` | Cool slate; light-theme cards are paper slips; the dark one follows TimeLog's Midnight theme. |
 | Green | `#0C1B13` / `#5CC98F` | `#E7F0E4` / `#1E7A4B` | Experimental; forest ground, mint accent. |
+
+In every dark palette Quest cards are dark raised cards (`slip*` roles), not parchment slips;
+the light palettes keep parchment. The reward card and the empty-state slip stay parchment.
 
 Higher contrast, Blue and Green all reach 4.5:1 on every body-text pair, 4.5:1 for accent used
 as text (`brassText` on boards, `brassOnParchment` on slips) and 3:1 for the accent as a fill.

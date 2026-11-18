@@ -1417,7 +1417,7 @@ disagreement is the spec, not the artboard (`CLAUDE.md`).
 - Preconditions: dark theme, Czech
 - Data needed: the artboard's content — a hero bar with a name and a level, 4–5 open quests across all four effort tiers, 1–2 quests done today (the artboard mixes in mission quests; since 2026-11-18 the Board shows only quests without a mission)
 - Steps: compose that state, screenshot, compare with `.design/screens/QuestBoard.png`
-- Expected: open quests render as parchment slips, done quests and mission cards on the raised ground, brass only on reward, completion and primary actions; grounds, radii, spacing and type sizes match the tokens
+- Expected: open quests render as parchment slips in the light theme and as dark raised cards (raised ground, 1px board-line border, light text) in the dark theme, done quests as dim outlined cards in the dark theme (on the raised ground in the light one) and mission cards on the raised ground, brass only on reward, completion and primary actions; grounds, radii, spacing and type sizes match the tokens
 - Verify: APP+DB
 
 ### UC-147 — Quest board, light
@@ -1426,7 +1426,7 @@ disagreement is the spec, not the artboard (`CLAUDE.md`).
 - Preconditions: light theme, Czech
 - Data needed: the same content as UC-146
 - Steps: screenshot, compare with `.design/screens/QuestBoardLight.png`
-- Expected: the Daylight palette, and every quest card carries the 1px parchment-edge outline that the dark theme does not have
+- Expected: the Daylight palette, and every quest card carries the 1px parchment-edge outline (the dark theme has the faint board-line border instead)
 - Verify: APP+DB
 
 ### UC-148 — Empty board, both themes

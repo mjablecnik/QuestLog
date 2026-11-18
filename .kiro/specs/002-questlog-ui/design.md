@@ -130,6 +130,8 @@ No directory exceeds eight authored files. Generated localization files are not 
 class QuestlogPalette {
   final Color board, boardRaised, boardLine, text, textDim, textFaint;
   final Color parchment, parchmentEdge, ink, inkDim, inkFaint;
+  // Quest card roles (2026-11-18): dark palettes use raised-board values, light ones parchment.
+  final Color slip, slipEdge, slipText, slipTextDim, slipTextFaint, slipDone;
   final Color brass, brassSoft, inkOnBrass, destructive, scrim, field, fieldActive;
   static const QuestlogPalette guildBoard = /* dark */;
   static const QuestlogPalette daylight = /* light */;

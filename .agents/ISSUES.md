@@ -72,6 +72,7 @@
 - Tried: left the approved colours untouched because DESIGN.md is the visual contract; the test lists each failing pair in _knownGaps with a floor so it fails on regressions or when a pair is fixed.
 - Next: darken inkDim, textDim and inkOnDestructive tokens slightly (daylight) with Martin's sign-off, then empty _knownGaps; avoid brass as text on parchment.
 - Update 2026-11-18: the temporary palette switch now offers Higher contrast, Blue and Green, none of which has these gaps (contrast_test.dart). Original still has them, so this stays OPEN until Martin picks a palette and the winner's values replace Original's.
+- Update 2026-11-18: dark Quest cards are now dark raised cards (Martin's request), so the Original dark gaps `inkDim/parchment` and brass-as-text on parchment no longer touch quest cards; they remain only on the reward card and the empty-state slip, which stay parchment.
 
 ## [LOW] Mission and rule sheet quest rows show only +XP for the effort tier
 - Run: 2026-11-18 (four effort tiers)
