@@ -92,7 +92,7 @@ void main() {
             switch (code % 5) {
               case 0:
               case 1:
-                await quests.create(draft(Difficulty.values[(code ~/ 5) % 3]));
+                await quests.create(draft(Difficulty.values[(code ~/ 5) % Difficulty.values.length]));
               case 2:
                 if (pick != null) await quests.complete(pick);
               case 3:
@@ -160,6 +160,48 @@ void main() {
       await quests.update(created.id, draft(Difficulty.hard));
       final result = await quests.complete(created.id);
       expect(result.awardedXp, 50);
+    });
+
+    test('a whole-day Quest awards 100 XP and exactly fills Level 1', () async {
+      final created = await quests.create(draft(Difficulty.fullDay));
+      final result = await quests.complete(created.id);
+
+      expect(result.awardedXp, 100);
+      expect(result.levelBefore, 1);
+      expect(result.levelAfter, 2);
+      expect(await xp.readTotal(), 100);
+      expect((await db.select(db.quests).getSingle()).awardedXp, 100);
+    });
+
+    test('a whole-day Quest from 90 XP crosses into Level 2 mid-bar', () async {
+      await xp.apply(90);
+      final created = await quests.create(draft(Difficulty.fullDay));
+      final result = await quests.complete(created.id);
+
+      expect(result.levelBefore, 1);
+      expect(result.levelAfter, 2);
+      expect(progressFor(await xp.readTotal()).xpIntoLevel, 90);
+    });
+
+    test('reopening a done whole-day Quest takes the 100 XP back and drops the Level', () async {
+      final created = await quests.create(draft(Difficulty.fullDay));
+      await quests.complete(created.id);
+      final reopened = await quests.reopen(created.id);
+
+      expect(reopened.revokedXp, 100);
+      expect(reopened.levelAfter, 1);
+      expect(await xp.readTotal(), 0);
+    });
+
+    test('tiers stored before the fourth one existed keep their XP, no migration needed', () async {
+      for (final (String name, int expected) in [('easy', 10), ('normal', 25), ('hard', 50)]) {
+        await db.customStatement(
+          'INSERT INTO quests (name, difficulty, sort_order, created_at) '
+          "VALUES ('Old $name', '$name', 1, 0)",
+        );
+        final id = (await (db.select(db.quests)..where((q) => q.name.equals('Old $name'))).getSingle()).id;
+        expect((await quests.complete(id)).awardedXp, expected, reason: name);
+      }
     });
 
     test('missionReadyToComplete is true only when the last Quest is completed', () async {

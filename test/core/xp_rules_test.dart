@@ -7,6 +7,17 @@ void main() {
       expect(Difficulty.easy.xp, 10);
       expect(Difficulty.normal.xp, 25);
       expect(Difficulty.hard.xp, 50);
+      expect(Difficulty.fullDay.xp, 100);
+    });
+
+    test('there are four effort tiers and their XP strictly grows', () {
+      expect(Difficulty.values, hasLength(4));
+      final xp = [for (final d in Difficulty.values) d.xp];
+      expect(xp, [10, 25, 50, 100]);
+    });
+
+    test('the stored enum names of the first three tiers did not change', () {
+      expect([for (final d in Difficulty.values) d.name], ['easy', 'normal', 'hard', 'fullDay']);
     });
 
     test('Mission_Bonus XP', () {
@@ -42,6 +53,40 @@ void main() {
     test('there is no upper level limit', () {
       expect(levelFor(xpToReachLevel(5000)), 5000);
       expect(levelFor(xpToReachLevel(5000) - 1), 4999);
+    });
+  });
+
+  group('a whole-day Quest (+100 XP) against the unchanged level curve', () {
+    test('exactly fills Level 1', () {
+      expect(progressFor(Difficulty.fullDay.xp),
+          const LevelProgress(level: 2, xpIntoLevel: 0, threshold: 150));
+    });
+
+    test('from 90 XP it lands inside Level 2', () {
+      expect(progressFor(90 + Difficulty.fullDay.xp),
+          const LevelProgress(level: 2, xpIntoLevel: 90, threshold: 150));
+    });
+
+    test('from 249 XP it crosses into Level 3', () {
+      // Level 3 starts at 250 XP; 249 + 100 = 349 is 99 of 200 into Level 3.
+      expect(progressFor(249 + Difficulty.fullDay.xp),
+          const LevelProgress(level: 3, xpIntoLevel: 99, threshold: 200));
+    });
+
+    test('with a large Mission bonus it can skip a whole level', () {
+      // 0 XP + 100 + 200 = 300: Level 1 -> Level 3, bar 50 of 200.
+      final total = Difficulty.fullDay.xp + MissionBonus.large.xp;
+      expect(levelFor(0), 1);
+      expect(progressFor(total),
+          const LevelProgress(level: 3, xpIntoLevel: 50, threshold: 200));
+    });
+
+    Glados(any.intInRange(0, 200000)).test('the bar never overflows after +100', (xp) {
+      final p = progressFor(xp + Difficulty.fullDay.xp);
+      expect(p.xpIntoLevel, inInclusiveRange(0, p.threshold - 1));
+      // One whole-day Quest alone can skip at most one level while the
+      // threshold is at least 100 (level thresholds are 100, 150, 200, ...).
+      expect(levelFor(xp + Difficulty.fullDay.xp) - levelFor(xp), lessThanOrEqualTo(1));
     });
   });
 

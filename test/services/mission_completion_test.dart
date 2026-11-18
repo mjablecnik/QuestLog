@@ -92,7 +92,7 @@ void main() {
             final missionRows = await db.select(db.missions).get();
             final aQuest = questRows.isEmpty ? null : questRows[pick % questRows.length];
             final aMission = missionRows.isEmpty ? null : missionRows[pick % missionRows.length];
-            final difficulty = Difficulty.values[pick % 3];
+            final difficulty = Difficulty.values[pick % Difficulty.values.length];
 
             switch (code % 7) {
               case 0:
@@ -102,7 +102,7 @@ void main() {
                   MissionDraft(
                     name: 'M',
                     bonus: MissionBonus.values[pick % 3],
-                    quests: [quest(difficulty), quest(Difficulty.values[(pick + 1) % 3])],
+                    quests: [quest(difficulty), quest(Difficulty.values[(pick + 1) % Difficulty.values.length])],
                   ),
                 );
               case 2:

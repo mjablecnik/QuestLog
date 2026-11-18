@@ -1,7 +1,12 @@
 import 'dart:math' as math;
 
-/// XP tier of a Quest.
-enum Difficulty { easy, normal, hard }
+/// Effort tier of a Quest, chosen mostly by the time it takes.
+///
+/// The enum names are the values stored in the database, so the first three
+/// keep their original names. Shown to the user as effort steps 1 to 4:
+/// [easy] a moment, [normal] an hour, [hard] part of a day, [fullDay] a whole
+/// day.
+enum Difficulty { easy, normal, hard, fullDay }
 
 /// Extra XP granted when a Mission is completed.
 enum MissionBonus { small, medium, large }
@@ -12,6 +17,7 @@ extension DifficultyXp on Difficulty {
         Difficulty.easy => 10,
         Difficulty.normal => 25,
         Difficulty.hard => 50,
+        Difficulty.fullDay => 100,
       };
 }
 
