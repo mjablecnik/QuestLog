@@ -36,14 +36,10 @@ class RulesSection extends ConsumerWidget {
         if (result.skippedNextPosting) l.rule_postedSkippedNote,
         if (result.closedPreviousInstance) l.rule_postedClosedNote,
       ];
-      showQuestlogSnack(context, notes.join(' '), bottomClearance: Space.s16);
+      showQuestlogSnack(context, notes.join(' '));
     } on DomainError catch (error) {
       if (!context.mounted) return;
-      showQuestlogSnack(
-        context,
-        domainErrorText(l, error),
-        bottomClearance: Space.s16,
-      );
+      showQuestlogSnack(context, domainErrorText(l, error));
     }
   }
 

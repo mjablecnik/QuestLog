@@ -20,6 +20,8 @@ import 'package:questlog/ui/screens/shell/questlog_tab_bar.dart';
 import 'package:questlog/ui/screens/shell/reconcile_banner.dart';
 import 'package:questlog/ui/screens/shell/splash_screen.dart';
 import 'package:questlog/ui/state/ui_providers.dart';
+import 'package:questlog/ui/widgets/common/add_fab.dart';
+import 'package:questlog/ui/widgets/hero/hero_bar.dart';
 
 import '../../../helpers/fixed_clock.dart';
 import '../../../helpers/seed.dart';
@@ -58,6 +60,7 @@ Mission _mission(int id, String name) => Mission(
 
 const Key _questsTab = ValueKey<ShellTab>(ShellTab.quests);
 const Key _missionsTab = ValueKey<ShellTab>(ShellTab.missions);
+const Key _settingsTab = ValueKey<ShellTab>(ShellTab.settings);
 
 void main() {
   late QuestlogDatabase db;
@@ -181,7 +184,7 @@ void main() {
   });
 
   group('tabs', () {
-    shellTest('exactly two tabs, Quests then Missions, switch on tap', (
+    shellTest('three tabs, Quests, Missions, then Settings, switch on tap', (
       tester,
     ) async {
       await pumpApp(tester);
@@ -192,10 +195,11 @@ void main() {
           of: find.byType(QuestlogTabBar),
           matching: find.byType(InkWell),
         ),
-        findsNWidgets(2),
+        findsNWidgets(3),
       );
       expect(find.byKey(_questsTab), findsOneWidget);
       expect(find.byKey(_missionsTab), findsOneWidget);
+      expect(find.byKey(_settingsTab), findsOneWidget);
       expect(
         find.descendant(
           of: find.byType(QuestlogTabBar),
@@ -210,15 +214,28 @@ void main() {
         ),
         findsOneWidget,
       );
+      expect(
+        find.descendant(
+          of: find.byType(QuestlogTabBar),
+          matching: find.text('Settings'),
+        ),
+        findsOneWidget,
+      );
       expect(tabIndex(tester), 0);
 
       await tester.tap(find.byKey(_missionsTab));
       await settle(tester);
       expect(tabIndex(tester), 1);
 
+      await tester.tap(find.byKey(_settingsTab));
+      await settle(tester);
+      expect(tabIndex(tester), 2);
+      expect(find.byType(SettingsScreen), findsOneWidget);
+
       await tester.tap(find.byKey(_questsTab));
       await settle(tester);
       expect(tabIndex(tester), 0);
+      expect(find.byType(SettingsScreen), findsNothing);
     });
 
     shellTest('tabs have 44 px hit areas and a selected semantic state', (
@@ -226,7 +243,7 @@ void main() {
     ) async {
       await pumpApp(tester);
       await settle(tester);
-      for (final Key key in <Key>[_questsTab, _missionsTab]) {
+      for (final Key key in <Key>[_questsTab, _missionsTab, _settingsTab]) {
         final Size size = tester.getSize(find.byKey(key));
         expect(size.height, greaterThanOrEqualTo(44));
         expect(size.width, greaterThanOrEqualTo(44));
@@ -237,6 +254,7 @@ void main() {
       // `toString` is stable enough to read the flags without private API.
       expect(quests.label, 'Quests');
       expect(missions.label, 'Missions');
+      expect(tester.getSemantics(find.byKey(_settingsTab)).label, 'Settings');
       expect(
         quests.flagsCollection.isSelected,
         isNot(missions.flagsCollection.isSelected),
@@ -244,44 +262,39 @@ void main() {
       handle.dispose();
     });
 
-    shellTest('Settings opens from the Board and closes back to the tab', (
+    shellTest('Settings is a tab: no back button, no hero bar, no add button', (
       tester,
     ) async {
       await pumpApp(tester);
       await settle(tester);
-
-      tester.widget<BoardScreen>(find.byType(BoardScreen)).onOpenSettings();
+      await tester.tap(find.byKey(_settingsTab));
       await settle(tester);
-      await tester.pumpAndSettle();
+
       expect(find.byType(SettingsScreen), findsOneWidget);
-
-      Navigator.of(tester.element(find.byType(SettingsScreen))).pop();
-      await tester.pumpAndSettle();
-      await settle(tester);
-      expect(find.byType(SettingsScreen), findsNothing);
+      expect(find.text('Back'), findsNothing);
+      expect(find.byType(HeroBar), findsNothing);
+      expect(find.byType(AddFab), findsNothing);
       expect(find.byType(QuestlogTabBar), findsOneWidget);
-      expect(tabIndex(tester), 0);
+      expect(find.bySemanticsLabel('Settings'), findsWidgets);
     });
 
-    shellTest('Settings opens from the Missions tab and returns to it', (
+    shellTest('a message raised on the Settings tab is cleared on leaving it', (
       tester,
     ) async {
       await pumpApp(tester);
       await settle(tester);
-      await tester.tap(find.byKey(_missionsTab));
+      await tester.tap(find.byKey(_settingsTab));
       await settle(tester);
+      container
+          .read(snackbarProvider.notifier)
+          .show(const SnackMessage('Rule posted'));
+      await tester.pump();
+      await tester.pump();
+      expect(find.text('Rule posted'), findsOneWidget);
 
-      final screen = tester.widget<MissionsScreen>(find.byType(MissionsScreen));
-      expect(screen.onOpenSettings, isNotNull);
-      screen.onOpenSettings!();
-      await settle(tester);
+      await tester.tap(find.byKey(_questsTab));
       await tester.pumpAndSettle();
-      expect(find.byType(SettingsScreen), findsOneWidget);
-
-      Navigator.of(tester.element(find.byType(SettingsScreen))).pop();
-      await tester.pumpAndSettle();
-      await settle(tester);
-      expect(tabIndex(tester), 1);
+      expect(find.byType(SnackBar), findsNothing);
     });
   });
 
@@ -337,6 +350,18 @@ void main() {
             await seedMission(db, name: 'Mission $i');
           }
         },
+      );
+    });
+
+    shellTest('the Settings tab keeps its offset across tab switches', (
+      tester,
+    ) async {
+      await checkRetention(
+        tester,
+        screen: SettingsScreen,
+        tab: _settingsTab,
+        other: _questsTab,
+        seed: () async {},
       );
     });
 

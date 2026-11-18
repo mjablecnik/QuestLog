@@ -26,7 +26,6 @@ Future<_Fixture> _pumpHero(
   WidgetTester tester, {
   int startXp = 0,
   bool disableAnimations = false,
-  VoidCallback? onOpenSettings,
 }) async {
   final db = createTestDatabase();
   final container = ProviderContainer(
@@ -45,7 +44,7 @@ Future<_Fixture> _pumpHero(
     tester,
     UncontrolledProviderScope(
       container: container,
-      child: HeroBar(onOpenSettings: onOpenSettings ?? () {}),
+      child: const HeroBar(),
     ),
     disableAnimations: disableAnimations,
   );
@@ -236,25 +235,6 @@ void main() {
         expect(values.any((v) => v >= 1 - 1e-9), isTrue);
       },
     );
-  });
-
-  group('gear', () {
-    testWidgets('is a labelled 44x44 button that calls onOpenSettings', (
-      tester,
-    ) async {
-      var taps = 0;
-      await _pumpHero(tester, onOpenSettings: () => taps++);
-
-      final gear = find.bySemanticsLabel('Settings');
-      expect(gear, findsOneWidget);
-      final size = tester.getSize(gear);
-      expect(size.width, greaterThanOrEqualTo(Metrics.touchTarget));
-      expect(size.height, greaterThanOrEqualTo(Metrics.touchTarget));
-
-      await tester.tap(gear);
-      await tester.pump();
-      expect(taps, 1);
-    });
   });
 
   group('LevelBadge', () {

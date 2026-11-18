@@ -7,19 +7,15 @@ import '../../../l10n/app_localizations.dart';
 import '../../../services/providers.dart';
 import '../../theme/questlog_theme.dart';
 import '../../theme/tokens.dart';
-import '../common/app_icon.dart';
 import 'level_badge.dart';
 
 /// Key of the filled part of the progress bar; tests read its width factor.
 const Key heroBarFillKey = ValueKey<String>('hero-bar-fill');
 
-/// Level badge, hero name and Level, "current / threshold XP", XP remaining, the
-/// progress bar and the Settings gear.
+/// Level badge, hero name and Level, "current / threshold XP", XP remaining and
+/// the progress bar.
 class HeroBar extends ConsumerWidget {
-  const HeroBar({super.key, required this.onOpenSettings});
-
-  /// Called when the gear is tapped.
-  final VoidCallback onOpenSettings;
+  const HeroBar({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -109,57 +105,7 @@ class HeroBar extends ConsumerWidget {
             children: <Widget>[...lines, bar],
           ),
         ),
-        const SizedBox(width: Space.s4),
-        _GearButton(label: l10n.hero_settingsLabel, onPressed: onOpenSettings),
       ],
-    );
-  }
-}
-
-/// Round settings button: 32px painted, 44px hit area, pressed splash from the
-/// theme.
-class _GearButton extends StatelessWidget {
-  const _GearButton({required this.label, required this.onPressed});
-
-  final String label;
-  final VoidCallback onPressed;
-
-  @override
-  Widget build(BuildContext context) {
-    final QuestlogPalette p = context.palette;
-    return Semantics(
-      button: true,
-      label: label,
-      excludeSemantics: true,
-      onTap: onPressed,
-      child: SizedBox(
-        width: Metrics.touchTarget,
-        height: Metrics.touchTarget,
-        child: Material(
-          type: MaterialType.transparency,
-          child: InkResponse(
-            onTap: onPressed,
-            radius: Metrics.touchTarget / 2,
-            customBorder: const CircleBorder(),
-            child: Center(
-              child: Container(
-                width: Metrics.iconButton,
-                height: Metrics.iconButton,
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: p.field,
-                ),
-                child: AppIcon(
-                  IconAsset.gear,
-                  size: Metrics.iconSmall,
-                  color: p.textDim,
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
     );
   }
 }

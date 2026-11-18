@@ -5,11 +5,11 @@ import '../../theme/questlog_theme.dart';
 import '../../theme/tokens.dart';
 import '../../widgets/common/app_icon.dart';
 
-/// The two tabs of the shell. There is deliberately no third one.
-enum ShellTab { quests, missions }
+/// The three tabs of the shell; Settings lives in the bar, not behind a button.
+enum ShellTab { quests, missions, settings }
 
-/// Bottom bar with exactly the two tabs Questy and Mise; the active one is
-/// brass, the other faint (see `.tabbar` in the design).
+/// Bottom bar with the tabs Questy, Mise and Nastavení; the active one is
+/// brass, the others faint (see `.tabbar` in the design).
 class QuestlogTabBar extends StatelessWidget {
   const QuestlogTabBar({
     super.key,
@@ -43,12 +43,16 @@ class QuestlogTabBar extends StatelessWidget {
                   Expanded(
                     child: _TabItem(
                       key: ValueKey<ShellTab>(tab),
-                      icon: tab == ShellTab.quests
-                          ? IconAsset.quests
-                          : IconAsset.missions,
-                      label: tab == ShellTab.quests
-                          ? l10n.app_tabQuests
-                          : l10n.app_tabMissions,
+                      icon: switch (tab) {
+                        ShellTab.quests => IconAsset.quests,
+                        ShellTab.missions => IconAsset.missions,
+                        ShellTab.settings => IconAsset.gear,
+                      },
+                      label: switch (tab) {
+                        ShellTab.quests => l10n.app_tabQuests,
+                        ShellTab.missions => l10n.app_tabMissions,
+                        ShellTab.settings => l10n.app_tabSettings,
+                      },
                       selected: tab == current,
                       onTap: () => onSelected(tab),
                     ),

@@ -122,8 +122,8 @@ class A11yEnv {
     final int missionId = await _seed(tester, db, clock, startXp);
 
     final Widget home = switch (subject) {
-      Subject.board => BoardScreen(onOpenSettings: () {}),
-      Subject.missions => MissionsScreen(onOpenSettings: () {}),
+      Subject.board => const BoardScreen(),
+      Subject.missions => const MissionsScreen(),
       Subject.detail => MissionDetailScreen(missionId: missionId),
       Subject.settings => const SettingsScreen(),
       Subject.shell => const AppShell(),

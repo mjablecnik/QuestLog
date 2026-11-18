@@ -27,6 +27,7 @@ final AppLocalizationsCs cs = AppLocalizationsCs();
 
 const Key _questsTab = ValueKey<ShellTab>(ShellTab.quests);
 const Key _missionsTab = ValueKey<ShellTab>(ShellTab.missions);
+const Key _settingsTab = ValueKey<ShellTab>(ShellTab.settings);
 
 /// Drift streams run on real async: give them time, then finish the frames.
 Future<void> _settle(WidgetTester tester) async {
@@ -229,13 +230,14 @@ void main() {
       expect(find.text(en.hero_level(2)), findsOneWidget);
 
       // ---- 5. Settings: language to Czech, theme to Light (11.x, 14.3) ----
-      await _tap(tester, find.bySemanticsLabel(en.hero_settingsLabel).first);
+      await _tap(tester, find.byKey(_settingsTab));
       expect(find.byType(SettingsScreen), findsOneWidget);
-      expect(find.text(en.settings_title), findsOneWidget);
+      // Screen title plus the tab label.
+      expect(find.text(en.settings_title), findsNWidgets(2));
       expect(_palette(tester).isLight, isFalse);
 
       await _tap(tester, find.text(en.settings_languageCs));
-      expect(find.text(cs.settings_title), findsOneWidget);
+      expect(find.text(cs.settings_title), findsNWidgets(2));
       expect(find.text(cs.settings_groupLanguage.toUpperCase()), findsOne);
       expect(find.text(en.settings_title), findsNothing);
       expect(container.read(effectiveLocaleProvider).languageCode, 'cs');
@@ -271,13 +273,10 @@ void main() {
       expect(find.text(cs.rule_posted), findsOneWidget);
       expect(find.text(cs.rule_postNow), findsNothing);
 
-      // Back to the Board (the tab Settings was opened from), then Missions.
-      await _tap(tester, find.text(cs.common_back));
-      expect(find.byType(SettingsScreen), findsNothing);
-      // The Settings message does not outlive the route: it would sit over the
-      // tab bar of the screen below.
-      expect(find.byType(SnackBar), findsNothing);
+      // Leaving the Settings tab takes its message with it, then Missions.
       await _tap(tester, find.byKey(_missionsTab));
+      expect(find.byType(SettingsScreen), findsNothing);
+      expect(find.byType(SnackBar), findsNothing);
       // Screen title plus the tab label.
       expect(find.text(cs.missions_title), findsNWidgets(2));
       expect(find.text(cs.missions_sectionOpen.toUpperCase()), findsOneWidget);

@@ -18,10 +18,7 @@ import 'quest_list.dart';
 /// The Quest board: hero bar, title, the open Quests and those done today,
 /// plus the add button.
 class BoardScreen extends ConsumerStatefulWidget {
-  const BoardScreen({super.key, required this.onOpenSettings});
-
-  /// Called when the gear in the hero bar is tapped.
-  final VoidCallback onOpenSettings;
+  const BoardScreen({super.key});
 
   @override
   ConsumerState<BoardScreen> createState() => _BoardScreenState();
@@ -76,7 +73,7 @@ class _BoardScreenState extends ConsumerState<BoardScreen> {
                     Space.s20,
                     Space.s18,
                   ),
-                  child: HeroBar(onOpenSettings: widget.onOpenSettings),
+                  child: const HeroBar(),
                 ),
                 _TitleRow(openCount: open?.length, today: today),
                 const SizedBox(height: Space.s10),

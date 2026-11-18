@@ -22,6 +22,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get app_tabMissions => 'Missions';
 
   @override
+  String get app_tabSettings => 'Settings';
+
+  @override
   String app_postedMissions(String names) {
     return 'Posted: $names';
   }
@@ -133,9 +136,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
     return '$xpString XP to level $level';
   }
-
-  @override
-  String get hero_settingsLabel => 'Settings';
 
   @override
   String hero_levelBadgeLabel(int level) {

@@ -19,17 +19,12 @@ import '../../widgets/common/skeleton_list.dart';
 import '../../widgets/hero/hero_bar.dart';
 import '../../widgets/sheet/confirm_destructive.dart';
 import '../mission_detail/mission_detail_screen.dart';
-import '../settings/settings_screen.dart';
 import 'mission_swipe_row.dart';
 
 /// The "Mise" tab: open Missions with their progress, the Missions completed
 /// on the current Board_Day, and the entry points to create, edit and delete.
 class MissionsScreen extends ConsumerStatefulWidget {
-  const MissionsScreen({super.key, this.onOpenSettings});
-
-  /// Called when the Hero_Bar gear is tapped; defaults to pushing the
-  /// Settings_Screen.
-  final VoidCallback? onOpenSettings;
+  const MissionsScreen({super.key});
 
   @override
   ConsumerState<MissionsScreen> createState() => _MissionsScreenState();
@@ -38,16 +33,6 @@ class MissionsScreen extends ConsumerStatefulWidget {
 class _MissionsScreenState extends ConsumerState<MissionsScreen> {
   /// Ids of Missions whose removal transition is running.
   final Set<int> _leaving = <int>{};
-
-  void _openSettings() {
-    final VoidCallback? callback = widget.onOpenSettings;
-    if (callback != null) {
-      callback();
-      return;
-    }
-    Navigator.of(context)
-        .push(CupertinoPageRoute<void>(builder: (_) => const SettingsScreen()));
-  }
 
   void _openDetail(MissionSummary mission) {
     Navigator.of(context).push(
@@ -147,7 +132,7 @@ class _MissionsScreenState extends ConsumerState<MissionsScreen> {
                     Space.s20,
                     Space.s18,
                   ),
-                  child: HeroBar(onOpenSettings: _openSettings),
+                  child: const HeroBar(),
                 ),
                 _TitleRow(
                   openCount: openList?.length ?? 0,

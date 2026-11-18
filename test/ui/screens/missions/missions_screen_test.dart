@@ -125,7 +125,7 @@ Future<_Env> _pump(
         locale: const Locale('en'),
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
-        home: MissionsScreen(onOpenSettings: () {}),
+        home: const MissionsScreen(),
       ),
     ),
   );

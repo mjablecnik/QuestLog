@@ -1,11 +1,74 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:questlog/data/preferences.dart';
+import 'package:questlog/l10n/app_localizations.dart';
 import 'package:questlog/ui/screens/shell/questlog_tab_bar.dart';
+import 'package:questlog/ui/theme/questlog_theme.dart';
 import 'package:questlog/ui/theme/tokens.dart';
 
 import '../../widgets/common/_harness.dart';
 
 void main() {
+  for (final (String, Locale) entry in <(String, Locale)>[
+    ('en', const Locale('en')),
+    ('cs', const Locale('cs')),
+  ]) {
+    for (final double scale in <double>[1, 2]) {
+      testWidgets('three equal tabs fit 390 px without overflow '
+          '(${entry.$1}, text x$scale)', (tester) async {
+        tester.view.physicalSize = const Size(390, 844);
+        tester.view.devicePixelRatio = 1;
+        addTearDown(tester.view.reset);
+        await tester.pumpWidget(
+          MaterialApp(
+            theme: buildTheme(
+              palette: QuestlogPalette.guildBoard,
+              font: DisplayFont.figtree,
+            ),
+            locale: entry.$2,
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            builder: (BuildContext context, Widget? app) => MediaQuery(
+              data: MediaQuery.of(context)
+                  .copyWith(textScaler: TextScaler.linear(scale)),
+              child: app!,
+            ),
+            home: Scaffold(
+              body: Align(
+                alignment: Alignment.bottomCenter,
+                child: QuestlogTabBar(
+                  current: ShellTab.settings,
+                  onSelected: (_) {},
+                ),
+              ),
+            ),
+          ),
+        );
+
+        expect(tester.takeException(), isNull);
+        final List<Size> sizes = <Size>[
+          for (final ShellTab tab in ShellTab.values)
+            tester.getSize(find.byKey(ValueKey<ShellTab>(tab))),
+        ];
+        expect(sizes, hasLength(3));
+        for (final Size size in sizes) {
+          expect(size.width, closeTo(390 / 3, 0.01));
+          expect(size.height, greaterThanOrEqualTo(Metrics.touchTarget));
+        }
+        final AppLocalizations l = AppLocalizations.of(
+          tester.element(find.byType(QuestlogTabBar)),
+        );
+        for (final String label in <String>[
+          l.app_tabQuests,
+          l.app_tabMissions,
+          l.app_tabSettings,
+        ]) {
+          expect(find.text(label), findsOneWidget);
+        }
+      });
+    }
+  }
+
   for (final (String, QuestlogPalette) entry in <(String, QuestlogPalette)>[
     ('dark', QuestlogPalette.guildBoard),
     ('light', QuestlogPalette.daylight),

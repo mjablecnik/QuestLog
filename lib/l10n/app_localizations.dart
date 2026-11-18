@@ -122,6 +122,12 @@ abstract class AppLocalizations {
   /// **'Mise'**
   String get app_tabMissions;
 
+  /// Label of the Settings tab in the bottom tab bar.
+  ///
+  /// In cs, this message translates to:
+  /// **'Nastavení'**
+  String get app_tabSettings;
+
   /// Snackbar after Reconciliation posted recurring missions. names is a comma-separated list of Mission names.
   ///
   /// In cs, this message translates to:
@@ -259,12 +265,6 @@ abstract class AppLocalizations {
   /// In cs, this message translates to:
   /// **'{xp} XP do úrovně {level}'**
   String hero_xpRemaining(int xp, int level);
-
-  /// Semantic label of the gear button in the Hero_Bar.
-  ///
-  /// In cs, this message translates to:
-  /// **'Nastavení'**
-  String get hero_settingsLabel;
 
   /// Semantic label of the Level badge.
   ///

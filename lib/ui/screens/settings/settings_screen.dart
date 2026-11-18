@@ -18,7 +18,7 @@ import 'font_section.dart';
 import 'palette_section.dart';
 import 'rules_section.dart';
 
-/// Pushed settings screen: profile, language, appearance, recurring rules,
+/// The "Nastavení" tab: profile, language, appearance, recurring rules,
 /// the temporary palette switch, the temporary font picker and About.
 ///
 /// Every value is read from streams that already hold the stored settings, so
@@ -32,106 +32,47 @@ class SettingsScreen extends ConsumerWidget {
     final l = AppLocalizations.of(context);
     return Scaffold(
       body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            const _BackRow(),
-            Expanded(
-              child: ListView(
-                keyboardDismissBehavior:
-                    ScrollViewKeyboardDismissBehavior.onDrag,
-                padding: const EdgeInsets.fromLTRB(
-                  Space.s20,
-                  Space.s8,
-                  Space.s20,
-                  Space.s48,
-                ),
-                children: <Widget>[
-                  Semantics(
-                    header: true,
-                    child: Text(
-                      l.settings_title,
-                      style: context.displayText.headlineLarge,
-                    ),
-                  ),
-                  const SizedBox(height: Space.s24),
-                  _Group(
-                    label: l.settings_groupProfile,
-                    child: const _HeroNameField(),
-                  ),
-                  const SizedBox(height: Space.s24),
-                  _Group(
-                    label: l.settings_groupLanguage,
-                    child: const _LanguageControl(),
-                  ),
-                  const SizedBox(height: Space.s24),
-                  _Group(
-                    label: l.settings_groupAppearance,
-                    child: const _ThemeControl(),
-                  ),
-                  const PaletteSection(),
-                  const SizedBox(height: Space.s24),
-                  // These two draw their own group headers.
-                  const RulesSection(),
-                  const FontSection(),
-                  const SizedBox(height: Space.s24),
-                  _Group(
-                    label: l.settings_groupAbout,
-                    child: const _AboutRow(),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-/// Chevron and label that pop the screen.
-class _BackRow extends StatelessWidget {
-  const _BackRow();
-
-  @override
-  Widget build(BuildContext context) {
-    final p = context.palette;
-    final l = AppLocalizations.of(context);
-    return Padding(
-      padding: const EdgeInsets.only(left: Space.s8, top: Space.s4),
-      child: Semantics(
-        button: true,
-        label: l.common_back,
-        excludeSemantics: true,
-        child: InkWell(
-          borderRadius: BorderRadius.circular(Radii.control),
-          onTap: () => Navigator.of(context).maybePop(),
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(
-              minHeight: Metrics.touchTarget,
-              minWidth: Metrics.touchTarget,
-            ),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: Space.s8),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  AppIcon(
-                    IconAsset.chevronLeft,
-                    size: Metrics.iconSize,
-                    color: p.brassText,
-                  ),
-                  const SizedBox(width: Space.s4),
-                  Text(
-                    l.common_back,
-                    style: context.bodyText.bodyMedium!.copyWith(
-                      color: p.brassText,
-                    ),
-                  ),
-                ],
-              ),
-            ),
+        // The tab bar below already clears the bottom inset.
+        bottom: false,
+        child: ListView(
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+          padding: const EdgeInsets.fromLTRB(
+            Space.s20,
+            Space.s16,
+            Space.s20,
+            Space.s24,
           ),
+          children: <Widget>[
+            Semantics(
+              header: true,
+              child: Text(
+                l.settings_title,
+                style: context.displayText.headlineLarge,
+              ),
+            ),
+            const SizedBox(height: Space.s24),
+            _Group(
+              label: l.settings_groupProfile,
+              child: const _HeroNameField(),
+            ),
+            const SizedBox(height: Space.s24),
+            _Group(
+              label: l.settings_groupLanguage,
+              child: const _LanguageControl(),
+            ),
+            const SizedBox(height: Space.s24),
+            _Group(
+              label: l.settings_groupAppearance,
+              child: const _ThemeControl(),
+            ),
+            const PaletteSection(),
+            const SizedBox(height: Space.s24),
+            // These two draw their own group headers.
+            const RulesSection(),
+            const FontSection(),
+            const SizedBox(height: Space.s24),
+            _Group(label: l.settings_groupAbout, child: const _AboutRow()),
+          ],
         ),
       ),
     );
@@ -172,7 +113,6 @@ void _reportFailure(BuildContext context, Object error) {
   showQuestlogSnack(
     context,
     domainErrorText(AppLocalizations.of(context), error),
-    bottomClearance: Space.s16,
   );
 }
 

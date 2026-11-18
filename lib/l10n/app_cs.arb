@@ -16,6 +16,10 @@
   "@app_tabMissions": {
     "description": "Label of the Missions tab in the bottom tab bar."
   },
+  "app_tabSettings": "Nastavení",
+  "@app_tabSettings": {
+    "description": "Label of the Settings tab in the bottom tab bar."
+  },
   "app_postedMissions": "Vyvěšeno: {names}",
   "@app_postedMissions": {
     "description": "Snackbar after Reconciliation posted recurring missions. names is a comma-separated list of Mission names.",
@@ -161,10 +165,6 @@
         "type": "int"
       }
     }
-  },
-  "hero_settingsLabel": "Nastavení",
-  "@hero_settingsLabel": {
-    "description": "Semantic label of the gear button in the Hero_Bar."
   },
   "hero_levelBadgeLabel": "Úroveň {level}",
   "@hero_levelBadgeLabel": {

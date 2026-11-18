@@ -12,13 +12,13 @@ import '../../theme/questlog_theme.dart';
 import '../../widgets/common/snackbar_host.dart';
 import '../board/board_screen.dart';
 import '../missions/missions_screen.dart';
-import 'open_settings.dart';
+import '../settings/settings_screen.dart';
 import 'questlog_tab_bar.dart';
 import 'reconcile_banner.dart';
 import 'splash_screen.dart';
 
 /// Root screen: splash until the first Reconciliation has finished, then the
-/// two tabs (Questy, Mise). The reward overlay is hosted by `QuestlogApp`, above
+/// three tabs (Questy, Mise, Nastavení). The reward overlay is hosted by `QuestlogApp`, above
 /// the Navigator, so it also covers pushed routes.
 ///
 /// Reconciliation runs at start, once per return from the background, when the
@@ -137,6 +137,14 @@ class _AppShellState extends ConsumerState<AppShell>
     );
   }
 
+  void _selectTab(ShellTab tab) {
+    if (tab == _tab) return;
+    // A message belongs to the screen that raised it (for example a Settings
+    // rule saved), so it does not follow the user to another tab.
+    ScaffoldMessenger.of(context).clearSnackBars();
+    setState(() => _tab = tab);
+  }
+
   @override
   Widget build(BuildContext context) {
     ref.listen<SnackMessage?>(
@@ -156,19 +164,20 @@ class _AppShellState extends ConsumerState<AppShell>
     return Column(
       children: <Widget>[
         Expanded(
-          // Both tabs stay mounted, so each keeps its scroll position.
+          // All tabs stay mounted, so each keeps its scroll position.
           child: IndexedStack(
             index: _tab.index,
             children: <Widget>[
-              BoardScreen(onOpenSettings: () => openSettings(context)),
-              MissionsScreen(onOpenSettings: () => openSettings(context)),
+              BoardScreen(),
+              MissionsScreen(),
+              SettingsScreen(),
             ],
           ),
         ),
         if (_failed) ReconcileBanner(onRetry: _requestReconcile),
         QuestlogTabBar(
           current: _tab,
-          onSelected: (tab) => setState(() => _tab = tab),
+          onSelected: _selectTab,
         ),
       ],
     );

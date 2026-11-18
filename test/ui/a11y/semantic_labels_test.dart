@@ -4,7 +4,7 @@ import 'package:questlog/l10n/app_localizations.dart';
 
 import '_a11y_harness.dart';
 
-/// Requirement 16.3: check circles, the add buttons, the gear, swipe actions,
+/// Requirement 16.3: check circles, the add buttons, swipe actions,
 /// the drag handle and the "..." menu all have a spoken label in the
 /// Effective_Language.
 void main() {
@@ -37,7 +37,7 @@ void main() {
       await tester.pumpAndSettle();
     }
 
-    a11yTest('board (${language.key}): labels of gear, add, checks, drag and '
+    a11yTest('board (${language.key}): labels of add, checks, drag and '
         'swipe actions', (
       WidgetTester tester,
       void Function(A11yEnv) track,
@@ -49,7 +49,6 @@ void main() {
       expect(spoken, contains(l.a11y_completeQuest('Koupit mléko')));
       expect(spoken, contains(l.a11y_reopenQuest('Odeslat daňové přiznání')));
       expect(spoken, contains(l.a11y_dragHint));
-      expect(spoken, contains(l.settings_title));
       await swipeOpen(tester, 'Koupit mléko');
       spoken = spokenTexts(tester);
       expect(spoken, contains(l.a11y_editQuest('Koupit mléko')));

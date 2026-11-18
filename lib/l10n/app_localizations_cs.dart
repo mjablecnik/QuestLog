@@ -22,6 +22,9 @@ class AppLocalizationsCs extends AppLocalizations {
   String get app_tabMissions => 'Mise';
 
   @override
+  String get app_tabSettings => 'Nastavení';
+
+  @override
   String app_postedMissions(String names) {
     return 'Vyvěšeno: $names';
   }
@@ -135,9 +138,6 @@ class AppLocalizationsCs extends AppLocalizations {
 
     return '$xpString XP do úrovně $level';
   }
-
-  @override
-  String get hero_settingsLabel => 'Nastavení';
 
   @override
   String hero_levelBadgeLabel(int level) {
