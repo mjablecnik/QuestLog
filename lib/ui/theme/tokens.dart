@@ -151,6 +151,119 @@ class QuestlogPalette {
     field: Color(0x0D1F2A26),
     fieldActive: Color(0x1AB4832A),
   );
+
+  // Temporary palette experiments (blue, green). In every palette `brass` is
+  // the accent colour: the name is kept so roles are not churned before one
+  // palette is chosen. Removed with the palette switch.
+
+  /// Dark blue after TimeLog's "Midnight" theme (board, text and accent are
+  /// its `background`, `text` and `accent`), with cool paper slips.
+  static const QuestlogPalette blueDark = QuestlogPalette(
+    brightness: Brightness.dark,
+    board: Color(0xFF0F1319),
+    boardRaised: Color(0xFF18202B),
+    boardLine: Color(0x1AE6EAF2),
+    text: Color(0xFFE6EAF2),
+    textDim: Color(0xA6E6EAF2),
+    textFaint: Color(0x66E6EAF2),
+    parchment: Color(0xFFEEF2F7),
+    parchmentEdge: Color(0xFFDAE2EC),
+    ink: Color(0xFF131B26),
+    inkDim: Color(0xB2131B26),
+    inkFaint: Color(0x61131B26),
+    brass: Color(0xFF78B4C4),
+    brassSoft: Color(0x2E78B4C4),
+    brassText: Color(0xFF78B4C4),
+    brassOnParchment: Color(0xFF2D6E80),
+    inkOnBrass: Color(0xFF08131A),
+    destructive: Color(0xFFD96B5A),
+    inkOnDestructive: Color(0xFF2B0F0A),
+    scrim: Color(0xB8070A10),
+    sheet: Color(0xFF18202B),
+    field: Color(0x0FE6EAF2),
+    fieldActive: Color(0x1A78B4C4),
+  );
+
+  /// Light counterpart of [blueDark]: cool off-white ground, darkened teal accent.
+  static const QuestlogPalette blueLight = QuestlogPalette(
+    brightness: Brightness.light,
+    board: Color(0xFFEDF1F6),
+    boardRaised: Color(0xFFF8FAFD),
+    boardLine: Color(0x1415202B),
+    text: Color(0xFF15202B),
+    textDim: Color(0xB315202B),
+    textFaint: Color(0x6B15202B),
+    parchment: Color(0xFFFFFFFF),
+    parchmentEdge: Color(0xFFDCE4EE),
+    ink: Color(0xFF15202B),
+    inkDim: Color(0xB215202B),
+    inkFaint: Color(0x6115202B),
+    brass: Color(0xFF2B7287),
+    brassSoft: Color(0x242B7287),
+    brassText: Color(0xFF2B7287),
+    brassOnParchment: Color(0xFF2B7287),
+    inkOnBrass: Color(0xFFF4FAFC),
+    destructive: Color(0xFFD96B5A),
+    inkOnDestructive: Color(0xFF2B0F0A),
+    scrim: Color(0x8015202B),
+    sheet: Color(0xFFF8FAFD),
+    field: Color(0x0D15202B),
+    fieldActive: Color(0x1A2B7287),
+  );
+
+  /// Experimental dark green: emerald accent on a deep green-black ground.
+  static const QuestlogPalette greenDark = QuestlogPalette(
+    brightness: Brightness.dark,
+    board: Color(0xFF0C1B13),
+    boardRaised: Color(0xFF15291E),
+    boardLine: Color(0x1AE4F0E6),
+    text: Color(0xFFE4F0E6),
+    textDim: Color(0xA6E4F0E6),
+    textFaint: Color(0x66E4F0E6),
+    parchment: Color(0xFFEAF3E6),
+    parchmentEdge: Color(0xFFD3E4CF),
+    ink: Color(0xFF14261B),
+    inkDim: Color(0xB214261B),
+    inkFaint: Color(0x6114261B),
+    brass: Color(0xFF5CC98F),
+    brassSoft: Color(0x2E5CC98F),
+    brassText: Color(0xFF5CC98F),
+    brassOnParchment: Color(0xFF1B7447),
+    inkOnBrass: Color(0xFF06210F),
+    destructive: Color(0xFFD96B5A),
+    inkOnDestructive: Color(0xFF2B0F0A),
+    scrim: Color(0xB8050D08),
+    sheet: Color(0xFF15291E),
+    field: Color(0x0FE4F0E6),
+    fieldActive: Color(0x1A5CC98F),
+  );
+
+  /// Light counterpart of [greenDark]: pale sage ground, deep green accent.
+  static const QuestlogPalette greenLight = QuestlogPalette(
+    brightness: Brightness.light,
+    board: Color(0xFFE7F0E4),
+    boardRaised: Color(0xFFF4F9F2),
+    boardLine: Color(0x1414261B),
+    text: Color(0xFF14261B),
+    textDim: Color(0xB314261B),
+    textFaint: Color(0x6B14261B),
+    parchment: Color(0xFFFBFEF9),
+    parchmentEdge: Color(0xFFD3E3CF),
+    ink: Color(0xFF14261B),
+    inkDim: Color(0xB214261B),
+    inkFaint: Color(0x6114261B),
+    brass: Color(0xFF1E7A4B),
+    brassSoft: Color(0x241E7A4B),
+    brassText: Color(0xFF1E7A4B),
+    brassOnParchment: Color(0xFF1E7A4B),
+    inkOnBrass: Color(0xFFF2FBF4),
+    destructive: Color(0xFFD96B5A),
+    inkOnDestructive: Color(0xFF2B0F0A),
+    scrim: Color(0x8014261B),
+    sheet: Color(0xFFF4F9F2),
+    field: Color(0x0D14261B),
+    fieldActive: Color(0x1A1E7A4B),
+  );
 }
 
 /// Spacing scale in logical pixels.

@@ -76,7 +76,7 @@ final List<_Pair> _brassPairs = <_Pair>[
   ('brass/parchment', (p) => p.brass, (p) => p.parchment),
 ];
 
-/// Brass roles of the temporary higher-contrast palette: text and icon
+/// Accent text roles of the higher-contrast, blue and green palettes: text and icon
 /// strokes use [QuestlogPalette.brassText] / [QuestlogPalette.brassOnParchment].
 final List<_Pair> _highContrastBrassPairs = <_Pair>[
   ('brassText/board', (p) => p.brassText, (p) => p.board),
@@ -161,6 +161,26 @@ void main() {
 
   group('higher-contrast palette: brass text roles reach 4.5:1, no gaps', () {
     _checkPairs(highContrast, _highContrastBrassPairs, 4.5);
+  });
+
+  // Temporary palette experiments: blue and green have no gaps either.
+  final Map<String, QuestlogPalette> experiments = <String, QuestlogPalette>{
+    'blueDark': QuestlogPalette.blueDark,
+    'blueLight': QuestlogPalette.blueLight,
+    'greenDark': QuestlogPalette.greenDark,
+    'greenLight': QuestlogPalette.greenLight,
+  };
+
+  group('blue and green palettes: body text pairs reach 4.5:1, no gaps', () {
+    _checkPairs(experiments, _bodyPairs, 4.5);
+  });
+
+  group('blue and green palettes: accent text roles reach 4.5:1, no gaps', () {
+    _checkPairs(experiments, _highContrastBrassPairs, 4.5);
+  });
+
+  group('blue and green palettes: accent fill reaches 3:1 on the ground', () {
+    _checkPairs(experiments, _brassPairs.take(3).toList(), 3.0);
   });
 
   test('the original palettes keep brass text roles equal to brass', () {

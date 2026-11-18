@@ -12,9 +12,13 @@ void main() {
     QuestlogPalette.daylight,
     QuestlogPalette.guildBoardHighContrast,
     QuestlogPalette.daylightHighContrast,
+    QuestlogPalette.blueDark,
+    QuestlogPalette.blueLight,
+    QuestlogPalette.greenDark,
+    QuestlogPalette.greenLight,
   ];
 
-  test('buildTheme succeeds for both palettes and every display font', () {
+  test('buildTheme succeeds for every palette and every display font', () {
     for (final QuestlogPalette p in palettes) {
       for (final DisplayFont f in DisplayFont.values) {
         final ThemeData t = buildTheme(palette: p, font: f);
