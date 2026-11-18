@@ -196,7 +196,7 @@ first; cases that name Czech text say so.
 - Area: board
 - Requirement: U-3.1, D-7.1, D-7.2
 - Preconditions: app on the Board
-- Data needed: 4 open quests with `sortOrder` 0–3, 2 quests completed today (`completedAt` after today's 04:00)
+- Data needed: 4 open quests without a mission, `sortOrder` 0–3, 2 such quests completed today (`completedAt` after today's 04:00); changed 2026-11-18: any quest of a mission must be absent (see UC-172)
 - Steps: screenshot the whole Board, scrolling if needed
 - Expected: the four open quests appear in sortOrder, then a section header, then the two done quests
 - Verify: APP+DB
@@ -210,7 +210,7 @@ first; cases that name Czech text say so.
 - Expected: each shows a check circle, the name, a meta row and the XP (+10/+25/+50/+100); the four pips show 1/2/3/4 filled diamonds, no colour differs between tiers and no tier name appears (updated 2026-11-18, was three tiers)
 - Verify: APP+DB
 
-### UC-019 — Mission chip versus "no mission" in the meta row
+### UC-019 — Mission chip versus "no mission" in the meta row — OBSOLETE (2026-11-18 strict split, replaced by UC-172)
 - Area: board
 - Requirement: U-3.3, D-7.9
 - Preconditions: app on the Board, Czech selected
@@ -251,7 +251,7 @@ first; cases that name Czech text say so.
 - Requirement: U-3.8, D-2.7, U-10.8
 - Preconditions: a completed mission with one done quest
 - Data needed: one mission (bonus Medium) status `completed` with `awardedBonus = 100`, one quest in it done with `awardedXp = 25`, `totalXp = 125`
-- Steps: tap the done quest's check circle on the Board, screenshot the message, then open the mission detail
+- Steps: open the mission detail (the Board no longer lists mission quests), tap the done quest's check circle, screenshot the message (changed 2026-11-18)
 - Expected: the message says both the quest XP and the mission bonus were withdrawn; Total_XP is 0; the mission shows as open again
 - Verify: APP+DB
 
@@ -439,8 +439,8 @@ first; cases that name Czech text say so.
 - Requirement: U-4.6, D-3.3, D-3.4
 - Preconditions: a mission with three quests, plus two standalone quests interleaved
 - Data needed: one open mission with quests M1–M3, two standalone quests S1, S2, interleaved `sortOrder`
-- Steps: reorder M3 above M1 on the mission detail, go back, screenshot the Board
-- Expected: the Board shows M3 before M1 and the positions of S1 and S2 are unchanged
+- Steps: reorder M3 above M1 on the mission detail, go back, screenshot the Board (changed 2026-11-18: the Board no longer lists M1–M3)
+- Expected: the mission detail shows M3 before M1; the Board lists only S1 and S2, their order unchanged
 - Verify: APP+DB
 
 ---
@@ -1254,7 +1254,7 @@ first; cases that name Czech text say so.
 - Requirement: D-13.6, U-17.5
 - Preconditions: Board and Missions both rendered
 - Data needed: one open mission with 2 quests
-- Steps: complete a quest on the Board, then switch to the Missions tab without any manual refresh
+- Steps: complete a quest in the mission detail, then switch to the Missions tab without any manual refresh (changed 2026-11-18: mission quests are not on the Board)
 - Expected: the mission card's ring and remaining XP already reflect the completion; both tabs agree after every change
 - Verify: APP+DB
 
@@ -1415,7 +1415,7 @@ disagreement is the spec, not the artboard (`CLAUDE.md`).
 - Area: visual
 - Requirement: U-15.5, U-15.6, U-19.4
 - Preconditions: dark theme, Czech
-- Data needed: the artboard's content — a hero bar with a name and a level, 4–5 open quests mixing standalone and mission quests across all four effort tiers, 1–2 quests done today
+- Data needed: the artboard's content — a hero bar with a name and a level, 4–5 open quests across all four effort tiers, 1–2 quests done today (the artboard mixes in mission quests; since 2026-11-18 the Board shows only quests without a mission)
 - Steps: compose that state, screenshot, compare with `.design/screens/QuestBoard.png`
 - Expected: open quests render as parchment slips, done quests and mission cards on the raised ground, brass only on reward, completion and primary actions; grounds, radii, spacing and type sizes match the tokens
 - Verify: APP+DB
@@ -1653,6 +1653,42 @@ disagreement is the spec, not the artboard (`CLAUDE.md`).
 - Expected: +100 on the reward card; from 0 XP the bar shows level 2 with 0/150; from 90 XP level 2 with 90/150; reopening takes 100 XP back; a quest stored before the fourth tier (easy/normal/hard) still renders and awards 10/25/50
 - Verify: APP+DB
 
+### UC-172 — The Board lists only quests without a mission
+- Area: board
+- Requirement: U-3.1, U-3.3, U-3.10, D-7.1, D-7.2 (changed 2026-11-18 at Martin's request)
+- Preconditions: app on the Board, English
+- Data needed: 2 open and 1 done-today quest without a mission; an open mission with 2 open quests and 1 done-today quest
+- Steps: screenshot the Board, then open the mission and screenshot its detail, then the Missions tab
+- Expected: the Board shows the 2 open quests and the 1 done quest only, the header reads "2 open", the section XP and done summary count only those, cards show pips and no mission chip or "no mission"; the mission detail lists all its quests; the mission card and hero bar are unchanged
+- Verify: APP+DB
+
+### UC-173 — A board holding only mission quests shows the empty state
+- Area: board
+- Requirement: U-3.10
+- Preconditions: only mission quests exist (open and done today)
+- Data needed: one open mission with 2 quests, one of them done today, no free quests
+- Steps: screenshot the Board
+- Expected: the empty state ("The board is empty", with the sentence that mission quests live under Missions), header "0 open", no section headers, no skeleton
+- Verify: APP+DB
+
+### UC-174 — Assigning or removing a mission moves a quest between Board and mission
+- Area: board, quest sheet
+- Requirement: U-3.1, U-6.7
+- Preconditions: one free quest on the Board, one open mission "Úklid"
+- Data needed: as above
+- Steps: edit the quest and pick the mission, save, screenshot the Board; open the mission detail; edit the quest again and pick "no mission"; screenshot the Board. Then use the Board's plus button to create a quest with the mission picked
+- Expected: after assigning, the quest leaves the Board and a snackbar reads "Added to mission Úklid"; the detail lists it; after unassigning it is back on the Board with no snackbar; a new quest created with a mission also leaves the Board and shows the snackbar; creating from the mission detail (preselected mission) shows no snackbar
+- Verify: APP+DB
+
+### UC-175 — Deleting a mission leaves nothing behind on the Board
+- Area: board, missions
+- Requirement: D-5 (Mission deletion removes its quests), U-3.1
+- Preconditions: an open mission with an open and a done-today quest, one free quest
+- Data needed: as above
+- Steps: delete the mission from its menu, go to the Board
+- Expected: the Board still lists only the free quest; the mission's quests are gone, not moved to the Board; Total_XP unchanged
+- Verify: APP+DB
+
 ---
 
 ## Requirement coverage map
@@ -1683,7 +1719,7 @@ disagreement is the spec, not the artboard (`CLAUDE.md`).
 |---|---|
 | U-1 App shell and navigation | UC-001, UC-002, UC-003, UC-004, UC-005, UC-006, UC-007, UC-008 |
 | U-2 Hero bar | UC-009, UC-010, UC-011, UC-012, UC-016 |
-| U-3 Quest board | UC-017 – UC-028, UC-148, UC-170 |
+| U-3 Quest board | UC-017 – UC-028, UC-148, UC-170, UC-172 – UC-175 |
 | U-4 Quest reordering | UC-039, UC-040, UC-041, UC-042, UC-043, UC-051 |
 | U-5 Quest sheet | UC-029 – UC-038, UC-145, UC-151, UC-170 |
 | U-6 Swipe actions and deletion | UC-044 – UC-050, UC-153 |

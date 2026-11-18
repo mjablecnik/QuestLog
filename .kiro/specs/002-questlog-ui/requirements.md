@@ -1,5 +1,7 @@
 # Requirements Document
 
+> **Changed 2026-11-18 at Martin's request.** The Board_Screen lists only Quests without a Mission (see Requirement on the Board_Screen, criteria 1, 3 and 10, and the Quest_Sheet note on the snackbar); Mission Quests appear only on the Mission_Detail_Screen. This overrides "the board shows all open Quests" wherever it appears below.
+
 > **Changed 2026-11-18 at Martin's request.** The Difficulty selector became an **Effort** picker with four tiers (Chvilka +10, Hodinka +25, Část dne +50, Celý den +100; English Moment, Hour, Part of a day, Full day), default Hodinka, each option showing name, XP, four pips and a time description, with one hint line below. Pips are now four. Tier names appear only in the Quest_Sheet and never in a list, card or reward card; accessibility labels give the step ("effort 3 of 4"). The text below is superseded where it says three.
 
 ## Introduction
@@ -71,16 +73,16 @@ Terms defined in `001-questlog-domain` (Quest, Mission, Instance, Difficulty, Mi
 
 #### Acceptance Criteria
 
-1. THE Board_Screen SHALL list the open board Quests in manual order as Quest_Cards, followed by the Quests done on the current Board_Day
+1. THE Board_Screen SHALL list the open board Quests in manual order as Quest_Cards, followed by the Quests done on the current Board_Day (changed 2026-11-18 at Martin's request, overriding the earlier "Board shows all open Quests": the Board lists only Quests that belong to no Mission, open and done alike; Mission Quests appear only on the Mission_Detail_Screen; there is no toggle or filter; every count, XP total and the empty state on the Board use that set, while the Hero_Bar, Mission progress and rewards are unaffected)
 2. THE Quest_Card SHALL show a check circle, the Quest name, a meta row and the XP of the Quest's Difficulty
-3. WHEN a Quest belongs to a Mission, THE Quest_Card meta row SHALL show a Mission chip with the Mission name and the Difficulty pips, and WHEN it does not, THE meta row SHALL show "bez mise" (English "no mission") and the Difficulty pips
+3. THE Quest_Card meta row SHALL show the Difficulty pips (changed 2026-11-18: the Mission chip and the "bez mise" / "no mission" label are gone, every Board Quest has no Mission)
 4. THE effort pips SHALL show one to four filled diamonds for the four effort tiers, with no colour coding of difficulty
 5. THE done Quest_Card SHALL use the raised ground, a struck-through name, a filled brass check and the completion time in the meta row
 6. WHEN the check circle of an open Quest is tapped, THE Board_Screen SHALL call Quest_Service to complete it, update the list at once and show the Reward_Card
 7. WHEN the check circle of a done Quest is tapped, THE Board_Screen SHALL call Quest_Service to reopen it, move it back among the open Quests and show a brief message with the XP withdrawn
 8. WHEN reopening a Quest also reopens its Mission, THE Board_Screen SHALL say so in the same message
 9. WHILE the first data load is pending, THE Board_Screen SHALL show skeleton cards in place of Quest_Cards
-10. WHEN there are no open board Quests and no Quests done today, THE Board_Screen SHALL show the empty state with a heading and one sentence of guidance that points to the add button
+10. WHEN there are no open board Quests and no Quests done today, THE Board_Screen SHALL show the empty state with a heading and one sentence of guidance that points to the add button and says that Quests of a Mission live under Missions (changed 2026-11-18: Quests that belong to a Mission do not count)
 11. THE Board_Screen SHALL show a floating add button that opens the Quest_Sheet
 12. WHEN the Board_Day changes while the Questlog_App is open or in the background, THE Board_Screen SHALL stop showing Quests completed on earlier days without requiring a restart
 13. WHEN the tap on a check circle fails with an error, THE Board_Screen SHALL restore the previous state of the card and show the localized error message
@@ -111,7 +113,7 @@ Terms defined in `001-questlog-domain` (Quest, Mission, Instance, Difficulty, Mi
 4. WHEN the name is empty after trimming, longer than 80 characters or the note is longer than 500 characters, THE Quest_Sheet SHALL show a localized error beside the offending field, SHALL keep everything the user typed and SHALL NOT call Quest_Service
 5. WHEN the Quest_Sheet is opened from the Mission_Detail_Screen, THE Quest_Sheet SHALL preselect that Mission
 6. WHEN a done Quest is edited, THE Quest_Sheet SHALL show the Difficulty selector and Mission picker as disabled and SHALL allow only the name and note to change
-7. WHEN the primary button succeeds, THE Questlog_App SHALL close the sheet with the sheet transition and show the new or changed Quest on the board
+7. WHEN the primary button succeeds, THE Questlog_App SHALL close the sheet with the sheet transition and show the new or changed Quest on the board, or, when it belongs to a Mission that was not already the Quest's Mission and was not preselected, a snackbar "Added to mission X" because the Quest leaves the board (changed 2026-11-18)
 8. WHEN the Quest_Sheet contains input and is dismissed by "Zrušit", the grabber or a swipe, THE Questlog_App SHALL ask for confirmation before discarding it, and SHALL NOT ask when the sheet is untouched
 9. IF Quest_Service reports an invalid-state error because the chosen Mission is no longer open, THEN THE Quest_Sheet SHALL show the error beside the Mission picker and keep the sheet open
 

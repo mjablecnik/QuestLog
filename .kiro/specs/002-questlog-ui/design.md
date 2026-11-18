@@ -251,7 +251,7 @@ class EmptyState extends StatelessWidget { /* heading, body, optional action */ 
 class SkeletonList extends StatelessWidget { /* n placeholder cards, reduced-motion aware */ }
 
 // widgets/cards
-class QuestCard extends StatelessWidget { QuestCard({required BoardQuest item,   // Quest + missionName from the domain
+class QuestCard extends StatelessWidget { QuestCard({required Quest quest,   // plain Quest; BoardQuest and the Mission chip removed 2026-11-18
     required VoidCallback onToggle, VoidCallback? onEdit, VoidCallback? onDelete}); }
 class MissionCard extends StatelessWidget { MissionCard({required MissionSummary mission, VoidCallback? onTap, ...}); }
 class DifficultyPips extends StatelessWidget { DifficultyPips(Difficulty d); }  // four pips since 2026-11-18

@@ -146,15 +146,15 @@ Build the Questlog domain layer in a new Flutter project at `/workspace/questlog
     - _Requirements: 3.1, 3.5_
 
   - [x] 6.7 Implement board streams and Quest history
-    - Add `BoardQuest` (Quest plus nullable Mission name, joined in the query) to `lib/data/models.dart`
-    - `watchOpenBoard()` returning `BoardQuest` (standalone or `open` Mission, open, in `sort_order`), `watchDoneToday(today)` returning `BoardQuest` completed within the Board_Day of the supplied `today` (`boardDayStartOf(today)` up to the next Day_Start), `history(fromDay, toDay)` returning `HistoryQuest` newest first with name, Difficulty, awarded XP, completion time and Mission name
+    - Add `BoardQuest` (Quest plus nullable Mission name, joined in the query) to `lib/data/models.dart` _(changed 2026-11-18 at Martin's request: removed again, the board streams return plain `Quest`s of Quests without a Mission)_
+    - `watchOpenBoard()` returning `BoardQuest` (standalone or `open` Mission, open, in `sort_order`; now: no Mission at all), `watchDoneToday(today)` returning `BoardQuest` (now: only Quests without a Mission) completed within the Board_Day of the supplied `today` (`boardDayStartOf(today)` up to the next Day_Start), `history(fromDay, toDay)` returning `HistoryQuest` newest first with name, Difficulty, awarded XP, completion time and Mission name
     - The Board_Day comes from the caller, never from a timer inside the service, so the UI's Board_Day signal drives the refresh
     - Add `boardDayStartOf(today)` to `lib/core/board_day.dart` with a unit test across a DST change
     - _Requirements: 7.1, 7.2, 7.3, 7.9, 7.10, 15.4, 15.6, 15.7_
 
   - [x] 6.8 Write board stream and history tests
     - Quests done before 04:00 today belong to the previous Board_Day and drop out when `watchDoneToday` is called with the next `today`; done Quests of `closed` Missions are excluded from the board but present in history
-    - `BoardQuest.missionName` is set for Mission Quests and null for standalone Quests
+    - `BoardQuest.missionName` is set for Mission Quests and null for standalone Quests _(replaced 2026-11-18: the board streams never contain a Mission Quest, open or done; tests cover that, a Quest moving in and out of a Mission, and Mission deletion)_
     - History range filter, newest-first order, reopened Quest absent, no write side effects
     - _Requirements: 7.1, 7.2, 7.3, 7.9, 7.10, 15.4, 15.6, 15.7_
 

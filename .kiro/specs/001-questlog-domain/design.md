@@ -207,9 +207,11 @@ class QuestService {
   /// [orderedIds] is the new relative order of exactly those quests.
   Future<void> reorder(List<int> orderedIds);
 
-  Stream<List<BoardQuest>> watchOpenBoard();                // 7.1, 7.9
+  /// Open Quests without a Mission only (changed 2026-11-18 at Martin's request).
+  Stream<List<Quest>> watchOpenBoard();                     // 7.1
   /// [today] is the caller's Board_Day date; the window is [boardDayStartOf(today), +1 day).
-  Stream<List<BoardQuest>> watchDoneToday(DateTime today);  // 7.2, 7.9, 7.10
+  /// Quests without a Mission only, like [watchOpenBoard].
+  Stream<List<Quest>> watchDoneToday(DateTime today);       // 7.2, 7.10
   Future<List<HistoryQuest>> history(DateTime fromDay, DateTime toDay);
 }
 ```
@@ -287,8 +289,7 @@ class MissionSummary { int id; String name; MissionBonus bonus; MissionStatus st
   DateTime? completedAt; int? awardedBonus; }
 class MissionDetail { Mission mission; List<Quest> quests; }
 
-/// A Quest as the board shows it: the Quest plus its Mission's name, joined in the query.
-class BoardQuest { Quest quest; String? missionName; }
+// BoardQuest (Quest + missionName) was removed 2026-11-18: board Quests have no Mission.
 class RuleQuest { String name; Difficulty difficulty; int sortOrder; }
 class RuleSummary { int id; String name; Cadence cadence; DateTime anchorDate;
   MissionBonus bonus; List<RuleQuest> quests;

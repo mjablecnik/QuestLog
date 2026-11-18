@@ -90,8 +90,9 @@ check is 28px inside a 44px row).
 
 - **Hero bar** — level badge (52px circle, brass ring, `--brass-soft` fill), name + level,
   `current / next XP`, remaining XP, 6px brass progress bar.
-- **Quest card** — check circle · title + meta row (mission chip, effort pips 1–4,
-  or "bez mise") · brass `+XP`. `.done` variant: `--board-raised` ground, strike-through,
+- **Quest card** — check circle · title + meta row (effort pips 1–4; changed 2026-11-18 at
+  Martin's request: no mission chip and no "bez mise" label, because the Board lists only
+  quests without a mission) · brass `+XP`. `.done` variant: `--board-raised` ground, strike-through,
   brass filled check, completion time in the meta row.
 - **Effort pips** — four 7px diamonds; filled count = tier (changed 2026-11-18 at Martin's
   request, was three pips and Snadný/Běžný/Těžký). +10, +25, +50, +100 XP. No colour coding.
@@ -114,11 +115,14 @@ check is 28px inside a 44px row).
   Smazat misi (destructive last).
 - **Reward card** — parchment card over scrim: brass seal with rays, `+XP`, "QUEST SPLNĚN",
   quest name, mission progress block when applicable, `Pokračovat`. Auto-dismisses.
-- **Empty state** — pinned blank slip, display heading, one sentence of guidance.
+- **Empty state** — pinned blank slip, display heading, one sentence of guidance. On the
+  Board the sentence also says that quests of a mission live under Missions.
 - **Gear** — removed 2026-11-18 at Martin's request: Settings is now the third bottom tab
   (gear icon, label Nastavení/Settings) and the hero bar carries no button. The tab bar has
   three equal items and no press highlight. `.design/artboards/` and `.design/screens/` still
-  show the old gear and two tabs; the running app and the README screenshots are current.
+  show the old gear and two tabs, and the Board artboards still show mission chips and mission
+  quests among the posted quests (Board and Missions split strictly, 2026-11-18); the running
+  app and the README screenshots are current.
 - **Settings** — a tab (no back nav), display title, labelled groups with segmented controls:
   *Jazyk* (Čeština / English), *Vzhled* (Světlý / Tmavý / Systém, with icons), then the
   *Pravidelné mise* list (`.rule` rows: repeat icon tile, name, "cadence · N questů ·

@@ -10,6 +10,8 @@ local-only SQLite via Drift + Riverpod — no server, no account, no network at 
 Both specs (`001-questlog-domain`, `002-questlog-ui`) are fully implemented and verified
 on the Linux desktop app (pipeline run `2026-11-15-1405`); `scripts/check.sh` is green.
 Quests have four effort tiers (10/25/50/100 XP, 2026-11-18, Martin's request; no migration).
+Board and Missions are strictly split (2026-11-18, Martin's request): the Board lists only quests
+without a mission, open and done alike; a mission's quests appear only in its detail.
 Not done: the iOS build and every on-device check — Martin does those himself (open LOW
 entry in `.agents/ISSUES.md`).
 

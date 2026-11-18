@@ -121,7 +121,7 @@ Build the Questlog screens on top of the finished domain layer from `001-questlo
     - **Property 8: Progress ring geometry**
     - For any `done` in `0..total`, the ring sweep equals `done / total` and no stroke is drawn at 0
     - **Validates: Requirements 8.2, 8.3**
-    - Widget: Quest_Card shows the Mission chip or "bez mise", correct pips and XP, strike-through and completion time when done; Mission_Card shows remaining XP or the ready caption; check circle hit area is at least 44×44
+    - Widget: Quest_Card shows correct pips (the Mission chip and "bez mise" were removed 2026-11-18) and XP, strike-through and completion time when done; Mission_Card shows remaining XP or the ready caption; check circle hit area is at least 44×44
     - _Requirements: 3.2, 3.3, 3.5, 8.4, 16.1_
 
   - [x] 6.4 Implement Hero_Bar
@@ -171,7 +171,7 @@ Build the Questlog screens on top of the finished domain layer from `001-questlo
     - _Requirements: 3.1, 3.6, 3.7, 3.8, 3.9, 3.10, 3.11, 3.12, 3.13, 4.1, 4.2, 4.3, 4.4, 4.5, 4.7, 6.1, 6.7, 6.8, 6.9, 18.2_
 
   - [x] 8.2 Write Board_Screen tests
-    - Widget: open Quests in manual order and done Quests below; completing shows the Reward_Card and moves the card; unchecking moves it back with a withdrawal message (and the Mission-reopened note); drag-and-drop persists the new order and a cancelled drag persists nothing; a failing reorder restores the order; empty state and skeletons; clock advanced past 04:00 removes yesterday's done Quests
+    - Widget: open Quests in manual order and done Quests below; completing shows the Reward_Card and moves the card; unchecking moves it back with a withdrawal message (the Mission-reopened note now appears only on the Mission detail since 2026-11-18, when the Board stopped listing Mission Quests); Mission Quests, open or done, never appear and are not counted in the header, section XP or done summary; a Mission-only board shows the empty state; drag-and-drop persists the new order and a cancelled drag persists nothing; a failing reorder restores the order; empty state and skeletons; clock advanced past 04:00 removes yesterday's done Quests
     - _Requirements: 3.1, 3.6, 3.7, 3.8, 3.10, 3.12, 3.13, 4.2, 4.3, 4.4, 4.5_
 
 - [x] 9. Implement the Quest_Sheet and quest deletion

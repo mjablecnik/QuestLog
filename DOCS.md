@@ -54,7 +54,7 @@ tables:
 
 | Table | Holds |
 |---|---|
-| `quests` | name, note, effort tier (column `difficulty`), optional mission, sort order, completion time and awarded XP |
+| `quests` | name, note, effort tier (column `difficulty`), optional mission (the Board shows only quests without one), sort order, completion time and awarded XP |
 | `missions` | name, bonus size, status (open, completed, closed), awarded bonus, optional rule |
 | `recurring_rules` | name, cadence, anchor date, next index, bonus size, last posted date |
 | `rule_quests` | the quests a rule posts with each mission |

@@ -1,5 +1,7 @@
 # Requirements Document
 
+> **Changed 2026-11-18 at Martin's request.** Board and Missions are split strictly: the open and done board Quests are only those that belong to no Mission (Requirement 7, criteria 1, 2 and 9). This overrides "the board shows all open Quests" wherever it appears below; Mission Quests are reachable only through the Mission detail. Deleting a Mission still deletes its Quests.
+
 > **Changed 2026-11-18 at Martin's request.** Quests have four effort tiers instead of three Difficulty levels, and Martin's wording overrides the text below: the glossary entry for Difficulty reads Moment (10 XP), Hour (25 XP), Part of a day (50 XP) or Full day (100 XP); enum values `easy`, `normal`, `hard`, `fullDay`. Stored values are unchanged and the schema stays at version 1 (no migration). The level curve is unchanged.
 
 ## Introduction
@@ -136,15 +138,15 @@ All data is stored locally on the device. There is no server, no account and no 
 
 #### Acceptance Criteria
 
-1. THE Quest_Service SHALL return as open board Quests all open Quests that are standalone or belong to an `open` Mission
-2. THE Quest_Service SHALL return as done board Quests all Quests whose completion timestamp falls within the current Board_Day, that is at or after the most recent Day_Start
+1. THE Quest_Service SHALL return as open board Quests all open Quests that belong to no Mission (changed 2026-11-18 at Martin's request: the board used to include the open Quests of `open` Missions; they now appear only on the Mission detail)
+2. THE Quest_Service SHALL return as done board Quests all Quests that belong to no Mission and whose completion timestamp falls within the current Board_Day, that is at or after the most recent Day_Start (changed 2026-11-18, see criterion 1)
 3. WHEN the Board_Day changes, THE Quest_Service SHALL stop returning Quests completed on earlier days as done board Quests
 4. THE Mission_Service SHALL return as completed Missions only those whose completion timestamp falls within the current Board_Day, each with its awarded Mission_Bonus
 5. THE Mission_Service SHALL return each `open` Mission together with all of its Quests, including Quests completed on earlier days
 6. THE Mission_Service SHALL NOT return `closed` Missions or the Quests of `closed` Missions
 7. THE Board_Day boundary SHALL be computed from the local date and time supplied by the Clock as the most recent local 04:00, not from a fixed 24-hour offset
 8. THE Recurrence_Service SHALL use Today, not the calendar date, wherever a Recurring_Rule is compared with the current date
-9. THE Quest_Service SHALL return with every board Quest the name of its Mission, or no name when the Quest is standalone
+9. ~~THE Quest_Service SHALL return with every board Quest the name of its Mission, or no name when the Quest is standalone~~ Removed 2026-11-18 at Martin's request: every board Quest is standalone, so there is no Mission name to return; `history` still returns it
 10. THE Quest_Service and Mission_Service SHALL evaluate the done and completed windows for the Today supplied by the caller, so that a consumer can refresh them when the Board_Day changes
 
 ### Requirement 8: Recurring Rule Definition

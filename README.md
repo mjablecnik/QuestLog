@@ -29,9 +29,10 @@ Questlog is a personal gamified to-do app for one user, built with Flutter for i
 (the Linux desktop build is used for development and tests).
 
 - **Quests** are one-off tasks with an effort tier (moment, hour, part of a day, full day; 10, 25, 50 or
-  100 XP) chosen by how much time they take, which decides the XP they award; the Board lists the open ones and lets you reorder them by dragging.
+  100 XP) chosen by how much time they take, which decides the XP they award; the Board lists the ones that belong to no mission and lets you reorder them by dragging.
 - **Missions** are long-term goals made of quests, with a progress ring and a bonus XP
-  reward (small, medium, large) when the last quest is done.
+  reward (small, medium, large) when the last quest is done. Their quests live in the
+  mission and are not shown on the Board.
 - **XP and levels** are shown in the hero bar; completing a quest or mission opens a reward
   card, and reopening one takes the XP back.
 - **Recurring missions** are posted automatically from rules set up in Settings (daily,
@@ -89,7 +90,8 @@ On a machine without a display, run the app as `xvfb-run -a flutter run -d linux
 tests need no display.
 
 The app has three tabs: Quests (the Board), Missions and Settings; new items are created
-with the plus button on the first two.
+with the plus button on the first two. The Board shows only quests without a mission;
+a quest that belongs to a mission is listed in that mission's detail.
 
 The bundle identifier and the display name for iOS are set in one place,
 `ios/Flutter/AppIdentity.xcconfig` (`APP_BUNDLE_IDENTIFIER`, `APP_DISPLAY_NAME`);
