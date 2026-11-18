@@ -168,8 +168,8 @@ class _PaletteChipState extends State<_PaletteChip> {
   }
 }
 
-/// A tiny board in the colours of [palette]: ground, one parchment slip with
-/// an ink line, and the accent as a dot.
+/// A tiny board in the colours of [palette]: ground, one Quest card with
+/// a text line, and the accent as a dot.
 class _Swatch extends StatelessWidget {
   const _Swatch({required this.palette});
 
@@ -196,12 +196,9 @@ class _Swatch extends StatelessWidget {
               height: Space.s18,
               padding: const EdgeInsets.all(Space.s4),
               decoration: BoxDecoration(
-                color: p.parchment,
+                color: p.slip,
                 borderRadius: BorderRadius.circular(Space.s4),
-                border: Border.all(
-                  color: p.parchmentEdge,
-                  width: Metrics.hairline,
-                ),
+                border: Border.all(color: p.slipEdge, width: Metrics.hairline),
               ),
               child: Align(
                 alignment: Alignment.topLeft,
@@ -209,7 +206,7 @@ class _Swatch extends StatelessWidget {
                   width: Space.s12,
                   height: Space.s4,
                   decoration: BoxDecoration(
-                    color: p.ink,
+                    color: p.slipText,
                     borderRadius: BorderRadius.circular(Space.s2),
                   ),
                 ),
@@ -222,10 +219,7 @@ class _Swatch extends StatelessWidget {
             child: Container(
               width: Space.s12,
               height: Space.s12,
-              decoration: BoxDecoration(
-                color: p.brass,
-                shape: BoxShape.circle,
-              ),
+              decoration: BoxDecoration(color: p.brass, shape: BoxShape.circle),
             ),
           ),
         ],

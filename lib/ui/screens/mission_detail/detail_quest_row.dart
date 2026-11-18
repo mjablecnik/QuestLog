@@ -13,8 +13,8 @@ import '../../widgets/common/app_icon.dart';
 /// Group tag that makes an open swipe pane close when another row is swiped.
 const String _swipeGroup = 'mission-detail-quests';
 
-/// One Quest of the Mission detail: a parchment slip while open, a dimmed
-/// raised card once done, with the swipe actions "Upravit" and "Smazat".
+/// One Quest of the Mission detail: a parchment slip while open (light theme)
+/// or a dark raised card (dark theme), a dimmed card once done, with the swipe actions "Upravit" and "Smazat".
 ///
 /// An open Quest shows its effort pips (never a tier name), a done one when it was
 /// completed. The Mission is not repeated on the row, the screen is its page.
@@ -43,7 +43,7 @@ class DetailQuestRow extends StatelessWidget {
     final bool done = quest.isDone;
     final int xp = quest.awardedXp ?? quest.difficulty.xp;
     final TextStyle meta = context.bodyText.bodySmall!.copyWith(
-      color: done ? p.textFaint : p.inkDim,
+      color: done ? p.textFaint : p.slipTextDim,
     );
     final TextStyle xpStyle = context.displayText.titleMedium!.copyWith(
       color: p.brass,
@@ -52,21 +52,19 @@ class DetailQuestRow extends StatelessWidget {
     final BorderRadius radius = BorderRadius.circular(Radii.card);
     final Widget card = DecoratedBox(
       decoration: BoxDecoration(
-        color: done ? p.boardRaised : p.parchment,
+        color: done ? p.slipDone : p.slip,
         borderRadius: radius,
         border: Border.all(
-          color: done
-              ? p.boardLine
-              : (p.isLight ? p.parchmentEdge : p.parchment),
+          color: done ? p.boardLine : p.slipEdge,
           width: Metrics.hairline,
         ),
-        boxShadow: done
+        boxShadow: done || !p.isLight
             ? null
             : <BoxShadow>[
                 BoxShadow(
-                  color: p.ink.withValues(alpha: p.isLight ? 0.10 : 0.28),
-                  blurRadius: p.isLight ? 18 : 24,
-                  offset: Offset(0, p.isLight ? Space.s6 : Space.s12),
+                  color: p.ink.withValues(alpha: 0.10),
+                  blurRadius: 18,
+                  offset: const Offset(0, Space.s6),
                 ),
               ],
       ),
@@ -103,7 +101,7 @@ class DetailQuestRow extends StatelessWidget {
                         Text(
                           quest.name,
                           style: context.bodyText.titleMedium!.copyWith(
-                            color: done ? p.textDim : p.ink,
+                            color: done ? p.textDim : p.slipText,
                             decoration: done
                                 ? TextDecoration.lineThrough
                                 : null,

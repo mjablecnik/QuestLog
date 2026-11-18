@@ -29,8 +29,8 @@ String questCompletedLabel(
   return l.quest_completedOn(DateFormat.yMd(locale).format(completedAt));
 }
 
-/// One Quest on the board: a parchment slip while open, a dimmed raised card
-/// once done.
+/// One Quest on the board: a parchment slip while open (light theme) or a dark
+/// raised card (dark theme), a dimmed card once done.
 class QuestCard extends StatelessWidget {
   const QuestCard({
     super.key,
@@ -62,8 +62,8 @@ class QuestCard extends StatelessWidget {
     final bool done = quest.isDone;
     final int xp = quest.awardedXp ?? quest.difficulty.xp;
 
-    final Color nameColor = done ? p.textDim : p.ink;
-    final Color metaColor = done ? p.textFaint : p.inkDim;
+    final Color nameColor = done ? p.textDim : p.slipText;
+    final Color metaColor = done ? p.textFaint : p.slipTextDim;
     final TextStyle meta = context.bodyText.bodySmall!.copyWith(
       color: metaColor,
     );
@@ -71,7 +71,7 @@ class QuestCard extends StatelessWidget {
     final List<Widget> metaRow = <Widget>[
       DifficultyPips(
         quest.difficulty,
-        emptyColor: done ? p.textFaint : p.inkFaint,
+        emptyColor: done ? p.textFaint : p.slipTextFaint,
       ),
       if (done && completedLabel != null) Text(completedLabel!, style: meta),
     ];
@@ -82,28 +82,24 @@ class QuestCard extends StatelessWidget {
     );
 
     final BorderRadius radius = BorderRadius.circular(Radii.card);
-    final Color ground = done ? p.boardRaised : p.parchment;
-    // Daylight draws the parchment-edge outline on every Quest card, done ones
-    // included, and its shadow too (the artboard does); the dark done card has
+    final Color ground = done ? p.slipDone : p.slip;
+    // Daylight draws the parchment-edge outline and a soft shadow on every
+    // Quest card, done ones included (the artboard does); the dark theme has
     // the faint board line and no shadow.
-    final Color outline = p.isLight
-        ? p.parchmentEdge
-        : (done ? p.boardLine : p.parchment);
-
     return DecoratedBox(
       decoration: BoxDecoration(
         color: ground,
         borderRadius: radius,
-        border: Border.all(color: outline, width: Metrics.hairline),
-        boxShadow: done && !p.isLight
-            ? null
-            : <BoxShadow>[
+        border: Border.all(color: p.slipEdge, width: Metrics.hairline),
+        boxShadow: p.isLight
+            ? <BoxShadow>[
                 BoxShadow(
-                  color: p.ink.withValues(alpha: p.isLight ? 0.10 : 0.28),
-                  blurRadius: p.isLight ? 18 : 24,
-                  offset: Offset(0, p.isLight ? Space.s6 : Space.s12),
+                  color: p.ink.withValues(alpha: 0.10),
+                  blurRadius: 18,
+                  offset: const Offset(0, Space.s6),
                 ),
-              ],
+              ]
+            : null,
       ),
       child: Material(
         type: MaterialType.transparency,

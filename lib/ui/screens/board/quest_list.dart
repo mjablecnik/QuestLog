@@ -156,13 +156,30 @@ class _QuestListState extends ConsumerState<QuestList> {
 
   Widget _liftProxy(Widget child, int index, Animation<double> animation) {
     final bool reduced = MediaQuery.disableAnimationsOf(context);
+    final p = context.palette;
+    // A dark card has no resting shadow, so the lifted one gets its own.
+    final Widget lifted = p.isLight
+        ? child
+        : DecoratedBox(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(Radii.card),
+              boxShadow: <BoxShadow>[
+                BoxShadow(
+                  color: p.scrim,
+                  blurRadius: 24,
+                  offset: const Offset(0, Space.s12),
+                ),
+              ],
+            ),
+            child: child,
+          );
     return Material(
       type: MaterialType.transparency,
       child: reduced
-          ? child
+          ? lifted
           : ScaleTransition(
               scale: Tween<double>(begin: 1, end: 1.02).animate(animation),
-              child: child,
+              child: lifted,
             ),
     );
   }

@@ -70,7 +70,9 @@ class _CheckCircleState extends State<CheckCircle> {
                 shape: BoxShape.circle,
                 color: checked ? p.brass : (_pressed ? p.brassSoft : null),
                 border: Border.all(
-                  color: checked ? p.brass : (_pressed ? p.brass : p.inkFaint),
+                  color: checked
+                      ? p.brass
+                      : (_pressed ? p.brass : p.slipTextFaint),
                   width: 2,
                 ),
               ),

@@ -22,7 +22,7 @@ class DifficultyPips extends StatelessWidget {
 
   final Difficulty difficulty;
 
-  /// Colour of the unfilled pips; defaults to the faint ink of a parchment slip.
+  /// Colour of the unfilled pips; defaults to the faint text of a Quest card.
   final Color? emptyColor;
 
   static const int total = 4;
@@ -31,7 +31,7 @@ class DifficultyPips extends StatelessWidget {
   Widget build(BuildContext context) {
     final p = context.palette;
     final int filled = pipCount(difficulty);
-    final Color empty = emptyColor ?? p.inkFaint;
+    final Color empty = emptyColor ?? p.slipTextFaint;
     final AppLocalizations l = AppLocalizations.of(context);
 
     return Semantics(

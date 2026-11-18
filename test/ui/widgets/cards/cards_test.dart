@@ -279,6 +279,69 @@ void main() {
       );
     });
 
+    final List<QuestlogPalette> darkPalettes = <QuestlogPalette>[
+      QuestlogPalette.guildBoard,
+      QuestlogPalette.guildBoardHighContrast,
+      QuestlogPalette.blueDark,
+      QuestlogPalette.greenDark,
+    ];
+    for (int i = 0; i < darkPalettes.length; i++) {
+      final QuestlogPalette p = darkPalettes[i];
+      testWidgets('dark theme: an open card is a raised dark card '
+          '(palette #$i)', (tester) async {
+        await pumpCards(
+          tester,
+          QuestCard(quest: boardQuest(), onToggle: () {}),
+          palette: p,
+        );
+        final BoxDecoration d = _cardDecoration(tester);
+        expect(d.color, p.boardRaised);
+        expect((d.border! as Border).top.color, p.boardLine);
+        expect(d.boxShadow, isNull);
+        expect(
+          tester.widget<Text>(find.text('Take out the trash')).style!.color,
+          p.text,
+        );
+        expect(tester.widget<Text>(find.text('+25')).style!.color, p.brass);
+      });
+
+      testWidgets('dark theme: a done card is outlined, not filled '
+          '(palette #$i)', (tester) async {
+        await pumpCards(
+          tester,
+          QuestCard(
+            quest: boardQuest(completedAt: DateTime(2026, 11, 15, 9)),
+            onToggle: () {},
+          ),
+          palette: p,
+        );
+        final BoxDecoration d = _cardDecoration(tester);
+        expect(d.color, const Color(0x00000000));
+        expect((d.border! as Border).top.color, p.boardLine);
+        final Text name = tester.widget(find.text('Take out the trash'));
+        expect(name.style!.decoration, TextDecoration.lineThrough);
+        expect(name.style!.color, p.textDim);
+      });
+    }
+
+    testWidgets('light theme: an open card keeps the parchment slip', (
+      tester,
+    ) async {
+      final QuestlogPalette p = QuestlogPalette.daylight;
+      await pumpCards(
+        tester,
+        QuestCard(quest: boardQuest(), onToggle: () {}),
+        palette: p,
+      );
+      final BoxDecoration d = _cardDecoration(tester);
+      expect(d.color, p.parchment);
+      expect(d.boxShadow, isNotNull);
+      expect(
+        tester.widget<Text>(find.text('Take out the trash')).style!.color,
+        p.ink,
+      );
+    });
+
     testWidgets('long names and 130% text do not overflow at 320 wide', (
       tester,
     ) async {
@@ -420,4 +483,16 @@ void main() {
       expect(paint, paintsExactlyCountTimes(#drawArc, 0));
     });
   });
+}
+
+BoxDecoration _cardDecoration(WidgetTester tester) {
+  final DecoratedBox box = tester.widget(
+    find
+        .descendant(
+          of: find.byType(QuestCard),
+          matching: find.byType(DecoratedBox),
+        )
+        .first,
+  );
+  return box.decoration as BoxDecoration;
 }
