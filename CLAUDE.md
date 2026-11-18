@@ -46,7 +46,7 @@ scripts/                     check.sh, check-structure.sh (max 15 source files p
 screenshots/                 README screenshots (English, dark theme, real app at 2x); retake them after visible UI changes
 test/                        mirrors lib/ (core, data, services, ui) + goldens/, helpers/
 .kiro/specs/                 001 domain, 002 UI: requirements, design, tasks
-.design/                     approved visual contract (DESIGN.md, artboards/, screens/)
+.design/                     approved visual contract (DESIGN.md, artboards/, screens/, icon/generate.mjs = app icon + launch screen)
 .agents/                     pipeline artifacts: PIPELINE_STATE.json, ISSUES.md, MEMORY.md,
                              USE_CASES.md, runs/2026-11-15-1405/ (one report per phase)
 ```

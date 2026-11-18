@@ -40,7 +40,7 @@ questlog/
 ├── screenshots/             the six README screenshots (English, dark theme, 780x1688)
 ├── ios/, linux/             platform projects (iOS identity: ios/Flutter/AppIdentity.xcconfig)
 ├── .kiro/specs/             001-questlog-domain and 002-questlog-ui (requirements, design, tasks)
-├── .design/                 the approved visual design: DESIGN.md, artboards/, screens/
+├── .design/                 the approved visual design: DESIGN.md, artboards/, screens/, icon/ (app icon + launch screen generator)
 ├── .agents/                 development pipeline artifacts (state, issues, use cases, reports)
 ├── l10n.yaml                Flutter localization generator configuration
 └── pubspec.yaml             dependencies, fonts, assets

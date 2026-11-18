@@ -140,3 +140,13 @@ Resolved: name (Questlog); display face (Figtree, separate role); theme default 
 system; recurring missions with six cadences, exact day and manual posting; **no** due
 dates, streaks or history in v1; "projects" (as in TimeLog) deliberately left out of the UI
 but the data model should leave room for an optional parent of missions/quests.
+
+## 6. App icon and launch screen
+
+A parchment quest slip (pinned, three difficulty pips) stamped with a scalloped brass seal and
+check, on the Guild Board green. The same mark plus a Figtree 700 "Questlog" wordmark is the
+launch screen, in Guild Board and Daylight variants that follow the system appearance. The
+single source is `icon/generate.mjs` (colours as literals there, from § 2): it writes the iOS
+`AppIcon` set (opaque RGB), `LaunchImage` and the `LaunchBackground` colour set, and
+`icon/app-icon.svg`. Run `NODE_PATH=../worklog/node_modules node .design/icon/generate.mjs`
+from the project root. Not included: iOS 18 dark/tinted icon variants, a Linux window icon.
