@@ -123,6 +123,10 @@ check is 28px inside a 44px row).
 
 ## 4. Components
 
+- **Tap feedback** — changed 2026-11-18 at Martin's request: a touch gives no splash, highlight or
+  hover tint on any control (theme-wide `NoSplash`, transparent button overlays). State is shown
+  by selection (filled, brass border) or an in-place fill the control draws itself, as the Effort
+  rows do. Only keyboard focus is painted.
 - **Hero bar** — level badge (52px circle, brass ring, `--brass-soft` fill), name + level,
   `current / next XP`, remaining XP, 6px brass progress bar.
 - **Quest card** — check circle · title + meta row (effort pips 1–4; changed 2026-11-18 at

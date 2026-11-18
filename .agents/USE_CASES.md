@@ -1329,13 +1329,13 @@ first; cases that name Czech text say so.
 - Expected: no tappable element is smaller than 44×44 logical pixels
 - Verify: TEST
 
-### UC-138 — Every tappable element has a visible pressed state
+### UC-138 — A touch leaves no splash or highlight (changed 2026-11-18 at Martin's request)
 - Area: a11y
-- Requirement: U-16.2
-- Preconditions: every screen and sheet rendered
-- Data needed: the accessibility harness seed
-- Steps: press and hold each tappable element and compare the rendered frame with the idle frame
-- Expected: each one changes visibly while pressed
+- Requirement: U-16.2 (amended)
+- Preconditions: the theme built for every palette; a chip, text, filled, outlined and icon button
+- Data needed: none
+- Steps: press and hold each control and compare the rendered frame with the idle frame
+- Expected: nothing changes; the theme has `NoSplash` and transparent splash, highlight and hover, and button overlays are transparent except for keyboard focus (`test/ui/theme/tap_feedback_test.dart`)
 - Verify: TEST
 
 ### UC-139 — Semantic labels in the effective language

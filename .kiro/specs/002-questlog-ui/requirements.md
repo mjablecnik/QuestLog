@@ -284,7 +284,7 @@ Terms defined in `001-questlog-domain` (Quest, Mission, Instance, Difficulty, Mi
 #### Acceptance Criteria
 
 1. THE Questlog_App SHALL give every tappable element a hit area of at least 44×44 logical pixels, including the 28px painted check circle
-2. THE Questlog_App SHALL give every tappable element a visible pressed state
+2. ~~THE Questlog_App SHALL give every tappable element a visible pressed state~~ *Changed 2026-11-18 at Martin's request:* a touch SHALL leave no Material splash, highlight or hover tint on any element; state is shown by selection or by an in-place fill that the control draws itself (the Effort rows, the segmented control, the check circle). Only keyboard focus is painted.
 3. THE Questlog_App SHALL provide semantic labels for check circles, the add buttons, the three tabs, swipe actions, the drag handle and the "···" menu, in the Effective_Language
 4. THE Questlog_App SHALL announce through semantics when a Quest or Mission is completed or reopened
 5. WHEN the device requests reduced motion, THE Questlog_App SHALL replace slide, scale and ray animations with fades of at most 150 ms
