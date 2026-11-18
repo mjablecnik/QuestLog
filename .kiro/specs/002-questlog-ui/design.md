@@ -20,10 +20,9 @@ graph TD
     APP --> SHELL[AppShell: tabs + splash + reconcile]
     SHELL --> BOARD[BoardScreen]
     SHELL --> MISSIONS[MissionsScreen]
+    SHELL --> SETTINGS[SettingsScreen]
     BOARD --> DETAIL[MissionDetailScreen]
     MISSIONS --> DETAIL
-    BOARD --> SETTINGS[SettingsScreen]
-    MISSIONS --> SETTINGS
     BOARD -. sheets .-> QSHEET[QuestSheet]
     MISSIONS -. sheets .-> MSHEET[MissionSheet]
     SETTINGS -. sheets .-> RSHEET[RuleSheet]
@@ -260,7 +259,7 @@ class ProgressRing extends StatelessWidget { ProgressRing({required int done, re
 class CheckCircle extends StatelessWidget { /* 28px painted, 44px hit area, semantic label */ }
 
 // widgets/hero
-class HeroBar extends ConsumerWidget { HeroBar({required VoidCallback onSettings}); }
+class HeroBar extends ConsumerWidget { HeroBar(); }
 
 // widgets/reward
 class RewardOverlay extends ConsumerWidget { /* hosts the queue above the shell */ }
@@ -273,8 +272,10 @@ Future<bool> confirmDestructive(BuildContext context, {required String title, re
 
 ### 11. Screens
 
+> Changed 2026-11-18 at Martin's request: Settings is the third bottom tab in the shell's `IndexedStack` (no pushed route, no back row, no hero bar), the hero bar's gear and `open_settings.dart` are gone, and tab items suppress the splash/highlight feedback (`NoSplash`, transparent colours and `overlayColor`). Settings snackbars use the default clearance above the tab bar.
+
 ```dart
-class AppShell extends ConsumerStatefulWidget { /* splash → reconcile → tabs, lifecycle observer */ }
+class AppShell extends ConsumerStatefulWidget { /* splash → reconcile → IndexedStack of Board, Missions, Settings, lifecycle observer */ }
 class BoardScreen extends ConsumerWidget { /* open list (reorderable), done list, FAB, empty state */ }
 class MissionsScreen extends ConsumerWidget { /* open Missions, "Dokončeno dnes", FAB, empty state */ }
 class MissionDetailScreen extends ConsumerWidget { MissionDetailScreen(int missionId); }

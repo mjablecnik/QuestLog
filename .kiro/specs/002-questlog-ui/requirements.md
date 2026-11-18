@@ -4,7 +4,7 @@
 
 This spec defines the user interface of Questlog, the personal gamified to-do application built in Flutter (iOS primary) under `/workspace/questlog/`. It builds on `001-questlog-domain`, which provides every service, rule and stream the screens use; the UI contains no business logic of its own. The visual contract is `.design/DESIGN.md` together with the artboards in `.design/artboards/` (direction "Guild Board", dark by default, light variant "Daylight", typeface Figtree).
 
-The application has two tabs, **Questy** (the quest board) and **Mise** (missions), reached from a hero bar that shows the hero's Level and XP and carries the gear that opens **Nastavení** (settings). Quests are created, edited, completed, reordered by drag and deleted on the board; Missions are created and completed from the Missions tab and their detail screen; recurring rules and the temporary display-font switch live in Settings. All user-facing text is Czech or English; all code, identifiers and this document are English.
+The application has three tabs, **Questy** (the quest board), **Mise** (missions) and **Nastavení** (settings); the Questy and Mise tabs show a hero bar with the hero's Level and XP. Quests are created, edited, completed, reordered by drag and deleted on the board; Missions are created and completed from the Missions tab and their detail screen; recurring rules and the temporary display-font switch live in Settings. All user-facing text is Czech or English; all code, identifiers and this document are English.
 
 Out of scope: a history screen (the data is retained by spec 001), notifications, projects, due dates, streaks, onboarding, and the iOS build and App Store steps, which the user performs.
 
@@ -14,11 +14,11 @@ Terms defined in `001-questlog-domain` (Quest, Mission, Instance, Difficulty, Mi
 
 - **Questlog_App**: The Flutter application at `/workspace/questlog/`.
 - **App_Shell**: The root widget that applies theme and locale, hosts the tabs and runs Reconciliation.
-- **Hero_Bar**: The header shown on the Board_Screen and Missions_Screen with the Level badge, hero name, Level_Progress and the Settings gear.
+- **Hero_Bar**: The header shown on the Board_Screen and Missions_Screen with the Level badge, hero name and Level_Progress.
 - **Board_Screen**: The Questy tab listing open Quests and the Quests done on the current Board_Day.
 - **Missions_Screen**: The Mise tab listing open Missions and the section "Dokončeno dnes" of Missions completed on the current Board_Day.
 - **Mission_Detail_Screen**: The screen showing one Mission with all of its Quests.
-- **Settings_Screen**: The screen reached from the gear, containing profile, language, theme, recurring rules, the display-font picker and the About footer.
+- **Settings_Screen**: The screen behind the third bottom tab, containing profile, language, theme, recurring rules, the display-font picker and the About footer.
 - **Quest_Sheet**: The bottom sheet for creating or editing a Quest.
 - **Mission_Sheet**: The bottom sheet for creating or editing a Mission.
 - **Rule_Sheet**: The bottom sheet for creating, editing or deleting a Recurring_Rule.
@@ -39,9 +39,12 @@ Terms defined in `001-questlog-domain` (Quest, Mission, Instance, Difficulty, Mi
 #### Acceptance Criteria
 
 1. WHEN the Questlog_App starts, THE App_Shell SHALL show a branded splash until the Questlog_Database is open and the first Reconciliation has finished, and SHALL then show the Board_Screen
-2. THE App_Shell SHALL offer exactly two tabs, Questy and Mise, in a bottom tab bar, and SHALL NOT offer a third tab
-3. THE Board_Screen and the Missions_Screen SHALL each show the Hero_Bar with the Settings gear at its right end
-4. WHEN the gear is tapped, THE App_Shell SHALL open the Settings_Screen, and WHEN the Settings_Screen is closed, THE App_Shell SHALL return to the tab it came from with its scroll position unchanged
+2. THE App_Shell SHALL offer exactly three tabs, Questy, Mise and Nastavení, in a bottom tab bar, and SHALL show no highlight, ripple or frame on a tab while it is pressed
+3. THE Board_Screen and the Missions_Screen SHALL each show the Hero_Bar; the Settings_Screen SHALL NOT
+4. WHEN the Nastavení tab is tapped, THE App_Shell SHALL show the Settings_Screen in place, and WHEN another tab is tapped, THE App_Shell SHALL return to it with the scroll position of every tab unchanged
+
+> Changed 2026-11-18 at Martin's request: Settings became the third bottom tab (criteria 2–4 above), the gear in the hero bar was removed, and tab items no longer show the orange press highlight.
+
 5. WHEN the Questlog_App returns from the background, THE App_Shell SHALL run Reconciliation once, and SHALL NOT run it again until the next return from the background
 6. WHEN Reconciliation posts one or more Instances, THE App_Shell SHALL show a brief message naming the posted Missions
 7. IF Reconciliation fails with a storage error, THEN THE App_Shell SHALL show the existing data, show an inline retry message and SHALL NOT block the user from using the rest of the app
@@ -199,7 +202,7 @@ Terms defined in `001-questlog-domain` (Quest, Mission, Instance, Difficulty, Mi
 
 #### Acceptance Criteria
 
-1. THE Settings_Screen SHALL show a back navigation, the title "Nastavení" and the labelled groups in this order: Profil, Jazyk, Vzhled, Pravidelné mise, Dočasné, O aplikaci
+1. THE Settings_Screen SHALL show the title "Nastavení" (no back navigation: it is a tab) and the labelled groups in this order: Profil, Jazyk, Vzhled, Pravidelné mise, Dočasné, O aplikaci
 2. THE Profile group SHALL contain a hero-name field with a 40-character limit and a counter that shows the Total_XP in small type next to the name
 3. WHEN the hero name field loses focus or is submitted, THE Settings_Screen SHALL save the trimmed name through Settings_Service and the Hero_Bar SHALL update at once
 4. IF the hero name exceeds 40 characters, THEN THE Settings_Screen SHALL show a localized error beside the field and SHALL NOT save
@@ -276,7 +279,7 @@ Terms defined in `001-questlog-domain` (Quest, Mission, Instance, Difficulty, Mi
 
 1. THE Questlog_App SHALL give every tappable element a hit area of at least 44×44 logical pixels, including the 28px painted check circle
 2. THE Questlog_App SHALL give every tappable element a visible pressed state
-3. THE Questlog_App SHALL provide semantic labels for check circles, the add buttons, the gear, swipe actions, the drag handle and the "···" menu, in the Effective_Language
+3. THE Questlog_App SHALL provide semantic labels for check circles, the add buttons, the three tabs, swipe actions, the drag handle and the "···" menu, in the Effective_Language
 4. THE Questlog_App SHALL announce through semantics when a Quest or Mission is completed or reopened
 5. WHEN the device requests reduced motion, THE Questlog_App SHALL replace slide, scale and ray animations with fades of at most 150 ms
 6. THE Questlog_App SHALL keep text contrast of at least 4.5:1 for body text on every ground in both themes

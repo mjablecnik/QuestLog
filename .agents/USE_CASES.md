@@ -49,31 +49,31 @@ first; cases that name Czech text say so.
 - Expected: the first screenshot shows the branded splash; the second shows the Board screen; no exception in stdout
 - Verify: APP
 
-### UC-002 — Exactly two tabs, Questy and Mise
+### UC-002 — Exactly three tabs, Questy, Mise and Nastavení
 - Area: shell
 - Requirement: U-1.2
 - Preconditions: app running on the Board
 - Data needed: none
 - Steps: screenshot the bottom tab bar
-- Expected: two tabs only, labelled Quests and Missions (Czech: Questy, Mise); no third tab anywhere
+- Expected: three equal tabs, labelled Quests, Missions and Settings (Czech: Questy, Mise, Nastavení), the Settings tab with a gear icon; no fourth tab; pressing and holding a tab shows no orange frame or ripple (changed 2026-11-18)
 - Verify: APP
 
-### UC-003 — Hero bar with the gear on both tabs
+### UC-003 — Hero bar on Quests and Missions, without a gear
 - Area: shell
 - Requirement: U-1.3
 - Preconditions: app running
 - Data needed: none
 - Steps: screenshot the Board, tap the Mise tab, screenshot
-- Expected: both screens carry the hero bar, and a gear button sits at its right end on both
+- Expected: both screens carry the hero bar and it has no button at its right end; the Settings tab has no hero bar
 - Verify: APP
 
-### UC-004 — Gear opens Settings and closing it returns to the same tab
+### UC-004 — The Settings tab opens in place and tabs keep their scroll position
 - Area: shell
 - Requirement: U-1.4
 - Preconditions: app running
 - Data needed: 12 open quests, so the Board scrolls
-- Steps: on the Board scroll halfway down, tap the gear, screenshot, tap back, screenshot
-- Expected: Settings opens with the title Nastavení/Settings; back returns to the Board (not the Missions tab) with the scroll position unchanged
+- Steps: on the Board scroll halfway down, tap the Settings tab, screenshot, tap the Quests tab, screenshot
+- Expected: Settings shows the title Nastavení/Settings with no back button; the Quests tab returns to the Board with the scroll position unchanged
 - Verify: APP
 
 ### UC-005 — Reconciliation runs once per return from the background
@@ -108,8 +108,8 @@ first; cases that name Czech text say so.
 - Requirement: U-1.8
 - Preconditions: app on device
 - Data needed: one mission with 2 quests
-- Steps: open Settings and swipe from the left edge; open a mission detail and swipe from the left edge
-- Expected: both screens pop back to where they were pushed from
+- Steps: open a mission detail and swipe from the left edge (Settings is a tab and has nothing to pop since 2026-11-18)
+- Expected: the detail pops back to the tab it was pushed from
 - Verify: IOS
 
 ---
@@ -1113,10 +1113,10 @@ first; cases that name Czech text say so.
 ### UC-115 — A setting change applies without rebuilding the navigation stack
 - Area: settings
 - Requirement: U-11.8, D-12.8
-- Preconditions: a mission detail pushed, then Settings on top of it
+- Preconditions: the Missions tab shown with a mission detail not yet opened
 - Data needed: one open mission with 2 quests
-- Steps: open a mission detail, open Settings from the hero bar, change the theme and the language, close Settings
-- Expected: the detail behind is already in the new theme and language and is still the same pushed screen with its scroll position; nothing reloaded or popped
+- Steps: open the Settings tab, change the theme and the language, return to the Missions tab and open a mission detail
+- Expected: the tabs and the detail are already in the new theme and language; each tab keeps its scroll position; nothing reloaded
 - Verify: APP+DB
 
 ### UC-116 — Font picker row and sheet

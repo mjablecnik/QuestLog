@@ -125,7 +125,7 @@ Build the Questlog screens on top of the finished domain layer from `001-questlo
     - _Requirements: 3.2, 3.3, 3.5, 8.4, 16.1_
 
   - [x] 6.4 Implement Hero_Bar
-    - `lib/ui/widgets/hero/`: `LevelBadge` and `HeroBar` reading Xp_Engine progress and the hero name, with an animated progress bar that fills to the end before wrapping on a Level-up, tabular XP figures and the gear button
+    - `lib/ui/widgets/hero/`: `LevelBadge` and `HeroBar` reading Xp_Engine progress and the hero name, with an animated progress bar that fills to the end before wrapping on a Level-up, tabular XP figures (the gear button was removed 2026-11-18, see 7.2)
     - _Requirements: 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 1.3_
 
   - [x] 6.5 Write Hero_Bar tests
@@ -153,12 +153,12 @@ Build the Questlog screens on top of the finished domain layer from `001-questlo
     - _Requirements: 1.8, 11.7, 11.8, 14.2, 14.3, 14.4, 15.2, 17.5_
 
   - [x] 7.2 Implement the app shell, splash and tabs
-    - `lib/ui/screens/shell/`: `AppShell` with splash until the database is open and Reconciliation finished, two-tab bottom bar (Questy, Mise), lifecycle observer running Reconciliation once per resume, message for posted Missions, retry banner on storage errors, `RewardOverlay` above the tabs
-    - Settings opens as a pushed screen from the gear and returns to the same tab with scroll position kept
+    - `lib/ui/screens/shell/`: `AppShell` with splash until the database is open and Reconciliation finished, bottom tab bar (Questy, Mise; Nastavení added as a third tab 2026-11-18), lifecycle observer running Reconciliation once per resume, message for posted Missions, retry banner on storage errors, `RewardOverlay` above the tabs
+    - Settings is the third tab of the bottom bar (changed 2026-11-18 at Martin's request, replacing the pushed screen opened from the hero-bar gear); every tab keeps its scroll position; tab items show no press highlight
     - _Requirements: 1.1, 1.2, 1.4, 1.5, 1.6, 1.7, 17.3_
 
   - [x] 7.3 Write shell tests
-    - Widget: splash then Board; exactly two tabs; Reconciliation runs once at start and once per resume; posted Missions produce a message; a failing Reconciliation shows data and a retry banner; switching tabs keeps each tab's scroll position
+    - Widget: splash then Board; exactly three tabs; Reconciliation runs once at start and once per resume; posted Missions produce a message; a failing Reconciliation shows data and a retry banner; switching tabs keeps each tab's scroll position
     - _Requirements: 1.1, 1.2, 1.5, 1.6, 1.7_
 
 - [x] 8. Implement the Board_Screen

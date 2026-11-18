@@ -108,9 +108,11 @@ check is 28px inside a 44px row).
 - **Reward card** — parchment card over scrim: brass seal with rays, `+XP`, "QUEST SPLNĚN",
   quest name, mission progress block when applicable, `Pokračovat`. Auto-dismisses.
 - **Empty state** — pinned blank slip, display heading, one sentence of guidance.
-- **Gear** — `.icon-btn.gear` at the right end of the hero bar on every board screen; the
-  only way into Settings. There is no third tab.
-- **Settings** — back nav, display title, labelled groups with segmented controls:
+- **Gear** — removed 2026-11-18 at Martin's request: Settings is now the third bottom tab
+  (gear icon, label Nastavení/Settings) and the hero bar carries no button. The tab bar has
+  three equal items and no press highlight. `.design/artboards/` and `.design/screens/` still
+  show the old gear and two tabs; the running app and the README screenshots are current.
+- **Settings** — a tab (no back nav), display title, labelled groups with segmented controls:
   *Jazyk* (Čeština / English), *Vzhled* (Světlý / Tmavý / Systém, with icons), then the
   *Pravidelné mise* list (`.rule` rows: repeat icon tile, name, "cadence · N questů ·
   příště date", and a brass outline pill **Vyvěsit teď**; the pill reads *Vyvěšeno* and

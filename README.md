@@ -88,8 +88,8 @@ scripts/check.sh                    # flutter analyze + all tests (about 4 min) 
 On a machine without a display, run the app as `xvfb-run -a flutter run -d linux`; the
 tests need no display.
 
-The app has two tabs, Quests (the Board) and Missions; new items are created with the
-plus button on each, and Settings opens from the gear in the hero bar.
+The app has three tabs: Quests (the Board), Missions and Settings; new items are created
+with the plus button on the first two.
 
 The bundle identifier and the display name for iOS are set in one place,
 `ios/Flutter/AppIdentity.xcconfig` (`APP_BUNDLE_IDENTIFIER`, `APP_DISPLAY_NAME`);
