@@ -22,6 +22,12 @@ class QuestlogPalette {
     required this.brassSoft,
     Color? brassText,
     Color? brassOnParchment,
+    Color? slip,
+    Color? slipEdge,
+    Color? slipText,
+    Color? slipTextDim,
+    Color? slipTextFaint,
+    Color? slipDone,
     required this.inkOnBrass,
     required this.destructive,
     required this.inkOnDestructive,
@@ -30,7 +36,22 @@ class QuestlogPalette {
     required this.field,
     required this.fieldActive,
   }) : brassText = brassText ?? brass,
-       brassOnParchment = brassOnParchment ?? brass;
+       brassOnParchment = brassOnParchment ?? brass,
+       slip = slip ?? (brightness == Brightness.dark ? boardRaised : parchment),
+       slipEdge =
+           slipEdge ??
+           (brightness == Brightness.dark ? boardLine : parchmentEdge),
+       slipText = slipText ?? (brightness == Brightness.dark ? text : ink),
+       slipTextDim =
+           slipTextDim ?? (brightness == Brightness.dark ? textDim : inkDim),
+       slipTextFaint =
+           slipTextFaint ??
+           (brightness == Brightness.dark ? textFaint : inkFaint),
+       slipDone =
+           slipDone ??
+           (brightness == Brightness.dark
+               ? const Color(0x00000000)
+               : boardRaised);
 
   final Brightness brightness;
   final Color board, boardRaised, boardLine, text, textDim, textFaint;
@@ -44,6 +65,17 @@ class QuestlogPalette {
 
   /// Brass as text or an icon stroke on parchment.
   final Color brassOnParchment;
+
+  /// Quest card roles. Light palettes keep the parchment slip (the defaults
+  /// are its values); dark palettes draw a dark raised card instead, so no
+  /// bright plane glares on the dark board. Widgets read these roles, never
+  /// [parchment] or [ink], for a Quest card.
+  ///
+  /// [slip] fills an open card, [slipDone] a done one (transparent on a dark
+  /// board, so an open card reads as the raised one), [slipEdge] is the
+  /// hairline outline; [slipText], [slipTextDim] and [slipTextFaint] are the
+  /// name, the meta line and the check ring plus empty pips.
+  final Color slip, slipEdge, slipText, slipTextDim, slipTextFaint, slipDone;
 
   bool get isLight => brightness == Brightness.light;
 

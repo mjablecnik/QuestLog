@@ -85,6 +85,20 @@ final List<_Pair> _highContrastBrassPairs = <_Pair>[
   ('brassOnParchment/parchment', (p) => p.brassOnParchment, (p) => p.parchment),
 ];
 
+/// Quest card roles on a dark palette (a dark raised card, not parchment).
+final List<_Pair> _darkSlipTextPairs = <_Pair>[
+  ('slipText/slip', (p) => p.slipText, (p) => p.slip),
+  ('slipTextDim/slip', (p) => p.slipTextDim, (p) => p.slip),
+  ('brass/slip (XP)', (p) => p.brassText, (p) => p.slip),
+  ('textDim/slipDone-over-board', (p) => p.textDim, (p) => p.board),
+];
+
+/// Non-text parts of a dark Quest card: the check ring and the empty pips.
+final List<_Pair> _darkSlipGraphicPairs = <_Pair>[
+  ('slipTextFaint/slip', (p) => p.slipTextFaint, (p) => p.slip),
+  ('brass/slip (pips, check)', (p) => p.brass, (p) => p.slip),
+];
+
 /// Pairs below their threshold in the approved palette: `palette/pair` ->
 /// floor the ratio must not drop under. Remove an entry once the palette fixes it.
 const Map<String, double> _knownGaps = <String, double>{
@@ -181,6 +195,49 @@ void main() {
 
   group('blue and green palettes: accent fill reaches 3:1 on the ground', () {
     _checkPairs(experiments, _brassPairs.take(3).toList(), 3.0);
+  });
+
+  // Dark Quest cards: every dark palette, no gaps.
+  final Map<String, QuestlogPalette> darkPalettes = <String, QuestlogPalette>{
+    'guildBoard': QuestlogPalette.guildBoard,
+    'guildBoardHighContrast': QuestlogPalette.guildBoardHighContrast,
+    'blueDark': QuestlogPalette.blueDark,
+    'greenDark': QuestlogPalette.greenDark,
+  };
+
+  group('dark Quest cards: text pairs reach 4.5:1, no gaps', () {
+    _checkPairs(darkPalettes, _darkSlipTextPairs, 4.5);
+  });
+
+  group('dark Quest cards: check ring, pips and tick reach 3:1, no gaps', () {
+    _checkPairs(darkPalettes, _darkSlipGraphicPairs, 3.0);
+  });
+
+  test('dark palettes draw Quest cards as the raised board, not parchment', () {
+    for (final QuestlogPalette p in darkPalettes.values) {
+      expect(p.slip, p.boardRaised);
+      expect(p.slipEdge, p.boardLine);
+      expect(p.slipText, p.text);
+      expect(p.slipTextDim, p.textDim);
+      expect(p.slipTextFaint, p.textFaint);
+      expect(p.slipDone.a, 0, reason: 'a done card is outlined, not filled');
+    }
+  });
+
+  test('light palettes keep the parchment slip, role for role', () {
+    for (final QuestlogPalette p in <QuestlogPalette>[
+      QuestlogPalette.daylight,
+      QuestlogPalette.daylightHighContrast,
+      QuestlogPalette.blueLight,
+      QuestlogPalette.greenLight,
+    ]) {
+      expect(p.slip, p.parchment);
+      expect(p.slipEdge, p.parchmentEdge);
+      expect(p.slipText, p.ink);
+      expect(p.slipTextDim, p.inkDim);
+      expect(p.slipTextFaint, p.inkFaint);
+      expect(p.slipDone, p.boardRaised);
+    }
   });
 
   test('the original palettes keep brass text roles equal to brass', () {
