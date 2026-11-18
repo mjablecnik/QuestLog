@@ -14,3 +14,6 @@ build/
 coverage/
 *.iml
 .idea/
+
+# FVM Version Cache
+.fvm/
