@@ -89,10 +89,15 @@ class _TabItem extends StatelessWidget {
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(Radii.control),
-        // The design marks the active tab by colour alone; a pointer resting
-        // on a tab (desktop, iPad) or a leftover focus must not paint a pill.
+        // The design marks the active tab by colour alone: a touch, a pointer
+        // resting on a tab (desktop, iPad) or a leftover focus must not paint
+        // a pill behind it.
+        splashFactory: NoSplash.splashFactory,
+        splashColor: Colors.transparent,
+        highlightColor: Colors.transparent,
         hoverColor: Colors.transparent,
         focusColor: Colors.transparent,
+        overlayColor: const WidgetStatePropertyAll<Color>(Colors.transparent),
         child: ConstrainedBox(
           constraints: const BoxConstraints(minHeight: Metrics.touchTarget),
           child: Column(
