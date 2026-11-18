@@ -7,6 +7,7 @@ import 'package:questlog/app.dart';
 import 'package:questlog/data/database.dart';
 import 'package:questlog/l10n/app_localizations_en.dart';
 import 'package:questlog/services/providers.dart';
+import 'package:questlog/ui/screens/shell/questlog_tab_bar.dart';
 import 'package:questlog/ui/state/ui_providers.dart';
 import 'package:questlog/ui/widgets/cards/check_circle.dart';
 import 'package:questlog/ui/widgets/reward/reward_card.dart';
@@ -87,17 +88,30 @@ void main() {
     await tester.tap(find.text(en.common_continue));
     await _settle(tester);
 
-    // Completing a mission: its last quest, then the reward's mission button.
+    // Completing a mission: open it (the Board lists no mission quests),
+    // complete its last quest, then the reward's mission button.
+    await tester.tap(find.byKey(const ValueKey<ShellTab>(ShellTab.missions)));
+    await _settle(tester);
+    await tester.tap(find.text('Only mission'));
+    await _settle(tester);
     await tester.tap(check('Mission step'));
     await _settle(tester);
-    expect(find.text(en.reward_completeMission), findsOneWidget);
+    final Finder rewardButton = find.descendant(
+      of: find.byType(RewardCard),
+      matching: find.text(en.reward_completeMission),
+    );
+    expect(rewardButton, findsOneWidget);
     haptics.clear();
-    await tester.tap(find.text(en.reward_completeMission));
+    await tester.tap(rewardButton);
     await _settle(tester);
     expect(find.byType(RewardCard), findsOneWidget);
-    expect(find.text(en.reward_completeMission), findsNothing);
+    expect(rewardButton, findsNothing);
     expect(haptics, contains(_heavy));
     await tester.tap(find.text(en.common_continue));
+    await _settle(tester);
+    await tester.tap(find.bySemanticsLabel(en.common_back));
+    await _settle(tester);
+    await tester.tap(find.byKey(const ValueKey<ShellTab>(ShellTab.quests)));
     await _settle(tester);
 
     // Lifting a card to reorder it.

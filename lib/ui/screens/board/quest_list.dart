@@ -32,8 +32,8 @@ class QuestList extends ConsumerStatefulWidget {
     required this.today,
   });
 
-  final List<BoardQuest> open;
-  final List<BoardQuest> done;
+  final List<Quest> open;
+  final List<Quest> done;
 
   /// Calendar date of the current Board_Day, for the completion labels.
   final DateTime today;
@@ -52,20 +52,20 @@ class _QuestListState extends ConsumerState<QuestList> {
   /// Quests with a toggle call in flight, so a double tap cannot complete twice.
   final Set<int> _toggling = <int>{};
 
-  List<int> _ids(List<BoardQuest> items) => <int>[
-    for (final BoardQuest item in items) item.quest.id,
+  List<int> _ids(List<Quest> items) => <int>[
+    for (final Quest quest in items) quest.id,
   ];
 
   /// The open Quests as displayed: the optimistic order wins over the stream.
-  List<BoardQuest> get _shownOpen {
+  List<Quest> get _shownOpen {
     final List<int>? pending = _pending;
     if (pending == null) return widget.open;
-    final Map<int, BoardQuest> byId = <int, BoardQuest>{
-      for (final BoardQuest item in widget.open) item.quest.id: item,
+    final Map<int, Quest> byId = <int, Quest>{
+      for (final Quest quest in widget.open) quest.id: quest,
     };
-    return <BoardQuest>[
+    return <Quest>[
       for (final int id in pending)
-        if (byId.remove(id) case final BoardQuest item) item,
+        if (byId.remove(id) case final Quest quest) quest,
       ...byId.values,
     ];
   }
@@ -141,11 +141,10 @@ class _QuestListState extends ConsumerState<QuestList> {
     }
   }
 
-  Widget _row(BoardQuest item, AppLocalizations l) {
-    final Quest quest = item.quest;
+  Widget _row(Quest quest, AppLocalizations l) {
     final DateTime? completedAt = quest.completedAt;
     return QuestRow(
-      item: item,
+      quest: quest,
       completedLabel: completedAt == null
           ? null
           : questCompletedLabel(l, completedAt, widget.today),
@@ -172,15 +171,15 @@ class _QuestListState extends ConsumerState<QuestList> {
   Widget build(BuildContext context) {
     final AppLocalizations l = AppLocalizations.of(context);
     final p = context.palette;
-    final List<BoardQuest> open = _shownOpen;
-    final List<BoardQuest> done = widget.done;
+    final List<Quest> open = _shownOpen;
+    final List<Quest> done = widget.done;
     final int openXp = open.fold<int>(
       0,
-      (int sum, BoardQuest i) => sum + i.quest.difficulty.xp,
+      (int sum, Quest i) => sum + i.difficulty.xp,
     );
     final int doneXp = done.fold<int>(
       0,
-      (int sum, BoardQuest i) => sum + (i.quest.awardedXp ?? 0),
+      (int sum, Quest i) => sum + (i.awardedXp ?? 0),
     );
 
     return SlidableAutoCloseBehavior(
@@ -200,11 +199,11 @@ class _QuestListState extends ConsumerState<QuestList> {
             onReorderStart: (_) => Haptics.light(),
             onReorderItem: _onReorder,
             itemBuilder: (BuildContext context, int index) {
-              final BoardQuest item = open[index];
+              final Quest quest = open[index];
               return ReorderableDelayedDragStartListener(
-                key: ValueKey<int>(item.quest.id),
+                key: ValueKey<int>(quest.id),
                 index: index,
-                child: Semantics(hint: l.a11y_dragHint, child: _row(item, l)),
+                child: Semantics(hint: l.a11y_dragHint, child: _row(quest, l)),
               );
             },
           ),
@@ -237,10 +236,10 @@ class _QuestListState extends ConsumerState<QuestList> {
             SliverList.builder(
               itemCount: done.length,
               itemBuilder: (BuildContext context, int index) {
-                final BoardQuest item = done[index];
+                final Quest quest = done[index];
                 return KeyedSubtree(
-                  key: ValueKey<int>(item.quest.id),
-                  child: _row(item, l),
+                  key: ValueKey<int>(quest.id),
+                  child: _row(quest, l),
                 );
               },
             ),

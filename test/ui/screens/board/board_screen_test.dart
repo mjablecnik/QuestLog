@@ -1,10 +1,11 @@
+import 'package:drift/drift.dart' show Value;
 import 'package:flutter/gestures.dart' show kLongPressTimeout;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:questlog/core/errors.dart';
 import 'package:questlog/core/xp_rules.dart';
-import 'package:questlog/data/models.dart';
+import 'package:questlog/data/database.dart' show QuestsCompanion;
 import 'package:questlog/l10n/app_localizations.dart';
 import 'package:questlog/l10n/app_localizations_cs.dart';
 import 'package:questlog/l10n/app_localizations_en.dart';
@@ -230,32 +231,76 @@ void main() {
     expect(h.order(tester, ['Alpha', 'Beta']), ['Alpha', 'Beta']);
   });
 
-  boardTest(h, 'reopening the last quest of a completed mission says so', (
+  boardTest(h, 'shows only quests without a mission, counts and XP included', (
     tester,
   ) async {
     await h.pump(tester);
     await h.seed(tester, () async {
-      final int mission = await seedMission(
-        h.db,
-        name: 'Cleanup',
-        status: MissionStatus.completed,
-        completedAt: DateTime(2026, 11, 15, 9),
-        awardedBonus: 100,
-      );
+      final int mission = await seedMission(h.db, name: 'Cleanup');
+      await seedQuest(h.db, name: 'Free', sortOrder: 1);
+      await seedQuest(h.db, name: 'Free done', sortOrder: 2, completedAt: DateTime(2026, 11, 15, 8));
+      await seedQuest(h.db, name: 'Bound', sortOrder: 3, missionId: mission, difficulty: Difficulty.hard);
       await seedQuest(
         h.db,
-        name: 'Sweep',
+        name: 'Bound done',
+        sortOrder: 4,
         missionId: mission,
         completedAt: DateTime(2026, 11, 15, 9),
       );
     });
     await h.settle(tester);
 
-    await tapCheck(tester, 'Reopen quest Sweep');
+    expect(find.text('Free'), findsOneWidget);
+    expect(find.text('Free done'), findsOneWidget);
+    expect(find.text('Bound'), findsNothing);
+    expect(find.text('Bound done'), findsNothing);
+    expect(find.text('1 open · Sunday, November 15'), findsOneWidget);
+    expect(find.text('+25 XP'), findsOneWidget);
+    expect(find.text('1 QUEST · 25 XP'), findsOneWidget);
+  });
 
-    expect(find.text('125 XP withdrawn · mission reopened'), findsOneWidget);
-    expect(find.text('Cleanup'), findsOneWidget);
-    expect(check('Complete quest Sweep'), findsOneWidget);
+  boardTest(h, 'a board of mission quests only shows the empty state', (
+    tester,
+  ) async {
+    await h.pump(tester);
+    await h.seed(tester, () async {
+      final int mission = await seedMission(h.db, name: 'Cleanup');
+      await seedQuest(h.db, name: 'Bound', missionId: mission);
+    });
+    await h.settle(tester);
+
+    expect(find.text('The board is empty'), findsOneWidget);
+    expect(find.text('Bound'), findsNothing);
+    expect(find.text('POSTED QUESTS'), findsNothing);
+    expect(find.text('0 open · Sunday, November 15'), findsOneWidget);
+  });
+
+  boardTest(h, 'a quest that gets a mission leaves the board and returns when freed', (
+    tester,
+  ) async {
+    await h.pump(tester);
+    late int questId;
+    late int missionId;
+    await h.seed(tester, () async {
+      missionId = await seedMission(h.db, name: 'Cleanup');
+      questId = await seedQuest(h.db, name: 'Wanderer');
+    });
+    await h.settle(tester);
+    expect(find.text('Wanderer'), findsOneWidget);
+
+    await h.seed(tester, () async {
+      await (h.db.update(h.db.quests)..where((q) => q.id.equals(questId)))
+          .write(QuestsCompanion(missionId: Value<int?>(missionId)));
+    });
+    await h.settle(tester);
+    expect(find.text('Wanderer'), findsNothing);
+
+    await h.seed(tester, () async {
+      await (h.db.update(h.db.quests)..where((q) => q.id.equals(questId)))
+          .write(const QuestsCompanion(missionId: Value<int?>(null)));
+    });
+    await h.settle(tester);
+    expect(find.text('Wanderer'), findsOneWidget);
   });
 
   boardTest(h, 'add button opens the quest sheet', (tester) async {

@@ -2,6 +2,7 @@ import 'package:glados/glados.dart';
 import 'package:questlog/core/xp_rules.dart';
 import 'package:questlog/data/database.dart';
 import 'package:questlog/data/models.dart';
+import 'package:questlog/services/mission_service.dart';
 import 'package:questlog/services/quest_service.dart';
 import 'package:questlog/services/xp_engine.dart';
 
@@ -21,15 +22,16 @@ void main() {
   });
   tearDown(() => db.close());
 
-  List<String> names(List<BoardQuest> board) => board.map((b) => b.quest.name).toList();
+  List<String> names(List<Quest> board) => board.map((q) => q.name).toList();
 
   group('watchOpenBoard', () {
-    test('returns open Quests of standalone and open Missions in sort order', () async {
+    test('returns only open Quests without a Mission, in sort order', () async {
       final open = await seedMission(db, name: 'Open mission');
       final completed = await seedMission(db, status: MissionStatus.completed);
       final closed = await seedMission(db, status: MissionStatus.closed);
       await seedQuest(db, name: 'third', sortOrder: 3);
-      await seedQuest(db, name: 'first', sortOrder: 1, missionId: open);
+      await seedQuest(db, name: 'in open mission', sortOrder: 1, missionId: open);
+      await seedQuest(db, name: 'first', sortOrder: 0);
       await seedQuest(db, name: 'in closed', sortOrder: 2, missionId: closed);
       await seedQuest(db, name: 'in completed', sortOrder: 4, missionId: completed);
       await seedQuest(db, name: 'done', sortOrder: 5, completedAt: DateTime(2026, 11, 15, 9));
@@ -39,14 +41,41 @@ void main() {
       expect(names(board), ['first', 'third']);
     });
 
-    test('missionName is set for Mission Quests and null for standalone Quests', () async {
+    test('a Quest moves between the Board and its Mission when the assignment changes', () async {
       final missionId = await seedMission(db, name: 'Spring cleaning');
-      await seedQuest(db, name: 'in mission', sortOrder: 1, missionId: missionId);
-      await seedQuest(db, name: 'alone', sortOrder: 2);
+      final created = await quests.create(const QuestDraft(name: 'Wash windows', difficulty: Difficulty.easy));
+      final emitted = <List<String>>[];
+      final sub = quests.watchOpenBoard().listen((b) => emitted.add(names(b)));
+      await pumpEventQueue();
 
-      final board = await quests.watchOpenBoard().first;
+      await quests.update(
+        created.id,
+        QuestDraft(name: 'Wash windows', difficulty: Difficulty.easy, missionId: missionId),
+      );
+      await pumpEventQueue();
+      await quests.update(
+        created.id,
+        const QuestDraft(name: 'Wash windows', difficulty: Difficulty.easy),
+      );
+      await pumpEventQueue();
+      await sub.cancel();
 
-      expect(board.map((b) => b.missionName), ['Spring cleaning', null]);
+      expect(emitted, [
+        ['Wash windows'],
+        <String>[],
+        ['Wash windows'],
+      ]);
+    });
+
+    test('deleting a Mission removes its Quests and leaves the Board as it was', () async {
+      final missions = MissionService(db, xp, FixedClock(DateTime(2026, 11, 15, 10)));
+      final mission = await seedMission(db, name: 'Doomed');
+      await seedQuest(db, name: 'loose', sortOrder: 1);
+      await seedQuest(db, name: 'member', sortOrder: 2, missionId: mission);
+
+      await missions.delete(mission);
+
+      expect(names(await quests.watchOpenBoard().first), ['loose']);
     });
 
     test('emits again when a Quest is created or completed', () async {
@@ -87,35 +116,25 @@ void main() {
       expect(names(await quests.watchDoneToday(DateTime(2026, 11, 15)).first), ['last minute']);
     });
 
-    test('lists the newest completion first and carries the Mission name', () async {
-      final missionId = await seedMission(db, name: 'Mission');
+    test('lists the newest completion first', () async {
       await seedQuest(db, name: 'older', completedAt: DateTime(2026, 11, 15, 8));
-      await seedQuest(
-        db,
-        name: 'newer',
-        sortOrder: 2,
-        missionId: missionId,
-        completedAt: DateTime(2026, 11, 15, 9),
-      );
+      await seedQuest(db, name: 'newer', sortOrder: 2, completedAt: DateTime(2026, 11, 15, 9));
 
       final board = await quests.watchDoneToday(DateTime(2026, 11, 15)).first;
 
       expect(names(board), ['newer', 'older']);
-      expect(board.map((b) => b.missionName), ['Mission', null]);
     });
 
-    test('excludes done Quests of closed Missions but keeps them in history', () async {
+    test('leaves out done Quests of any Mission but keeps them in history', () async {
+      final open = await seedMission(db, name: 'Open');
       final closed = await seedMission(db, status: MissionStatus.closed);
-      await seedQuest(
-        db,
-        name: 'closed one',
-        missionId: closed,
-        completedAt: DateTime(2026, 11, 15, 9),
-      );
+      await seedQuest(db, name: 'loose', completedAt: DateTime(2026, 11, 15, 8));
+      await seedQuest(db, name: 'open one', sortOrder: 2, missionId: open, completedAt: DateTime(2026, 11, 15, 9));
+      await seedQuest(db, name: 'closed one', sortOrder: 3, missionId: closed, completedAt: DateTime(2026, 11, 15, 10));
 
-      expect(await quests.watchDoneToday(DateTime(2026, 11, 15)).first, isEmpty);
+      expect(names(await quests.watchDoneToday(DateTime(2026, 11, 15)).first), ['loose']);
       final history = await quests.history(DateTime(2026, 11, 15), DateTime(2026, 11, 15));
-      expect(history.map((h) => h.name), ['closed one']);
+      expect(history.map((h) => h.name), ['closed one', 'open one', 'loose']);
     });
 
     test('a Quest reopened after completion leaves the done list', () async {

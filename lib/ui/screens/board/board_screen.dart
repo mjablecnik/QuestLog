@@ -36,14 +36,14 @@ class _BoardScreenState extends ConsumerState<BoardScreen> {
 
     // The done window follows the Board_Day, so it re-queries at 04:00.
     final DateTime today = ref.watch(boardDayProvider);
-    final AsyncValue<List<BoardQuest>> openAsync = ref.watch(openBoardProvider);
-    final AsyncValue<List<BoardQuest>> doneAsync = ref.watch(
+    final AsyncValue<List<Quest>> openAsync = ref.watch(openBoardProvider);
+    final AsyncValue<List<Quest>> doneAsync = ref.watch(
       doneTodayProvider(today),
     );
     if (doneAsync.hasValue) _doneSeen = true;
 
-    final List<BoardQuest>? open = openAsync.value;
-    final List<BoardQuest> done = doneAsync.value ?? const <BoardQuest>[];
+    final List<Quest>? open = openAsync.value;
+    final List<Quest> done = doneAsync.value ?? const <Quest>[];
     final bool loading = open == null || (!_doneSeen && !doneAsync.hasValue);
     final bool empty =
         !loading && open.isEmpty && done.isEmpty && !doneAsync.isLoading;

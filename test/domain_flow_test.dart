@@ -74,17 +74,18 @@ void main() {
       reason: 'idempotent within the Board_Day',
     );
 
-    final board = await quests.watchOpenBoard().first;
-    expect(board.map((b) => b.quest.name), ['Plan the week', 'Tidy the inbox']);
-    expect(board.every((b) => b.missionName == 'Weekly review'), isTrue);
+    // The Instance's Quests belong to the Mission, so the Board never lists them.
+    expect(await quests.watchOpenBoard().first, isEmpty);
+    final board = (await missions.watchDetail(mission.id).first)!.quests;
+    expect(board.map((q) => q.name), ['Plan the week', 'Tidy the inbox']);
     expect((await missions.watchOpen().first).single.total, 2);
 
     // The hard Quest takes Total_XP from 50 to 100: Level 1 -> 2.
-    final hard = await quests.complete(board[0].quest.id);
+    final hard = await quests.complete(board[0].id);
     expect((hard.awardedXp, hard.levelBefore, hard.levelAfter), (50, 1, 2));
     expect(hard.missionReadyToComplete, isFalse);
 
-    final normal = await quests.complete(board[1].quest.id);
+    final normal = await quests.complete(board[1].id);
     expect(normal.missionReadyToComplete, isTrue);
     expect(await xp.readTotal(), 125);
 
@@ -99,8 +100,9 @@ void main() {
     var today = todayOf(clock.now());
     expect(today, DateTime(2026, 11, 16));
     expect(
-      (await quests.watchDoneToday(today).first).map((b) => b.quest.name),
-      ['Tidy the inbox', 'Plan the week'],
+      await quests.watchDoneToday(today).first,
+      isEmpty,
+      reason: "Monday's done Quests belong to the Mission, not to the Board",
     );
     expect(
       (await missions.watchCompletedToday(today).first).single.name,

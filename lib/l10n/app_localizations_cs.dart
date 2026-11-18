@@ -199,10 +199,7 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get board_emptyBody =>
-      'Klepni na tlačítko + a vyvěs první quest — třeba něco, co jsi dnes stejně chtěl udělat. Za každý splněný získáš XP.';
-
-  @override
-  String get board_noMission => 'bez mise';
+      'Questy, které patří do mise, najdeš v záložce Mise. Klepni na tlačítko + a vyvěs vlastní quest — třeba něco, co jsi dnes stejně chtěl udělat. Za každý splněný získáš XP.';
 
   @override
   String get board_swipeHint =>
@@ -325,11 +322,6 @@ class AppLocalizationsCs extends AppLocalizations {
   String get a11y_missionMenu => 'Nabídka mise';
 
   @override
-  String a11y_questMission(String name) {
-    return 'Mise $name';
-  }
-
-  @override
   String a11y_effort(int step, int total) {
     return 'Námaha $step ze $total';
   }
@@ -414,6 +406,11 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get quest_missionNone => 'Bez mise';
+
+  @override
+  String quest_addedToMission(String name) {
+    return 'Přidáno do mise $name';
+  }
 
   @override
   String get quest_noteLabel => 'Poznámka';

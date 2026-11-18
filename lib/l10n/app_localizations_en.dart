@@ -189,10 +189,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get board_emptyBody =>
-      'Tap the + button to post your first quest — maybe something you meant to do today anyway. Every one you finish earns XP.';
-
-  @override
-  String get board_noMission => 'no mission';
+      'Quests that belong to a mission live under Missions. Tap the + button to post a quest of your own — maybe something you meant to do today anyway. Every one you finish earns XP.';
 
   @override
   String get board_swipeHint =>
@@ -315,11 +312,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get a11y_missionMenu => 'Mission menu';
 
   @override
-  String a11y_questMission(String name) {
-    return 'Mission $name';
-  }
-
-  @override
   String a11y_effort(int step, int total) {
     return 'Effort $step of $total';
   }
@@ -404,6 +396,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get quest_missionNone => 'No mission';
+
+  @override
+  String quest_addedToMission(String name) {
+    return 'Added to mission $name';
+  }
 
   @override
   String get quest_noteLabel => 'Note';

@@ -9,6 +9,7 @@ import '../../services/providers.dart';
 import '../../services/quest_service.dart';
 import '../forms/error_text.dart';
 import '../forms/validators.dart';
+import '../state/ui_providers.dart';
 import '../theme/questlog_theme.dart';
 import '../theme/tokens.dart';
 import '../widgets/common/effort_picker.dart';
@@ -150,13 +151,39 @@ class _QuestSheetState extends ConsumerState<QuestSheet> {
       final Quest saved = _isEditing
           ? await service.update(_editing!.id, draft)
           : await service.create(draft);
-      if (mounted) QuestlogSheet.close<Quest>(context, saved);
+      if (!mounted) return;
+      _announceMissionMove(saved);
+      QuestlogSheet.close<Quest>(context, saved);
     } on InvalidStateError {
       if (!mounted) return;
       // Only the Mission assignment can be rejected as invalid state here.
       setState(() => _missionNotOpen = true);
     } on DomainError catch (error) {
       if (mounted) setState(() => _serviceError = error);
+    }
+  }
+
+  /// A Quest assigned to a Mission from outside that Mission's detail screen
+  /// leaves the Board; say where it went.
+  void _announceMissionMove(Quest saved) {
+    final int? missionId = saved.missionId;
+    if (missionId == null ||
+        missionId == _editing?.missionId ||
+        widget.presetMissionId != null) {
+      return;
+    }
+    final List<MissionSummary> missions =
+        ref.read(openMissionsProvider).value ?? const <MissionSummary>[];
+    for (final MissionSummary mission in missions) {
+      if (mission.id != missionId) continue;
+      ref
+          .read(snackbarProvider.notifier)
+          .show(
+            SnackMessage(
+              AppLocalizations.of(context).quest_addedToMission(mission.name),
+            ),
+          );
+      return;
     }
   }
 

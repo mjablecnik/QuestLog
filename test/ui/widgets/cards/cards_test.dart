@@ -127,23 +127,18 @@ void main() {
     for (final Locale locale in <Locale>[en, cs]) {
       final bool isCs = locale == cs;
 
-      testWidgets('open with mission shows chip, pips and XP ($locale)', (
+      testWidgets('open shows name, pips and XP, no mission text ($locale)', (
         tester,
       ) async {
         await pumpCards(
           tester,
           QuestCard(
-            item: boardQuest(
-              name: 'Sweep',
-              missionName: 'Clean-up',
-              difficulty: Difficulty.normal,
-            ),
+            quest: boardQuest(name: 'Sweep', difficulty: Difficulty.normal),
             onToggle: () {},
           ),
           locale: locale,
         );
         expect(find.text('Sweep'), findsOneWidget);
-        expect(find.text('Clean-up'), findsOneWidget);
         expect(find.text(isCs ? 'bez mise' : 'no mission'), findsNothing);
         expect(_filledPips, findsNWidgets(2));
         expect(_emptyPips, findsNWidgets(2));
@@ -154,20 +149,19 @@ void main() {
         );
       });
 
-      testWidgets('open without mission shows the no-mission label ($locale)', (
+      testWidgets('open full-day quest fills all four pips ($locale)', (
         tester,
       ) async {
         await pumpCards(
           tester,
           QuestCard(
-            item: boardQuest(difficulty: Difficulty.hard),
+            quest: boardQuest(difficulty: Difficulty.fullDay),
             onToggle: () {},
           ),
           locale: locale,
         );
-        expect(find.text(isCs ? 'bez mise' : 'no mission'), findsOneWidget);
-        expect(_filledPips, findsNWidgets(3));
-        expect(find.text('+50'), findsOneWidget);
+        expect(_filledPips, findsNWidgets(4));
+        expect(find.text('+100'), findsOneWidget);
       });
 
       testWidgets(
@@ -184,7 +178,7 @@ void main() {
                   DateTime(2026, 11, 15),
                 );
                 return QuestCard(
-                  item: boardQuest(
+                  quest: boardQuest(
                     name: 'Dishes',
                     difficulty: Difficulty.easy,
                     completedAt: at,
@@ -200,7 +194,6 @@ void main() {
           expect(_decorationOf(tester, 'Dishes'), TextDecoration.lineThrough);
           expect(find.text(isCs ? 'dnes 8:52' : 'today 08:52'), findsOneWidget);
           expect(find.text('+10'), findsOneWidget);
-          expect(find.text(isCs ? 'bez mise' : 'no mission'), findsOneWidget);
           expect(
             tester.widget<CheckCircle>(find.byType(CheckCircle)).checked,
             isTrue,
@@ -217,11 +210,11 @@ void main() {
         Column(
           children: <Widget>[
             QuestCard(
-              item: boardQuest(name: 'Open one'),
+              quest: boardQuest(name: 'Open one'),
               onToggle: () {},
             ),
             QuestCard(
-              item: boardQuest(
+              quest: boardQuest(
                 id: 2,
                 name: 'Done one',
                 completedAt: DateTime(2026, 11, 15, 9),
@@ -247,7 +240,7 @@ void main() {
       await pumpCards(
         tester,
         QuestCard(
-          item: boardQuest(name: 'Sweep'),
+          quest: boardQuest(name: 'Sweep'),
           onToggle: () => toggled++,
           onTap: () => tapped++,
           trailing: const SizedBox(key: ValueKey<String>('handle'), width: 20),
@@ -267,7 +260,7 @@ void main() {
     testWidgets('light theme draws the parchment-edge outline', (tester) async {
       await pumpCards(
         tester,
-        QuestCard(item: boardQuest(), onToggle: () {}),
+        QuestCard(quest: boardQuest(), onToggle: () {}),
         palette: QuestlogPalette.daylight,
       );
       final DecoratedBox box = tester.widget(
@@ -299,9 +292,8 @@ void main() {
           child: SizedBox(
             width: 288,
             child: QuestCard(
-              item: boardQuest(
+              quest: boardQuest(
                 name: 'A very long quest name that has to wrap onto lines',
-                missionName: 'An equally long mission name here',
                 difficulty: Difficulty.hard,
               ),
               onToggle: () {},

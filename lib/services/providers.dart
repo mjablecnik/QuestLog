@@ -63,12 +63,12 @@ final settingsProvider = StreamProvider<AppSettings>(
   (ref) => ref.watch(settingsServiceProvider).watch(),
 );
 
-final openBoardProvider = StreamProvider<List<BoardQuest>>(
+final openBoardProvider = StreamProvider<List<Quest>>(
   (ref) => ref.watch(questServiceProvider).watchOpenBoard(),
 );
 
 /// Quests completed on the Board_Day of the given date.
-final doneTodayProvider = StreamProvider.family<List<BoardQuest>, DateTime>(
+final doneTodayProvider = StreamProvider.family<List<Quest>, DateTime>(
   (ref, today) => ref.watch(questServiceProvider).watchDoneToday(today),
 );
 

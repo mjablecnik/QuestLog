@@ -317,14 +317,8 @@ abstract class AppLocalizations {
   /// Empty-state guidance of the Board_Screen; points to the add button.
   ///
   /// In cs, this message translates to:
-  /// **'Klepni na tlačítko + a vyvěs první quest — třeba něco, co jsi dnes stejně chtěl udělat. Za každý splněný získáš XP.'**
+  /// **'Questy, které patří do mise, najdeš v záložce Mise. Klepni na tlačítko + a vyvěs vlastní quest — třeba něco, co jsi dnes stejně chtěl udělat. Za každý splněný získáš XP.'**
   String get board_emptyBody;
-
-  /// Meta-row text of a Quest without a Mission.
-  ///
-  /// In cs, this message translates to:
-  /// **'bez mise'**
-  String get board_noMission;
 
   /// One-line hint under the open list.
   ///
@@ -494,12 +488,6 @@ abstract class AppLocalizations {
   /// **'Nabídka mise'**
   String get a11y_missionMenu;
 
-  /// Semantic label of the Mission chip on a Quest_Card.
-  ///
-  /// In cs, this message translates to:
-  /// **'Mise {name}'**
-  String a11y_questMission(String name);
-
   /// Semantic label of the effort pips; never names the step.
   ///
   /// In cs, this message translates to:
@@ -619,6 +607,12 @@ abstract class AppLocalizations {
   /// In cs, this message translates to:
   /// **'Bez mise'**
   String get quest_missionNone;
+
+  /// Snackbar after a Quest saved from the Board was assigned to a Mission, so it left the Board.
+  ///
+  /// In cs, this message translates to:
+  /// **'Přidáno do mise {name}'**
+  String quest_addedToMission(String name);
 
   /// Label of the note field.
   ///

@@ -52,6 +52,12 @@ Finder _completeCheck(String name) => find.byWidgetPredicate(
       w is CheckCircle && w.semanticLabel == en.a11y_completeQuest(name),
 );
 
+/// [text] inside the Reward_Card (the Mission detail has its own button).
+Finder _inRewardCard(String text) => find.descendant(
+  of: find.byType(RewardCard),
+  matching: find.text(text),
+);
+
 QuestlogPalette _palette(WidgetTester tester) =>
     tester.element(find.byType(SettingsScreen)).palette;
 
@@ -142,33 +148,35 @@ void main() {
       expect(find.text('+100'), findsOneWidget);
       expect(find.text(en.missions_openCount(1)), findsOneWidget);
 
-      // Both Quests are on the Board and belong to the Mission.
+      // Both Quests belong to the Mission, so the Board does not list them.
       await _tap(tester, find.byKey(_questsTab));
+      expect(find.text('Rake the leaves'), findsNothing);
+      expect(find.text('Clean the gutters'), findsNothing);
+      expect(find.text(en.board_emptyTitle), findsOneWidget);
+      expect(find.text(en.board_subtitle(0, 'Monday, November 16')), findsOne);
+
+      // ---- 2. Complete both Quests in the Mission, then the Mission -------
+      await _tap(tester, find.byKey(_missionsTab));
+      await _tap(tester, find.text('Autumn clean-up'));
       expect(find.text('Rake the leaves'), findsOneWidget);
       expect(find.text('Clean the gutters'), findsOneWidget);
-      expect(find.text(en.board_subtitle(2, 'Monday, November 16')), findsOne);
-
-      // ---- 2. Complete both Quests, then the Mission (7.3, 8.5) -----------
       await _tap(tester, _completeCheck('Rake the leaves'));
       expect(find.text(en.reward_questComplete), findsOneWidget);
       expect(find.text('+25 XP'), findsOneWidget);
       expect(find.text(en.reward_missionProgress(1, 2)), findsOneWidget);
       // Not the last Quest: no mission button, "Continue" closes the card.
-      expect(find.text(en.reward_completeMission), findsNothing);
+      expect(_inRewardCard(en.reward_completeMission), findsNothing);
       await _tap(tester, find.text(en.common_continue));
       expect(find.text(en.reward_questComplete), findsNothing);
-      expect(find.text(en.hero_xpProgress(35, 100)), findsOneWidget);
 
       await _tap(tester, _completeCheck('Clean the gutters'));
       expect(find.text(en.reward_questComplete), findsOneWidget);
       expect(find.text('+50 XP'), findsOneWidget);
       // Every Quest is done: the card offers to complete the Mission.
       expect(find.text(en.reward_missionReady), findsOneWidget);
-      expect(find.text(en.reward_completeMission), findsOneWidget);
-      expect(find.text(en.hero_level(1)), findsOneWidget);
-      expect(find.text(en.hero_xpProgress(85, 100)), findsOneWidget);
+      expect(_inRewardCard(en.reward_completeMission), findsOneWidget);
 
-      await _tap(tester, find.text(en.reward_completeMission));
+      await _tap(tester, _inRewardCard(en.reward_completeMission));
       // The Mission bonus crosses the Level boundary: Level-up variant.
       expect(find.text(en.reward_levelUp), findsOneWidget);
       expect(find.text(en.reward_levelUpBody(2)), findsOneWidget);
@@ -185,17 +193,17 @@ void main() {
       expect(container.read(rewardQueueProvider), isEmpty);
       expect(find.text(en.reward_levelUp), findsNothing);
 
+      // Back on the Board: the Mission's done Quests are not listed there.
+      await _tap(tester, find.bySemanticsLabel(en.common_back));
+      await _tap(tester, find.byKey(_questsTab));
+      expect(find.text(en.board_doneSection.toUpperCase()), findsNothing);
+      expect(find.text('Rake the leaves'), findsNothing);
+      expect(find.text(en.board_emptyTitle), findsOneWidget);
+
       // The Hero_Bar shows the new Level: 185 XP = Level 2, 85 / 150.
       expect(find.text(en.hero_level(2)), findsOneWidget);
       expect(find.text(en.hero_xpProgress(85, 150)), findsOneWidget);
       expect(find.text(en.hero_xpRemaining(65, 3)), findsOneWidget);
-
-      // The Board lists both done Quests under "Done today".
-      expect(find.text(en.board_doneSection.toUpperCase()), findsOneWidget);
-      expect(
-        find.text(en.board_doneSummary(2, 75).toUpperCase()),
-        findsOneWidget,
-      );
 
       // ---- 3. Missions tab: "Completed today" with the earned bonus -------
       await _tap(tester, find.byKey(_missionsTab));
@@ -222,8 +230,6 @@ void main() {
       expect(find.text(en.missions_emptyTitle), findsOneWidget);
       await _tap(tester, find.byKey(_questsTab));
       expect(find.text(en.board_doneSection.toUpperCase()), findsNothing);
-      expect(find.text('Rake the leaves'), findsNothing);
-      expect(find.text('Clean the gutters'), findsNothing);
       expect(find.text(en.board_emptyTitle), findsOneWidget);
       expect(find.text(en.board_subtitle(0, 'Tuesday, November 17')), findsOne);
       // The earned XP stays: history is not on the board, the level is.
@@ -283,8 +289,12 @@ void main() {
       expect(find.text('Water plants'), findsOneWidget);
       expect(find.text(cs.missions_remaining(25)), findsOneWidget);
       expect(find.text(cs.missions_openCount(1)), findsOneWidget);
-      // The posted Quest template is on the Board.
+      // The posted Quest belongs to the new Mission: Missions shows it, the
+      // Board does not.
       await _tap(tester, find.byKey(_questsTab));
+      expect(find.text('Fill the can'), findsNothing);
+      await _tap(tester, find.byKey(_missionsTab));
+      await _tap(tester, find.text('Water plants'));
       expect(find.text('Fill the can'), findsOneWidget);
     } finally {
       semantics.dispose();

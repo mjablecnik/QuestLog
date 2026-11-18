@@ -177,39 +177,41 @@ class QuestService {
     });
   }
 
-  /// Open Quests that are standalone or belong to an `open` Mission, in the
-  /// manual order.
-  Stream<List<BoardQuest>> watchOpenBoard() {
-    final query = _boardQuery()
-      ..where(
-        _db.quests.completedAt.isNull() &
-            (_db.quests.missionId.isNull() | _db.missions.status.equalsValue(MissionStatus.open)),
-      )
-      ..orderBy([OrderingTerm.asc(_db.quests.sortOrder)]);
-    return query.watch().map(_toBoardQuests);
+  /// Open Quests that belong to no Mission, in the manual order. Quests of a
+  /// Mission are listed only on that Mission's detail screen.
+  Stream<List<Quest>> watchOpenBoard() {
+    final query = _db.select(_db.quests)
+      ..where((q) => q.completedAt.isNull() & q.missionId.isNull())
+      ..orderBy([(q) => OrderingTerm.asc(q.sortOrder)]);
+    return query.watch().map(_toModels);
   }
 
-  /// Quests completed within the Board_Day of [today], newest first.
+  /// Quests without a Mission completed within the Board_Day of [today],
+  /// newest first.
   ///
   /// [today] comes from the caller, so a consumer can refresh the window when the
-  /// Board_Day changes. Quests of `closed` Missions are left out.
-  Stream<List<BoardQuest>> watchDoneToday(DateTime today) {
+  /// Board_Day changes.
+  Stream<List<Quest>> watchDoneToday(DateTime today) {
     final window = boardDayRange(today, today);
-    final query = _boardQuery()
+    final query = _db.select(_db.quests)
       ..where(
-        _db.quests.completedAt.isBiggerOrEqualValue(window.start) &
-            _db.quests.completedAt.isSmallerThanValue(window.end) &
-            (_db.quests.missionId.isNull() | _db.missions.status.equalsValue(MissionStatus.closed).not()),
+        (q) =>
+            q.missionId.isNull() &
+            q.completedAt.isBiggerOrEqualValue(window.start) &
+            q.completedAt.isSmallerThanValue(window.end),
       )
-      ..orderBy([OrderingTerm.desc(_db.quests.completedAt), OrderingTerm.desc(_db.quests.id)]);
-    return query.watch().map(_toBoardQuests);
+      ..orderBy([
+        (q) => OrderingTerm.desc(q.completedAt),
+        (q) => OrderingTerm.desc(q.id),
+      ]);
+    return query.watch().map(_toModels);
   }
 
   /// Done Quests completed from the Board_Day [fromDay] up to and including the
   /// Board_Day [toDay], newest first. Reads only.
   Future<List<HistoryQuest>> history(DateTime fromDay, DateTime toDay) async {
     final window = boardDayRange(fromDay, toDay);
-    final query = _boardQuery()
+    final query = _historyQuery()
       ..where(
         _db.quests.completedAt.isBiggerOrEqualValue(window.start) &
             _db.quests.completedAt.isSmallerThanValue(window.end),
@@ -229,21 +231,13 @@ class QuestService {
     ];
   }
 
-  JoinedSelectStatement<HasResultSet, dynamic> _boardQuery() {
+  JoinedSelectStatement<HasResultSet, dynamic> _historyQuery() {
     return _db.select(_db.quests).join([
       leftOuterJoin(_db.missions, _db.missions.id.equalsExp(_db.quests.missionId)),
     ]);
   }
 
-  List<BoardQuest> _toBoardQuests(List<TypedResult> rows) {
-    return [
-      for (final row in rows)
-        BoardQuest(
-          quest: row.readTable(_db.quests).toModel(),
-          missionName: row.readTableOrNull(_db.missions)?.name,
-        ),
-    ];
-  }
+  List<Quest> _toModels(List<QuestRow> rows) => [for (final row in rows) row.toModel()];
 
   Future<MissionProgress> _progress(int missionId) async {
     final rows =

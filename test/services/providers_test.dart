@@ -46,6 +46,6 @@ void main() {
     expect(await container.read(openBoardProvider.future), isEmpty);
     expect(await container.read(rulesProvider.future), isEmpty);
     expect(await container.read(openMissionsProvider.future), isEmpty);
-    expect((await container.read(doneToday.future)).single.quest.name, 'Wired');
+    expect((await container.read(doneToday.future)).single.name, 'Wired');
   });
 }

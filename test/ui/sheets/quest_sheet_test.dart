@@ -12,6 +12,7 @@ import 'package:questlog/l10n/app_localizations_en.dart';
 import 'package:questlog/services/providers.dart';
 import 'package:questlog/services/quest_service.dart';
 import 'package:questlog/ui/sheets/quest_sheet.dart';
+import 'package:questlog/ui/state/ui_providers.dart';
 import 'package:questlog/ui/theme/questlog_theme.dart';
 import 'package:questlog/ui/theme/tokens.dart';
 import 'package:questlog/ui/widgets/cards/difficulty_pips.dart';
@@ -47,10 +48,13 @@ class _SpyQuestService extends QuestService {
 }
 
 class _Fixture {
-  _Fixture(this.db, this.service);
+  _Fixture(this.db, this.service, this.container);
 
   final QuestlogDatabase db;
   final _SpyQuestService service;
+  final ProviderContainer container;
+
+  String? get snackText => container.read(snackbarProvider)?.text;
 
   Future<List<Quest>> quests() async {
     final rows = await db.select(db.quests).get();
@@ -143,7 +147,7 @@ Future<_Fixture> _pumpHost(
   );
   await tester.tap(find.text('open'));
   await tester.pumpAndSettle();
-  return _Fixture(db, spy);
+  return _Fixture(db, spy, container);
 }
 
 Future<_Fixture> _pumpCreate(
@@ -422,6 +426,43 @@ void main() {
 
       final List<Quest> stored = await f.quests();
       expect(stored.single.missionId, missionId);
+    });
+
+    testWidgets('assigning a mission from outside its detail screen says where the quest went', (
+      tester,
+    ) async {
+      final f = await _pumpCreate(
+        tester,
+        seed: (db) async => seedMission(db, name: 'Cleanup'),
+      );
+      await tester.tap(find.text('Cleanup'));
+      await tester.pump();
+      await tester.enterText(_nameField, 'Vacuum');
+      await _submit(tester);
+
+      expect((await f.quests()).single.missionId, isNotNull);
+      expect(f.snackText, 'Added to mission Cleanup');
+    });
+
+    testWidgets('a quest without a mission, or posted inside a mission, shows no message', (
+      tester,
+    ) async {
+      final loose = await _pumpCreate(
+        tester,
+        seed: (db) async => seedMission(db, name: 'Cleanup'),
+      );
+      await tester.enterText(_nameField, 'Vacuum');
+      await _submit(tester);
+      expect(loose.snackText, isNull);
+
+      final inside = await _pumpCreate(
+        tester,
+        presetMissionId: 1,
+        seed: (db) async => seedMission(db, name: 'Cleanup'),
+      );
+      await tester.enterText(_nameField, 'Dust');
+      await _submit(tester);
+      expect(inside.snackText, isNull);
     });
 
     testWidgets('picking "no mission" detaches a preset mission', (

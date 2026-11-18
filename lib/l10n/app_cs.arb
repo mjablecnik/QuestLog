@@ -230,13 +230,9 @@
   "@board_emptyTitle": {
     "description": "Empty-state heading of the Board_Screen."
   },
-  "board_emptyBody": "Klepni na tlačítko + a vyvěs první quest — třeba něco, co jsi dnes stejně chtěl udělat. Za každý splněný získáš XP.",
+  "board_emptyBody": "Questy, které patří do mise, najdeš v záložce Mise. Klepni na tlačítko + a vyvěs vlastní quest — třeba něco, co jsi dnes stejně chtěl udělat. Za každý splněný získáš XP.",
   "@board_emptyBody": {
     "description": "Empty-state guidance of the Board_Screen; points to the add button."
-  },
-  "board_noMission": "bez mise",
-  "@board_noMission": {
-    "description": "Meta-row text of a Quest without a Mission."
   },
   "board_swipeHint": "Tažením doleva upravíš nebo smažeš · klepnutím na kroužek splníš",
   "@board_swipeHint": {
@@ -412,15 +408,6 @@
   "@a11y_missionMenu": {
     "description": "Semantic label of the three-dots button."
   },
-  "a11y_questMission": "Mise {name}",
-  "@a11y_questMission": {
-    "description": "Semantic label of the Mission chip on a Quest_Card.",
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
   "a11y_effort": "Námaha {step} ze {total}",
   "@a11y_effort": {
     "description": "Semantic label of the effort pips; never names the step.",
@@ -554,6 +541,15 @@
   "quest_missionNone": "Bez mise",
   "@quest_missionNone": {
     "description": "First option of the Mission picker."
+  },
+  "quest_addedToMission": "Přidáno do mise {name}",
+  "@quest_addedToMission": {
+    "description": "Snackbar after a Quest saved from the Board was assigned to a Mission, so it left the Board.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
   },
   "quest_noteLabel": "Poznámka",
   "@quest_noteLabel": {

@@ -36,26 +36,22 @@ Future<void> pumpCards(
   );
 }
 
-BoardQuest boardQuest({
+Quest boardQuest({
   int id = 1,
   String name = 'Take out the trash',
   Difficulty difficulty = Difficulty.normal,
-  String? missionName,
   DateTime? completedAt,
   int? awardedXp,
-}) => BoardQuest(
-  quest: Quest(
-    id: id,
-    name: name,
-    note: null,
-    difficulty: difficulty,
-    missionId: missionName == null ? null : 1,
-    sortOrder: 0,
-    createdAt: DateTime(2026, 11, 15, 8),
-    completedAt: completedAt,
-    awardedXp: awardedXp,
-  ),
-  missionName: missionName,
+}) => Quest(
+  id: id,
+  name: name,
+  note: null,
+  difficulty: difficulty,
+  missionId: null,
+  sortOrder: 0,
+  createdAt: DateTime(2026, 11, 15, 8),
+  completedAt: completedAt,
+  awardedXp: awardedXp,
 );
 
 MissionSummary missionSummary({

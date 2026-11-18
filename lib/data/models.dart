@@ -184,16 +184,6 @@ class ReopenQuestResult {
   final int revokedBonus;
 }
 
-/// A Quest as the board shows it: the Quest plus the name of its Mission.
-class BoardQuest {
-  const BoardQuest({required this.quest, required this.missionName});
-
-  final Quest quest;
-
-  /// The name of the Quest's Mission, or null for a standalone Quest.
-  final String? missionName;
-}
-
 /// A done Quest as the history query returns it.
 class HistoryQuest {
   const HistoryQuest({

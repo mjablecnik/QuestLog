@@ -34,14 +34,14 @@ String questCompletedLabel(
 class QuestCard extends StatelessWidget {
   const QuestCard({
     super.key,
-    required this.item,
+    required this.quest,
     required this.onToggle,
     this.onTap,
     this.completedLabel,
     this.trailing,
   });
 
-  final BoardQuest item;
+  final Quest quest;
 
   /// The check circle: completes an open Quest, reopens a done one.
   final VoidCallback onToggle;
@@ -59,9 +59,7 @@ class QuestCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final p = context.palette;
     final AppLocalizations l = AppLocalizations.of(context);
-    final Quest quest = item.quest;
     final bool done = quest.isDone;
-    final String? mission = item.missionName;
     final int xp = quest.awardedXp ?? quest.difficulty.xp;
 
     final Color nameColor = done ? p.textDim : p.ink;
@@ -70,17 +68,11 @@ class QuestCard extends StatelessWidget {
       color: metaColor,
     );
 
-    final Widget chipOrNone = mission == null
-        ? Text(l.board_noMission, style: meta)
-        : _MissionChip(name: mission, done: done);
-
     final List<Widget> metaRow = <Widget>[
-      if (mission != null) chipOrNone,
       DifficultyPips(
         quest.difficulty,
         emptyColor: done ? p.textFaint : p.inkFaint,
       ),
-      if (mission == null) chipOrNone,
       if (done && completedLabel != null) Text(completedLabel!, style: meta),
     ];
 
@@ -174,44 +166,6 @@ class QuestCard extends StatelessWidget {
                 ],
               ],
             ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _MissionChip extends StatelessWidget {
-  const _MissionChip({required this.name, required this.done});
-
-  final String name;
-  final bool done;
-
-  @override
-  Widget build(BuildContext context) {
-    final p = context.palette;
-    final AppLocalizations l = AppLocalizations.of(context);
-    return Semantics(
-      label: l.a11y_questMission(name),
-      excludeSemantics: true,
-      child: Container(
-        constraints: const BoxConstraints(maxWidth: 160),
-        padding: const EdgeInsets.symmetric(
-          horizontal: Space.s8,
-          vertical: Space.s2,
-        ),
-        decoration: BoxDecoration(
-          color: done ? p.boardLine : p.inkFaint.withValues(alpha: 0.2),
-          borderRadius: BorderRadius.circular(Radii.pill),
-        ),
-        child: Text(
-          name,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-          style: context.bodyText.bodySmall!.copyWith(
-            fontSize: 11.5,
-            fontWeight: FontWeight.w600,
-            color: done ? p.textDim : p.ink,
           ),
         ),
       ),

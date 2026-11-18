@@ -16,14 +16,14 @@ import '../../widgets/common/app_icon.dart';
 class QuestRow extends StatelessWidget {
   const QuestRow({
     super.key,
-    required this.item,
+    required this.quest,
     required this.completedLabel,
     required this.onToggle,
     required this.onEdit,
     required this.onDelete,
   });
 
-  final BoardQuest item;
+  final Quest quest;
 
   /// Completion time of a done Quest, already localized.
   final String? completedLabel;
@@ -35,7 +35,7 @@ class QuestRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final p = context.palette;
     final AppLocalizations l = AppLocalizations.of(context);
-    final String name = item.quest.name;
+    final String name = quest.name;
     final BorderRadius deleteRadius = const BorderRadius.horizontal(
       right: Radius.circular(Radii.card),
     );
@@ -73,7 +73,7 @@ class QuestRow extends StatelessWidget {
               ],
             ),
             child: QuestCard(
-              item: item,
+              quest: quest,
               completedLabel: completedLabel,
               onToggle: onToggle,
               onTap: onEdit,
