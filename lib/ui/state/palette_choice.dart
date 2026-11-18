@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../data/palette_choice_store.dart';
+import '../theme/tokens.dart';
 
 /// Where the palette choice is remembered; `main` swaps in the file store.
 final paletteChoiceStoreProvider = Provider<PaletteChoiceStore>(
@@ -27,4 +28,21 @@ class PaletteChoiceNotifier extends Notifier<PaletteChoice> {
     state = choice;
     await ref.read(paletteChoiceStoreProvider).save(choice);
   }
+}
+
+/// The dark and light colour sets each choice stands for.
+extension PaletteChoiceColors on PaletteChoice {
+  QuestlogPalette get dark => switch (this) {
+    PaletteChoice.original => QuestlogPalette.guildBoard,
+    PaletteChoice.highContrast => QuestlogPalette.guildBoardHighContrast,
+    PaletteChoice.blue => QuestlogPalette.blueDark,
+    PaletteChoice.green => QuestlogPalette.greenDark,
+  };
+
+  QuestlogPalette get light => switch (this) {
+    PaletteChoice.original => QuestlogPalette.daylight,
+    PaletteChoice.highContrast => QuestlogPalette.daylightHighContrast,
+    PaletteChoice.blue => QuestlogPalette.blueLight,
+    PaletteChoice.green => QuestlogPalette.greenLight,
+  };
 }

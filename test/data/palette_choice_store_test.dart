@@ -34,6 +34,23 @@ void main() {
       expect(await FilePaletteChoiceStore(file).load(), PaletteChoice.original);
     });
 
+    test('keeps reading the values stored by the two-palette switch', () async {
+      file.writeAsStringSync('highContrast');
+      expect(
+        await FilePaletteChoiceStore(file).load(),
+        PaletteChoice.highContrast,
+      );
+      file.writeAsStringSync('original\n');
+      expect(await FilePaletteChoiceStore(file).load(), PaletteChoice.original);
+    });
+
+    test('reads the new palettes by name', () async {
+      file.writeAsStringSync('blue');
+      expect(await FilePaletteChoiceStore(file).load(), PaletteChoice.blue);
+      file.writeAsStringSync('green');
+      expect(await FilePaletteChoiceStore(file).load(), PaletteChoice.green);
+    });
+
     test('does not throw when the file cannot be written', () async {
       final store = FilePaletteChoiceStore(
         File(p.join(directory.path, 'missing', 'palette_choice.txt')),

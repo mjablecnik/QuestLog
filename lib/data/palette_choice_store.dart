@@ -2,7 +2,7 @@ import 'dart:io';
 
 /// Temporary palette switch: which colour set the app is drawn with. Removed
 /// together with the switch once Martin has chosen.
-enum PaletteChoice { original, highContrast }
+enum PaletteChoice { original, highContrast, blue, green }
 
 /// Keeps the [PaletteChoice] between launches. Deliberately outside the
 /// database, so the temporary switch leaves no schema migration behind.

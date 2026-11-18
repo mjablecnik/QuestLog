@@ -765,6 +765,12 @@ class AppLocalizationsCs extends AppLocalizations {
   String get settings_paletteHighContrast => 'Vyšší kontrast';
 
   @override
+  String get settings_paletteBlue => 'Modrá';
+
+  @override
+  String get settings_paletteGreen => 'Zelená';
+
+  @override
   String get settings_licenses => 'Licence';
 
   @override

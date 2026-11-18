@@ -166,6 +166,8 @@
   "settings_paletteLabel": "Palette",
   "settings_paletteOriginal": "Original",
   "settings_paletteHighContrast": "Higher contrast",
+  "settings_paletteBlue": "Blue",
+  "settings_paletteGreen": "Green",
   "settings_groupAbout": "About",
   "settings_heroNameLabel": "Hero name",
   "settings_heroNamePlaceholder": "What should we call you?",

@@ -1082,17 +1082,29 @@ abstract class AppLocalizations {
   /// **'Paleta'**
   String get settings_paletteLabel;
 
-  /// Segment of the temporary palette switch: the approved palette.
+  /// Option of the temporary palette switch: the approved palette.
   ///
   /// In cs, this message translates to:
   /// **'Původní'**
   String get settings_paletteOriginal;
 
-  /// Segment of the temporary palette switch: the higher-contrast palette.
+  /// Option of the temporary palette switch: the higher-contrast palette.
   ///
   /// In cs, this message translates to:
   /// **'Vyšší kontrast'**
   String get settings_paletteHighContrast;
+
+  /// Option of the temporary palette switch: the blue palette after TimeLog.
+  ///
+  /// In cs, this message translates to:
+  /// **'Modrá'**
+  String get settings_paletteBlue;
+
+  /// Option of the temporary palette switch: the experimental green palette.
+  ///
+  /// In cs, this message translates to:
+  /// **'Zelená'**
+  String get settings_paletteGreen;
 
   /// Row in the About group that opens the open-source licences page.
   ///

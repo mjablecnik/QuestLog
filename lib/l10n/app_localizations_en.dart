@@ -739,6 +739,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settings_paletteHighContrast => 'Higher contrast';
 
   @override
+  String get settings_paletteBlue => 'Blue';
+
+  @override
+  String get settings_paletteGreen => 'Green';
+
+  @override
   String get settings_licenses => 'Licenses';
 
   @override

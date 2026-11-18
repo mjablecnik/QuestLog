@@ -10,7 +10,6 @@ import 'ui/state/palette_choice.dart';
 import 'ui/state/quest_actions.dart';
 import 'ui/state/ui_providers.dart';
 import 'ui/theme/questlog_theme.dart';
-import 'ui/theme/tokens.dart';
 import 'ui/widgets/reward/reward_overlay.dart';
 
 /// The application root: theme, locale and localization follow the settings
@@ -25,8 +24,7 @@ class QuestlogApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final locale = ref.watch(effectiveLocaleProvider);
     final DisplayFont font = ref.watch(displayFontProvider);
-    final bool highContrast =
-        ref.watch(paletteChoiceProvider) == PaletteChoice.highContrast;
+    final PaletteChoice paletteChoice = ref.watch(paletteChoiceProvider);
     return MaterialApp(
       onGenerateTitle: (context) => AppLocalizations.of(context).app_name,
       debugShowCheckedModeBanner: false,
@@ -39,15 +37,11 @@ class QuestlogApp extends ConsumerWidget {
       supportedLocales: AppLocalizations.supportedLocales,
       locale: locale,
       theme: buildTheme(
-        palette: highContrast
-            ? QuestlogPalette.daylightHighContrast
-            : QuestlogPalette.daylight,
+        palette: paletteChoice.light,
         font: font,
       ),
       darkTheme: buildTheme(
-        palette: highContrast
-            ? QuestlogPalette.guildBoardHighContrast
-            : QuestlogPalette.guildBoard,
+        palette: paletteChoice.dark,
         font: font,
       ),
       themeMode: ref.watch(themeModeProvider),

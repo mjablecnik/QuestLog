@@ -96,7 +96,7 @@ void main() {
   }
 
   settingsTest('shows the groups in the required order', (tester) async {
-    await open(tester);
+    await open(tester, size: const Size(390, 1200));
     final labels = ['PROFILE', 'LANGUAGE', 'APPEARANCE', 'ABOUT'];
     final tops = [
       for (final label in labels) tester.getTopLeft(find.text(label)).dy,
@@ -216,7 +216,7 @@ void main() {
   settingsTest('shows the version from the platform info provider', (
     tester,
   ) async {
-    await open(tester, version: '4.5.6');
+    await open(tester, size: const Size(390, 1200), version: '4.5.6');
     expect(find.text('version 4.5.6'), findsOneWidget);
     expect(find.text('Questlog'), findsOneWidget);
   });

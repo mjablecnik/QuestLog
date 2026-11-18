@@ -90,6 +90,33 @@ void main() {
     }
   }
 
+  // The temporary palette picker: four chips, names may wrap but never clip.
+  for (final MapEntry<String, Locale> language in locales.entries) {
+    a11yTest(
+      'palette chips at 320px, text 200 %, ${language.key} have no overflow',
+      (WidgetTester tester, void Function(A11yEnv) track) async {
+        track(
+          await A11yEnv.pump(
+            tester,
+            Subject.settings,
+            width: 320,
+            textScale: 2,
+            locale: language.value,
+          ),
+        );
+        await expectNoOverflow(tester);
+        final Finder chips = find.byWidgetPredicate(
+          (Widget w) =>
+              w is Semantics &&
+              w.properties.inMutuallyExclusiveGroup == true &&
+              w.properties.button == true &&
+              w.properties.selected != null,
+        );
+        expect(chips, findsAtLeastNWidgets(4));
+      },
+    );
+  }
+
   // The widest display font is the worst case for headings and card titles.
   for (final Subject subject in Subject.values) {
     a11yTest(

@@ -87,14 +87,32 @@ void main() {
     });
   }
 
-  paletteTest('shows a temporary group with both options, original selected', (
+  paletteTest('shows a temporary group with four options, original selected', (
     tester,
   ) async {
     await launch(tester);
 
     expect(find.text('PALETTE · TEMPORARY'), findsOneWidget);
-    expect(find.text('Original'), findsOneWidget);
-    expect(find.text('Higher contrast'), findsOneWidget);
+    for (final String name in <String>[
+      'Original',
+      'Higher contrast',
+      'Blue',
+      'Green',
+    ]) {
+      expect(find.text(name), findsOneWidget);
+    }
+    expect(
+      tester.getSemantics(find.text('Original')),
+      isSemantics(
+        label: 'Original',
+        isButton: true,
+        isSelected: true,
+        hasSelectedState: true,
+        isInMutuallyExclusiveGroup: true,
+        hasTapAction: true,
+        hasEnabledState: false,
+      ),
+    );
     expect(
       paletteOf(tester, find.byType(SettingsScreen)),
       QuestlogPalette.daylight,
@@ -105,31 +123,59 @@ void main() {
     await launch(tester, locale: const Locale('cs'));
 
     expect(find.text('PALETA · DOČASNÉ'), findsOneWidget);
-    expect(find.text('Původní'), findsOneWidget);
-    expect(find.text('Vyšší kontrast'), findsOneWidget);
+    for (final String name in <String>[
+      'Původní',
+      'Vyšší kontrast',
+      'Modrá',
+      'Zelená',
+    ]) {
+      expect(find.text(name), findsOneWidget);
+    }
   });
 
-  paletteTest('switching restyles the screen and the route underneath live', (
+  paletteTest('every option is at least 44 px tall', (
+    tester,
+  ) async {
+    await launch(tester);
+    for (final String name in <String>[
+      'Original',
+      'Higher contrast',
+      'Blue',
+      'Green',
+    ]) {
+      final Finder chip = find.ancestor(
+        of: find.text(name),
+        matching: find.byType(GestureDetector),
+      );
+      expect(tester.getSize(chip.first).height, greaterThanOrEqualTo(44));
+    }
+  });
+
+  paletteTest('each option restyles the screen and the route underneath live', (
     tester,
   ) async {
     await launch(tester);
     final Finder probe = find.byType(_Probe, skipOffstage: false);
 
-    await tester.tap(find.text('Higher contrast'));
-    await settle(tester);
+    final Map<String, (PaletteChoice, QuestlogPalette)> options =
+        <String, (PaletteChoice, QuestlogPalette)>{
+          'Higher contrast': (
+            PaletteChoice.highContrast,
+            QuestlogPalette.daylightHighContrast,
+          ),
+          'Blue': (PaletteChoice.blue, QuestlogPalette.blueLight),
+          'Green': (PaletteChoice.green, QuestlogPalette.greenLight),
+          'Original': (PaletteChoice.original, QuestlogPalette.daylight),
+        };
+    for (final MapEntry<String, (PaletteChoice, QuestlogPalette)> o
+        in options.entries) {
+      await tester.tap(find.text(o.key));
+      await settle(tester);
 
-    expect(
-      paletteOf(tester, find.byType(SettingsScreen)),
-      QuestlogPalette.daylightHighContrast,
-    );
-    expect(paletteOf(tester, probe), QuestlogPalette.daylightHighContrast);
-    expect(store.value, PaletteChoice.highContrast);
-
-    await tester.tap(find.text('Original'));
-    await settle(tester);
-
-    expect(paletteOf(tester, probe), QuestlogPalette.daylight);
-    expect(store.value, PaletteChoice.original);
+      expect(paletteOf(tester, find.byType(SettingsScreen)), o.value.$2);
+      expect(paletteOf(tester, probe), o.value.$2);
+      expect(store.value, o.value.$1);
+    }
   });
 
   paletteTest('applies to the dark theme as well', (tester) async {
@@ -143,18 +189,21 @@ void main() {
       QuestlogPalette.guildBoard,
     );
 
-    await tester.tap(find.text('Higher contrast'));
-    await settle(tester);
-
-    expect(
-      paletteOf(tester, find.byType(SettingsScreen)),
-      QuestlogPalette.guildBoardHighContrast,
-    );
+    final Map<String, QuestlogPalette> options = <String, QuestlogPalette>{
+      'Higher contrast': QuestlogPalette.guildBoardHighContrast,
+      'Blue': QuestlogPalette.blueDark,
+      'Green': QuestlogPalette.greenDark,
+    };
+    for (final MapEntry<String, QuestlogPalette> o in options.entries) {
+      await tester.tap(find.text(o.key));
+      await settle(tester);
+      expect(paletteOf(tester, find.byType(SettingsScreen)), o.value);
+    }
   });
 
   paletteTest('a stored choice is applied on the next launch', (tester) async {
     await launch(tester);
-    await tester.tap(find.text('Higher contrast'));
+    await tester.tap(find.text('Blue'));
     await settle(tester);
     await finish(tester);
 
@@ -163,7 +212,7 @@ void main() {
 
     expect(
       paletteOf(tester, find.byType(SettingsScreen)),
-      QuestlogPalette.daylightHighContrast,
+      QuestlogPalette.blueLight,
     );
   });
 }
