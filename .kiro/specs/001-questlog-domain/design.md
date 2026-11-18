@@ -165,7 +165,7 @@ DateTime firstAnchor(Cadence cadence, DateTime requested,
 ### 5. XP rules (`lib/core/xp_rules.dart`)
 
 ```dart
-enum Difficulty { easy, normal, hard }      // xp: 10 / 25 / 50
+enum Difficulty { easy, normal, hard, fullDay }  // xp: 10 / 25 / 50 / 100 (fullDay added 2026-11-18, no migration)
 enum MissionBonus { small, medium, large }  // xp: 50 / 100 / 200
 extension DifficultyXp on Difficulty { int get xp; }
 extension MissionBonusXp on MissionBonus { int get xp; }
@@ -326,7 +326,7 @@ CREATE TABLE quests (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   name TEXT NOT NULL CHECK (length(trim(name)) BETWEEN 1 AND 80),
   note TEXT CHECK (note IS NULL OR length(note) <= 500),
-  difficulty TEXT NOT NULL,            -- easy | normal | hard
+  difficulty TEXT NOT NULL,            -- easy | normal | hard | fullDay (no CHECK)
   mission_id INTEGER REFERENCES missions(id) ON DELETE CASCADE,
   sort_order INTEGER NOT NULL,
   created_at INTEGER NOT NULL,

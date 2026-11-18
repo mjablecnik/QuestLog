@@ -28,8 +28,8 @@
 Questlog is a personal gamified to-do app for one user, built with Flutter for iOS first
 (the Linux desktop build is used for development and tests).
 
-- **Quests** are one-off tasks with a difficulty (easy, normal, hard) that decides the XP
-  they award; the Board lists the open ones and lets you reorder them by dragging.
+- **Quests** are one-off tasks with an effort tier (moment, hour, part of a day, full day; 10, 25, 50 or
+  100 XP) chosen by how much time they take, which decides the XP they award; the Board lists the open ones and lets you reorder them by dragging.
 - **Missions** are long-term goals made of quests, with a progress ring and a bonus XP
   reward (small, medium, large) when the last quest is done.
 - **XP and levels** are shown in the hero bar; completing a quest or mission opens a reward

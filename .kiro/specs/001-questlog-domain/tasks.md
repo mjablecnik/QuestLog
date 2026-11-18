@@ -40,7 +40,7 @@ Build the Questlog domain layer in a new Flutter project at `/workspace/questlog
     - **Validates: Requirements 7.2, 7.3, 7.7, 7.8**
 
   - [x] 2.3 Implement XP rules
-    - `lib/core/xp_rules.dart`: `Difficulty` (10/25/50), `MissionBonus` (50/100/200) with `xp` getters, `levelThreshold`, `xpToReachLevel`, `levelFor`, `progressFor`, `LevelProgress`
+    - `lib/core/xp_rules.dart`: `Difficulty` (10/25/50, plus `fullDay` 100 since 2026-11-18), `MissionBonus` (50/100/200) with `xp` getters, `levelThreshold`, `xpToReachLevel`, `levelFor`, `progressFor`, `LevelProgress`
     - _Requirements: 6.1, 6.2, 6.3, 6.4_
 
   - [x] 2.4 Write property tests for levels

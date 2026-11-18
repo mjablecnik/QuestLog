@@ -54,20 +54,23 @@ tables:
 
 | Table | Holds |
 |---|---|
-| `quests` | name, note, difficulty, optional mission, sort order, completion time and awarded XP |
+| `quests` | name, note, effort tier (column `difficulty`), optional mission, sort order, completion time and awarded XP |
 | `missions` | name, bonus size, status (open, completed, closed), awarded bonus, optional rule |
 | `recurring_rules` | name, cadence, anchor date, next index, bonus size, last posted date |
 | `rule_quests` | the quests a rule posts with each mission |
 | `app_state` | the singleton row: total XP, hero name, language, theme, display font |
 
-The schema is at version 1. A change to it needs a migration step in
+The schema is at version 1. Adding the fourth effort tier (`fullDay`) needed no migration:
+`quests.difficulty` and `rule_quests.difficulty` are plain text holding the enum name, with no
+`CHECK`, so the stored values `easy`, `normal` and `hard` keep their meaning. A change to the
+schema needs a migration step in
 `lib/data/database.dart` and a new dump in `drift_schemas/`.
 
 ### Rules of the game
 
 | Rule | Value |
 |---|---|
-| Quest XP | easy 10, normal 25, hard 50 |
+| Quest XP (effort tier) | 1 Moment 10, 2 Hour 25, 3 Part of a day 50, 4 Full day 100 |
 | Mission bonus | small 50, medium 100, large 200 |
 | XP to advance from level L | 100 + 50 × (L − 1) |
 | Board day | starts at 04:00 local time |

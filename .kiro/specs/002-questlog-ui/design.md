@@ -254,7 +254,7 @@ class SkeletonList extends StatelessWidget { /* n placeholder cards, reduced-mot
 class QuestCard extends StatelessWidget { QuestCard({required BoardQuest item,   // Quest + missionName from the domain
     required VoidCallback onToggle, VoidCallback? onEdit, VoidCallback? onDelete}); }
 class MissionCard extends StatelessWidget { MissionCard({required MissionSummary mission, VoidCallback? onTap, ...}); }
-class DifficultyPips extends StatelessWidget { DifficultyPips(Difficulty d); }
+class DifficultyPips extends StatelessWidget { DifficultyPips(Difficulty d); }  // four pips since 2026-11-18
 class ProgressRing extends StatelessWidget { ProgressRing({required int done, required int total, double size}); }
 class CheckCircle extends StatelessWidget { /* 28px painted, 44px hit area, semantic label */ }
 

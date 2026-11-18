@@ -71,3 +71,30 @@
 - Impact: secondary labels and brass text may be hard to read for low-vision users (accessibility requirement on contrast is only partly met).
 - Tried: left the approved colours untouched because DESIGN.md is the visual contract; the test lists each failing pair in _knownGaps with a floor so it fails on regressions or when a pair is fixed.
 - Next: darken inkDim, textDim and inkOnDestructive tokens slightly (daylight) with Martin's sign-off, then empty _knownGaps; avoid brass as text on parchment.
+
+## [LOW] Mission and rule sheet quest rows show only +XP for the effort tier
+- Run: 2026-11-18 (four effort tiers)
+- Phase: ui
+- Status: OPEN
+- What: the per-quest chip in the mission sheet and the rule sheet cycles through the four tiers on tap and shows only `+10/+25/+50/+100`; it has no pips, no tier name and no time hint, unlike the quest sheet's effort picker.
+- Impact: when planning a mission the user sees the XP but not the time guidance that defines each tier; the fourth step makes the cycle one tap longer.
+- Tried: nothing; tier names must not clutter rows and the chips are deliberately compact.
+- Next: Martin decides whether the chip should also draw the four pips, or open the same picker.
+
+## [LOW] The app icon and launch screen still draw three pips
+- Run: 2026-11-18 (four effort tiers)
+- Phase: docs
+- Status: OPEN
+- What: `.design/icon/generate.mjs` draws the quest slip with three diamonds, while the quest card now has four.
+- Impact: cosmetic mismatch only; the icon is a mark, not a rendering of the card.
+- Tried: left as is, since regenerating the icon set was not asked for.
+- Next: redraw with four diamonds if Martin wants the match; run `generate.mjs`.
+
+## [LOW] A Quest and a Mission bonus can skip a Level
+- Run: 2026-11-18 (four effort tiers)
+- Phase: domain
+- Status: OPEN
+- What: with the level curve unchanged (100 + 50 × (L − 1)), a single +100 Quest crosses at most one Level, but a Quest plus its Mission bonus can skip one (0 + 100 + 200 = 300 XP: Level 3, 50/200 into the bar). The reward card reports `levelBefore` and `levelAfter` of the whole step.
+- Impact: none observed; a Full day Quest makes it slightly more likely early on, and early levels now pass quickly (Level 2 is one Full day Quest).
+- Tried: tests pin the curve and the edge cases; no change made.
+- Next: Martin decides whether Level 2 at 100 XP is too cheap now, or raises the curve (a domain-spec change).

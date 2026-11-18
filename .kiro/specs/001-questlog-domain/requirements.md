@@ -1,5 +1,7 @@
 # Requirements Document
 
+> **Changed 2026-11-18 at Martin's request.** Quests have four effort tiers instead of three Difficulty levels, and Martin's wording overrides the text below: the glossary entry for Difficulty reads Moment (10 XP), Hour (25 XP), Part of a day (50 XP) or Full day (100 XP); enum values `easy`, `normal`, `hard`, `fullDay`. Stored values are unchanged and the schema stays at version 1 (no migration). The level curve is unchanged.
+
 ## Introduction
 
 Questlog is a personal, gamified to-do application for a single user, built in Flutter (iOS primary) under `/workspace/questlog/`. Work is split into **Quests** (one-off tasks) and **Missions** (long-running goals composed of several quests). Completing quests and missions awards XP, and accumulated XP raises the hero's Level. Missions can also be generated automatically from **Recurring_Rules** (for example "cleaning, monthly, on the 1st").
@@ -15,7 +17,7 @@ All data is stored locally on the device. There is no server, no account and no 
 - **Quest**: A one-off task with a name, a Difficulty, an optional note, an optional parent Mission and a done/open state.
 - **Mission**: A long-running goal that groups Quests and carries a Mission_Bonus. A Mission has one of three states: `open`, `completed` or `closed`.
 - **Instance**: A Mission created from a Recurring_Rule. It is an ordinary Mission that additionally references its rule.
-- **Difficulty**: The XP tier of a Quest: Easy (10 XP), Normal (25 XP) or Hard (50 XP).
+- **Difficulty**: The XP tier of a Quest: Moment (10 XP), Hour (25 XP), Part of a day (50 XP) or Full day (100 XP), chosen mostly by the time the Quest takes.
 - **Mission_Bonus**: The extra XP granted when a Mission is completed: Small (50 XP), Medium (100 XP) or Large (200 XP).
 - **Total_XP**: The lifetime XP counter, never reset by a Level change and never below zero.
 - **Level**: The hero's level, derived from Total_XP. Level 1 is the starting level.

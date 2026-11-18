@@ -90,11 +90,13 @@ check is 28px inside a 44px row).
 
 - **Hero bar** — level badge (52px circle, brass ring, `--brass-soft` fill), name + level,
   `current / next XP`, remaining XP, 6px brass progress bar.
-- **Quest card** — check circle · title + meta row (mission chip, difficulty pips 1–3,
+- **Quest card** — check circle · title + meta row (mission chip, effort pips 1–4,
   or "bez mise") · brass `+XP`. `.done` variant: `--board-raised` ground, strike-through,
   brass filled check, completion time in the meta row.
-- **Difficulty pips** — three 7px diamonds; filled count = tier. Snadný +10, Běžný +25,
-  Těžký +50 XP. No colour coding of difficulty.
+- **Effort pips** — four 7px diamonds; filled count = tier (changed 2026-11-18 at Martin's
+  request, was three pips and Snadný/Běžný/Těžký). +10, +25, +50, +100 XP. No colour coding.
+  Tier names (Chvilka, Hodinka, Část dne, Celý den) are never shown in a list, only in the
+  quest sheet.
 - **Mission card** — 56px progress ring (r 24, stroke 5, round caps; stroke hidden at
   0 %) with `done/total` inside · title + "Zbývá: …" · brass bonus `+XP` with a caps
   caption ("za dokončení" / "získáno").
@@ -103,6 +105,11 @@ check is 28px inside a 44px row).
 - **Sheets** — bottom sheet over scrim; grabber, `Zrušit` left, display title centred,
   labelled field groups, one brass primary button at the bottom ("Vyvěsit quest",
   "Zahájit misi").
+- **Quest sheet effort picker** — label *Námaha* (Effort). Four stacked rows, each with the tier
+  name, its time description ("do ~30 min", "do ~2 h", "2–4 h", "celý den"), `+XP` and the four
+  pips; the selected row has a brass border and `--brass-soft` fill. One hint line below tells
+  the user to pick by time and to go one step up for a trip, waiting or something unpleasant.
+  Default is tier 2. Artboards still show the old three-segment *Obtížnost* selector.
 - **Context menu** — mission detail `···` opens a 196px menu: Upravit misi · Přidat quest ·
   Smazat misi (destructive last).
 - **Reward card** — parchment card over scrim: brass seal with rays, `+XP`, "QUEST SPLNĚN",
@@ -145,7 +152,7 @@ but the data model should leave room for an optional parent of missions/quests.
 
 ## 6. App icon and launch screen
 
-A parchment quest slip (pinned, three difficulty pips) stamped with a scalloped brass seal and
+A parchment quest slip (pinned, three pips; the icon is not redrawn for the fourth tier) stamped with a scalloped brass seal and
 check, on the Guild Board green. The same mark plus a Figtree 700 "Questlog" wordmark is the
 launch screen, in Guild Board and Daylight variants that follow the system appearance. The
 single source is `icon/generate.mjs` (colours as literals there, from § 2): it writes the iOS

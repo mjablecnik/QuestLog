@@ -1,5 +1,7 @@
 # Requirements Document
 
+> **Changed 2026-11-18 at Martin's request.** The Difficulty selector became an **Effort** picker with four tiers (Chvilka +10, Hodinka +25, Část dne +50, Celý den +100; English Moment, Hour, Part of a day, Full day), default Hodinka, each option showing name, XP, four pips and a time description, with one hint line below. Pips are now four. Tier names appear only in the Quest_Sheet and never in a list, card or reward card; accessibility labels give the step ("effort 3 of 4"). The text below is superseded where it says three.
+
 ## Introduction
 
 This spec defines the user interface of Questlog, the personal gamified to-do application built in Flutter (iOS primary) under `/workspace/questlog/`. It builds on `001-questlog-domain`, which provides every service, rule and stream the screens use; the UI contains no business logic of its own. The visual contract is `.design/DESIGN.md` together with the artboards in `.design/artboards/` (direction "Guild Board", dark by default, light variant "Daylight", typeface Figtree).
@@ -72,7 +74,7 @@ Terms defined in `001-questlog-domain` (Quest, Mission, Instance, Difficulty, Mi
 1. THE Board_Screen SHALL list the open board Quests in manual order as Quest_Cards, followed by the Quests done on the current Board_Day
 2. THE Quest_Card SHALL show a check circle, the Quest name, a meta row and the XP of the Quest's Difficulty
 3. WHEN a Quest belongs to a Mission, THE Quest_Card meta row SHALL show a Mission chip with the Mission name and the Difficulty pips, and WHEN it does not, THE meta row SHALL show "bez mise" (English "no mission") and the Difficulty pips
-4. THE Difficulty pips SHALL show one, two or three filled diamonds for Easy, Normal and Hard, with no colour coding of difficulty
+4. THE effort pips SHALL show one to four filled diamonds for the four effort tiers, with no colour coding of difficulty
 5. THE done Quest_Card SHALL use the raised ground, a struck-through name, a filled brass check and the completion time in the meta row
 6. WHEN the check circle of an open Quest is tapped, THE Board_Screen SHALL call Quest_Service to complete it, update the list at once and show the Reward_Card
 7. WHEN the check circle of a done Quest is tapped, THE Board_Screen SHALL call Quest_Service to reopen it, move it back among the open Quests and show a brief message with the XP withdrawn
@@ -104,7 +106,7 @@ Terms defined in `001-questlog-domain` (Quest, Mission, Instance, Difficulty, Mi
 #### Acceptance Criteria
 
 1. WHEN the add button is tapped, THE Questlog_App SHALL open the Quest_Sheet in create mode with the name field focused and the keyboard shown
-2. THE Quest_Sheet SHALL contain a name field, a Difficulty selector showing Snadný +10, Běžný +25 and Těžký +50 XP (default Běžný), an optional note field and a Mission picker listing the open Missions with "bez mise" as the first option
+2. THE Quest_Sheet SHALL contain a name field, an Effort picker showing Chvilka +10, Hodinka +25, Část dne +50 and Celý den +100 XP (default Hodinka), an optional note field and a Mission picker listing the open Missions with "bez mise" as the first option
 3. THE Quest_Sheet SHALL have a grabber, "Zrušit" at the left, the title centred and one brass primary button labelled "Vyvěsit quest" in create mode and "Uložit" in edit mode
 4. WHEN the name is empty after trimming, longer than 80 characters or the note is longer than 500 characters, THE Quest_Sheet SHALL show a localized error beside the offending field, SHALL keep everything the user typed and SHALL NOT call Quest_Service
 5. WHEN the Quest_Sheet is opened from the Mission_Detail_Screen, THE Quest_Sheet SHALL preselect that Mission

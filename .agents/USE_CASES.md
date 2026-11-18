@@ -205,9 +205,9 @@ first; cases that name Czech text say so.
 - Area: board
 - Requirement: U-3.2, U-3.4
 - Preconditions: app on the Board
-- Data needed: three open quests, one Easy, one Normal, one Hard
-- Steps: screenshot the three cards
-- Expected: each shows a check circle, the name, a meta row and the XP (+10/+25/+50); the pips show 1/2/3 filled diamonds and no colour differs between tiers
+- Data needed: four open quests, one per effort tier (Moment, Hour, Part of a day, Full day)
+- Steps: screenshot the four cards
+- Expected: each shows a check circle, the name, a meta row and the XP (+10/+25/+50/+100); the four pips show 1/2/3/4 filled diamonds, no colour differs between tiers and no tier name appears (updated 2026-11-18, was three tiers)
 - Verify: APP+DB
 
 ### UC-019 — Mission chip versus "no mission" in the meta row
@@ -319,7 +319,7 @@ first; cases that name Czech text say so.
 - Preconditions: quest sheet open in create mode, Czech selected
 - Data needed: two open missions, so the picker has entries
 - Steps: screenshot the sheet
-- Expected: name field; difficulty selector Snadný +10 / Běžný +25 / Těžký +50 with Běžný selected; optional note field; mission picker with "bez mise" first then the two missions; grabber, "Zrušit" at the left, centred title, one brass button "Vyvěsit quest"
+- Expected: name field; label Námaha and an effort picker of four rows (Chvilka +10 "do ~30 min", Hodinka +25 "do ~2 h", Část dne +50 "2–4 h", Celý den +100 "celý den", each with four pips) with Hodinka selected, and the one-line hint below it (updated 2026-11-18); optional note field; mission picker with "bez mise" first then the two missions; grabber, "Zrušit" at the left, centred title, one brass button "Vyvěsit quest"
 - Verify: APP+DB
 
 ### UC-031 — Creating a quest puts it last in the order
@@ -327,7 +327,7 @@ first; cases that name Czech text say so.
 - Requirement: D-1.1, D-1.9, D-3.1, U-5.7
 - Preconditions: three open quests exist
 - Data needed: three open quests with `sortOrder` 0–2
-- Steps: create a quest named "Nakoupit" with difficulty Easy and no mission, screenshot
+- Steps: create a quest named "Nakoupit" with effort Chvilka (Easy) and no mission, screenshot
 - Expected: the sheet closes with its transition and the new card appears after the existing three, with +10 XP and "bez mise"
 - Verify: APP+DB
 
@@ -372,7 +372,7 @@ first; cases that name Czech text say so.
 - Requirement: D-1.6
 - Preconditions: an open quest in mission A
 - Data needed: one open quest (Easy) in open mission A, plus open mission B
-- Steps: edit it to a new name, difficulty Hard, a note, and mission B; save; screenshot
+- Steps: edit it to a new name, effort Část dne (Hard), a note, and mission B; save; screenshot
 - Expected: the card shows the new name, +50, the chip for mission B, and the note is stored
 - Verify: APP+DB
 
@@ -1324,7 +1324,7 @@ first; cases that name Czech text say so.
 - Area: a11y
 - Requirement: U-16.1
 - Preconditions: every screen and sheet rendered
-- Data needed: the accessibility harness seed — quests of all three difficulties, a mission, a rule
+- Data needed: the accessibility harness seed — quests of all four effort tiers, a mission, a rule
 - Steps: measure the hit area of every tappable element, including the 28px painted check circle
 - Expected: no tappable element is smaller than 44×44 logical pixels
 - Verify: TEST
@@ -1415,7 +1415,7 @@ disagreement is the spec, not the artboard (`CLAUDE.md`).
 - Area: visual
 - Requirement: U-15.5, U-15.6, U-19.4
 - Preconditions: dark theme, Czech
-- Data needed: the artboard's content — a hero bar with a name and a level, 4–5 open quests mixing standalone and mission quests across all three difficulties, 1–2 quests done today
+- Data needed: the artboard's content — a hero bar with a name and a level, 4–5 open quests mixing standalone and mission quests across all four effort tiers, 1–2 quests done today
 - Steps: compose that state, screenshot, compare with `.design/screens/QuestBoard.png`
 - Expected: open quests render as parchment slips, done quests and mission cards on the raised ground, brass only on reward, completion and primary actions; grounds, radii, spacing and type sizes match the tokens
 - Verify: APP+DB
@@ -1635,6 +1635,24 @@ disagreement is the spec, not the artboard (`CLAUDE.md`).
 - Expected: the app builds, launches, and the gesture, keyboard, safe-area and haptic cases pass
 - Verify: IOS
 
+### UC-170 — Effort picker shows names, times and XP only in the sheet
+- Area: quest-sheet
+- Requirement: U-5.2, U-3.4
+- Preconditions: quest sheet open in create mode; run once in Czech, once in English, once with the largest text scale
+- Data needed: none
+- Steps: screenshot the sheet; open the Board and a mission detail with quests of all four tiers and screenshot them
+- Expected: the sheet lists Chvilka/Moment, Hodinka/Hour, Část dne/Part of a day, Celý den/Full day with their time descriptions, +10/+25/+50/+100 and 1–4 pips, no text clipped or overflowing, hint line under the picker; no list, card or mission row shows a tier name or a word like "těžký"/"hard"
+- Verify: APP
+
+### UC-171 — A whole-day quest awards 100 XP and the level maths holds
+- Area: hero bar, XP and levels
+- Requirement: D-2.1, D-2.9
+- Preconditions: one open Full day quest, `totalXp = 0`, then again with `totalXp = 90`
+- Data needed: one quest (Full day, +100)
+- Steps: complete it, screenshot the reward card and the hero bar; reopen it
+- Expected: +100 on the reward card; from 0 XP the bar shows level 2 with 0/150; from 90 XP level 2 with 90/150; reopening takes 100 XP back; a quest stored before the fourth tier (easy/normal/hard) still renders and awards 10/25/50
+- Verify: APP+DB
+
 ---
 
 ## Requirement coverage map
@@ -1644,7 +1662,7 @@ disagreement is the spec, not the artboard (`CLAUDE.md`).
 | Req | Cases |
 |---|---|
 | D-1 Quest lifecycle | UC-031, UC-032, UC-033, UC-035, UC-036, UC-038, UC-045 |
-| D-2 Quest completion and XP | UC-015, UC-021, UC-022, UC-023, UC-055, UC-084, UC-132 |
+| D-2 Quest completion and XP | UC-015, UC-021, UC-022, UC-023, UC-055, UC-084, UC-132, UC-171 |
 | D-3 Quest ordering | UC-031, UC-039, UC-042, UC-043, UC-089 |
 | D-4 Mission lifecycle | UC-048, UC-061, UC-071, UC-075, UC-076, UC-088 |
 | D-5 Mission completion and bonus | UC-057, UC-063, UC-081, UC-082, UC-086, UC-088 |
@@ -1665,9 +1683,9 @@ disagreement is the spec, not the artboard (`CLAUDE.md`).
 |---|---|
 | U-1 App shell and navigation | UC-001, UC-002, UC-003, UC-004, UC-005, UC-006, UC-007, UC-008 |
 | U-2 Hero bar | UC-009, UC-010, UC-011, UC-012, UC-016 |
-| U-3 Quest board | UC-017 – UC-028, UC-148 |
+| U-3 Quest board | UC-017 – UC-028, UC-148, UC-170 |
 | U-4 Quest reordering | UC-039, UC-040, UC-041, UC-042, UC-043, UC-051 |
-| U-5 Quest sheet | UC-029 – UC-038, UC-145, UC-151 |
+| U-5 Quest sheet | UC-029 – UC-038, UC-145, UC-151, UC-170 |
 | U-6 Swipe actions and deletion | UC-044 – UC-050, UC-153 |
 | U-7 Reward card | UC-052 – UC-060, UC-152 |
 | U-8 Missions screen | UC-061 – UC-068, UC-149 |
