@@ -368,7 +368,7 @@ class _MissionBlock extends StatelessWidget {
   }
 }
 
-/// Full-width button with a pressed state and a 44 px minimum hit area.
+/// Full-width button with a 44 px minimum hit area.
 class _RewardButton extends StatelessWidget {
   const _RewardButton({
     required this.label,
@@ -395,10 +395,6 @@ class _RewardButton extends StatelessWidget {
         child: InkWell(
           borderRadius: radius,
           onTap: onPressed,
-          splashColor: p.brassSoft,
-          highlightColor: primary
-              ? p.inkOnBrass.withValues(alpha: 0.12)
-              : p.brassSoft,
           child: ConstrainedBox(
             constraints: const BoxConstraints(
               minHeight: Metrics.touchTarget + Space.s8,

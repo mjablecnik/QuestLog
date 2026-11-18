@@ -77,18 +77,16 @@ ThemeData buildTheme({
     scrim: p.scrim,
   );
 
-  final Color pressed = p.brassSoft;
+  // Taps leave no splash, highlight or hover tint anywhere: selection and
+  // in-place fills show state. Only keyboard focus is painted.
+  final Color focusFill = p.brassSoft;
+  // Transparent rather than null: a null resolves to the Material 3 default
+  // state layer, which tints a pressed button.
   final WidgetStateProperty<Color?> overlay =
       WidgetStateProperty.resolveWith<Color?>(
-        (Set<WidgetState> states) =>
-            states.any(
-              (WidgetState s) =>
-                  s == WidgetState.pressed ||
-                  s == WidgetState.hovered ||
-                  s == WidgetState.focused,
-            )
-            ? pressed
-            : null,
+        (Set<WidgetState> states) => states.contains(WidgetState.focused)
+            ? focusFill
+            : Colors.transparent,
       );
 
   const PageTransitionsTheme transitions = PageTransitionsTheme(
@@ -111,11 +109,11 @@ ThemeData buildTheme({
     fontFamily: bodyFamilyName,
     textTheme: body,
     primaryTextTheme: body,
-    splashFactory: InkRipple.splashFactory,
-    splashColor: pressed,
-    highlightColor: pressed,
-    hoverColor: pressed,
-    focusColor: pressed,
+    splashFactory: NoSplash.splashFactory,
+    splashColor: Colors.transparent,
+    highlightColor: Colors.transparent,
+    hoverColor: Colors.transparent,
+    focusColor: focusFill,
     dividerColor: p.boardLine,
     pageTransitionsTheme: transitions,
     textSelectionTheme: TextSelectionThemeData(
@@ -157,6 +155,9 @@ ThemeData buildTheme({
       style: ButtonStyle(overlayColor: overlay),
     ),
     iconButtonTheme: IconButtonThemeData(
+      style: ButtonStyle(overlayColor: overlay),
+    ),
+    outlinedButtonTheme: OutlinedButtonThemeData(
       style: ButtonStyle(overlayColor: overlay),
     ),
     filledButtonTheme: FilledButtonThemeData(
