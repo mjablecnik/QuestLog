@@ -30,6 +30,20 @@ abstract final class IconAsset {
   static const sun = 'sun';
   static const tick = 'tick';
   static const trash = 'trash';
+  static const undo = 'undo';
+  static const quote = 'quote';
+  static const notes = 'notes';
+  static const notePlus = 'note_plus';
+  static const move = 'move';
+  static const list = 'list';
+  static const link = 'link';
+  static const italic = 'italic';
+  static const heading = 'heading';
+  static const folderPlus = 'folder_plus';
+  static const folder = 'folder';
+  static const code = 'code';
+  static const checklist = 'checklist';
+  static const bold = 'bold';
 }
 
 /// A bundled SVG icon drawn with `currentColor` strokes, tinted by [color] or
