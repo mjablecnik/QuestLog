@@ -124,6 +124,13 @@ void main() {
             .where((n) => !n.isFolder && tree.isVisible(n.id))
             .length;
         expect(tree.noteCountDeep(f.id), expected);
+        final int folders = tree
+            .subtreeIds(f.id)
+            .where((id) => id != f.id)
+            .map((id) => tree.byId(id)!)
+            .where((n) => n.isFolder && tree.isVisible(n.id))
+            .length;
+        expect(tree.folderCountDeep(f.id), folders);
         expect(tree.folderCount(f.id) + tree.noteCount(f.id), tree.children(f.id).length);
         expect(tree.hasContent(f.id), tree.children(f.id).isNotEmpty);
       }
@@ -233,6 +240,20 @@ void main() {
       expect(tree.expiredIds(treeEpoch.add(const Duration(days: 31))), <int>{2});
       expect(tree.expiredIds(treeEpoch.add(const Duration(days: 41))), <int>{1, 2, 3});
     });
+  });
+
+  test('containedNotesCount counts what was trashed with the folder, not earlier trashed nodes', () {
+    final NoteTree tree = NoteTree(<NoteNode>[
+      node(1, folder: true, deleted: treeEpoch),
+      node(2, parent: 1),
+      node(3, parent: 1, folder: true),
+      node(4, parent: 3),
+      node(5, parent: 3, deleted: treeEpoch.subtract(const Duration(days: 1))),
+      node(6, parent: 1, folder: true, deleted: treeEpoch.subtract(const Duration(days: 2))),
+      node(7, parent: 6),
+    ]);
+    expect(tree.containedNotesCount(1), 2);
+    expect(tree.containedNotesCount(3), 1);
   });
 
   test('breadcrumb lists the folders from the top, subtree includes the node itself', () {

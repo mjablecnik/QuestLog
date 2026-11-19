@@ -85,6 +85,26 @@ final class NoteTree {
     return count;
   }
 
+  /// Visible Folders at any depth inside [folderId].
+  int folderCountDeep(int folderId) {
+    int count = 0;
+    for (final NoteNode child in children(folderId)) {
+      if (child.isFolder) count += 1 + folderCountDeep(child.id);
+    }
+    return count;
+  }
+
+  /// Notes inside the Folder at any depth, for a Folder that is in the Trash:
+  /// everything that was trashed with it, not what was trashed on its own earlier.
+  int containedNotesCount(int folderId) {
+    int count = 0;
+    for (final NoteNode child in _childrenOf[folderId] ?? const <NoteNode>[]) {
+      if (child.deletedAt != null) continue;
+      count += child.isFolder ? containedNotesCount(child.id) : 1;
+    }
+    return count;
+  }
+
   /// True when anything visible lies inside the Folder.
   bool hasContent(int folderId) => children(folderId).isNotEmpty;
 
