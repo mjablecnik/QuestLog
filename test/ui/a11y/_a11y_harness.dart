@@ -18,7 +18,12 @@ import 'package:questlog/services/mission_service.dart';
 import 'package:questlog/services/providers.dart';
 import 'package:questlog/services/recurrence_service.dart';
 import 'package:questlog/services/xp_engine.dart';
+import 'package:questlog/core/calendar/event_type.dart';
+import 'package:questlog/core/calendar/repeat_rule.dart';
+import 'package:questlog/data/calendar/calendar_models.dart';
+import 'package:questlog/services/calendar/calendar_service.dart';
 import 'package:questlog/ui/screens/board/board_screen.dart';
+import 'package:questlog/ui/screens/calendar/calendar_screen.dart';
 import 'package:questlog/ui/screens/mission_detail/mission_detail_screen.dart';
 import 'package:questlog/ui/screens/missions/missions_screen.dart';
 import 'package:questlog/ui/screens/settings/settings_screen.dart';
@@ -35,7 +40,7 @@ import '../../helpers/test_database.dart';
 final DateTime a11yNow = DateTime(2026, 11, 15, 12);
 
 /// The screens the layout and accessibility tests walk.
-enum Subject { board, missions, detail, settings, shell }
+enum Subject { board, missions, detail, settings, shell, calendar }
 
 /// Reconciliation that posts nothing, so the shell reaches its tabs without
 /// writing to the database from inside the fake-async zone.
@@ -109,6 +114,7 @@ class A11yEnv {
     QuestlogPalette palette = QuestlogPalette.guildBoard,
     DisplayFont font = DisplayFont.figtree,
     int startXp = 0,
+    bool calendarEvents = false,
   }) async {
     await _loadFont(tester, 'Figtree', <int>[400, 500, 600, 700, 800]);
     if (font == DisplayFont.unbounded) {
@@ -119,7 +125,7 @@ class A11yEnv {
     addTearDown(tester.view.reset);
     final QuestlogDatabase db = createTestDatabase();
     final FixedClock clock = FixedClock(a11yNow);
-    final int missionId = await _seed(tester, db, clock, startXp);
+    final int missionId = await _seed(tester, db, clock, startXp, calendarEvents);
 
     final Widget home = switch (subject) {
       Subject.board => const BoardScreen(),
@@ -127,6 +133,7 @@ class A11yEnv {
       Subject.detail => MissionDetailScreen(missionId: missionId),
       Subject.settings => const SettingsScreen(),
       Subject.shell => const AppShell(),
+      Subject.calendar => const CalendarScreen(),
     };
     await tester.pumpWidget(
       ProviderScope(
@@ -180,6 +187,7 @@ class A11yEnv {
     QuestlogDatabase db,
     FixedClock clock,
     int startXp,
+    bool calendarEvents,
   ) async {
     final int? id = await tester.runAsync(() async {
       if (startXp > 0) await XpEngine(db).apply(startXp);
@@ -233,6 +241,7 @@ class A11yEnv {
           ],
         ),
       );
+      if (calendarEvents) await _seedCalendar(db, clock);
       return long.id;
     });
     return id!;
@@ -311,4 +320,41 @@ List<String> spokenTexts(WidgetTester tester) {
     tester.binding.renderViews.first.owner!.semanticsOwner!.rootSemanticsNode!,
   );
   return found;
+}
+
+/// A week of events around the harness date: two Event_Tasks for today, a
+/// repeating lesson and a few days with several events.
+Future<void> _seedCalendar(QuestlogDatabase db, FixedClock clock) async {
+  final CalendarService calendar = CalendarService(db, XpEngine(db), clock);
+  Future<void> add(
+    String name,
+    EventType type,
+    DateTime date, {
+    int? from,
+    int? to,
+    RepeatRule repeat = const NoRepeat(),
+    bool onBoard = false,
+  }) async {
+    await calendar.create(
+      EventDraft(
+        name: name,
+        type: type,
+        startDate: date,
+        endDate: date,
+        startMinute: from,
+        endMinute: from == null ? null : to,
+        repeat: repeat,
+        onBoard: onBoard,
+      ),
+    );
+  }
+
+  await add('Popřát Evě k narozeninám', EventType.birthday, DateTime(2026, 11, 15), onBoard: true);
+  await add('Porada s týmem', EventType.meeting, DateTime(2026, 11, 15), from: 9 * 60, to: 10 * 60, onBoard: true);
+  await add('Leandro Salsa', EventType.lesson, DateTime(2026, 11, 4), from: 18 * 60, to: 19 * 60, repeat: const CadenceRepeat(Cadence.weekly));
+  await add('Prohlídka bytu', EventType.meeting, DateTime(2026, 11, 18), from: 8 * 60 + 15, to: 10 * 60);
+  await add('Seminář TypeScript', EventType.seminar, DateTime(2026, 11, 18), from: 11 * 60, to: 15 * 60 + 32);
+  await add('Narozeniny Tomáše', EventType.birthday, DateTime(2026, 11, 18), onBoard: true);
+  await add('Zouk', EventType.dance, DateTime(2026, 11, 20), from: 20 * 60, to: 22 * 60);
+  await add('Večeře', EventType.date, DateTime(2026, 11, 21), from: 19 * 60, to: 21 * 60);
 }
