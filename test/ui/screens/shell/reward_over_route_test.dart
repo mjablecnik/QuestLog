@@ -3,12 +3,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:questlog/app.dart';
 import 'package:questlog/data/database.dart';
-import 'package:questlog/l10n/app_localizations_en.dart';
 import 'package:questlog/services/providers.dart';
 import 'package:questlog/ui/screens/mission_detail/mission_detail_screen.dart';
 import 'package:questlog/ui/screens/shell/questlog_tab_bar.dart';
+import 'package:questlog/ui/state/reward_queue.dart';
 import 'package:questlog/ui/state/ui_providers.dart';
-import 'package:questlog/ui/widgets/cards/check_circle.dart';
 import 'package:questlog/ui/widgets/cards/mission_card.dart';
 import 'package:questlog/ui/widgets/reward/reward_card.dart';
 
@@ -29,7 +28,6 @@ void main() {
     tester.view.physicalSize = const Size(430, 900);
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.reset);
-    final AppLocalizationsEn en = AppLocalizationsEn();
     final QuestlogDatabase db = createTestDatabase();
 
     // Seeded before the first frame so no Drift stream is listening yet.
@@ -61,11 +59,14 @@ void main() {
     await _settle(tester);
     expect(find.byType(MissionDetailScreen), findsOneWidget);
 
-    await tester.tap(
-      find.byWidgetPredicate(
-        (Widget w) =>
-            w is CheckCircle &&
-            w.semanticLabel == en.a11y_completeQuest('Buy tiles'),
+    ProviderScope.containerOf(
+      tester.element(find.byType(MissionDetailScreen)),
+    ).read(rewardQueueProvider.notifier).push(
+      const MissionReward(
+        missionName: 'Bathroom',
+        bonus: 25,
+        levelUp: false,
+        level: 1,
       ),
     );
     await tester.pump();

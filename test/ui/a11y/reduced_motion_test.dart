@@ -5,9 +5,9 @@ import 'package:questlog/app.dart';
 import 'package:questlog/data/database.dart';
 import 'package:questlog/l10n/app_localizations.dart';
 import 'package:questlog/services/providers.dart';
+import 'package:questlog/ui/state/reward_queue.dart';
 import 'package:questlog/ui/state/ui_providers.dart';
 import 'package:questlog/ui/theme/tokens.dart';
-import 'package:questlog/ui/widgets/cards/check_circle.dart';
 import 'package:questlog/ui/widgets/reward/reward_card.dart';
 
 import '../../helpers/fixed_clock.dart';
@@ -76,11 +76,17 @@ void main() {
     return left;
   }
 
-  Future<void> completeQuest(WidgetTester tester) async {
-    await tester.tap(find.byType(CheckCircle).first);
-    await tester.pump();
-    await tester.runAsync(
-      () => Future<void>.delayed(const Duration(milliseconds: 60)),
+  /// Completing a Quest shows no card any more; the Mission reward still does.
+  Future<void> showMissionReward(WidgetTester tester) async {
+    ProviderScope.containerOf(
+      tester.element(find.byType(Scaffold).first),
+    ).read(rewardQueueProvider.notifier).push(
+      const MissionReward(
+        missionName: 'Bathroom',
+        bonus: 25,
+        levelUp: false,
+        level: 1,
+      ),
     );
     // Builds the reward card; its entry animation starts on this frame.
     await tester.pump();
@@ -96,7 +102,7 @@ void main() {
   }
 
   final Map<String, Future<void> Function(WidgetTester)> triggers = {
-    'reward card': completeQuest,
+    'reward card': showMissionReward,
     'quest sheet': openSheet,
   };
 

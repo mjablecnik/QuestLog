@@ -101,23 +101,19 @@ void main() {
         said(l10n.a11y_questCompleted('Milk', Difficulty.normal.xp)),
         true,
       );
-      await tester.tap(find.text(l10n.common_continue));
-      await settle();
 
       // Quest reopened.
       await tapCheck(l10n.a11y_reopenQuest('Milk'));
       expect(said(l10n.a11y_questReopened('Milk')), true);
 
-      // Mission completed, from the reward card of its last Quest.
+      // Mission completed, from the button of the Mission detail.
       await tester.tap(find.byKey(const ValueKey<ShellTab>(ShellTab.missions)));
       await settle();
       await tester.tap(find.byType(MissionCard));
       await settle();
       await tapCheck(l10n.a11y_completeQuest('Buy tiles'));
-      await tester.tap(find.text(l10n.common_continue));
-      await settle();
       await tapCheck(l10n.a11y_completeQuest('Lay tiles'));
-      await tester.tap(find.text(l10n.reward_completeMission).last);
+      await tester.tap(find.text(l10n.mission_completeAction));
       await settle();
       expect(
         said(l10n.a11y_missionCompleted('Bathroom', MissionBonus.small.xp)),

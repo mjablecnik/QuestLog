@@ -120,7 +120,7 @@ void main() {
     );
   });
 
-  boardTest(h, 'completing a quest pushes the reward and moves the card down', (
+  boardTest(h, 'completing a quest shows no reward and moves the card down', (
     tester,
   ) async {
     await h.pump(tester);
@@ -137,11 +137,7 @@ void main() {
 
     await tapCheck(tester, 'Complete quest Alpha');
 
-    final List<RewardEvent> queue = container(tester).read(rewardQueueProvider);
-    expect(queue, hasLength(1));
-    final QuestReward reward = queue.single as QuestReward;
-    expect(reward.questName, 'Alpha');
-    expect(reward.xp, 25);
+    expect(container(tester).read(rewardQueueProvider), isEmpty);
     expect(
       tester.getTopLeft(find.text('Alpha')).dy,
       greaterThan(tester.getTopLeft(find.text('DONE TODAY')).dy),

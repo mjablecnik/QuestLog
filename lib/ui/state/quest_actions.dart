@@ -42,8 +42,9 @@ void showDomainError(BuildContext context, Object error, {double? clearance}) {
 /// Completes or reopens [quest] (the check tap), shared by the Board and the
 /// Mission detail so both behave the same.
 ///
-/// Completion pushes a reward event; reopening shows the withdrawal message
-/// (with the Mission-reopened note when it applies). A failure leaves the card
+/// Completion shows no popup or animation: the Quest simply moves to the done
+/// list, with a haptic tap and a screen-reader announcement. Reopening shows the
+/// withdrawal message (with the Mission-reopened note when it applies). A failure leaves the card
 /// as it was and shows an error message.
 Future<void> toggleQuest(
   BuildContext context,
@@ -53,11 +54,18 @@ Future<void> toggleQuest(
 }) async {
   final l10n = AppLocalizations.of(context);
   final service = ref.read(questServiceProvider);
-  final queue = ref.read(rewardQueueProvider.notifier);
   try {
     if (quest.completedAt == null) {
       final result = await service.complete(quest.id);
-      queue.push(rewardForQuest(quest, result));
+      if (!context.mounted) return;
+      Haptics.success();
+      final String text = l10n.a11y_questCompleted(quest.name, result.awardedXp);
+      announce(
+        context,
+        result.levelAfter > result.levelBefore
+            ? '$text. ${l10n.a11y_levelUp(result.levelAfter)}'
+            : text,
+      );
     } else {
       final result = await service.reopen(quest.id);
       if (!context.mounted) return;
