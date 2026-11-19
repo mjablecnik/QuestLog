@@ -410,5 +410,6 @@
   "a11y_trashNode": "Delete {name}",
   "a11y_restoreNode": "Restore {name}",
   "a11y_foreverNode": "Delete {name} for good",
-  "a11y_breadcrumbTo": "Go to {name}"
+  "a11y_breadcrumbTo": "Go to {name}",
+  "a11y_taskToggle": "Toggle done"
 }

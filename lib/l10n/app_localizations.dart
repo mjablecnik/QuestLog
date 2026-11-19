@@ -2563,6 +2563,12 @@ abstract class AppLocalizations {
   /// In cs, this message translates to:
   /// **'Přejít na {name}'**
   String a11y_breadcrumbTo(String name);
+
+  /// Semantic label of the check of a checklist item in the Note_Editor.
+  ///
+  /// In cs, this message translates to:
+  /// **'Přepnout splněno'**
+  String get a11y_taskToggle;
 }
 
 class _AppLocalizationsDelegate

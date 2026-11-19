@@ -18,6 +18,7 @@ import '../notes/notes_actions.dart';
 import 'editor_style.dart';
 import 'format_toolbar.dart';
 import 'note_markdown.dart';
+import 'note_task_component.dart';
 
 /// Opens the Note_Editor on the Note [noteId], or on a new Note in [parentId]
 /// (null is the Root_Folder) when [noteId] is null.
@@ -208,6 +209,10 @@ class _NoteEditorScreenState extends ConsumerState<NoteEditorScreen>
                             selectionStyle: buildSelectionStyles(p),
                             documentOverlayBuilders: buildEditorOverlays(p),
                             contentTapDelegateFactories: const [],
+                            componentBuilders: <ComponentBuilder>[
+                              ...defaultComponentBuilders,
+                              NoteTaskComponentBuilder(_editor, toggleLabel: l.a11y_taskToggle),
+                            ],
                           ),
                           if (_isEmpty)
                             Positioned(

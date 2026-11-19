@@ -1683,4 +1683,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String a11y_breadcrumbTo(String name) {
     return 'Go to $name';
   }
+
+  @override
+  String get a11y_taskToggle => 'Toggle done';
 }

@@ -2284,5 +2284,9 @@
         "type": "String"
       }
     }
+  },
+  "a11y_taskToggle": "Přepnout splněno",
+  "@a11y_taskToggle": {
+    "description": "Semantic label of the check of a checklist item in the Note_Editor."
   }
 }

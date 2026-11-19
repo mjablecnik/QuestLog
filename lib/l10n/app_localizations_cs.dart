@@ -1725,4 +1725,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String a11y_breadcrumbTo(String name) {
     return 'Přejít na $name';
   }
+
+  @override
+  String get a11y_taskToggle => 'Přepnout splněno';
 }
