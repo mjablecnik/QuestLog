@@ -45,9 +45,9 @@ The board day rolls over at 04:00, so a late evening still belongs to the same d
 
 ## 📸 Screenshots
 
-<a href="screenshots/01-board.png"><img src="screenshots/01-board.png" width="31%" alt="The Board with posted quests"></a>&nbsp;&nbsp;&nbsp;<a href="screenshots/02-missions.png"><img src="screenshots/02-missions.png" width="31%" alt="Missions with progress rings"></a>&nbsp;&nbsp;&nbsp;<a href="screenshots/03-new-quest.png"><img src="screenshots/03-new-quest.png" width="31%" alt="The new quest sheet"></a>
+<a href="screenshots/01-board.png"><img src="screenshots/01-board.png" width="31%" alt="The Board with today's events and quests"></a>&nbsp;&nbsp;&nbsp;<a href="screenshots/02-missions.png"><img src="screenshots/02-missions.png" width="31%" alt="Missions with progress rings"></a>&nbsp;&nbsp;&nbsp;<a href="screenshots/03-new-quest.png"><img src="screenshots/03-new-quest.png" width="31%" alt="The new quest sheet"></a>
 
-<a href="screenshots/04-calendar.png"><img src="screenshots/04-calendar.png" width="31%" alt="The calendar month with coloured event types"></a>&nbsp;&nbsp;&nbsp;<a href="screenshots/05-calendar-day.png"><img src="screenshots/05-calendar-day.png" width="31%" alt="The day sheet"></a>&nbsp;&nbsp;&nbsp;<a href="screenshots/06-board-events.png"><img src="screenshots/06-board-events.png" width="31%" alt="The Board with events to do today"></a>
+<a href="screenshots/04-calendar.png"><img src="screenshots/04-calendar.png" width="31%" alt="The calendar month with coloured event types"></a>&nbsp;&nbsp;&nbsp;<a href="screenshots/05-calendar-day.png"><img src="screenshots/05-calendar-day.png" width="31%" alt="The day sheet"></a>
 
 ## 🔧 Prerequisites
 
