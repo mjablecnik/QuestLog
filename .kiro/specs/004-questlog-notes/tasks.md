@@ -89,7 +89,7 @@ Add the Poznámky tab to Questlog: a tree of Folders and Notes, a WYSIWYG Markdo
 
 - [ ] 5. Markdown conversion for the editor (`lib/ui/screens/note_editor/`)
   - [ ] 5.1 Add the editor dependency and prove it
-    - Spike first: `flutter pub add appflowy_editor`, commit the updated `pubspec.yaml` and `pubspec.lock`, run `flutter analyze` and a widget test that pumps an `AppFlowyEditor` under the Questlog theme
+    - Spike first: add the editor package, commit the updated `pubspec.yaml` and `pubspec.lock`, run `flutter analyze` and a widget test that pumps the editor under the Questlog theme (outcome: `appflowy_editor` does not compile with Flutter 3.47, `super_editor` 0.3.0-dev.52 is used, see `design.md`)
     - Confirm on the Linux desktop run that the editor accepts text, that a Czech diacritic sentence round-trips, and that its styles can be set from `context.palette` with no literal colours; if any of this fails, switch to `super_editor` with `super_editor_markdown`, keep `note_markdown.dart` as the only adapter, and record the change in `design.md` (Overview, "Editor package" and "Licence of the editor package")
     - The dependency update is its own commit, apart from the feature commits
     - _Requirements: 4.2, 4.8_
@@ -153,7 +153,7 @@ Add the Poznámky tab to Questlog: a tree of Folders and Notes, a WYSIWYG Markdo
 
   - [ ] 7.2 Add the Format_Toolbar
     - `format_toolbar.dart`: bold, italic, heading (paragraph, H1, H2, H3, paragraph), bulleted list, checklist, quote, code and link buttons, 44-point targets, horizontal scroll when too wide, selected state read from the editor selection; the link button opens `showLinkSheet` and applies the link to the selection
-    - _Requirements: 5.1, 5.2, 5.3, 5.4, 5.5, 5.6, 5.7, 5.8, 5.9, 5.10, 14.3_
+    - _Requirements: 5.1, 5.2, 5.3, 5.4, 5.5, 5.6, 5.7, 5.8, 5.9, 5.10, 5.11, 14.3_
 
   - [ ] 7.3 Add the Note_Editor screen
     - `note_editor_screen.dart`: full-screen route without the tab bar, back button with the Folder name, Node_Menu button and Hotovo, editor with the Format_Toolbar above the keyboard, flush on Hotovo, back and `AppLifecycleState.paused`, a banner with retry on a failed save and a message for a too long Note
@@ -163,7 +163,7 @@ Add the Poznámky tab to Questlog: a tree of Folders and Notes, a WYSIWYG Markdo
   - [ ] 7.4 Write widget tests for the editor
     - Opening shows formatted text without Markdown markers; autosave fires after 500 ms of fake time and not before; flush on Hotovo, back and pause; an empty new Note creates no row; a failed save keeps the text and shows the retry; too long text shows the message
     - Toolbar: pressed state follows the caret, bold on a selection and on an empty selection, heading cycle, list, checklist, quote and code toggles, link sheet applies a link, a checklist item toggles when tapped; Node_Menu disabled for an unsaved Note
-    - _Requirements: 3.6, 3.7, 4.1, 4.2, 4.3, 4.4, 4.5, 4.6, 4.9, 4.10, 5.2, 5.3, 5.4, 5.5, 5.6, 5.7, 5.8, 5.10, 9.5_
+    - _Requirements: 3.6, 3.7, 4.1, 4.2, 4.3, 4.4, 4.5, 4.6, 4.9, 4.10, 5.2, 5.3, 5.4, 5.5, 5.6, 5.7, 5.8, 5.10, 5.11, 9.5_
 
 - [ ] 8. Checkpoint — Notes screens and editor
   - Run `scripts/check.sh`; ensure all tests pass, ask the user if questions arise
@@ -228,7 +228,7 @@ Add the Poznámky tab to Questlog: a tree of Folders and Notes, a WYSIWYG Markdo
 
 - Tasks marked with `*` are optional and can be skipped for faster MVP.
 - Spec `004-questlog-notes` is the next spec after `003-questlog-calendar`; it overrides `003` Requirement 1 criterion 1 (five tabs instead of four) and adds schema version 4. The app has one palette (blue), so there is no palette matrix to test.
-- Task 5.1 is a spike on purpose: if `appflowy_editor` fails the checks, the fallback is `super_editor` with `super_editor_markdown`, and only `note_markdown.dart`, `editor_style.dart`, `format_toolbar.dart` and the editor screen change.
+- Task 5.1 was a spike on purpose: `appflowy_editor` failed it, so `super_editor` is used; only `note_markdown.dart`, `editor_style.dart`, `format_toolbar.dart` and the editor screen depend on that choice.
 - Run `git config --global --add safe.directory /opt/flutter` once per sandbox. Drift codegen takes about 50 s: run `build_runner` in the background and poll the log. Edit only the `.arb` files for strings.
 - The dependency update (task 5.1) is its own commit. One Conventional Commit per task, author `Martin Jablečník <martin.jablecnik@email.cz>`, no tool-attribution trailers.
 - Notes award no XP and are not linked to Quests, Missions or the Calendar. Links inside a Note are stored and shown but not opened in v1; search, tags, images, tables and a Trash undo are out of scope.

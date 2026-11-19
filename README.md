@@ -30,6 +30,10 @@ Questlog is a personal gamified to-do app for one user, built with Flutter for i
   notable and folk days and a few name days, repeating every year. An event with the "On the
   board" switch shows up on the Board on its day as a task: completing it earns 10 to 100 XP
   (by the event's length, or by its type for an all-day event).
+- **Notes** are a fifth tab: Folders and sub-Folders of any depth hold Notes, which you write in a WYSIWYG editor
+  (Markdown underneath: headings, bold, italic, code, links, lists, checklists, quotes) that saves by itself.
+  Folders and Notes can be renamed, moved to another Folder and deleted; deleting moves them to a Trash
+  (the bin icon at the top level) where they stay for 30 days and can be restored or deleted for good.
 - **Recurring missions** are posted automatically from rules set up in Settings (daily,
   weekly, biweekly, monthly, quarterly or yearly).
 - **Two looks and two languages**: a dark and a light theme of the blue palette
@@ -84,8 +88,8 @@ scripts/check.sh                    # flutter analyze + all tests (about 4 min) 
 On a machine without a display, run the app as `xvfb-run -a flutter run -d linux`; the
 tests need no display.
 
-The app has four tabs: Quests (the Board), Missions, Calendar and Settings; new items are created
-with the plus button on the first three. The Board shows the quests without a mission plus the
+The app has five tabs: Quests (the Board), Missions, Calendar, Notes and Settings; new items are created
+with the plus button on the first four. The Board shows the quests without a mission plus the
 quests of a mission that you posted there; every quest of a mission is listed in that mission's detail.
 
 The bundle identifier and the display name for iOS are set in one place,

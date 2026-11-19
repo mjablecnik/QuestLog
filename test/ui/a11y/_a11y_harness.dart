@@ -25,6 +25,10 @@ import 'package:questlog/services/calendar/calendar_service.dart';
 import 'package:questlog/ui/screens/board/board_screen.dart';
 import 'package:questlog/ui/screens/calendar/calendar_screen.dart';
 import 'package:questlog/ui/screens/mission_detail/mission_detail_screen.dart';
+import 'package:questlog/ui/screens/note_editor/note_editor_screen.dart';
+import 'package:questlog/ui/screens/notes/notes_screen.dart';
+import 'package:questlog/ui/screens/notes/trash_screen.dart';
+import 'package:questlog/services/notes/notes_service.dart';
 import 'package:questlog/ui/screens/missions/missions_screen.dart';
 import 'package:questlog/ui/screens/settings/settings_screen.dart';
 import 'package:questlog/ui/screens/shell/app_shell.dart';
@@ -40,7 +44,7 @@ import '../../helpers/test_database.dart';
 final DateTime a11yNow = DateTime(2026, 11, 15, 12);
 
 /// The screens the layout and accessibility tests walk.
-enum Subject { board, missions, detail, settings, shell, calendar }
+enum Subject { board, missions, detail, settings, shell, calendar, notes, trash, editor }
 
 /// Reconciliation that posts nothing, so the shell reaches its tabs without
 /// writing to the database from inside the fake-async zone.
@@ -134,6 +138,10 @@ class A11yEnv {
       Subject.settings => const SettingsScreen(),
       Subject.shell => const AppShell(),
       Subject.calendar => const CalendarScreen(),
+      Subject.notes => const NotesScreen(),
+      Subject.trash => const TrashScreen(),
+      // The second node of the seed is a long Note in the root.
+      Subject.editor => const NoteEditorScreen(noteId: 2),
     };
     await tester.pumpWidget(
       ProviderScope(
@@ -242,6 +250,7 @@ class A11yEnv {
         ),
       );
       if (calendarEvents) await _seedCalendar(db, clock);
+      await _seedNotes(db, clock);
       return long.id;
     });
     return id!;
@@ -357,4 +366,29 @@ Future<void> _seedCalendar(QuestlogDatabase db, FixedClock clock) async {
   await add('Narozeniny Tomáše', EventType.birthday, DateTime(2026, 11, 18), onBoard: true);
   await add('Zouk', EventType.dance, DateTime(2026, 11, 20), from: 20 * 60, to: 22 * 60);
   await add('Večeře', EventType.date, DateTime(2026, 11, 21), from: 19 * 60, to: 21 * 60);
+}
+
+/// Notes with long Czech names: a Folder with a Note inside (ids 1 and 4), a
+/// long Note in the root (2, the one the editor opens) and a trashed Note (3).
+Future<void> _seedNotes(QuestlogDatabase db, FixedClock clock) async {
+  final NotesService notes = NotesService(db, clock);
+  final folder = await notes.createFolder(
+    name: 'Kompletní rekonstrukce koupelny včetně obkladů a podlahy',
+  );
+  await notes.saveBody(
+    body: '# Nákupní seznam k rekonstrukci koupelny a související poznámky\n\n'
+        'Dlaždice, spárovací hmota, **silikon** a [dokumentace](https://example.com).\n\n'
+        '- [ ] objednat dlaždice\n- [x] domluvit instalatéra\n\n> Měř dvakrát, řež jednou.',
+    untitledName: 'Bez názvu',
+  );
+  final trashed = await notes.saveBody(
+    body: 'Smazaná poznámka s docela dlouhým názvem, který se nevejde na jeden řádek',
+    untitledName: 'Bez názvu',
+  );
+  await notes.saveBody(
+    parentId: folder.id,
+    body: 'Poznámka ve složce s dlouhým názvem, který se musí zalomit nebo zkrátit',
+    untitledName: 'Bez názvu',
+  );
+  await notes.moveToTrash(trashed!.id);
 }

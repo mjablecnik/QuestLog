@@ -121,11 +121,12 @@ Terms defined in `001-questlog-domain`, `002-questlog-ui` and `003-questlog-cale
 1. WHILE the keyboard is shown in the Note_Editor, THE Format_Toolbar SHALL be shown directly above it
 2. THE Format_Toolbar SHALL offer buttons for bold, italic, heading, bulleted list, checklist, quote, code and link
 3. WHILE the text at the caret has a format, THE Format_Toolbar SHALL show the button of that format as selected
-4. WHEN a button for bold, italic or code is pressed while text is selected, THE Note_Editor SHALL apply the format to the selection, or remove it when the whole selection already has it
-5. WHEN a button for bold, italic or code is pressed while no text is selected, THE Note_Editor SHALL apply the format to the text typed next
+4. WHEN a button for bold or italic is pressed while text is selected, THE Note_Editor SHALL apply the format to the selection, or remove it when the whole selection already has it
+5. WHEN a button for bold or italic is pressed while no text is selected, THE Note_Editor SHALL apply the format to the text typed next
 6. WHEN the heading button is pressed, THE Note_Editor SHALL change the current block through heading 1, heading 2, heading 3 and back to a paragraph, one step per press
-7. WHEN the button for bulleted list, checklist, quote or code is pressed, THE Note_Editor SHALL turn the current block into that kind of block, or back into a paragraph when it already is
-8. WHEN the link button is pressed, THE Note_Editor SHALL open a sheet asking for an address and, when confirmed, apply the link to the selected text
+7. WHEN the button for bulleted list, checklist or quote is pressed, THE Note_Editor SHALL turn the current block into that kind of block, or back into a paragraph when it already is
+11. WHEN the code button is pressed while text is selected, THE Note_Editor SHALL apply or remove inline code on the selection, and WHEN it is pressed while no text is selected, THE Note_Editor SHALL turn the current block into a code block, or back into a paragraph when it already is one
+8. WHEN the link button is pressed, THE Note_Editor SHALL open a sheet asking for an address and, when confirmed, apply the link to the selected text, or insert the address as linked text when no text is selected
 9. IF the Format_Toolbar does not fit the screen width, THEN THE Format_Toolbar SHALL scroll horizontally
 10. WHEN a checklist item is tapped, THE Note_Editor SHALL toggle its checked state
 

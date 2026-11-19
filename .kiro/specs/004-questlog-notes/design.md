@@ -10,10 +10,11 @@ Notes are added beside the existing domain, in the same layers as the calendar. 
 - **Trash is a timestamp, not a copy.** Deleting sets `deleted_at` on one row and leaves `parent_id` alone, so a Folder is trashed together with its content as one Trashed_Node and "where it came from" is simply its parent. A node is visible only when neither it nor any ancestor has `deleted_at`. Restore clears the timestamp, or first moves the Node to the Root_Folder when its parent is gone or trashed (Requirement 11.9).
 - **Purge relies on the foreign key.** `parent_id` is declared `ON DELETE CASCADE`, so deleting an expired Folder row removes everything inside it. A Node trashed on its own is always older than the Folder that was trashed around it later, so cascade never removes a Node before its own timer ends.
 - **Markdown is the stored format, the editor is a view of it.** The Markdown_Body is the only copy of the text. The editor package turns it into a document on open and back into Markdown on save. Constructs the editor does not know stay as plain text (Requirement 4.8).
-- **Editor package: `appflowy_editor`.** It is a Flutter-native block editor with its own Markdown codec, checklists, quotes, code blocks, links and a themeable toolbar API, so there is no WebView and no second text engine. `flutter pub add --dry-run` resolves it against this SDK (26 new transitive packages, among them `url_launcher`). The first task is a spike that proves the round trip and the theming; the fallback is `super_editor` with `super_editor_markdown` (20 packages), which resolves too. Everything outside `lib/ui/screens/note_editor/` stays independent of the choice: the rest of the app only sees a `String` body.
+- **Editor package: `super_editor` 0.3.0-dev.52 (MIT).** It is a Flutter-native block editor with checklists, quotes, code blocks, links, a stylesheet API and its own Markdown codec, so there is no WebView and no second text engine. The spike (task 5.1) rejected `appflowy_editor`: it resolves, but 6.2.0 does not compile with Flutter 3.47 (`TextInputClient.onFocusReceived` is missing) and it forces an older `package_info_plus`. `super_editor` 0.3.0-dev.39 failed the same way and its separate `super_editor_markdown` clashes with the codec that is now inside `super_editor`, so dev.52 alone is used. Everything outside `lib/ui/screens/note_editor/` stays independent of the choice: the rest of the app only sees a `String` body.
 - **Automatic name instead of a mandatory title field.** A new Note is named after its first non-empty line until the user renames it (Requirement 6), so creating a Note is one tap and typing.
 - **Five tabs.** The tab bar already holds Settings as a tab, so Poznámky is inserted before it. Five is the iOS maximum for a tab bar and still fits at the design width.
-- **Licence of the editor package.** `appflowy_editor` is dual-licensed AGPL-3.0 and MPL-2.0, and the app takes it under the MPL-2.0 (file-level copyleft, no obligation for the rest of the app). `super_editor` is MIT. The spike (task 5.1) records the licence of the package that is chosen.
+- **Licence of the editor package.** `super_editor` is MIT, so it adds no obligation for the app.
+- **The editor's Markdown codec is not used as is.** Spike results: raw HTML such as `<fs_line>`, a literal fence, `[x](y)` and `* comment` typed as plain text come back changed, and a code block gains whitespace on every pass. `note_markdown.dart` therefore escapes plain text on the way out, keeps raw HTML as text on the way in, and has its own serializers for code blocks, quotes and lists. The language after an opening fence is not kept.
 - **The whole tree is streamed.** `watchAll` emits every row, bodies included, after each write, so an autosave re-emits all Notes. For one user with a few hundred Notes this is cheap; if it ever is not, the Note_Row can read a stored preview column instead (a later schema step, not part of this spec).
 
 ## Architecture
@@ -114,7 +115,7 @@ lib/
     screens/note_editor/
       note_editor_screen.dart
       format_toolbar.dart
-      editor_style.dart         appflowy style built from Design_Tokens
+      editor_style.dart         stylesheet, selection and caret built from Design_Tokens
       note_markdown.dart        documentFromMarkdown / markdownFromDocument
     sheets/notes/
       add_sheet.dart

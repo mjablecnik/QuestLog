@@ -14,7 +14,7 @@ void main() {
     ('cs', const Locale('cs')),
   ]) {
     for (final double scale in <double>[1, 2]) {
-      testWidgets('four equal tabs fit 390 px without overflow '
+      testWidgets('five equal tabs fit 390 px without overflow '
           '(${entry.$1}, text x$scale)', (tester) async {
         tester.view.physicalSize = const Size(390, 844);
         tester.view.devicePixelRatio = 1;
@@ -50,9 +50,9 @@ void main() {
           for (final ShellTab tab in ShellTab.values)
             tester.getSize(find.byKey(ValueKey<ShellTab>(tab))),
         ];
-        expect(sizes, hasLength(4));
+        expect(sizes, hasLength(5));
         for (final Size size in sizes) {
-          expect(size.width, closeTo(390 / 4, 0.01));
+          expect(size.width, closeTo(390 / 5, 0.01));
           expect(size.height, greaterThanOrEqualTo(Metrics.touchTarget));
         }
         final AppLocalizations l = AppLocalizations.of(
@@ -62,6 +62,7 @@ void main() {
           l.app_tabQuests,
           l.app_tabMissions,
           l.app_tabCalendar,
+          l.app_tabNotes,
           l.app_tabSettings,
         ]) {
           expect(find.text(label), findsOneWidget);

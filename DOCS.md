@@ -19,17 +19,20 @@ questlog/
 │   ├── app.dart             root widget: theme, locale, shell
 │   ├── core/                pure Dart: clock, board day (04:00), XP and levels, cadence,
 │   │   │                    validation, domain errors
-│   │   └── calendar/        event types, repeat rules, Easter, event XP, month grid dates
+│   │   ├── calendar/        event types, repeat rules, Easter, event XP, month grid dates
+│   │   └── notes/           the notes tree (listing, moving, visibility, trash), names and previews, trash policy
 │   ├── data/                Drift tables, database, models, mappers, preferences enums
-│   │   └── calendar/        calendar tables, models, mappers, the one-time seed, filter store
+│   │   ├── calendar/        calendar tables, models, mappers, the one-time seed, filter store
+│   │   └── notes/           the note_nodes table and its mappers
 │   ├── services/            quest, mission, recurrence and settings services, XP engine,
 │   │                        Riverpod providers
-│   │   └── calendar/        calendar service and its providers
+│   │   ├── calendar/        calendar service and its providers
+│   │   └── notes/           notes service and its providers
 │   ├── ui/
 │   │   ├── theme/           design tokens (two themes of the blue palette), typography, ThemeData
 │   │   ├── state/           UI providers, reorder logic, reward queue, board-day signal
-│   │   ├── screens/         board, missions, mission_detail, settings, shell, calendar
-│   │   ├── sheets/          quest, mission, rule and font bottom sheets (calendar/: filter, month picker, delete)
+│   │   ├── screens/         board, missions, mission_detail, settings, shell, calendar, notes (list and Trash), note_editor
+│   │   ├── sheets/          quest, mission, rule and font bottom sheets (calendar/: filter, month picker, delete; notes/: add, name, move, link)
 │   │   ├── widgets/         cards, common, hero, reward, sheet
 │   │   └── forms/           validators, posting day, error text
 │   └── l10n/                app_cs.arb (template), app_en.arb, generated localizations
@@ -37,12 +40,12 @@ questlog/
 │   ├── fonts/               static TTFs: Figtree plus five temporary display families
 │   │   └── licenses/        one SIL OFL text per family, `<Family>-OFL.txt`
 │   └── icons/               24px SVG icons drawn with currentColor strokes
-├── drift_schemas/           drift_schema_v1.json and v2, the schema dump per version
+├── drift_schemas/           drift_schema_v1.json to v4, the schema dump per version
 ├── test/                    mirrors lib/ (core, data, services, ui); goldens/, helpers/
 ├── scripts/                 check.sh, check-structure.sh
 ├── screenshots/             the three README screenshots (English, dark theme, 780x1688)
 ├── ios/, linux/             platform projects (iOS identity: ios/Flutter/AppIdentity.xcconfig)
-├── .kiro/specs/             001-questlog-domain and 002-questlog-ui (requirements, design, tasks)
+├── .kiro/specs/             001-questlog-domain, 002-questlog-ui, 003-questlog-calendar and 004-questlog-notes (requirements, design, tasks)
 ├── .design/                 the approved visual design: DESIGN.md, artboards/, screens/, icon/ (app icon + launch screen generator)
 ├── .agents/                 development pipeline artifacts (state, issues, use cases, reports)
 ├── l10n.yaml                Flutter localization generator configuration
@@ -52,7 +55,7 @@ questlog/
 ### Data
 
 One SQLite file, `questlog.sqlite`, in the platform's application documents directory
-(`getApplicationDocumentsDirectory()`), opened lazily in a background isolate. Eight
+(`getApplicationDocumentsDirectory()`), opened lazily in a background isolate. Nine
 tables:
 
 | Table | Holds |
@@ -65,8 +68,9 @@ tables:
 | `calendar_events` | name, note, location, event type, start and end (a date plus minutes since midnight, no time zone, no minutes for an all-day event), repeat rule and its end, the On_Board flag |
 | `calendar_skipped_dates` | dates on which a repeating event is deleted for one occurrence |
 | `calendar_completions` | the completed occurrences of events (event, date, time, awarded XP) |
+| `note_nodes` | Folders and Notes in one table: optional parent (none is the top level; deleting a folder row deletes what is inside it), folder flag, name, the Markdown body, whether the name follows the first line, created, edited and deleted times |
 
-The schema is at version 3 (v3 added the three calendar tables and fills them once with 35 built-in events: 13 Czech public holidays, 16 notable and folk days and 6 name days; v2 added `quests.board` and `missions.sort_order`; the upgrade puts every quest without a mission in Todo and keeps the old Mission order). Adding the fourth effort tier (`fullDay`) needed no migration:
+The schema is at version 4 (v4 added `note_nodes`; v3 added the three calendar tables and fills them once with 35 built-in events: 13 Czech public holidays, 16 notable and folk days and 6 name days; v2 added `quests.board` and `missions.sort_order`; the upgrade puts every quest without a mission in Todo and keeps the old Mission order). Adding the fourth effort tier (`fullDay`) needed no migration:
 `quests.difficulty` and `rule_quests.difficulty` are plain text holding the enum name, with no
 `CHECK`, so the stored values `easy`, `normal` and `hard` keep their meaning. A change to the
 schema needs a migration step in
@@ -86,6 +90,21 @@ notable day and date, 25 XP for the rest. The calendar uses the calendar day (mi
 Board uses the Board_Day (04:00). The type filter is remembered in `calendar_filter.txt` beside
 the database. Notifications, an event URL, week and day views and user-defined types are not
 part of it (spec `003-questlog-calendar`).
+
+### Notes
+
+The Poznámky tab is independent of the rest of the app and awards no XP. Folders and Notes are rows of
+`note_nodes`; `NoteTree` (`lib/core/notes/`) holds every rule about the tree in pure Dart, and
+`NotesService` streams all rows, so the tree is built in memory. Deleting sets `deleted_at` on one row, so
+a Folder goes to the Trash with everything inside it; a node is visible only while neither it nor any
+ancestor is trashed. Restore clears the time, or first moves the node to the top level when its parent
+is gone or trashed. A Trashed_Node is purged 30 days after its deletion time (at start, on return from
+the background and when the Trash opens); the foreign key's cascade removes what is inside it. A Note's
+text is Markdown, edited with `super_editor` in `lib/ui/screens/note_editor/`; `note_markdown.dart` converts
+between the two and escapes plain text, because the package's own codec changes text typed in a WYSIWYG
+editor (for example ABAP field symbols such as `<fs_line>`). The language after a code fence is not kept.
+A new Note is named after its first line until it is renamed. Search, tags, images, tables, opening links
+and a Trash undo are not part of it (spec `004-questlog-notes`).
 
 ### Rules of the game
 
