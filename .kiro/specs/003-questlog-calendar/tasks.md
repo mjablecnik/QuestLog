@@ -218,7 +218,7 @@ Add the Kalendář tab to Questlog: the month overview, day sheet, event detail,
     - Tasks appear in Today above Quests in the right order, check and uncheck update the hero bar and the done style, a task of yesterday is gone, no drag handle and no swipe actions, the empty Board with only an Event_Task is not empty, a tap opens the detail
     - _Requirements: 15.2, 15.3, 15.4, 15.6, 15.7, 15.8, 15.9, 15.10, 15.12_
 
-- [ ] 10. End to end, goldens and documentation
+- [x] 10. End to end, goldens and documentation
   - [x] 10.1 Add the end-to-end scenario
     - In `test/ui/e2e_scenario_test.dart`: create a birthday with On_Board on, see it on the Board on its day, complete it and see the XP in the hero bar, open it in the calendar, delete it and undo, and check the seeded 17 November on the month without an Event_Task
     - _Requirements: 8.11, 11.8, 11.9, 14.1, 15.1, 15.4_
@@ -227,11 +227,11 @@ Add the Kalendář tab to Questlog: the month overview, day sheet, event detail,
     - Goldens for the month, the day sheet, the detail, the form and the Board with Event_Tasks, in Czech, dark and light; regenerate with `flutter test --update-goldens test/goldens` only for these new files
     - _Requirements: 13.1, 13.2_
 
-  - [ ] 10.3 Update documentation and screenshots
+  - [x] 10.3 Update documentation and screenshots
     - `CLAUDE.md`: status paragraph, layout block (new directories, schema v3, four tabs), a "Changed 2026-11-19 at Martin's request" note; `DOCS.md` and `README.md`: calendar section and retaken screenshots of the Board and the calendar (English, dark, 2x); `.kiro/specs/002-questlog-ui/requirements.md`: add "Changed" notes at Requirement 1 criteria 2 and 3 and at Requirement 3 for the Event_Tasks; remove the "no notifications" claim only if it concerns the calendar (notifications themselves stay out of scope)
     - _Requirements: 1.1, 15.2_
 
-- [ ] 11. Checkpoint — final
+- [x] 11. Checkpoint — final
   - Ensure `scripts/check.sh` passes (analyze, all tests, structure check) and the app starts under `xvfb-run -a flutter run -d linux`, ask the user if questions arise
 
 ## Task Dependency Graph

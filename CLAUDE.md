@@ -22,7 +22,6 @@ Calendar (2026-11-19, Martin's request, spec `003-questlog-calendar`; schema v3)
 overview, day sheet, event detail, event form, search and a type filter. Ten fixed event types with their own colour, repeat
 (daily, weekly, monthly, yearly), Czech public holidays, notable days and name days seeded once. An event with `On the board`
 shows on the Board as a task on its day and awards 10-100 XP (by length, or by type when all-day). The tab has no hero bar.
-README screenshots do not show the calendar yet (retake them).
 Not done: the iOS build and every on-device check — Martin does those himself (open LOW
 entry in `.agents/ISSUES.md`).
 
