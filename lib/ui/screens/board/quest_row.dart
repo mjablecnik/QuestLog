@@ -18,6 +18,7 @@ class QuestRow extends StatelessWidget {
     super.key,
     required this.quest,
     required this.completedLabel,
+    this.missionName,
     required this.onToggle,
     required this.onEdit,
     required this.onDelete,
@@ -27,6 +28,9 @@ class QuestRow extends StatelessWidget {
 
   /// Completion time of a done Quest, already localized.
   final String? completedLabel;
+
+  /// Name of the Mission the Quest belongs to, shown on its card.
+  final String? missionName;
   final VoidCallback onToggle;
   final VoidCallback onEdit;
   final VoidCallback onDelete;
@@ -75,6 +79,7 @@ class QuestRow extends StatelessWidget {
             child: QuestCard(
               quest: quest,
               completedLabel: completedLabel,
+              missionName: missionName,
               onToggle: onToggle,
               onTap: onEdit,
             ),

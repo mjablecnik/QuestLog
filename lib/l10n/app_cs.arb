@@ -205,9 +205,29 @@
       }
     }
   },
-  "board_openSection": "Vyvěšené questy",
-  "@board_openSection": {
-    "description": "Section label above the open Quests."
+  "board_todaySection": "Dnes",
+  "@board_todaySection": {
+    "description": "Board section for the Quests to focus on today."
+  },
+  "board_todoSection": "Todo",
+  "@board_todoSection": {
+    "description": "Board section where new Quests land."
+  },
+  "board_todayEmpty": "Přetáhni sem quest, na který se dnes chceš soustředit.",
+  "@board_todayEmpty": {
+    "description": "Hint in the empty Today section."
+  },
+  "board_todoEmpty": "Nové questy se vyvěsí sem.",
+  "@board_todoEmpty": {
+    "description": "Hint in the empty Todo section."
+  },
+  "quest_boardLabel": "Nástěnka",
+  "@quest_boardLabel": {
+    "description": "Label of the Board section picker in the Quest sheet."
+  },
+  "quest_boardNone": "Mimo nástěnku",
+  "@quest_boardNone": {
+    "description": "Option that keeps a Mission Quest off the Board."
   },
   "board_doneSection": "Splněno dnes",
   "@board_doneSection": {

@@ -8,7 +8,6 @@ import '../../../data/models.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../services/providers.dart';
 import '../../state/quest_actions.dart';
-import '../../state/reorder.dart';
 import '../../sheets/quest_sheet.dart';
 import '../../theme/questlog_theme.dart';
 import '../../theme/tokens.dart';
@@ -18,33 +17,77 @@ import '../../widgets/sheet/confirm_destructive.dart';
 import 'quest_row.dart';
 import 'section_header.dart';
 
-/// The open Quests in manual order (reorderable on long press) followed by the
-/// Quests done on the current Board_Day.
+/// One entry of the flat reorderable list: a section header, the hint shown in
+/// an empty section, or a Quest.
+sealed class _Entry {
+  const _Entry();
+  Key get key;
+}
+
+class _HeaderEntry extends _Entry {
+  const _HeaderEntry(this.section);
+  final BoardSection section;
+  @override
+  Key get key => ValueKey<String>('header-${section.name}');
+}
+
+class _EmptyEntry extends _Entry {
+  const _EmptyEntry(this.section);
+  final BoardSection section;
+  @override
+  Key get key => ValueKey<String>('empty-${section.name}');
+}
+
+class _QuestEntry extends _Entry {
+  const _QuestEntry(this.quest);
+  final Quest quest;
+  @override
+  Key get key => ValueKey<int>(quest.id);
+}
+
+/// The Quest ids of both sections as the user arranged them.
+class _Arrangement {
+  const _Arrangement({required this.today, required this.todo});
+  final List<int> today;
+  final List<int> todo;
+}
+
+/// The Board: a Today section and a Todo section of open Quests in manual
+/// order, followed by the Quests done on the current Board_Day.
 ///
-/// Only the open rows live in the reorderable sliver: done rows are neither
-/// draggable nor drop targets. A drop shows the new order at once; it is kept
-/// until the stream confirms it, and dropped again when the service fails.
+/// Both sections live in one reorderable list, the section headers being
+/// entries that cannot be dragged. A long press lifts a Quest; dropping it
+/// before the Todo header puts it in Today, after it in Todo. Done rows are
+/// neither draggable nor drop targets.
+///
+/// A drop shows the new arrangement at once; it is kept until the stream
+/// confirms it, and dropped again when the service fails.
 class QuestList extends ConsumerStatefulWidget {
   const QuestList({
     super.key,
     required this.open,
     required this.done,
     required this.today,
+    this.missionNames = const <int, String>{},
   });
 
+  /// Every open Quest on the Board, in the manual order, both sections.
   final List<Quest> open;
   final List<Quest> done;
 
   /// Calendar date of the current Board_Day, for the completion labels.
   final DateTime today;
 
+  /// Names of the Missions, to label a Quest that belongs to one.
+  final Map<int, String> missionNames;
+
   @override
   ConsumerState<QuestList> createState() => _QuestListState();
 }
 
 class _QuestListState extends ConsumerState<QuestList> {
-  /// Optimistic order of the open Quest ids while a reorder is unconfirmed.
-  List<int>? _pending;
+  /// The arrangement of a drop the stream has not confirmed yet.
+  _Arrangement? _pending;
 
   /// Identifies the latest reorder call; older failures must not undo it.
   int _reorderToken = 0;
@@ -52,33 +95,57 @@ class _QuestListState extends ConsumerState<QuestList> {
   /// Quests with a toggle call in flight, so a double tap cannot complete twice.
   final Set<int> _toggling = <int>{};
 
-  List<int> _ids(List<Quest> items) => <int>[
+  List<int> _ids(Iterable<Quest> items) => <int>[
     for (final Quest quest in items) quest.id,
   ];
 
-  /// The open Quests as displayed: the optimistic order wins over the stream.
-  List<Quest> get _shownOpen {
-    final List<int>? pending = _pending;
-    if (pending == null) return widget.open;
+  Iterable<Quest> _actual(BoardSection section) =>
+      widget.open.where((Quest q) => q.board == section);
+
+  /// The open Quests as displayed: the unconfirmed arrangement wins over the
+  /// stream; Quests it does not mention (new ones) go to their own section.
+  ({List<Quest> today, List<Quest> todo}) get _shown {
+    final _Arrangement? pending = _pending;
+    if (pending == null) {
+      return (
+        today: _actual(BoardSection.today).toList(),
+        todo: _actual(BoardSection.todo).toList(),
+      );
+    }
     final Map<int, Quest> byId = <int, Quest>{
       for (final Quest quest in widget.open) quest.id: quest,
     };
-    return <Quest>[
-      for (final int id in pending)
+    final List<Quest> today = <Quest>[
+      for (final int id in pending.today)
         if (byId.remove(id) case final Quest quest) quest,
-      ...byId.values,
     ];
+    final List<Quest> todo = <Quest>[
+      for (final int id in pending.todo)
+        if (byId.remove(id) case final Quest quest) quest,
+    ];
+    for (final Quest quest in byId.values) {
+      (quest.board == BoardSection.today ? today : todo).add(quest);
+    }
+    return (today: today, todo: todo);
   }
 
   bool get _pendingConfirmed {
-    final List<int>? pending = _pending;
+    final _Arrangement? pending = _pending;
     if (pending == null) return false;
+    final Set<int> mentioned = <int>{...pending.today, ...pending.todo};
     final Set<int> present = _ids(widget.open).toSet();
-    final List<int> expected = <int>[
-      for (final int id in pending)
-        if (present.contains(id)) id,
-    ];
-    return listEquals(expected, _ids(widget.open));
+    bool matches(List<int> expected, BoardSection section) => listEquals(
+      <int>[
+        for (final int id in expected)
+          if (present.contains(id)) id,
+      ],
+      <int>[
+        for (final int id in _ids(_actual(section)))
+          if (mentioned.contains(id)) id,
+      ],
+    );
+    return matches(pending.today, BoardSection.today) &&
+        matches(pending.todo, BoardSection.todo);
   }
 
   @override
@@ -87,20 +154,64 @@ class _QuestListState extends ConsumerState<QuestList> {
     if (_pendingConfirmed) _pending = null;
   }
 
+  List<_Entry> _entries(List<Quest> today, List<Quest> todo) => <_Entry>[
+    const _HeaderEntry(BoardSection.today),
+    if (today.isEmpty) const _EmptyEntry(BoardSection.today),
+    for (final Quest quest in today) _QuestEntry(quest),
+    const _HeaderEntry(BoardSection.todo),
+    if (todo.isEmpty) const _EmptyEntry(BoardSection.todo),
+    for (final Quest quest in todo) _QuestEntry(quest),
+  ];
+
   /// [newIndex] is the index after the dragged row is removed
-  /// (`onReorderItem`); `moveWithinSubset` takes the pre-removal index.
+  /// (`onReorderItem`).
   Future<void> _onReorder(int oldIndex, int newIndex) async {
-    final List<int> shown = _ids(_shownOpen);
-    final List<int> next = moveWithinSubset(
-      shown,
-      oldIndex,
-      newIndex > oldIndex ? newIndex + 1 : newIndex,
-    );
-    if (listEquals(next, shown)) return;
-    setState(() => _pending = next);
+    final shown = _shown;
+    final List<_Entry> entries = _entries(shown.today, shown.todo);
+    final _QuestEntry moved = entries[oldIndex] as _QuestEntry;
+    final BoardSection before = shown.today.any((Quest q) => q.id == moved.quest.id)
+        ? BoardSection.today
+        : BoardSection.todo;
+    entries
+      ..removeAt(oldIndex)
+      ..insert(newIndex, moved);
+
+    // Whatever lies before the Todo header (also above the Today one) is Today.
+    final List<int> today = <int>[];
+    final List<int> todo = <int>[];
+    BoardSection current = BoardSection.today;
+    for (final _Entry entry in entries) {
+      switch (entry) {
+        case _HeaderEntry(:final BoardSection section):
+          current = section;
+        case _QuestEntry(:final Quest quest):
+          (current == BoardSection.today ? today : todo).add(quest.id);
+        case _EmptyEntry():
+          break;
+      }
+    }
+    final BoardSection after = today.contains(moved.quest.id)
+        ? BoardSection.today
+        : BoardSection.todo;
+    if (before == after &&
+        listEquals(today, _ids(shown.today)) &&
+        listEquals(todo, _ids(shown.todo))) {
+      return;
+    }
+
+    setState(() => _pending = _Arrangement(today: today, todo: todo));
     final int token = ++_reorderToken;
+    final service = ref.read(questServiceProvider);
     try {
-      await ref.read(questServiceProvider).reorder(next);
+      if (before == after) {
+        await service.reorder(after == BoardSection.today ? today : todo);
+      } else {
+        await service.moveOnBoard(
+          moved.quest.id,
+          after,
+          after == BoardSection.today ? today : todo,
+        );
+      }
     } catch (error) {
       if (!mounted || token != _reorderToken) return;
       setState(() => _pending = null);
@@ -148,6 +259,10 @@ class _QuestListState extends ConsumerState<QuestList> {
       completedLabel: completedAt == null
           ? null
           : questCompletedLabel(l, completedAt, widget.today),
+      missionName: switch (quest.missionId) {
+        final int id => widget.missionNames[id],
+        null => null,
+      },
       onToggle: () => _toggle(quest),
       onEdit: () => _edit(quest),
       onDelete: () => _delete(quest),
@@ -184,16 +299,60 @@ class _QuestListState extends ConsumerState<QuestList> {
     );
   }
 
+  Widget _entry(_Entry entry, int index, AppLocalizations l) {
+    final p = context.palette;
+    final ({List<Quest> today, List<Quest> todo}) shown = _shown;
+    switch (entry) {
+      case _HeaderEntry(:final BoardSection section):
+        final List<Quest> quests = section == BoardSection.today
+            ? shown.today
+            : shown.todo;
+        final int xp = quests.fold<int>(
+          0,
+          (int sum, Quest q) => sum + q.difficulty.xp,
+        );
+        return KeyedSubtree(
+          key: entry.key,
+          child: BoardSectionHeader(
+            label: section == BoardSection.today
+                ? l.board_todaySection
+                : l.board_todoSection,
+            figure: l.common_plusXp(xp),
+            figureColor: p.brass,
+          ),
+        );
+      case _EmptyEntry(:final BoardSection section):
+        return Padding(
+          key: entry.key,
+          padding: const EdgeInsets.fromLTRB(
+            Space.s20,
+            0,
+            Space.s20,
+            Space.s10,
+          ),
+          child: Text(
+            section == BoardSection.today
+                ? l.board_todayEmpty
+                : l.board_todoEmpty,
+            style: context.bodyText.bodySmall!.copyWith(color: p.textFaint),
+          ),
+        );
+      case _QuestEntry(:final Quest quest):
+        return ReorderableDelayedDragStartListener(
+          key: entry.key,
+          index: index,
+          child: Semantics(hint: l.a11y_dragHint, child: _row(quest, l)),
+        );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final AppLocalizations l = AppLocalizations.of(context);
     final p = context.palette;
-    final List<Quest> open = _shownOpen;
+    final shown = _shown;
+    final List<_Entry> entries = _entries(shown.today, shown.todo);
     final List<Quest> done = widget.done;
-    final int openXp = open.fold<int>(
-      0,
-      (int sum, Quest i) => sum + i.difficulty.xp,
-    );
     final int doneXp = done.fold<int>(
       0,
       (int sum, Quest i) => sum + (i.awardedXp ?? 0),
@@ -202,29 +361,19 @@ class _QuestListState extends ConsumerState<QuestList> {
     return SlidableAutoCloseBehavior(
       child: CustomScrollView(
         slivers: <Widget>[
-          if (open.isNotEmpty)
-            SliverToBoxAdapter(
-              child: BoardSectionHeader(
-                label: l.board_openSection,
-                figure: l.common_plusXp(openXp),
-                figureColor: p.brass,
-              ),
-            ),
           SliverReorderableList(
-            itemCount: open.length,
+            itemCount: entries.length,
             proxyDecorator: _liftProxy,
             onReorderStart: (_) => Haptics.light(),
             onReorderItem: _onReorder,
-            itemBuilder: (BuildContext context, int index) {
-              final Quest quest = open[index];
-              return ReorderableDelayedDragStartListener(
-                key: ValueKey<int>(quest.id),
-                index: index,
-                child: Semantics(hint: l.a11y_dragHint, child: _row(quest, l)),
-              );
+            findChildIndexCallback: (Key key) {
+              final int index = entries.indexWhere((_Entry e) => e.key == key);
+              return index < 0 ? null : index;
             },
+            itemBuilder: (BuildContext context, int index) =>
+                _entry(entries[index], index, l),
           ),
-          if (open.isNotEmpty)
+          if (shown.today.isNotEmpty || shown.todo.isNotEmpty)
             SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsets.symmetric(

@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart' show listEquals;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -14,7 +15,9 @@ import '../../theme/questlog_theme.dart';
 import '../../theme/tokens.dart';
 import '../../widgets/cards/mission_card.dart';
 import '../../widgets/common/add_fab.dart';
+import '../../state/reorder.dart';
 import '../../widgets/common/empty_state.dart';
+import '../../widgets/common/haptics.dart';
 import '../../widgets/common/skeleton_list.dart';
 import '../../widgets/hero/hero_bar.dart';
 import '../../widgets/sheet/confirm_destructive.dart';
@@ -201,7 +204,7 @@ class _TitleRow extends StatelessWidget {
   }
 }
 
-class _MissionList extends StatelessWidget {
+class _MissionList extends ConsumerStatefulWidget {
   const _MissionList({
     required this.open,
     required this.doneToday,
@@ -219,50 +222,146 @@ class _MissionList extends StatelessWidget {
   final ValueChanged<MissionSummary> onDelete;
 
   @override
+  ConsumerState<_MissionList> createState() => _MissionListState();
+}
+
+/// The open Missions are reorderable on long press, like the Quests of the
+/// Board; a drop shows the new order at once and keeps it until the stream
+/// confirms it (dropped again when the service fails).
+class _MissionListState extends ConsumerState<_MissionList> {
+  List<int>? _pending;
+  int _reorderToken = 0;
+
+  List<int> _ids(List<MissionSummary> items) => <int>[
+    for (final MissionSummary m in items) m.id,
+  ];
+
+  List<MissionSummary> get _shownOpen =>
+      applyOrder(widget.open, _pending, (MissionSummary m) => m.id);
+
+  @override
+  void didUpdateWidget(_MissionList oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    final List<int>? pending = _pending;
+    if (pending != null && orderConfirmed(pending, _ids(widget.open))) {
+      _pending = null;
+    }
+  }
+
+  /// [newIndex] is the index after the dragged row is removed.
+  Future<void> _onReorder(int oldIndex, int newIndex) async {
+    final List<int> shown = _ids(_shownOpen);
+    final List<int> next = moveWithinSubset(
+      shown,
+      oldIndex,
+      newIndex > oldIndex ? newIndex + 1 : newIndex,
+    );
+    if (listEquals(next, shown)) return;
+    setState(() => _pending = next);
+    final int token = ++_reorderToken;
+    try {
+      await ref.read(missionServiceProvider).reorder(next);
+    } catch (error) {
+      if (!mounted || token != _reorderToken) return;
+      setState(() => _pending = null);
+      showDomainError(context, error);
+      return;
+    }
+    if (mounted &&
+        token == _reorderToken &&
+        _pending != null &&
+        orderConfirmed(_pending!, _ids(widget.open))) {
+      setState(() => _pending = null);
+    }
+  }
+
+  Widget _liftProxy(Widget child, int index, Animation<double> animation) {
+    final bool reduced = MediaQuery.disableAnimationsOf(context);
+    return Material(
+      type: MaterialType.transparency,
+      child: reduced
+          ? child
+          : ScaleTransition(
+              scale: Tween<double>(begin: 1, end: 1.02).animate(animation),
+              child: child,
+            ),
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
     final AppLocalizations l = AppLocalizations.of(context);
     final String locale = l.localeName;
+    final List<MissionSummary> open = _shownOpen;
 
     Widget row(MissionSummary m, {String? time}) => Padding(
       key: ValueKey<int>(m.id),
       padding: const EdgeInsets.only(bottom: Space.s10),
       child: MissionSwipeRow(
         missionName: m.name,
-        leaving: leaving.contains(m.id),
-        onEdit: () => onEdit(m),
-        onDelete: () => onDelete(m),
+        leaving: widget.leaving.contains(m.id),
+        onEdit: () => widget.onEdit(m),
+        onDelete: () => widget.onDelete(m),
         child: MissionCard(
           mission: m,
           completedTime: time,
-          onTap: () => onOpen(m),
+          onTap: () => widget.onOpen(m),
         ),
       ),
     );
 
+    const EdgeInsets side = EdgeInsets.symmetric(horizontal: Space.s20);
     return SlidableAutoCloseBehavior(
-      child: ListView(
-        padding: const EdgeInsets.fromLTRB(
-          Space.s20,
-          0,
-          Space.s20,
-          Metrics.fab + 2 * Space.s20 + Space.s12,
-        ),
-        children: <Widget>[
+      child: CustomScrollView(
+        slivers: <Widget>[
           if (open.isNotEmpty) ...<Widget>[
-            _SectionLabel(l.missions_sectionOpen),
-            for (final MissionSummary m in open) row(m),
-          ],
-          if (doneToday.isNotEmpty) ...<Widget>[
-            if (open.isNotEmpty) const SizedBox(height: Space.s6),
-            _SectionLabel(l.missions_sectionDoneToday),
-            for (final MissionSummary m in doneToday)
-              row(
-                m,
-                time: m.completedAt == null
-                    ? null
-                    : DateFormat.Hm(locale).format(m.completedAt!),
+            SliverPadding(
+              padding: side,
+              sliver: SliverToBoxAdapter(
+                child: _SectionLabel(l.missions_sectionOpen),
               ),
+            ),
+            SliverPadding(
+              padding: side,
+              sliver: SliverReorderableList(
+                itemCount: open.length,
+                proxyDecorator: _liftProxy,
+                onReorderStart: (_) => Haptics.light(),
+                onReorderItem: _onReorder,
+                itemBuilder: (BuildContext context, int index) {
+                  final MissionSummary m = open[index];
+                  return ReorderableDelayedDragStartListener(
+                    key: ValueKey<int>(m.id),
+                    index: index,
+                    child: Semantics(
+                      hint: l.a11y_dragHint,
+                      child: row(m),
+                    ),
+                  );
+                },
+              ),
+            ),
           ],
+          SliverPadding(
+            padding: side.copyWith(
+              bottom: Metrics.fab + 2 * Space.s20 + Space.s12,
+            ),
+            sliver: SliverList.list(
+              children: <Widget>[
+                if (widget.doneToday.isNotEmpty) ...<Widget>[
+                  if (open.isNotEmpty) const SizedBox(height: Space.s6),
+                  _SectionLabel(l.missions_sectionDoneToday),
+                  for (final MissionSummary m in widget.doneToday)
+                    row(
+                      m,
+                      time: m.completedAt == null
+                          ? null
+                          : DateFormat.Hm(locale).format(m.completedAt!),
+                    ),
+                ],
+              ],
+            ),
+          ),
         ],
       ),
     );

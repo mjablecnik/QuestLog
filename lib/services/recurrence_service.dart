@@ -203,6 +203,7 @@ class RecurrenceService {
             bonus: rule.bonus,
             createdAt: now,
             ruleId: Value(rule.id),
+            sortOrder: Value(await nextMissionSortOrder(_db)),
           ),
         );
     for (final template in await _templates(rule.id)) {

@@ -26,7 +26,7 @@ class QuestlogDatabase extends _$QuestlogDatabase {
   QuestlogDatabase.forTesting(super.executor);
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
 
   /// Runs [action] in a transaction (joining the active one, if any).
   ///
@@ -57,8 +57,17 @@ class QuestlogDatabase extends _$QuestlogDatabase {
           // The singleton row: Total_XP 0 and the default settings.
           await into(appState).insert(AppStateCompanion.insert());
         },
-        // Upgrades from version 1 are added here with stepByStep(...) together
-        // with a new dump in drift_schemas/ whenever the schema changes.
+        onUpgrade: (m, from, to) async {
+          if (from < 2) {
+            // Board sections and a manual Mission order. Every Quest without a
+            // Mission was on the Board, so it goes to Todo; Missions keep their
+            // old oldest-first order.
+            await m.addColumn(quests, quests.board);
+            await m.addColumn(missions, missions.sortOrder);
+            await customStatement("UPDATE quests SET board = 'todo' WHERE mission_id IS NULL");
+            await customStatement('UPDATE missions SET sort_order = id');
+          }
+        },
         beforeOpen: (details) async {
           await customStatement('PRAGMA foreign_keys = ON');
         },

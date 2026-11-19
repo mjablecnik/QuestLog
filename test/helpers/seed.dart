@@ -14,6 +14,7 @@ Future<int> seedMission(
   DateTime? completedAt,
   int? awardedBonus,
   int? ruleId,
+  int sortOrder = 0,
 }) {
   return db.into(db.missions).insert(
         MissionsCompanion.insert(
@@ -24,6 +25,7 @@ Future<int> seedMission(
           completedAt: Value(completedAt),
           awardedBonus: Value(awardedBonus),
           ruleId: Value(ruleId),
+          sortOrder: Value(sortOrder),
         ),
       );
 }
@@ -37,12 +39,15 @@ Future<int> seedQuest(
   int sortOrder = 1,
   DateTime? completedAt,
   int? awardedXp,
+  BoardSection? board,
 }) {
   return db.into(db.quests).insert(
         QuestsCompanion.insert(
           name: name,
           difficulty: difficulty,
           missionId: Value(missionId),
+          // A Quest without a Mission is always on the Board, in Todo by default.
+          board: Value(missionId == null ? (board ?? BoardSection.todo) : board),
           sortOrder: sortOrder,
           createdAt: DateTime(2026, 11, 1, 12),
           completedAt: Value(completedAt),

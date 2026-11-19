@@ -54,7 +54,14 @@ class _BoardScreenState extends ConsumerState<BoardScreen> {
     } else if (empty) {
       body = EmptyState(title: l.board_emptyTitle, body: l.board_emptyBody);
     } else {
-      body = QuestList(open: open, done: done, today: today);
+      final List<MissionSummary> missions =
+          ref.watch(openMissionsProvider).value ?? const <MissionSummary>[];
+      body = QuestList(
+        open: open,
+        done: done,
+        today: today,
+        missionNames: <int, String>{for (final m in missions) m.id: m.name},
+      );
     }
 
     return Scaffold(

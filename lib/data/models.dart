@@ -5,6 +5,10 @@ import 'preferences.dart';
 /// Lifecycle state of a Mission.
 enum MissionStatus { open, completed, closed }
 
+/// The part of the Board a Quest is posted in. A Quest with no section is not
+/// on the Board (only a Quest of a Mission can be like that).
+enum BoardSection { todo, today }
+
 /// Result of applying an XP delta to Total_XP.
 class XpChange {
   const XpChange({
@@ -84,6 +88,7 @@ class Quest {
     required this.createdAt,
     required this.completedAt,
     required this.awardedXp,
+    this.board,
   });
 
   final int id;
@@ -91,6 +96,9 @@ class Quest {
   final String? note;
   final Difficulty difficulty;
   final int? missionId;
+
+  /// Where on the Board the Quest is posted; null when it is not on the Board.
+  final BoardSection? board;
   final int sortOrder;
   final DateTime createdAt;
   final DateTime? completedAt;
@@ -108,12 +116,17 @@ class QuestDraft {
     required this.difficulty,
     this.note,
     this.missionId,
+    this.board,
   });
 
   final String name;
   final String? note;
   final Difficulty difficulty;
   final int? missionId;
+
+  /// The Board section. A Quest without a Mission is always on the Board, so
+  /// null means Todo for it; for a Quest of a Mission null means off the Board.
+  final BoardSection? board;
 }
 
 /// Done and total Quest counts of a Mission and the XP its open Quests still award.

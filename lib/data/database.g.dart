@@ -593,6 +593,18 @@ class $MissionsTable extends Missions
     type: DriftSqlType.dateTime,
     requiredDuringInsert: false,
   );
+  static const VerificationMeta _sortOrderMeta = const VerificationMeta(
+    'sortOrder',
+  );
+  @override
+  late final GeneratedColumn<int> sortOrder = GeneratedColumn<int>(
+    'sort_order',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0),
+  );
   static const VerificationMeta _awardedBonusMeta = const VerificationMeta(
     'awardedBonus',
   );
@@ -624,6 +636,7 @@ class $MissionsTable extends Missions
     status,
     createdAt,
     completedAt,
+    sortOrder,
     awardedBonus,
     ruleId,
   ];
@@ -665,6 +678,12 @@ class $MissionsTable extends Missions
           data['completed_at']!,
           _completedAtMeta,
         ),
+      );
+    }
+    if (data.containsKey('sort_order')) {
+      context.handle(
+        _sortOrderMeta,
+        sortOrder.isAcceptableOrUnknown(data['sort_order']!, _sortOrderMeta),
       );
     }
     if (data.containsKey('awarded_bonus')) {
@@ -719,6 +738,10 @@ class $MissionsTable extends Missions
         DriftSqlType.dateTime,
         data['${effectivePrefix}completed_at'],
       ),
+      sortOrder: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}sort_order'],
+      )!,
       awardedBonus: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
         data['${effectivePrefix}awarded_bonus'],
@@ -748,6 +771,7 @@ class MissionRow extends DataClass implements Insertable<MissionRow> {
   final MissionStatus status;
   final DateTime createdAt;
   final DateTime? completedAt;
+  final int sortOrder;
   final int? awardedBonus;
   final int? ruleId;
   const MissionRow({
@@ -757,6 +781,7 @@ class MissionRow extends DataClass implements Insertable<MissionRow> {
     required this.status,
     required this.createdAt,
     this.completedAt,
+    required this.sortOrder,
     this.awardedBonus,
     this.ruleId,
   });
@@ -779,6 +804,7 @@ class MissionRow extends DataClass implements Insertable<MissionRow> {
     if (!nullToAbsent || completedAt != null) {
       map['completed_at'] = Variable<DateTime>(completedAt);
     }
+    map['sort_order'] = Variable<int>(sortOrder);
     if (!nullToAbsent || awardedBonus != null) {
       map['awarded_bonus'] = Variable<int>(awardedBonus);
     }
@@ -798,6 +824,7 @@ class MissionRow extends DataClass implements Insertable<MissionRow> {
       completedAt: completedAt == null && nullToAbsent
           ? const Value.absent()
           : Value(completedAt),
+      sortOrder: Value(sortOrder),
       awardedBonus: awardedBonus == null && nullToAbsent
           ? const Value.absent()
           : Value(awardedBonus),
@@ -823,6 +850,7 @@ class MissionRow extends DataClass implements Insertable<MissionRow> {
       ),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
       completedAt: serializer.fromJson<DateTime?>(json['completedAt']),
+      sortOrder: serializer.fromJson<int>(json['sortOrder']),
       awardedBonus: serializer.fromJson<int?>(json['awardedBonus']),
       ruleId: serializer.fromJson<int?>(json['ruleId']),
     );
@@ -841,6 +869,7 @@ class MissionRow extends DataClass implements Insertable<MissionRow> {
       ),
       'createdAt': serializer.toJson<DateTime>(createdAt),
       'completedAt': serializer.toJson<DateTime?>(completedAt),
+      'sortOrder': serializer.toJson<int>(sortOrder),
       'awardedBonus': serializer.toJson<int?>(awardedBonus),
       'ruleId': serializer.toJson<int?>(ruleId),
     };
@@ -853,6 +882,7 @@ class MissionRow extends DataClass implements Insertable<MissionRow> {
     MissionStatus? status,
     DateTime? createdAt,
     Value<DateTime?> completedAt = const Value.absent(),
+    int? sortOrder,
     Value<int?> awardedBonus = const Value.absent(),
     Value<int?> ruleId = const Value.absent(),
   }) => MissionRow(
@@ -862,6 +892,7 @@ class MissionRow extends DataClass implements Insertable<MissionRow> {
     status: status ?? this.status,
     createdAt: createdAt ?? this.createdAt,
     completedAt: completedAt.present ? completedAt.value : this.completedAt,
+    sortOrder: sortOrder ?? this.sortOrder,
     awardedBonus: awardedBonus.present ? awardedBonus.value : this.awardedBonus,
     ruleId: ruleId.present ? ruleId.value : this.ruleId,
   );
@@ -875,6 +906,7 @@ class MissionRow extends DataClass implements Insertable<MissionRow> {
       completedAt: data.completedAt.present
           ? data.completedAt.value
           : this.completedAt,
+      sortOrder: data.sortOrder.present ? data.sortOrder.value : this.sortOrder,
       awardedBonus: data.awardedBonus.present
           ? data.awardedBonus.value
           : this.awardedBonus,
@@ -891,6 +923,7 @@ class MissionRow extends DataClass implements Insertable<MissionRow> {
           ..write('status: $status, ')
           ..write('createdAt: $createdAt, ')
           ..write('completedAt: $completedAt, ')
+          ..write('sortOrder: $sortOrder, ')
           ..write('awardedBonus: $awardedBonus, ')
           ..write('ruleId: $ruleId')
           ..write(')'))
@@ -905,6 +938,7 @@ class MissionRow extends DataClass implements Insertable<MissionRow> {
     status,
     createdAt,
     completedAt,
+    sortOrder,
     awardedBonus,
     ruleId,
   );
@@ -918,6 +952,7 @@ class MissionRow extends DataClass implements Insertable<MissionRow> {
           other.status == this.status &&
           other.createdAt == this.createdAt &&
           other.completedAt == this.completedAt &&
+          other.sortOrder == this.sortOrder &&
           other.awardedBonus == this.awardedBonus &&
           other.ruleId == this.ruleId);
 }
@@ -929,6 +964,7 @@ class MissionsCompanion extends UpdateCompanion<MissionRow> {
   final Value<MissionStatus> status;
   final Value<DateTime> createdAt;
   final Value<DateTime?> completedAt;
+  final Value<int> sortOrder;
   final Value<int?> awardedBonus;
   final Value<int?> ruleId;
   const MissionsCompanion({
@@ -938,6 +974,7 @@ class MissionsCompanion extends UpdateCompanion<MissionRow> {
     this.status = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.completedAt = const Value.absent(),
+    this.sortOrder = const Value.absent(),
     this.awardedBonus = const Value.absent(),
     this.ruleId = const Value.absent(),
   });
@@ -948,6 +985,7 @@ class MissionsCompanion extends UpdateCompanion<MissionRow> {
     this.status = const Value.absent(),
     required DateTime createdAt,
     this.completedAt = const Value.absent(),
+    this.sortOrder = const Value.absent(),
     this.awardedBonus = const Value.absent(),
     this.ruleId = const Value.absent(),
   }) : name = Value(name),
@@ -960,6 +998,7 @@ class MissionsCompanion extends UpdateCompanion<MissionRow> {
     Expression<String>? status,
     Expression<DateTime>? createdAt,
     Expression<DateTime>? completedAt,
+    Expression<int>? sortOrder,
     Expression<int>? awardedBonus,
     Expression<int>? ruleId,
   }) {
@@ -970,6 +1009,7 @@ class MissionsCompanion extends UpdateCompanion<MissionRow> {
       if (status != null) 'status': status,
       if (createdAt != null) 'created_at': createdAt,
       if (completedAt != null) 'completed_at': completedAt,
+      if (sortOrder != null) 'sort_order': sortOrder,
       if (awardedBonus != null) 'awarded_bonus': awardedBonus,
       if (ruleId != null) 'rule_id': ruleId,
     });
@@ -982,6 +1022,7 @@ class MissionsCompanion extends UpdateCompanion<MissionRow> {
     Value<MissionStatus>? status,
     Value<DateTime>? createdAt,
     Value<DateTime?>? completedAt,
+    Value<int>? sortOrder,
     Value<int?>? awardedBonus,
     Value<int?>? ruleId,
   }) {
@@ -992,6 +1033,7 @@ class MissionsCompanion extends UpdateCompanion<MissionRow> {
       status: status ?? this.status,
       createdAt: createdAt ?? this.createdAt,
       completedAt: completedAt ?? this.completedAt,
+      sortOrder: sortOrder ?? this.sortOrder,
       awardedBonus: awardedBonus ?? this.awardedBonus,
       ruleId: ruleId ?? this.ruleId,
     );
@@ -1022,6 +1064,9 @@ class MissionsCompanion extends UpdateCompanion<MissionRow> {
     if (completedAt.present) {
       map['completed_at'] = Variable<DateTime>(completedAt.value);
     }
+    if (sortOrder.present) {
+      map['sort_order'] = Variable<int>(sortOrder.value);
+    }
     if (awardedBonus.present) {
       map['awarded_bonus'] = Variable<int>(awardedBonus.value);
     }
@@ -1040,6 +1085,7 @@ class MissionsCompanion extends UpdateCompanion<MissionRow> {
           ..write('status: $status, ')
           ..write('createdAt: $createdAt, ')
           ..write('completedAt: $completedAt, ')
+          ..write('sortOrder: $sortOrder, ')
           ..write('awardedBonus: $awardedBonus, ')
           ..write('ruleId: $ruleId')
           ..write(')'))
@@ -1110,6 +1156,15 @@ class $QuestsTable extends Quests with TableInfo<$QuestsTable, QuestRow> {
       'REFERENCES missions (id) ON DELETE CASCADE',
     ),
   );
+  @override
+  late final GeneratedColumnWithTypeConverter<BoardSection?, String> board =
+      GeneratedColumn<String>(
+        'board',
+        aliasedName,
+        true,
+        type: DriftSqlType.string,
+        requiredDuringInsert: false,
+      ).withConverter<BoardSection?>($QuestsTable.$converterboardn);
   static const VerificationMeta _sortOrderMeta = const VerificationMeta(
     'sortOrder',
   );
@@ -1161,6 +1216,7 @@ class $QuestsTable extends Quests with TableInfo<$QuestsTable, QuestRow> {
     note,
     difficulty,
     missionId,
+    board,
     sortOrder,
     createdAt,
     completedAt,
@@ -1263,6 +1319,12 @@ class $QuestsTable extends Quests with TableInfo<$QuestsTable, QuestRow> {
         DriftSqlType.int,
         data['${effectivePrefix}mission_id'],
       ),
+      board: $QuestsTable.$converterboardn.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}board'],
+        ),
+      ),
       sortOrder: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
         data['${effectivePrefix}sort_order'],
@@ -1289,6 +1351,10 @@ class $QuestsTable extends Quests with TableInfo<$QuestsTable, QuestRow> {
 
   static JsonTypeConverter2<Difficulty, String, String> $converterdifficulty =
       const EnumNameConverter<Difficulty>(Difficulty.values);
+  static JsonTypeConverter2<BoardSection, String, String> $converterboard =
+      const EnumNameConverter<BoardSection>(BoardSection.values);
+  static JsonTypeConverter2<BoardSection?, String?, String?> $converterboardn =
+      JsonTypeConverter2.asNullable($converterboard);
 }
 
 class QuestRow extends DataClass implements Insertable<QuestRow> {
@@ -1297,6 +1363,9 @@ class QuestRow extends DataClass implements Insertable<QuestRow> {
   final String? note;
   final Difficulty difficulty;
   final int? missionId;
+
+  /// Null: not on the Board. Quests without a Mission are always on it.
+  final BoardSection? board;
   final int sortOrder;
   final DateTime createdAt;
   final DateTime? completedAt;
@@ -1307,6 +1376,7 @@ class QuestRow extends DataClass implements Insertable<QuestRow> {
     this.note,
     required this.difficulty,
     this.missionId,
+    this.board,
     required this.sortOrder,
     required this.createdAt,
     this.completedAt,
@@ -1328,6 +1398,11 @@ class QuestRow extends DataClass implements Insertable<QuestRow> {
     if (!nullToAbsent || missionId != null) {
       map['mission_id'] = Variable<int>(missionId);
     }
+    if (!nullToAbsent || board != null) {
+      map['board'] = Variable<String>(
+        $QuestsTable.$converterboardn.toSql(board),
+      );
+    }
     map['sort_order'] = Variable<int>(sortOrder);
     map['created_at'] = Variable<DateTime>(createdAt);
     if (!nullToAbsent || completedAt != null) {
@@ -1348,6 +1423,9 @@ class QuestRow extends DataClass implements Insertable<QuestRow> {
       missionId: missionId == null && nullToAbsent
           ? const Value.absent()
           : Value(missionId),
+      board: board == null && nullToAbsent
+          ? const Value.absent()
+          : Value(board),
       sortOrder: Value(sortOrder),
       createdAt: Value(createdAt),
       completedAt: completedAt == null && nullToAbsent
@@ -1372,6 +1450,9 @@ class QuestRow extends DataClass implements Insertable<QuestRow> {
         serializer.fromJson<String>(json['difficulty']),
       ),
       missionId: serializer.fromJson<int?>(json['missionId']),
+      board: $QuestsTable.$converterboardn.fromJson(
+        serializer.fromJson<String?>(json['board']),
+      ),
       sortOrder: serializer.fromJson<int>(json['sortOrder']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
       completedAt: serializer.fromJson<DateTime?>(json['completedAt']),
@@ -1389,6 +1470,9 @@ class QuestRow extends DataClass implements Insertable<QuestRow> {
         $QuestsTable.$converterdifficulty.toJson(difficulty),
       ),
       'missionId': serializer.toJson<int?>(missionId),
+      'board': serializer.toJson<String?>(
+        $QuestsTable.$converterboardn.toJson(board),
+      ),
       'sortOrder': serializer.toJson<int>(sortOrder),
       'createdAt': serializer.toJson<DateTime>(createdAt),
       'completedAt': serializer.toJson<DateTime?>(completedAt),
@@ -1402,6 +1486,7 @@ class QuestRow extends DataClass implements Insertable<QuestRow> {
     Value<String?> note = const Value.absent(),
     Difficulty? difficulty,
     Value<int?> missionId = const Value.absent(),
+    Value<BoardSection?> board = const Value.absent(),
     int? sortOrder,
     DateTime? createdAt,
     Value<DateTime?> completedAt = const Value.absent(),
@@ -1412,6 +1497,7 @@ class QuestRow extends DataClass implements Insertable<QuestRow> {
     note: note.present ? note.value : this.note,
     difficulty: difficulty ?? this.difficulty,
     missionId: missionId.present ? missionId.value : this.missionId,
+    board: board.present ? board.value : this.board,
     sortOrder: sortOrder ?? this.sortOrder,
     createdAt: createdAt ?? this.createdAt,
     completedAt: completedAt.present ? completedAt.value : this.completedAt,
@@ -1426,6 +1512,7 @@ class QuestRow extends DataClass implements Insertable<QuestRow> {
           ? data.difficulty.value
           : this.difficulty,
       missionId: data.missionId.present ? data.missionId.value : this.missionId,
+      board: data.board.present ? data.board.value : this.board,
       sortOrder: data.sortOrder.present ? data.sortOrder.value : this.sortOrder,
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
       completedAt: data.completedAt.present
@@ -1443,6 +1530,7 @@ class QuestRow extends DataClass implements Insertable<QuestRow> {
           ..write('note: $note, ')
           ..write('difficulty: $difficulty, ')
           ..write('missionId: $missionId, ')
+          ..write('board: $board, ')
           ..write('sortOrder: $sortOrder, ')
           ..write('createdAt: $createdAt, ')
           ..write('completedAt: $completedAt, ')
@@ -1458,6 +1546,7 @@ class QuestRow extends DataClass implements Insertable<QuestRow> {
     note,
     difficulty,
     missionId,
+    board,
     sortOrder,
     createdAt,
     completedAt,
@@ -1472,6 +1561,7 @@ class QuestRow extends DataClass implements Insertable<QuestRow> {
           other.note == this.note &&
           other.difficulty == this.difficulty &&
           other.missionId == this.missionId &&
+          other.board == this.board &&
           other.sortOrder == this.sortOrder &&
           other.createdAt == this.createdAt &&
           other.completedAt == this.completedAt &&
@@ -1484,6 +1574,7 @@ class QuestsCompanion extends UpdateCompanion<QuestRow> {
   final Value<String?> note;
   final Value<Difficulty> difficulty;
   final Value<int?> missionId;
+  final Value<BoardSection?> board;
   final Value<int> sortOrder;
   final Value<DateTime> createdAt;
   final Value<DateTime?> completedAt;
@@ -1494,6 +1585,7 @@ class QuestsCompanion extends UpdateCompanion<QuestRow> {
     this.note = const Value.absent(),
     this.difficulty = const Value.absent(),
     this.missionId = const Value.absent(),
+    this.board = const Value.absent(),
     this.sortOrder = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.completedAt = const Value.absent(),
@@ -1505,6 +1597,7 @@ class QuestsCompanion extends UpdateCompanion<QuestRow> {
     this.note = const Value.absent(),
     required Difficulty difficulty,
     this.missionId = const Value.absent(),
+    this.board = const Value.absent(),
     required int sortOrder,
     required DateTime createdAt,
     this.completedAt = const Value.absent(),
@@ -1519,6 +1612,7 @@ class QuestsCompanion extends UpdateCompanion<QuestRow> {
     Expression<String>? note,
     Expression<String>? difficulty,
     Expression<int>? missionId,
+    Expression<String>? board,
     Expression<int>? sortOrder,
     Expression<DateTime>? createdAt,
     Expression<DateTime>? completedAt,
@@ -1530,6 +1624,7 @@ class QuestsCompanion extends UpdateCompanion<QuestRow> {
       if (note != null) 'note': note,
       if (difficulty != null) 'difficulty': difficulty,
       if (missionId != null) 'mission_id': missionId,
+      if (board != null) 'board': board,
       if (sortOrder != null) 'sort_order': sortOrder,
       if (createdAt != null) 'created_at': createdAt,
       if (completedAt != null) 'completed_at': completedAt,
@@ -1543,6 +1638,7 @@ class QuestsCompanion extends UpdateCompanion<QuestRow> {
     Value<String?>? note,
     Value<Difficulty>? difficulty,
     Value<int?>? missionId,
+    Value<BoardSection?>? board,
     Value<int>? sortOrder,
     Value<DateTime>? createdAt,
     Value<DateTime?>? completedAt,
@@ -1554,6 +1650,7 @@ class QuestsCompanion extends UpdateCompanion<QuestRow> {
       note: note ?? this.note,
       difficulty: difficulty ?? this.difficulty,
       missionId: missionId ?? this.missionId,
+      board: board ?? this.board,
       sortOrder: sortOrder ?? this.sortOrder,
       createdAt: createdAt ?? this.createdAt,
       completedAt: completedAt ?? this.completedAt,
@@ -1581,6 +1678,11 @@ class QuestsCompanion extends UpdateCompanion<QuestRow> {
     if (missionId.present) {
       map['mission_id'] = Variable<int>(missionId.value);
     }
+    if (board.present) {
+      map['board'] = Variable<String>(
+        $QuestsTable.$converterboardn.toSql(board.value),
+      );
+    }
     if (sortOrder.present) {
       map['sort_order'] = Variable<int>(sortOrder.value);
     }
@@ -1604,6 +1706,7 @@ class QuestsCompanion extends UpdateCompanion<QuestRow> {
           ..write('note: $note, ')
           ..write('difficulty: $difficulty, ')
           ..write('missionId: $missionId, ')
+          ..write('board: $board, ')
           ..write('sortOrder: $sortOrder, ')
           ..write('createdAt: $createdAt, ')
           ..write('completedAt: $completedAt, ')
@@ -2910,6 +3013,7 @@ typedef $$MissionsTableCreateCompanionBuilder = MissionsCompanion Function({
   Value<MissionStatus> status,
   required DateTime createdAt,
   Value<DateTime?> completedAt,
+  Value<int> sortOrder,
   Value<int?> awardedBonus,
   Value<int?> ruleId,
 });
@@ -2920,6 +3024,7 @@ typedef $$MissionsTableUpdateCompanionBuilder = MissionsCompanion Function({
   Value<MissionStatus> status,
   Value<DateTime> createdAt,
   Value<DateTime?> completedAt,
+  Value<int> sortOrder,
   Value<int?> awardedBonus,
   Value<int?> ruleId,
 });
@@ -3003,6 +3108,11 @@ class $$MissionsTableFilterComposer
 
   ColumnFilters<DateTime> get completedAt => $composableBuilder(
     column: $table.completedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get sortOrder => $composableBuilder(
+    column: $table.sortOrder,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -3099,6 +3209,11 @@ class $$MissionsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<int> get sortOrder => $composableBuilder(
+    column: $table.sortOrder,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<int> get awardedBonus => $composableBuilder(
     column: $table.awardedBonus,
     builder: (column) => ColumnOrderings(column),
@@ -3156,6 +3271,9 @@ class $$MissionsTableAnnotationComposer
     column: $table.completedAt,
     builder: (column) => column,
   );
+
+  GeneratedColumn<int> get sortOrder =>
+      $composableBuilder(column: $table.sortOrder, builder: (column) => column);
 
   GeneratedColumn<int> get awardedBonus => $composableBuilder(
     column: $table.awardedBonus,
@@ -3245,6 +3363,7 @@ class $$MissionsTableTableManager
                 Value<MissionStatus> status = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
                 Value<DateTime?> completedAt = const Value.absent(),
+                Value<int> sortOrder = const Value.absent(),
                 Value<int?> awardedBonus = const Value.absent(),
                 Value<int?> ruleId = const Value.absent(),
               }) => MissionsCompanion(
@@ -3254,6 +3373,7 @@ class $$MissionsTableTableManager
                 status: status,
                 createdAt: createdAt,
                 completedAt: completedAt,
+                sortOrder: sortOrder,
                 awardedBonus: awardedBonus,
                 ruleId: ruleId,
               ),
@@ -3265,6 +3385,7 @@ class $$MissionsTableTableManager
                 Value<MissionStatus> status = const Value.absent(),
                 required DateTime createdAt,
                 Value<DateTime?> completedAt = const Value.absent(),
+                Value<int> sortOrder = const Value.absent(),
                 Value<int?> awardedBonus = const Value.absent(),
                 Value<int?> ruleId = const Value.absent(),
               }) => MissionsCompanion.insert(
@@ -3274,6 +3395,7 @@ class $$MissionsTableTableManager
                 status: status,
                 createdAt: createdAt,
                 completedAt: completedAt,
+                sortOrder: sortOrder,
                 awardedBonus: awardedBonus,
                 ruleId: ruleId,
               ),
@@ -3366,6 +3488,7 @@ typedef $$QuestsTableCreateCompanionBuilder = QuestsCompanion Function({
   Value<String?> note,
   required Difficulty difficulty,
   Value<int?> missionId,
+  Value<BoardSection?> board,
   required int sortOrder,
   required DateTime createdAt,
   Value<DateTime?> completedAt,
@@ -3377,6 +3500,7 @@ typedef $$QuestsTableUpdateCompanionBuilder = QuestsCompanion Function({
   Value<String?> note,
   Value<Difficulty> difficulty,
   Value<int?> missionId,
+  Value<BoardSection?> board,
   Value<int> sortOrder,
   Value<DateTime> createdAt,
   Value<DateTime?> completedAt,
@@ -3432,6 +3556,12 @@ class $$QuestsTableFilterComposer
   ColumnWithTypeConverterFilters<Difficulty, Difficulty, String>
   get difficulty => $composableBuilder(
     column: $table.difficulty,
+    builder: (column) => ColumnWithTypeConverterFilters(column),
+  );
+
+  ColumnWithTypeConverterFilters<BoardSection?, BoardSection, String>
+  get board => $composableBuilder(
+    column: $table.board,
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
@@ -3508,6 +3638,11 @@ class $$QuestsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<String> get board => $composableBuilder(
+    column: $table.board,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<int> get sortOrder => $composableBuilder(
     column: $table.sortOrder,
     builder: (column) => ColumnOrderings(column),
@@ -3575,6 +3710,9 @@ class $$QuestsTableAnnotationComposer
         column: $table.difficulty,
         builder: (column) => column,
       );
+
+  GeneratedColumnWithTypeConverter<BoardSection?, String> get board =>
+      $composableBuilder(column: $table.board, builder: (column) => column);
 
   GeneratedColumn<int> get sortOrder =>
       $composableBuilder(column: $table.sortOrder, builder: (column) => column);
@@ -3647,6 +3785,7 @@ class $$QuestsTableTableManager
                 Value<String?> note = const Value.absent(),
                 Value<Difficulty> difficulty = const Value.absent(),
                 Value<int?> missionId = const Value.absent(),
+                Value<BoardSection?> board = const Value.absent(),
                 Value<int> sortOrder = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
                 Value<DateTime?> completedAt = const Value.absent(),
@@ -3657,6 +3796,7 @@ class $$QuestsTableTableManager
                 note: note,
                 difficulty: difficulty,
                 missionId: missionId,
+                board: board,
                 sortOrder: sortOrder,
                 createdAt: createdAt,
                 completedAt: completedAt,
@@ -3669,6 +3809,7 @@ class $$QuestsTableTableManager
                 Value<String?> note = const Value.absent(),
                 required Difficulty difficulty,
                 Value<int?> missionId = const Value.absent(),
+                Value<BoardSection?> board = const Value.absent(),
                 required int sortOrder,
                 required DateTime createdAt,
                 Value<DateTime?> completedAt = const Value.absent(),
@@ -3679,6 +3820,7 @@ class $$QuestsTableTableManager
                 note: note,
                 difficulty: difficulty,
                 missionId: missionId,
+                board: board,
                 sortOrder: sortOrder,
                 createdAt: createdAt,
                 completedAt: completedAt,

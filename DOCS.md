@@ -34,7 +34,7 @@ questlog/
 │   ├── fonts/               static TTFs: Figtree plus five temporary display families
 │   │   └── licenses/        one SIL OFL text per family, `<Family>-OFL.txt`
 │   └── icons/               24px SVG icons drawn with currentColor strokes
-├── drift_schemas/           drift_schema_v1.json, the schema dump per version
+├── drift_schemas/           drift_schema_v1.json and v2, the schema dump per version
 ├── test/                    mirrors lib/ (core, data, services, ui); goldens/, helpers/
 ├── scripts/                 check.sh, check-structure.sh
 ├── screenshots/             the three README screenshots (English, dark theme, 780x1688)
@@ -54,13 +54,13 @@ tables:
 
 | Table | Holds |
 |---|---|
-| `quests` | name, note, effort tier (column `difficulty`), optional mission (the Board shows only quests without one), sort order, completion time and awarded XP |
-| `missions` | name, bonus size, status (open, completed, closed), awarded bonus, optional rule |
+| `quests` | name, note, effort tier (column `difficulty`), optional mission, Board section (`board`: `todo`, `today` or null = not on the Board; quests without a mission are never null), sort order, completion time and awarded XP |
+| `missions` | name, bonus size, status (open, completed, closed), sort order, awarded bonus, optional rule |
 | `recurring_rules` | name, cadence, anchor date, next index, bonus size, last posted date |
 | `rule_quests` | the quests a rule posts with each mission |
 | `app_state` | the singleton row: total XP, hero name, language, theme, display font |
 
-The schema is at version 1. Adding the fourth effort tier (`fullDay`) needed no migration:
+The schema is at version 2 (v2 added `quests.board` and `missions.sort_order`; the upgrade puts every quest without a mission in Todo and keeps the old Mission order). Adding the fourth effort tier (`fullDay`) needed no migration:
 `quests.difficulty` and `rule_quests.difficulty` are plain text holding the enum name, with no
 `CHECK`, so the stored values `easy`, `normal` and `hard` keep their meaning. A change to the
 schema needs a migration step in

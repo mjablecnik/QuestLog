@@ -58,6 +58,7 @@ class _QuestSheetState extends ConsumerState<QuestSheet> {
   late final TextEditingController _note;
   late Difficulty _difficulty;
   late int? _missionId;
+  late BoardSection? _board;
 
   FieldError? _nameError;
   FieldError? _noteError;
@@ -82,6 +83,10 @@ class _QuestSheetState extends ConsumerState<QuestSheet> {
     _note = TextEditingController(text: quest?.note ?? '');
     _difficulty = quest?.difficulty ?? Difficulty.normal;
     _missionId = quest != null ? quest.missionId : widget.presetMissionId;
+    // A new Quest of a Mission starts off the Board, any other one in Todo.
+    _board = quest != null
+        ? quest.board
+        : (_missionId == null ? BoardSection.todo : null);
   }
 
   @override
@@ -104,8 +109,12 @@ class _QuestSheetState extends ConsumerState<QuestSheet> {
     return _name.text != initialName ||
         _note.text != initialNote ||
         _difficulty != initialDifficulty ||
-        _missionId != initialMission;
+        _missionId != initialMission ||
+        _board != (quest != null ? quest.board : _initialNewBoard);
   }
+
+  BoardSection? get _initialNewBoard =>
+      widget.presetMissionId == null ? BoardSection.todo : null;
 
   void _onNameChanged(String value) {
     setState(() {
@@ -123,6 +132,10 @@ class _QuestSheetState extends ConsumerState<QuestSheet> {
 
   void _selectMission(int? id) {
     setState(() {
+      // Joining a Mission takes a Quest off the Board; leaving it puts the
+      // Quest back (a Quest without a Mission is always on the Board).
+      if (id != null && _missionId == null) _board = null;
+      if (id == null) _board ??= BoardSection.todo;
       _missionId = id;
       _missionNotOpen = false;
       _serviceError = null;
@@ -146,6 +159,7 @@ class _QuestSheetState extends ConsumerState<QuestSheet> {
       note: _note.text.isEmpty ? null : _note.text,
       difficulty: _difficulty,
       missionId: _missionId,
+      board: _board,
     );
     try {
       final Quest saved = _isEditing
@@ -168,6 +182,7 @@ class _QuestSheetState extends ConsumerState<QuestSheet> {
   void _announceMissionMove(Quest saved) {
     final int? missionId = saved.missionId;
     if (missionId == null ||
+        saved.board != null ||
         missionId == _editing?.missionId ||
         widget.presetMissionId != null) {
       return;
@@ -270,6 +285,17 @@ class _QuestSheetState extends ConsumerState<QuestSheet> {
               noneLabel: l10n.quest_missionNone,
               onSelected: _selectMission,
               hasError: _missionNotOpen,
+            ),
+          ),
+          const SizedBox(height: Space.s20),
+          _FieldGroup(
+            label: l10n.quest_boardLabel,
+            child: _BoardPicker(
+              enabled: !_isDone,
+              selected: _board,
+              allowOff: _missionId != null,
+              onSelected: (BoardSection? value) =>
+                  setState(() => _board = value),
             ),
           ),
           const SizedBox(height: Space.s20),
@@ -487,6 +513,59 @@ class _FocusFillState extends State<_FocusFill> {
       skipTraversal: true,
       onFocusChange: (bool value) => setState(() => _focused = value),
       child: widget.builder(_focused),
+    );
+  }
+}
+
+/// Pill choices for where the Quest is on the Board: Today, Todo and, for a
+/// Quest of a Mission, off the Board.
+class _BoardPicker extends StatelessWidget {
+  const _BoardPicker({
+    required this.enabled,
+    required this.selected,
+    required this.allowOff,
+    required this.onSelected,
+  });
+
+  final bool enabled;
+  final BoardSection? selected;
+  final bool allowOff;
+  final ValueChanged<BoardSection?> onSelected;
+
+  @override
+  Widget build(BuildContext context) {
+    final AppLocalizations l10n = AppLocalizations.of(context);
+    return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints constraints) {
+        return Wrap(
+          spacing: Space.s8,
+          runSpacing: Space.s8,
+          children: <Widget>[
+            _PickChip(
+              label: l10n.board_todaySection,
+              selected: selected == BoardSection.today,
+              enabled: enabled,
+              maxWidth: constraints.maxWidth,
+              onTap: () => onSelected(BoardSection.today),
+            ),
+            _PickChip(
+              label: l10n.board_todoSection,
+              selected: selected == BoardSection.todo,
+              enabled: enabled,
+              maxWidth: constraints.maxWidth,
+              onTap: () => onSelected(BoardSection.todo),
+            ),
+            if (allowOff)
+              _PickChip(
+                label: l10n.quest_boardNone,
+                selected: selected == null,
+                enabled: enabled,
+                maxWidth: constraints.maxWidth,
+                onTap: () => onSelected(null),
+              ),
+          ],
+        );
+      },
     );
   }
 }

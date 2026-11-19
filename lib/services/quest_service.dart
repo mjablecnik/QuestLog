@@ -36,6 +36,7 @@ class QuestService {
         difficulty: draft.difficulty,
         missionId: missionId,
         createdAt: _clock.now(),
+        board: draft.board,
       );
       return (await _load(id)).toModel();
     });
@@ -60,6 +61,7 @@ class QuestService {
           change.copyWith(
             difficulty: Value(draft.difficulty),
             missionId: Value(missionId),
+            board: Value(missionId == null ? (draft.board ?? BoardSection.todo) : draft.board),
           ),
         );
       }
@@ -177,17 +179,33 @@ class QuestService {
     });
   }
 
-  /// Open Quests that belong to no Mission, in the manual order. Quests of a
-  /// Mission are listed only on that Mission's detail screen.
+  /// Moves an open Quest to [section] of the Board and puts the Quests of that
+  /// section into [orderedIds] (which includes [id]), in one transaction.
+  Future<void> moveOnBoard(int id, BoardSection section, List<int> orderedIds) {
+    return _db.runTransaction(() async {
+      final quest = await _load(id);
+      if (quest.completedAt != null) {
+        throw InvalidStateError('quest $id is done and cannot be moved on the board');
+      }
+      if (!orderedIds.contains(id)) {
+        throw const ValidationError('orderedIds', 'does not contain the moved quest');
+      }
+      await (_db.update(_db.quests)..where((q) => q.id.equals(id)))
+          .write(QuestsCompanion(board: Value(section)));
+      await reorder(orderedIds);
+    });
+  }
+
+  /// Open Quests that are on the Board (both sections), in the manual order.
+  /// Quests of a Mission are on the Board only when they were put there.
   Stream<List<Quest>> watchOpenBoard() {
     final query = _db.select(_db.quests)
-      ..where((q) => q.completedAt.isNull() & q.missionId.isNull())
+      ..where((q) => q.completedAt.isNull() & q.board.isNotNull())
       ..orderBy([(q) => OrderingTerm.asc(q.sortOrder)]);
     return query.watch().map(_toModels);
   }
 
-  /// Quests without a Mission completed within the Board_Day of [today],
-  /// newest first.
+  /// Quests on the Board completed within the Board_Day of [today], newest first.
   ///
   /// [today] comes from the caller, so a consumer can refresh the window when the
   /// Board_Day changes.
@@ -196,7 +214,7 @@ class QuestService {
     final query = _db.select(_db.quests)
       ..where(
         (q) =>
-            q.missionId.isNull() &
+            q.board.isNotNull() &
             q.completedAt.isBiggerOrEqualValue(window.start) &
             q.completedAt.isSmallerThanValue(window.end),
       )

@@ -35,6 +35,7 @@ class Missions extends Table {
   TextColumn get status => textEnum<MissionStatus>().withDefault(const Constant('open'))();
   DateTimeColumn get createdAt => dateTime()();
   DateTimeColumn get completedAt => dateTime().nullable()();
+  IntColumn get sortOrder => integer().withDefault(const Constant(0))();
   IntColumn get awardedBonus => integer().nullable()();
   IntColumn get ruleId =>
       integer().nullable().references(RecurringRules, #id, onDelete: KeyAction.setNull)();
@@ -50,6 +51,8 @@ class Quests extends Table {
   TextColumn get difficulty => textEnum<Difficulty>()();
   IntColumn get missionId =>
       integer().nullable().references(Missions, #id, onDelete: KeyAction.cascade)();
+  /// Null: not on the Board. Quests without a Mission are always on it.
+  TextColumn get board => textEnum<BoardSection>().nullable()();
   IntColumn get sortOrder => integer()();
   DateTimeColumn get createdAt => dateTime()();
   DateTimeColumn get completedAt => dateTime().nullable()();

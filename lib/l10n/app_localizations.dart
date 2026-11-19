@@ -290,11 +290,41 @@ abstract class AppLocalizations {
   /// **'{count, plural, one{{count} otevřený} few{{count} otevřené} other{{count} otevřených}} · {date}'**
   String board_subtitle(int count, String date);
 
-  /// Section label above the open Quests.
+  /// Board section for the Quests to focus on today.
   ///
   /// In cs, this message translates to:
-  /// **'Vyvěšené questy'**
-  String get board_openSection;
+  /// **'Dnes'**
+  String get board_todaySection;
+
+  /// Board section where new Quests land.
+  ///
+  /// In cs, this message translates to:
+  /// **'Todo'**
+  String get board_todoSection;
+
+  /// Hint in the empty Today section.
+  ///
+  /// In cs, this message translates to:
+  /// **'Přetáhni sem quest, na který se dnes chceš soustředit.'**
+  String get board_todayEmpty;
+
+  /// Hint in the empty Todo section.
+  ///
+  /// In cs, this message translates to:
+  /// **'Nové questy se vyvěsí sem.'**
+  String get board_todoEmpty;
+
+  /// Label of the Board section picker in the Quest sheet.
+  ///
+  /// In cs, this message translates to:
+  /// **'Nástěnka'**
+  String get quest_boardLabel;
+
+  /// Option that keeps a Mission Quest off the Board.
+  ///
+  /// In cs, this message translates to:
+  /// **'Mimo nástěnku'**
+  String get quest_boardNone;
 
   /// Section label above the Quests done on the current Board_Day.
   ///

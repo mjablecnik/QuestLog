@@ -163,7 +163,22 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get board_openSection => 'Posted quests';
+  String get board_todaySection => 'Today';
+
+  @override
+  String get board_todoSection => 'Todo';
+
+  @override
+  String get board_todayEmpty => 'Drag a quest here to focus on it today.';
+
+  @override
+  String get board_todoEmpty => 'New quests are posted here.';
+
+  @override
+  String get quest_boardLabel => 'Board';
+
+  @override
+  String get quest_boardNone => 'Off the board';
 
   @override
   String get board_doneSection => 'Done today';

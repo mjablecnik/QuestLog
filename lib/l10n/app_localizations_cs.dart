@@ -172,7 +172,23 @@ class AppLocalizationsCs extends AppLocalizations {
   }
 
   @override
-  String get board_openSection => 'Vyvěšené questy';
+  String get board_todaySection => 'Dnes';
+
+  @override
+  String get board_todoSection => 'Todo';
+
+  @override
+  String get board_todayEmpty =>
+      'Přetáhni sem quest, na který se dnes chceš soustředit.';
+
+  @override
+  String get board_todoEmpty => 'Nové questy se vyvěsí sem.';
+
+  @override
+  String get quest_boardLabel => 'Nástěnka';
+
+  @override
+  String get quest_boardNone => 'Mimo nástěnku';
 
   @override
   String get board_doneSection => 'Splněno dnes';

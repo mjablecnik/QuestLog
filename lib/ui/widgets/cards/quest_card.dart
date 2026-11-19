@@ -38,6 +38,7 @@ class QuestCard extends StatelessWidget {
     required this.onToggle,
     this.onTap,
     this.completedLabel,
+    this.missionName,
     this.trailing,
   });
 
@@ -51,6 +52,9 @@ class QuestCard extends StatelessWidget {
 
   /// Already localized completion time, shown in the meta row of a done Quest.
   final String? completedLabel;
+
+  /// Name of the Mission the Quest belongs to, shown in the meta row.
+  final String? missionName;
 
   /// Slot at the right end, for the drag handle of a reorderable list.
   final Widget? trailing;
@@ -73,6 +77,8 @@ class QuestCard extends StatelessWidget {
         quest.difficulty,
         emptyColor: done ? p.textFaint : p.slipTextFaint,
       ),
+      if (missionName != null)
+        Text(missionName!, style: meta.copyWith(fontWeight: FontWeight.w600)),
       if (done && completedLabel != null) Text(completedLabel!, style: meta),
     ];
 

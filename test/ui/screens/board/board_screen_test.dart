@@ -5,7 +5,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:questlog/core/errors.dart';
 import 'package:questlog/core/xp_rules.dart';
-import 'package:questlog/data/database.dart' show QuestsCompanion;
+import 'package:questlog/data/database.dart' show QuestRow, QuestsCompanion;
+import 'package:questlog/data/models.dart' show BoardSection;
 import 'package:questlog/l10n/app_localizations.dart';
 import 'package:questlog/l10n/app_localizations_cs.dart';
 import 'package:questlog/l10n/app_localizations_en.dart';
@@ -105,7 +106,8 @@ void main() {
       'Third',
       'Finished',
     ]);
-    expect(find.text('POSTED QUESTS'), findsOneWidget);
+    expect(find.text('TODAY'), findsOneWidget);
+    expect(find.text('TODO'), findsOneWidget);
     expect(find.text('DONE TODAY'), findsOneWidget);
     expect(find.text('3 open · Sunday, November 15'), findsOneWidget);
     expect(find.text('1 QUEST · 25 XP'), findsOneWidget);
@@ -271,7 +273,7 @@ void main() {
 
     expect(find.text('The board is empty'), findsOneWidget);
     expect(find.text('Bound'), findsNothing);
-    expect(find.text('POSTED QUESTS'), findsNothing);
+    expect(find.text('TODO'), findsNothing);
     expect(find.text('0 open · Sunday, November 15'), findsOneWidget);
   });
 
@@ -290,14 +292,14 @@ void main() {
 
     await h.seed(tester, () async {
       await (h.db.update(h.db.quests)..where((q) => q.id.equals(questId)))
-          .write(QuestsCompanion(missionId: Value<int?>(missionId)));
+          .write(QuestsCompanion(missionId: Value<int?>(missionId), board: const Value<BoardSection?>(null)));
     });
     await h.settle(tester);
     expect(find.text('Wanderer'), findsNothing);
 
     await h.seed(tester, () async {
       await (h.db.update(h.db.quests)..where((q) => q.id.equals(questId)))
-          .write(const QuestsCompanion(missionId: Value<int?>(null)));
+          .write(const QuestsCompanion(missionId: Value<int?>(null), board: Value<BoardSection?>(BoardSection.todo)));
     });
     await h.settle(tester);
     expect(find.text('Wanderer'), findsOneWidget);
@@ -553,5 +555,58 @@ void main() {
 
     expect(find.text('Beta'), findsNothing);
     expect(find.text('Alpha'), findsOneWidget);
+  });
+
+  boardTest(h, 'a mission quest posted to Today shows under Today with its mission', (
+    tester,
+  ) async {
+    await h.pump(tester);
+    await h.seed(tester, () async {
+      final int mission = await seedMission(h.db, name: 'Cleanup');
+      await seedQuest(h.db, name: 'Posted', missionId: mission, board: BoardSection.today);
+      await seedQuest(h.db, name: 'Hidden', missionId: mission, sortOrder: 2);
+      await seedQuest(h.db, name: 'Loose', sortOrder: 3);
+    });
+    await h.settle(tester);
+
+    expect(find.text('Hidden'), findsNothing);
+    expect(find.text('Cleanup'), findsOneWidget);
+    expect(h.order(tester, ['Posted', 'Loose']), ['Posted', 'Loose']);
+    expect(
+      tester.getTopLeft(find.text('TODO')).dy,
+      greaterThan(tester.getTopLeft(find.text('Posted')).dy),
+    );
+    expect(
+      tester.getTopLeft(find.text('TODO')).dy,
+      lessThan(tester.getTopLeft(find.text('Loose')).dy),
+    );
+  });
+
+  boardTest(h, 'an empty Today section shows its hint', (tester) async {
+    await seedThree(tester);
+
+    expect(find.text('Drag a quest here to focus on it today.'), findsOneWidget);
+  });
+
+  boardTest(h, 'dragging a quest above the Todo header moves it to Today', (
+    tester,
+  ) async {
+    await seedThree(tester);
+
+    await dragCard(tester, 'Alpha', -150);
+
+    final List<QuestRow> rows = await tester.runAsync(
+      () => h.db.select(h.db.quests).get(),
+    ) as List<QuestRow>;
+    final Map<String, BoardSection?> board = <String, BoardSection?>{
+      for (final QuestRow r in rows) r.name: r.board,
+    };
+    expect(board['Alpha'], BoardSection.today);
+    expect(board['Beta'], BoardSection.todo);
+    expect(board['Gamma'], BoardSection.todo);
+    expect(
+      tester.getTopLeft(find.text('Alpha')).dy,
+      lessThan(tester.getTopLeft(find.text('TODO')).dy),
+    );
   });
 }

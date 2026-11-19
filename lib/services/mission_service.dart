@@ -31,7 +31,12 @@ class MissionService {
     return _db.runTransaction(() async {
       final now = _clock.now();
       final id = await _db.into(_db.missions).insert(
-            MissionsCompanion.insert(name: name, bonus: draft.bonus, createdAt: now),
+            MissionsCompanion.insert(
+              name: name,
+              bonus: draft.bonus,
+              createdAt: now,
+              sortOrder: Value(await nextMissionSortOrder(_db)),
+            ),
           );
       for (final quest in draft.quests) {
         await insertQuestLast(
@@ -125,11 +130,36 @@ class MissionService {
     });
   }
 
-  /// `open` Missions with their progress, oldest first.
+  /// Puts exactly the Missions in [orderedIds] into that relative order; every
+  /// other Mission keeps its place. Same contract as `QuestService.reorder`.
+  Future<void> reorder(List<int> orderedIds) async {
+    if (orderedIds.toSet().length != orderedIds.length) {
+      throw const ValidationError('orderedIds', 'contains a duplicate id');
+    }
+    if (orderedIds.isEmpty) return;
+    await _db.runTransaction(() async {
+      final rows =
+          await (_db.select(_db.missions)..where((m) => m.id.isIn(orderedIds))).get();
+      if (rows.length != orderedIds.length) {
+        throw const ValidationError('orderedIds', 'contains an unknown id');
+      }
+      final positions = rows.map((row) => row.sortOrder).toList()..sort();
+      for (var i = 0; i < orderedIds.length; i++) {
+        await (_db.update(_db.missions)..where((m) => m.id.equals(orderedIds[i])))
+            .write(MissionsCompanion(sortOrder: Value(positions[i])));
+      }
+    });
+  }
+
+  /// `open` Missions with their progress in the manual order.
   Stream<List<MissionSummary>> watchOpen() {
     return _watchSummaries(
       _db.missions.status.equalsValue(MissionStatus.open),
-      [OrderingTerm.asc(_db.missions.createdAt), OrderingTerm.asc(_db.missions.id)],
+      [
+        OrderingTerm.asc(_db.missions.sortOrder),
+        OrderingTerm.asc(_db.missions.createdAt),
+        OrderingTerm.asc(_db.missions.id),
+      ],
     );
   }
 

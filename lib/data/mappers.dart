@@ -8,6 +8,7 @@ extension QuestRowMapping on QuestRow {
         note: note,
         difficulty: difficulty,
         missionId: missionId,
+        board: board,
         sortOrder: sortOrder,
         createdAt: createdAt,
         completedAt: completedAt,
