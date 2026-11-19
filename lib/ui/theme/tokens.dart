@@ -214,6 +214,13 @@ abstract final class Metrics {
   static const double dashLength = 6;
   static const double dashGap = 4;
 
+  /// Notes: tinted icon tile of a row, width of one of three swipe actions,
+  /// the count badge on the Trash button, indent of one level in the Move_Sheet.
+  static const double nodeIcon = 40;
+  static const double swipeActionNarrow = 76;
+  static const double trashBadge = 16;
+  static const double treeIndent = 22;
+
   /// Rule row in Settings: tinted icon tile, "Post now" pill, add-row plus.
   static const double ruleIcon = 40;
   static const double postPill = 30;
@@ -227,6 +234,9 @@ abstract final class Motion {
 
   /// Sheets and menus.
   static const Duration panel = Duration(milliseconds: 300);
+
+  /// Pause after the last keystroke before a Note is saved.
+  static const Duration autosave = Duration(milliseconds: 500);
 
   /// Screen transitions.
   static const Duration screen = Duration(milliseconds: 350);

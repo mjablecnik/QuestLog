@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../data/models.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../../services/notes/notes_providers.dart';
 import '../../../services/providers.dart';
 import '../../state/board_day.dart';
 import '../../state/ui_providers.dart';
@@ -13,13 +14,14 @@ import '../../widgets/common/snackbar_host.dart';
 import '../board/board_screen.dart';
 import '../calendar/calendar_screen.dart';
 import '../missions/missions_screen.dart';
+import '../notes/notes_screen.dart';
 import '../settings/settings_screen.dart';
 import 'questlog_tab_bar.dart';
 import 'reconcile_banner.dart';
 import 'splash_screen.dart';
 
 /// Root screen: splash until the first Reconciliation has finished, then the
-/// four tabs (Questy, Mise, Kalendář, Nastavení). The reward overlay is hosted by `QuestlogApp`, above
+/// five tabs (Questy, Mise, Kalendář, Poznámky, Nastavení). The reward overlay is hosted by `QuestlogApp`, above
 /// the Navigator, so it also covers pushed routes.
 ///
 /// Reconciliation runs at start, once per return from the background, when the
@@ -100,6 +102,11 @@ class _AppShellState extends ConsumerState<AppShell>
       // and the user gets the retry banner instead of a stuck splash.
       posted = null;
     }
+    // Notes: whatever expired in the Trash goes now. A failure is ignored; the
+    // next request tries again and nothing else depends on it.
+    try {
+      await ref.read(notesServiceProvider).purgeExpired();
+    } catch (_) {}
     if (!mounted) return;
     setState(() {
       _ready = true;
@@ -172,6 +179,7 @@ class _AppShellState extends ConsumerState<AppShell>
               BoardScreen(),
               MissionsScreen(),
               CalendarScreen(),
+              NotesScreen(),
               SettingsScreen(),
             ],
           ),

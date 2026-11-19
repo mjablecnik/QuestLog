@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart' show MaxLengthEnforcement;
 
 import '../../theme/questlog_theme.dart';
 import '../../theme/tokens.dart';
@@ -50,6 +51,10 @@ class CalendarTextField extends StatefulWidget {
     this.title = false,
     this.textInputAction,
     this.onSubmitted,
+    this.maxLength,
+    this.keyboardType,
+    this.textCapitalization = TextCapitalization.sentences,
+    this.fieldKey,
   });
 
   final TextEditingController controller;
@@ -63,6 +68,12 @@ class CalendarTextField extends StatefulWidget {
   final bool title;
   final TextInputAction? textInputAction;
   final ValueChanged<String>? onSubmitted;
+
+  /// Longest text the field accepts; null for no limit.
+  final int? maxLength;
+  final TextInputType? keyboardType;
+  final TextCapitalization textCapitalization;
+  final Key? fieldKey;
 
   @override
   State<CalendarTextField> createState() => _CalendarTextFieldState();
@@ -94,19 +105,23 @@ class _CalendarTextFieldState extends State<CalendarTextField> {
           skipTraversal: true,
           onFocusChange: (bool value) => setState(() => _focused = value),
           child: TextField(
+            key: widget.fieldKey,
             controller: widget.controller,
+            maxLength: widget.maxLength,
+            maxLengthEnforcement: MaxLengthEnforcement.enforced,
             autofocus: widget.autofocus,
             onChanged: widget.onChanged,
             onSubmitted: widget.onSubmitted,
             textInputAction: widget.textInputAction,
-            textCapitalization: TextCapitalization.sentences,
-            keyboardType: widget.multiline ? TextInputType.multiline : TextInputType.text,
+            textCapitalization: widget.textCapitalization,
+            keyboardType: widget.keyboardType ?? (widget.multiline ? TextInputType.multiline : TextInputType.text),
             minLines: widget.multiline ? 2 : 1,
             maxLines: widget.multiline ? 5 : 1,
             cursorColor: p.brass,
             style: style,
             decoration: InputDecoration(
               hintText: widget.hint,
+              counterText: '',
               hintStyle: style.copyWith(color: p.textFaint),
               filled: true,
               fillColor: _focused ? p.fieldActive : p.field,

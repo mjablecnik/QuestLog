@@ -6,9 +6,9 @@ import '../../theme/tokens.dart';
 import '../../widgets/common/app_icon.dart';
 
 /// The four tabs of the shell; Settings lives in the bar, not behind a button.
-enum ShellTab { quests, missions, calendar, settings }
+enum ShellTab { quests, missions, calendar, notes, settings }
 
-/// Bottom bar with the tabs Questy, Mise, Kalendář and Nastavení; the active one is
+/// Bottom bar with the tabs Questy, Mise, Kalendář, Poznámky and Nastavení; the active one is
 /// brass, the others faint (see `.tabbar` in the design).
 class QuestlogTabBar extends StatelessWidget {
   const QuestlogTabBar({
@@ -47,12 +47,14 @@ class QuestlogTabBar extends StatelessWidget {
                         ShellTab.quests => IconAsset.quests,
                         ShellTab.missions => IconAsset.missions,
                         ShellTab.calendar => IconAsset.calendar,
+                        ShellTab.notes => IconAsset.notes,
                         ShellTab.settings => IconAsset.gear,
                       },
                       label: switch (tab) {
                         ShellTab.quests => l10n.app_tabQuests,
                         ShellTab.missions => l10n.app_tabMissions,
                         ShellTab.calendar => l10n.app_tabCalendar,
+                        ShellTab.notes => l10n.app_tabNotes,
                         ShellTab.settings => l10n.app_tabSettings,
                       },
                       selected: tab == current,

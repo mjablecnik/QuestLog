@@ -86,7 +86,7 @@ class QuestlogSheet extends StatefulWidget {
   const QuestlogSheet({
     super.key,
     required this.title,
-    required this.primaryLabel,
+    this.primaryLabel,
     required this.child,
     this.primaryIcon,
     this.onPrimary,
@@ -98,7 +98,8 @@ class QuestlogSheet extends StatefulWidget {
   final String title;
 
   /// Already localized label of the brass button ("Vyvěsit quest", "Uložit").
-  final String primaryLabel;
+  /// Null for a sheet that has no primary button (a sheet of choices).
+  final String? primaryLabel;
 
   /// Optional [IconAsset] shown before the label of the brass button (the
   /// artboards give the create sheets one).
@@ -254,11 +255,13 @@ class _QuestlogSheetState extends State<QuestlogSheet> {
               Space.s20,
               Space.s12 + media.padding.bottom,
             ),
-            child: _PrimaryButton(
-              label: widget.primaryLabel,
-              icon: widget.primaryIcon,
-              onPressed: canSubmit ? _submit : null,
-            ),
+            child: widget.primaryLabel == null
+                ? null
+                : _PrimaryButton(
+                    label: widget.primaryLabel!,
+                    icon: widget.primaryIcon,
+                    onPressed: canSubmit ? _submit : null,
+                  ),
           ),
         ],
       ),
