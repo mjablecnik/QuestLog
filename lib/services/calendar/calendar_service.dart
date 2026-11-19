@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:drift/drift.dart';
 
 import '../../core/calendar/calendar_dates.dart';
@@ -382,14 +384,52 @@ class CalendarService {
         .getSingleOrNull();
   }
 
+  /// Emits [read] once and again after every change of a calendar table.
+  ///
+  /// Listens to the table updates themselves instead of to a query, so an idle
+  /// calendar holds no query of its own and never delays the other streams.
   Stream<T> _watchAll<T>(Future<T> Function() read) {
-    return _db
-        .customSelect(
-          'SELECT 1',
-          readsFrom: <TableInfo>{_db.calendarEvents, _db.calendarSkippedDates, _db.calendarCompletions},
-        )
-        .watch()
-        .asyncMap((_) => read());
+    late final StreamController<T> controller;
+    StreamSubscription<Set<TableUpdate>>? subscription;
+    bool busy = false;
+    bool again = false;
+
+    // Reads once at a time; a change that arrives during a read schedules one more.
+    Future<void> emit() async {
+      if (busy) {
+        again = true;
+        return;
+      }
+      busy = true;
+      try {
+        do {
+          again = false;
+          final T value = await read();
+          if (!controller.isClosed) controller.add(value);
+        } while (again && !controller.isClosed);
+      } catch (error, stack) {
+        if (!controller.isClosed) controller.addError(error, stack);
+      } finally {
+        busy = false;
+      }
+    }
+
+    controller = StreamController<T>(
+      onListen: () {
+        subscription = _db
+            .tableUpdates(
+              TableUpdateQuery.onAllTables(<TableInfo>[
+                _db.calendarEvents,
+                _db.calendarSkippedDates,
+                _db.calendarCompletions,
+              ]),
+            )
+            .listen((_) => emit());
+        emit();
+      },
+      onCancel: () async => subscription?.cancel(),
+    );
+    return controller.stream;
   }
 
   EventDraft _validated(EventDraft draft) {
