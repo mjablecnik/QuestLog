@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:questlog/core/notes/note_node.dart';
 import 'package:questlog/core/notes/note_tree.dart';
 import 'package:questlog/services/notes/notes_providers.dart';
+import 'package:questlog/ui/screens/notes/breadcrumb.dart';
 import 'package:questlog/ui/screens/notes/folder_row.dart';
 import 'package:questlog/ui/screens/notes/note_row.dart';
 import 'package:questlog/ui/screens/notes/notes_screen.dart';
@@ -74,7 +75,7 @@ void main() {
       await h.note(tester, '# Shopping\n\nmilk and bread');
       final NoteRow row = tester.widget<NoteRow>(find.byType(NoteRow));
       expect(row.name, 'Shopping');
-      expect(row.preview, 'Shopping milk and bread');
+      expect(row.preview, 'milk and bread', reason: 'the name line is not repeated');
       expect(row.date, 'today');
       expect(find.text('NOTES'), findsOneWidget);
     });
@@ -93,6 +94,10 @@ void main() {
       // Breadcrumb: Notes > ABAP > Syntax, title Syntax.
       expect(find.text('Syntax'), findsWidgets);
       expect(container(tester).read(visibleFolderProvider), s.id);
+      final double crumbX = tester
+          .getTopLeft(find.descendant(of: find.byType(Breadcrumb), matching: find.text('Notes')))
+          .dx;
+      expect(crumbX, lessThan(40), reason: 'a short breadcrumb starts at the left edge');
       await tester.tap(find.byKey(const ValueKey<String>('notes-back')));
       await h.settle(tester);
       expect(container(tester).read(visibleFolderProvider), a.id);
