@@ -1364,4 +1364,323 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get calendar_clearRepeatEnd => 'Remove the repeat end';
+
+  @override
+  String get app_tabNotes => 'Notes';
+
+  @override
+  String get notes_title => 'Notes';
+
+  @override
+  String notes_folderCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count folders',
+      one: '$count folder',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String notes_noteCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count notes',
+      one: '$count note',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get notes_folderEmpty => 'Empty folder';
+
+  @override
+  String get notes_sectionFolders => 'Folders';
+
+  @override
+  String get notes_sectionNotes => 'Notes';
+
+  @override
+  String get notes_emptyTitle => 'Nothing here yet';
+
+  @override
+  String get notes_emptyBody => 'Add a note or a folder with the plus button.';
+
+  @override
+  String get notes_addTitle => 'Add';
+
+  @override
+  String get notes_addNote => 'New note';
+
+  @override
+  String get notes_addNoteHint => 'A blank page with the editor';
+
+  @override
+  String get notes_addFolder => 'New folder';
+
+  @override
+  String get notes_addFolderHint => 'For organising notes and other folders';
+
+  @override
+  String notes_addWhere(String place) {
+    return 'It will be created in $place';
+  }
+
+  @override
+  String get notes_createFolder => 'Create folder';
+
+  @override
+  String get notes_nameLabel => 'Name';
+
+  @override
+  String get notes_renameTitle => 'Rename';
+
+  @override
+  String get notes_moveTitle => 'Move';
+
+  @override
+  String notes_moveNote(String name) {
+    return 'Note “$name”';
+  }
+
+  @override
+  String notes_moveFolder(String name) {
+    return 'Folder “$name”';
+  }
+
+  @override
+  String get notes_moveRootTag => 'top level';
+
+  @override
+  String get notes_moveCurrentTag => 'current location';
+
+  @override
+  String notes_moveConfirm(String name) {
+    return 'Move to $name';
+  }
+
+  @override
+  String get notes_actionRename => 'Rename';
+
+  @override
+  String get notes_actionMove => 'Move';
+
+  @override
+  String get notes_actionDelete => 'Delete';
+
+  @override
+  String get notes_actionTrash => 'Move to Trash';
+
+  @override
+  String notes_deleteFolderTitle(String name) {
+    return 'Move $name to the Trash?';
+  }
+
+  @override
+  String notes_deleteFolderBody(String contents) {
+    return 'The folder holds $contents. They move to the Trash with it and are deleted for good after 30 days.';
+  }
+
+  @override
+  String notes_joinAnd(String first, String second) {
+    return '$first and $second';
+  }
+
+  @override
+  String get notes_deleteConfirm => 'Move to Trash';
+
+  @override
+  String get notes_movedToTrash => 'Moved to the Trash';
+
+  @override
+  String get notes_untitled => 'Untitled';
+
+  @override
+  String get notes_errorGeneric => 'That did not work.';
+
+  @override
+  String get notes_errorGone => 'That item no longer exists.';
+
+  @override
+  String get notes_trashButton => 'Trash';
+
+  @override
+  String get trash_title => 'Trash';
+
+  @override
+  String trash_count(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count items',
+      one: '$count item',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get trash_info =>
+      'Items stay in the Trash for 30 days and are then deleted for good. A folder is restored with its content.';
+
+  @override
+  String get trash_section => 'Deleted';
+
+  @override
+  String trash_noteLine(String from, String when) {
+    return 'from $from · $when';
+  }
+
+  @override
+  String trash_folderLine(String notes, String from, String when) {
+    return 'folder, $notes · from $from · $when';
+  }
+
+  @override
+  String trash_daysLeft(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: '$days days',
+      one: '1 day',
+    );
+    return 'deleted in $_temp0';
+  }
+
+  @override
+  String get trash_restore => 'Restore';
+
+  @override
+  String get trash_forever => 'Forever';
+
+  @override
+  String get trash_emptyAction => 'Empty Trash';
+
+  @override
+  String get trash_emptyStateTitle => 'The Trash is empty';
+
+  @override
+  String get trash_emptyStateBody =>
+      'Deleted notes and folders stay here for 30 days.';
+
+  @override
+  String get trash_foreverTitle => 'Delete for good?';
+
+  @override
+  String trash_foreverBody(String name) {
+    return '$name will be deleted for good with its content and cannot be restored.';
+  }
+
+  @override
+  String get trash_foreverConfirm => 'Delete for good';
+
+  @override
+  String get trash_emptyTitle => 'Empty the Trash?';
+
+  @override
+  String trash_emptyBody(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count items will be',
+      one: '$count item will be',
+    );
+    return '$_temp0 deleted for good with their content and cannot be restored.';
+  }
+
+  @override
+  String get trash_restored => 'Restored';
+
+  @override
+  String get trash_deleted => 'Deleted for good';
+
+  @override
+  String get trash_emptied => 'The Trash was emptied';
+
+  @override
+  String get editor_done => 'Done';
+
+  @override
+  String get editor_hint => 'Start writing…';
+
+  @override
+  String get editor_saveFailed => 'The note could not be saved.';
+
+  @override
+  String get editor_tooLong =>
+      'The note is too long, at most 100,000 characters.';
+
+  @override
+  String get editor_fmtBold => 'Bold';
+
+  @override
+  String get editor_fmtItalic => 'Italic';
+
+  @override
+  String get editor_fmtHeading => 'Heading';
+
+  @override
+  String get editor_fmtList => 'Bulleted list';
+
+  @override
+  String get editor_fmtChecklist => 'Checklist';
+
+  @override
+  String get editor_fmtQuote => 'Quote';
+
+  @override
+  String get editor_fmtCode => 'Code';
+
+  @override
+  String get editor_fmtLink => 'Link';
+
+  @override
+  String get editor_linkLabel => 'Address';
+
+  @override
+  String get editor_linkApply => 'Apply link';
+
+  @override
+  String get a11y_nodeMenu => 'Item menu';
+
+  @override
+  String a11y_openFolder(String name) {
+    return 'Open folder $name';
+  }
+
+  @override
+  String a11y_openNote(String name) {
+    return 'Open note $name';
+  }
+
+  @override
+  String a11y_renameNode(String name) {
+    return 'Rename $name';
+  }
+
+  @override
+  String a11y_moveNode(String name) {
+    return 'Move $name';
+  }
+
+  @override
+  String a11y_trashNode(String name) {
+    return 'Delete $name';
+  }
+
+  @override
+  String a11y_restoreNode(String name) {
+    return 'Restore $name';
+  }
+
+  @override
+  String a11y_foreverNode(String name) {
+    return 'Delete $name for good';
+  }
+
+  @override
+  String a11y_breadcrumbTo(String name) {
+    return 'Go to $name';
+  }
 }

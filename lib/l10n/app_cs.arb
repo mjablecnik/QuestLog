@@ -1837,5 +1837,452 @@
   "calendar_clearRepeatEnd": "Zrušit konec opakování",
   "@calendar_clearRepeatEnd": {
     "description": "Accessibility label of the button that removes the repeat end date."
+  },
+  "app_tabNotes": "Poznámky",
+  "@app_tabNotes": {
+    "description": "Label of the Notes tab in the bottom tab bar."
+  },
+  "notes_title": "Poznámky",
+  "@notes_title": {
+    "description": "Title of the Notes_Screen at the Root_Folder."
+  },
+  "notes_folderCount": "{count, plural, one{{count} složka} few{{count} složky} other{{count} složek}}",
+  "@notes_folderCount": {
+    "description": "Number of Folders with a correctly pluralised noun.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "notes_noteCount": "{count, plural, one{{count} poznámka} few{{count} poznámky} other{{count} poznámek}}",
+  "@notes_noteCount": {
+    "description": "Number of Notes with a correctly pluralised noun.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "notes_folderEmpty": "Prázdná složka",
+  "@notes_folderEmpty": {
+    "description": "Summary of a Folder_Row that holds nothing."
+  },
+  "notes_sectionFolders": "Složky",
+  "@notes_sectionFolders": {
+    "description": "Heading of the Folder section of the Notes_Screen."
+  },
+  "notes_sectionNotes": "Poznámky",
+  "@notes_sectionNotes": {
+    "description": "Heading of the Note section of the Notes_Screen."
+  },
+  "notes_emptyTitle": "Zatím tu nic není",
+  "@notes_emptyTitle": {
+    "description": "Title of the empty state of a Folder."
+  },
+  "notes_emptyBody": "Přidej poznámku nebo složku tlačítkem plus.",
+  "@notes_emptyBody": {
+    "description": "Body of the empty state of a Folder."
+  },
+  "notes_addTitle": "Přidat",
+  "@notes_addTitle": {
+    "description": "Title of the Add_Sheet and label of the add button."
+  },
+  "notes_addNote": "Nová poznámka",
+  "@notes_addNote": {
+    "description": "Choice in the Add_Sheet that creates a Note."
+  },
+  "notes_addNoteHint": "Prázdná stránka s editorem",
+  "@notes_addNoteHint": {
+    "description": "Hint under the new-note choice."
+  },
+  "notes_addFolder": "Nová složka",
+  "@notes_addFolder": {
+    "description": "Choice in the Add_Sheet that creates a Folder, and the title of its Name_Sheet."
+  },
+  "notes_addFolderHint": "Pro třídění poznámek a dalších složek",
+  "@notes_addFolderHint": {
+    "description": "Hint under the new-folder choice."
+  },
+  "notes_addWhere": "Vytvoří se ve složce {place}",
+  "@notes_addWhere": {
+    "description": "Line of the Add_Sheet naming the Current_Folder.",
+    "placeholders": {
+      "place": {
+        "type": "String"
+      }
+    }
+  },
+  "notes_createFolder": "Vytvořit složku",
+  "@notes_createFolder": {
+    "description": "Primary button of the Name_Sheet that creates a Folder."
+  },
+  "notes_nameLabel": "Název",
+  "@notes_nameLabel": {
+    "description": "Label of the name field of the Name_Sheet."
+  },
+  "notes_renameTitle": "Přejmenovat",
+  "@notes_renameTitle": {
+    "description": "Title of the Name_Sheet that renames a Node."
+  },
+  "notes_moveTitle": "Přesunout",
+  "@notes_moveTitle": {
+    "description": "Title of the Move_Sheet."
+  },
+  "notes_moveNote": "Poznámka „{name}“",
+  "@notes_moveNote": {
+    "description": "Line under the Move_Sheet title naming the Note that is moved.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "notes_moveFolder": "Složka „{name}“",
+  "@notes_moveFolder": {
+    "description": "Line under the Move_Sheet title naming the Folder that is moved.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "notes_moveRootTag": "nejvyšší úroveň",
+  "@notes_moveRootTag": {
+    "description": "Tag of the Root_Folder row in the Move_Sheet."
+  },
+  "notes_moveCurrentTag": "současné umístění",
+  "@notes_moveCurrentTag": {
+    "description": "Tag of the row of the current parent in the Move_Sheet."
+  },
+  "notes_moveConfirm": "Přesunout do složky {name}",
+  "@notes_moveConfirm": {
+    "description": "Primary button of the Move_Sheet.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "notes_actionRename": "Přejmenovat",
+  "@notes_actionRename": {
+    "description": "Swipe action and menu entry that renames a Node."
+  },
+  "notes_actionMove": "Přesunout",
+  "@notes_actionMove": {
+    "description": "Swipe action and menu entry that moves a Node."
+  },
+  "notes_actionDelete": "Smazat",
+  "@notes_actionDelete": {
+    "description": "Swipe action that moves a Node to the Trash."
+  },
+  "notes_actionTrash": "Přesunout do koše",
+  "@notes_actionTrash": {
+    "description": "Menu entry that moves a Node to the Trash."
+  },
+  "notes_deleteFolderTitle": "Přesunout složku {name} do koše?",
+  "@notes_deleteFolderTitle": {
+    "description": "Title of the warning dialog for a Folder with content.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "notes_deleteFolderBody": "Složka obsahuje {contents}. Přesunou se do koše i s celým obsahem a po 30 dnech se smažou navždy.",
+  "@notes_deleteFolderBody": {
+    "description": "Body of the warning dialog; contents is the counts of Folders and Notes.",
+    "placeholders": {
+      "contents": {
+        "type": "String"
+      }
+    }
+  },
+  "notes_joinAnd": "{first} a {second}",
+  "@notes_joinAnd": {
+    "description": "Joins two counts into one phrase.",
+    "placeholders": {
+      "first": {
+        "type": "String"
+      },
+      "second": {
+        "type": "String"
+      }
+    }
+  },
+  "notes_deleteConfirm": "Přesunout do koše",
+  "@notes_deleteConfirm": {
+    "description": "Destructive button of the warning dialog."
+  },
+  "notes_movedToTrash": "Přesunuto do koše",
+  "@notes_movedToTrash": {
+    "description": "Snackbar after a Node was moved to the Trash."
+  },
+  "notes_untitled": "Bez názvu",
+  "@notes_untitled": {
+    "description": "Name of a Note whose text has no line to name it after."
+  },
+  "notes_errorGeneric": "Nepodařilo se to provést.",
+  "@notes_errorGeneric": {
+    "description": "Snackbar after a notes action failed."
+  },
+  "notes_errorGone": "Tato položka už neexistuje.",
+  "@notes_errorGone": {
+    "description": "Snackbar when the Node was removed meanwhile."
+  },
+  "notes_trashButton": "Koš",
+  "@notes_trashButton": {
+    "description": "Semantic label of the Trash button of the Notes_Screen."
+  },
+  "trash_title": "Koš",
+  "@trash_title": {
+    "description": "Title of the Trash_Screen."
+  },
+  "trash_count": "{count, plural, one{{count} položka} few{{count} položky} other{{count} položek}}",
+  "@trash_count": {
+    "description": "Number of Trashed_Nodes with a correctly pluralised noun.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "trash_info": "Položky zůstávají v koši 30 dní a pak se smažou navždy. Složka se obnoví i s obsahem.",
+  "@trash_info": {
+    "description": "Information line at the top of the Trash_Screen."
+  },
+  "trash_section": "Smazané",
+  "@trash_section": {
+    "description": "Heading of the list of the Trash_Screen."
+  },
+  "trash_noteLine": "z {from} · {when}",
+  "@trash_noteLine": {
+    "description": "Second line of a trashed Note: where it came from and when it is purged.",
+    "placeholders": {
+      "from": {
+        "type": "String"
+      },
+      "when": {
+        "type": "String"
+      }
+    }
+  },
+  "trash_folderLine": "složka, {notes} · z {from} · {when}",
+  "@trash_folderLine": {
+    "description": "Second line of a trashed Folder.",
+    "placeholders": {
+      "notes": {
+        "type": "String"
+      },
+      "from": {
+        "type": "String"
+      },
+      "when": {
+        "type": "String"
+      }
+    }
+  },
+  "trash_daysLeft": "smaže se za {days, plural, one{1 den} few{{days} dny} other{{days} dní}}",
+  "@trash_daysLeft": {
+    "description": "Time left until the Purge.",
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "trash_restore": "Obnovit",
+  "@trash_restore": {
+    "description": "Button and swipe action that restores a Trashed_Node."
+  },
+  "trash_forever": "Navždy",
+  "@trash_forever": {
+    "description": "Swipe action that deletes a Trashed_Node permanently."
+  },
+  "trash_emptyAction": "Vysypat koš",
+  "@trash_emptyAction": {
+    "description": "Button that deletes every Trashed_Node permanently."
+  },
+  "trash_emptyStateTitle": "Koš je prázdný",
+  "@trash_emptyStateTitle": {
+    "description": "Title of the empty state of the Trash_Screen."
+  },
+  "trash_emptyStateBody": "Smazané poznámky a složky tu zůstanou 30 dní.",
+  "@trash_emptyStateBody": {
+    "description": "Body of the empty state of the Trash_Screen."
+  },
+  "trash_foreverTitle": "Smazat navždy?",
+  "@trash_foreverTitle": {
+    "description": "Title of the confirmation dialog of the swipe action Navždy."
+  },
+  "trash_foreverBody": "{name} se smaže natrvalo i s obsahem a nepůjde vrátit.",
+  "@trash_foreverBody": {
+    "description": "Body of that dialog.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "trash_foreverConfirm": "Smazat navždy",
+  "@trash_foreverConfirm": {
+    "description": "Destructive button of that dialog."
+  },
+  "trash_emptyTitle": "Vysypat koš?",
+  "@trash_emptyTitle": {
+    "description": "Title of the confirmation dialog of Vysypat koš."
+  },
+  "trash_emptyBody": "{count, plural, one{{count} položka se smaže} few{{count} položky se smažou} other{{count} položek se smaže}} natrvalo i s obsahem a nepůjde vrátit.",
+  "@trash_emptyBody": {
+    "description": "Body of that dialog.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "trash_restored": "Obnoveno",
+  "@trash_restored": {
+    "description": "Snackbar after a Trashed_Node was restored."
+  },
+  "trash_deleted": "Smazáno navždy",
+  "@trash_deleted": {
+    "description": "Snackbar after a Trashed_Node was deleted permanently."
+  },
+  "trash_emptied": "Koš je vysypaný",
+  "@trash_emptied": {
+    "description": "Snackbar after the Trash was emptied."
+  },
+  "editor_done": "Hotovo",
+  "@editor_done": {
+    "description": "Button that closes the Note_Editor."
+  },
+  "editor_hint": "Začni psát…",
+  "@editor_hint": {
+    "description": "Hint of an empty Note."
+  },
+  "editor_saveFailed": "Poznámku se nepodařilo uložit.",
+  "@editor_saveFailed": {
+    "description": "Message of the Note_Editor when a save failed."
+  },
+  "editor_tooLong": "Poznámka je příliš dlouhá, nejvýše 100 000 znaků.",
+  "@editor_tooLong": {
+    "description": "Message of the Note_Editor when the text is over the limit."
+  },
+  "editor_fmtBold": "Tučně",
+  "@editor_fmtBold": {
+    "description": "Semantic label of the bold button."
+  },
+  "editor_fmtItalic": "Kurzíva",
+  "@editor_fmtItalic": {
+    "description": "Semantic label of the italic button."
+  },
+  "editor_fmtHeading": "Nadpis",
+  "@editor_fmtHeading": {
+    "description": "Semantic label of the heading button."
+  },
+  "editor_fmtList": "Odrážky",
+  "@editor_fmtList": {
+    "description": "Semantic label of the bulleted list button."
+  },
+  "editor_fmtChecklist": "Úkoly",
+  "@editor_fmtChecklist": {
+    "description": "Semantic label of the checklist button."
+  },
+  "editor_fmtQuote": "Citace",
+  "@editor_fmtQuote": {
+    "description": "Semantic label of the quote button."
+  },
+  "editor_fmtCode": "Kód",
+  "@editor_fmtCode": {
+    "description": "Semantic label of the code button."
+  },
+  "editor_fmtLink": "Odkaz",
+  "@editor_fmtLink": {
+    "description": "Semantic label of the link button and title of the link sheet."
+  },
+  "editor_linkLabel": "Adresa",
+  "@editor_linkLabel": {
+    "description": "Label of the address field of the link sheet."
+  },
+  "editor_linkApply": "Použít odkaz",
+  "@editor_linkApply": {
+    "description": "Primary button of the link sheet."
+  },
+  "a11y_nodeMenu": "Nabídka položky",
+  "@a11y_nodeMenu": {
+    "description": "Semantic label of the Node_Menu button."
+  },
+  "a11y_openFolder": "Otevřít složku {name}",
+  "@a11y_openFolder": {
+    "description": "Semantic label of a Folder_Row.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "a11y_openNote": "Otevřít poznámku {name}",
+  "@a11y_openNote": {
+    "description": "Semantic label of a Note_Row.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "a11y_renameNode": "Přejmenovat {name}",
+  "@a11y_renameNode": {
+    "description": "Semantic label of the rename action of a row.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "a11y_moveNode": "Přesunout {name}",
+  "@a11y_moveNode": {
+    "description": "Semantic label of the move action of a row.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "a11y_trashNode": "Smazat {name}",
+  "@a11y_trashNode": {
+    "description": "Semantic label of the delete action of a row.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "a11y_restoreNode": "Obnovit {name}",
+  "@a11y_restoreNode": {
+    "description": "Semantic label of the restore action of a Trash row.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "a11y_foreverNode": "Smazat {name} navždy",
+  "@a11y_foreverNode": {
+    "description": "Semantic label of the permanent delete action of a Trash row.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "a11y_breadcrumbTo": "Přejít na {name}",
+  "@a11y_breadcrumbTo": {
+    "description": "Semantic label of a Breadcrumb segment.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
   }
 }

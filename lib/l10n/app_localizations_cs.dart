@@ -1401,4 +1401,328 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get calendar_clearRepeatEnd => 'Zrušit konec opakování';
+
+  @override
+  String get app_tabNotes => 'Poznámky';
+
+  @override
+  String get notes_title => 'Poznámky';
+
+  @override
+  String notes_folderCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count složek',
+      few: '$count složky',
+      one: '$count složka',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String notes_noteCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count poznámek',
+      few: '$count poznámky',
+      one: '$count poznámka',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get notes_folderEmpty => 'Prázdná složka';
+
+  @override
+  String get notes_sectionFolders => 'Složky';
+
+  @override
+  String get notes_sectionNotes => 'Poznámky';
+
+  @override
+  String get notes_emptyTitle => 'Zatím tu nic není';
+
+  @override
+  String get notes_emptyBody => 'Přidej poznámku nebo složku tlačítkem plus.';
+
+  @override
+  String get notes_addTitle => 'Přidat';
+
+  @override
+  String get notes_addNote => 'Nová poznámka';
+
+  @override
+  String get notes_addNoteHint => 'Prázdná stránka s editorem';
+
+  @override
+  String get notes_addFolder => 'Nová složka';
+
+  @override
+  String get notes_addFolderHint => 'Pro třídění poznámek a dalších složek';
+
+  @override
+  String notes_addWhere(String place) {
+    return 'Vytvoří se ve složce $place';
+  }
+
+  @override
+  String get notes_createFolder => 'Vytvořit složku';
+
+  @override
+  String get notes_nameLabel => 'Název';
+
+  @override
+  String get notes_renameTitle => 'Přejmenovat';
+
+  @override
+  String get notes_moveTitle => 'Přesunout';
+
+  @override
+  String notes_moveNote(String name) {
+    return 'Poznámka „$name“';
+  }
+
+  @override
+  String notes_moveFolder(String name) {
+    return 'Složka „$name“';
+  }
+
+  @override
+  String get notes_moveRootTag => 'nejvyšší úroveň';
+
+  @override
+  String get notes_moveCurrentTag => 'současné umístění';
+
+  @override
+  String notes_moveConfirm(String name) {
+    return 'Přesunout do složky $name';
+  }
+
+  @override
+  String get notes_actionRename => 'Přejmenovat';
+
+  @override
+  String get notes_actionMove => 'Přesunout';
+
+  @override
+  String get notes_actionDelete => 'Smazat';
+
+  @override
+  String get notes_actionTrash => 'Přesunout do koše';
+
+  @override
+  String notes_deleteFolderTitle(String name) {
+    return 'Přesunout složku $name do koše?';
+  }
+
+  @override
+  String notes_deleteFolderBody(String contents) {
+    return 'Složka obsahuje $contents. Přesunou se do koše i s celým obsahem a po 30 dnech se smažou navždy.';
+  }
+
+  @override
+  String notes_joinAnd(String first, String second) {
+    return '$first a $second';
+  }
+
+  @override
+  String get notes_deleteConfirm => 'Přesunout do koše';
+
+  @override
+  String get notes_movedToTrash => 'Přesunuto do koše';
+
+  @override
+  String get notes_untitled => 'Bez názvu';
+
+  @override
+  String get notes_errorGeneric => 'Nepodařilo se to provést.';
+
+  @override
+  String get notes_errorGone => 'Tato položka už neexistuje.';
+
+  @override
+  String get notes_trashButton => 'Koš';
+
+  @override
+  String get trash_title => 'Koš';
+
+  @override
+  String trash_count(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count položek',
+      few: '$count položky',
+      one: '$count položka',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get trash_info =>
+      'Položky zůstávají v koši 30 dní a pak se smažou navždy. Složka se obnoví i s obsahem.';
+
+  @override
+  String get trash_section => 'Smazané';
+
+  @override
+  String trash_noteLine(String from, String when) {
+    return 'z $from · $when';
+  }
+
+  @override
+  String trash_folderLine(String notes, String from, String when) {
+    return 'složka, $notes · z $from · $when';
+  }
+
+  @override
+  String trash_daysLeft(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: '$days dní',
+      few: '$days dny',
+      one: '1 den',
+    );
+    return 'smaže se za $_temp0';
+  }
+
+  @override
+  String get trash_restore => 'Obnovit';
+
+  @override
+  String get trash_forever => 'Navždy';
+
+  @override
+  String get trash_emptyAction => 'Vysypat koš';
+
+  @override
+  String get trash_emptyStateTitle => 'Koš je prázdný';
+
+  @override
+  String get trash_emptyStateBody =>
+      'Smazané poznámky a složky tu zůstanou 30 dní.';
+
+  @override
+  String get trash_foreverTitle => 'Smazat navždy?';
+
+  @override
+  String trash_foreverBody(String name) {
+    return '$name se smaže natrvalo i s obsahem a nepůjde vrátit.';
+  }
+
+  @override
+  String get trash_foreverConfirm => 'Smazat navždy';
+
+  @override
+  String get trash_emptyTitle => 'Vysypat koš?';
+
+  @override
+  String trash_emptyBody(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count položek se smaže',
+      few: '$count položky se smažou',
+      one: '$count položka se smaže',
+    );
+    return '$_temp0 natrvalo i s obsahem a nepůjde vrátit.';
+  }
+
+  @override
+  String get trash_restored => 'Obnoveno';
+
+  @override
+  String get trash_deleted => 'Smazáno navždy';
+
+  @override
+  String get trash_emptied => 'Koš je vysypaný';
+
+  @override
+  String get editor_done => 'Hotovo';
+
+  @override
+  String get editor_hint => 'Začni psát…';
+
+  @override
+  String get editor_saveFailed => 'Poznámku se nepodařilo uložit.';
+
+  @override
+  String get editor_tooLong =>
+      'Poznámka je příliš dlouhá, nejvýše 100 000 znaků.';
+
+  @override
+  String get editor_fmtBold => 'Tučně';
+
+  @override
+  String get editor_fmtItalic => 'Kurzíva';
+
+  @override
+  String get editor_fmtHeading => 'Nadpis';
+
+  @override
+  String get editor_fmtList => 'Odrážky';
+
+  @override
+  String get editor_fmtChecklist => 'Úkoly';
+
+  @override
+  String get editor_fmtQuote => 'Citace';
+
+  @override
+  String get editor_fmtCode => 'Kód';
+
+  @override
+  String get editor_fmtLink => 'Odkaz';
+
+  @override
+  String get editor_linkLabel => 'Adresa';
+
+  @override
+  String get editor_linkApply => 'Použít odkaz';
+
+  @override
+  String get a11y_nodeMenu => 'Nabídka položky';
+
+  @override
+  String a11y_openFolder(String name) {
+    return 'Otevřít složku $name';
+  }
+
+  @override
+  String a11y_openNote(String name) {
+    return 'Otevřít poznámku $name';
+  }
+
+  @override
+  String a11y_renameNode(String name) {
+    return 'Přejmenovat $name';
+  }
+
+  @override
+  String a11y_moveNode(String name) {
+    return 'Přesunout $name';
+  }
+
+  @override
+  String a11y_trashNode(String name) {
+    return 'Smazat $name';
+  }
+
+  @override
+  String a11y_restoreNode(String name) {
+    return 'Obnovit $name';
+  }
+
+  @override
+  String a11y_foreverNode(String name) {
+    return 'Smazat $name navždy';
+  }
+
+  @override
+  String a11y_breadcrumbTo(String name) {
+    return 'Přejít na $name';
+  }
 }

@@ -2083,6 +2083,486 @@ abstract class AppLocalizations {
   /// In cs, this message translates to:
   /// **'Zrušit konec opakování'**
   String get calendar_clearRepeatEnd;
+
+  /// Label of the Notes tab in the bottom tab bar.
+  ///
+  /// In cs, this message translates to:
+  /// **'Poznámky'**
+  String get app_tabNotes;
+
+  /// Title of the Notes_Screen at the Root_Folder.
+  ///
+  /// In cs, this message translates to:
+  /// **'Poznámky'**
+  String get notes_title;
+
+  /// Number of Folders with a correctly pluralised noun.
+  ///
+  /// In cs, this message translates to:
+  /// **'{count, plural, one{{count} složka} few{{count} složky} other{{count} složek}}'**
+  String notes_folderCount(int count);
+
+  /// Number of Notes with a correctly pluralised noun.
+  ///
+  /// In cs, this message translates to:
+  /// **'{count, plural, one{{count} poznámka} few{{count} poznámky} other{{count} poznámek}}'**
+  String notes_noteCount(int count);
+
+  /// Summary of a Folder_Row that holds nothing.
+  ///
+  /// In cs, this message translates to:
+  /// **'Prázdná složka'**
+  String get notes_folderEmpty;
+
+  /// Heading of the Folder section of the Notes_Screen.
+  ///
+  /// In cs, this message translates to:
+  /// **'Složky'**
+  String get notes_sectionFolders;
+
+  /// Heading of the Note section of the Notes_Screen.
+  ///
+  /// In cs, this message translates to:
+  /// **'Poznámky'**
+  String get notes_sectionNotes;
+
+  /// Title of the empty state of a Folder.
+  ///
+  /// In cs, this message translates to:
+  /// **'Zatím tu nic není'**
+  String get notes_emptyTitle;
+
+  /// Body of the empty state of a Folder.
+  ///
+  /// In cs, this message translates to:
+  /// **'Přidej poznámku nebo složku tlačítkem plus.'**
+  String get notes_emptyBody;
+
+  /// Title of the Add_Sheet and label of the add button.
+  ///
+  /// In cs, this message translates to:
+  /// **'Přidat'**
+  String get notes_addTitle;
+
+  /// Choice in the Add_Sheet that creates a Note.
+  ///
+  /// In cs, this message translates to:
+  /// **'Nová poznámka'**
+  String get notes_addNote;
+
+  /// Hint under the new-note choice.
+  ///
+  /// In cs, this message translates to:
+  /// **'Prázdná stránka s editorem'**
+  String get notes_addNoteHint;
+
+  /// Choice in the Add_Sheet that creates a Folder, and the title of its Name_Sheet.
+  ///
+  /// In cs, this message translates to:
+  /// **'Nová složka'**
+  String get notes_addFolder;
+
+  /// Hint under the new-folder choice.
+  ///
+  /// In cs, this message translates to:
+  /// **'Pro třídění poznámek a dalších složek'**
+  String get notes_addFolderHint;
+
+  /// Line of the Add_Sheet naming the Current_Folder.
+  ///
+  /// In cs, this message translates to:
+  /// **'Vytvoří se ve složce {place}'**
+  String notes_addWhere(String place);
+
+  /// Primary button of the Name_Sheet that creates a Folder.
+  ///
+  /// In cs, this message translates to:
+  /// **'Vytvořit složku'**
+  String get notes_createFolder;
+
+  /// Label of the name field of the Name_Sheet.
+  ///
+  /// In cs, this message translates to:
+  /// **'Název'**
+  String get notes_nameLabel;
+
+  /// Title of the Name_Sheet that renames a Node.
+  ///
+  /// In cs, this message translates to:
+  /// **'Přejmenovat'**
+  String get notes_renameTitle;
+
+  /// Title of the Move_Sheet.
+  ///
+  /// In cs, this message translates to:
+  /// **'Přesunout'**
+  String get notes_moveTitle;
+
+  /// Line under the Move_Sheet title naming the Note that is moved.
+  ///
+  /// In cs, this message translates to:
+  /// **'Poznámka „{name}“'**
+  String notes_moveNote(String name);
+
+  /// Line under the Move_Sheet title naming the Folder that is moved.
+  ///
+  /// In cs, this message translates to:
+  /// **'Složka „{name}“'**
+  String notes_moveFolder(String name);
+
+  /// Tag of the Root_Folder row in the Move_Sheet.
+  ///
+  /// In cs, this message translates to:
+  /// **'nejvyšší úroveň'**
+  String get notes_moveRootTag;
+
+  /// Tag of the row of the current parent in the Move_Sheet.
+  ///
+  /// In cs, this message translates to:
+  /// **'současné umístění'**
+  String get notes_moveCurrentTag;
+
+  /// Primary button of the Move_Sheet.
+  ///
+  /// In cs, this message translates to:
+  /// **'Přesunout do složky {name}'**
+  String notes_moveConfirm(String name);
+
+  /// Swipe action and menu entry that renames a Node.
+  ///
+  /// In cs, this message translates to:
+  /// **'Přejmenovat'**
+  String get notes_actionRename;
+
+  /// Swipe action and menu entry that moves a Node.
+  ///
+  /// In cs, this message translates to:
+  /// **'Přesunout'**
+  String get notes_actionMove;
+
+  /// Swipe action that moves a Node to the Trash.
+  ///
+  /// In cs, this message translates to:
+  /// **'Smazat'**
+  String get notes_actionDelete;
+
+  /// Menu entry that moves a Node to the Trash.
+  ///
+  /// In cs, this message translates to:
+  /// **'Přesunout do koše'**
+  String get notes_actionTrash;
+
+  /// Title of the warning dialog for a Folder with content.
+  ///
+  /// In cs, this message translates to:
+  /// **'Přesunout složku {name} do koše?'**
+  String notes_deleteFolderTitle(String name);
+
+  /// Body of the warning dialog; contents is the counts of Folders and Notes.
+  ///
+  /// In cs, this message translates to:
+  /// **'Složka obsahuje {contents}. Přesunou se do koše i s celým obsahem a po 30 dnech se smažou navždy.'**
+  String notes_deleteFolderBody(String contents);
+
+  /// Joins two counts into one phrase.
+  ///
+  /// In cs, this message translates to:
+  /// **'{first} a {second}'**
+  String notes_joinAnd(String first, String second);
+
+  /// Destructive button of the warning dialog.
+  ///
+  /// In cs, this message translates to:
+  /// **'Přesunout do koše'**
+  String get notes_deleteConfirm;
+
+  /// Snackbar after a Node was moved to the Trash.
+  ///
+  /// In cs, this message translates to:
+  /// **'Přesunuto do koše'**
+  String get notes_movedToTrash;
+
+  /// Name of a Note whose text has no line to name it after.
+  ///
+  /// In cs, this message translates to:
+  /// **'Bez názvu'**
+  String get notes_untitled;
+
+  /// Snackbar after a notes action failed.
+  ///
+  /// In cs, this message translates to:
+  /// **'Nepodařilo se to provést.'**
+  String get notes_errorGeneric;
+
+  /// Snackbar when the Node was removed meanwhile.
+  ///
+  /// In cs, this message translates to:
+  /// **'Tato položka už neexistuje.'**
+  String get notes_errorGone;
+
+  /// Semantic label of the Trash button of the Notes_Screen.
+  ///
+  /// In cs, this message translates to:
+  /// **'Koš'**
+  String get notes_trashButton;
+
+  /// Title of the Trash_Screen.
+  ///
+  /// In cs, this message translates to:
+  /// **'Koš'**
+  String get trash_title;
+
+  /// Number of Trashed_Nodes with a correctly pluralised noun.
+  ///
+  /// In cs, this message translates to:
+  /// **'{count, plural, one{{count} položka} few{{count} položky} other{{count} položek}}'**
+  String trash_count(int count);
+
+  /// Information line at the top of the Trash_Screen.
+  ///
+  /// In cs, this message translates to:
+  /// **'Položky zůstávají v koši 30 dní a pak se smažou navždy. Složka se obnoví i s obsahem.'**
+  String get trash_info;
+
+  /// Heading of the list of the Trash_Screen.
+  ///
+  /// In cs, this message translates to:
+  /// **'Smazané'**
+  String get trash_section;
+
+  /// Second line of a trashed Note: where it came from and when it is purged.
+  ///
+  /// In cs, this message translates to:
+  /// **'z {from} · {when}'**
+  String trash_noteLine(String from, String when);
+
+  /// Second line of a trashed Folder.
+  ///
+  /// In cs, this message translates to:
+  /// **'složka, {notes} · z {from} · {when}'**
+  String trash_folderLine(String notes, String from, String when);
+
+  /// Time left until the Purge.
+  ///
+  /// In cs, this message translates to:
+  /// **'smaže se za {days, plural, one{1 den} few{{days} dny} other{{days} dní}}'**
+  String trash_daysLeft(int days);
+
+  /// Button and swipe action that restores a Trashed_Node.
+  ///
+  /// In cs, this message translates to:
+  /// **'Obnovit'**
+  String get trash_restore;
+
+  /// Swipe action that deletes a Trashed_Node permanently.
+  ///
+  /// In cs, this message translates to:
+  /// **'Navždy'**
+  String get trash_forever;
+
+  /// Button that deletes every Trashed_Node permanently.
+  ///
+  /// In cs, this message translates to:
+  /// **'Vysypat koš'**
+  String get trash_emptyAction;
+
+  /// Title of the empty state of the Trash_Screen.
+  ///
+  /// In cs, this message translates to:
+  /// **'Koš je prázdný'**
+  String get trash_emptyStateTitle;
+
+  /// Body of the empty state of the Trash_Screen.
+  ///
+  /// In cs, this message translates to:
+  /// **'Smazané poznámky a složky tu zůstanou 30 dní.'**
+  String get trash_emptyStateBody;
+
+  /// Title of the confirmation dialog of the swipe action Navždy.
+  ///
+  /// In cs, this message translates to:
+  /// **'Smazat navždy?'**
+  String get trash_foreverTitle;
+
+  /// Body of that dialog.
+  ///
+  /// In cs, this message translates to:
+  /// **'{name} se smaže natrvalo i s obsahem a nepůjde vrátit.'**
+  String trash_foreverBody(String name);
+
+  /// Destructive button of that dialog.
+  ///
+  /// In cs, this message translates to:
+  /// **'Smazat navždy'**
+  String get trash_foreverConfirm;
+
+  /// Title of the confirmation dialog of Vysypat koš.
+  ///
+  /// In cs, this message translates to:
+  /// **'Vysypat koš?'**
+  String get trash_emptyTitle;
+
+  /// Body of that dialog.
+  ///
+  /// In cs, this message translates to:
+  /// **'{count, plural, one{{count} položka se smaže} few{{count} položky se smažou} other{{count} položek se smaže}} natrvalo i s obsahem a nepůjde vrátit.'**
+  String trash_emptyBody(int count);
+
+  /// Snackbar after a Trashed_Node was restored.
+  ///
+  /// In cs, this message translates to:
+  /// **'Obnoveno'**
+  String get trash_restored;
+
+  /// Snackbar after a Trashed_Node was deleted permanently.
+  ///
+  /// In cs, this message translates to:
+  /// **'Smazáno navždy'**
+  String get trash_deleted;
+
+  /// Snackbar after the Trash was emptied.
+  ///
+  /// In cs, this message translates to:
+  /// **'Koš je vysypaný'**
+  String get trash_emptied;
+
+  /// Button that closes the Note_Editor.
+  ///
+  /// In cs, this message translates to:
+  /// **'Hotovo'**
+  String get editor_done;
+
+  /// Hint of an empty Note.
+  ///
+  /// In cs, this message translates to:
+  /// **'Začni psát…'**
+  String get editor_hint;
+
+  /// Message of the Note_Editor when a save failed.
+  ///
+  /// In cs, this message translates to:
+  /// **'Poznámku se nepodařilo uložit.'**
+  String get editor_saveFailed;
+
+  /// Message of the Note_Editor when the text is over the limit.
+  ///
+  /// In cs, this message translates to:
+  /// **'Poznámka je příliš dlouhá, nejvýše 100 000 znaků.'**
+  String get editor_tooLong;
+
+  /// Semantic label of the bold button.
+  ///
+  /// In cs, this message translates to:
+  /// **'Tučně'**
+  String get editor_fmtBold;
+
+  /// Semantic label of the italic button.
+  ///
+  /// In cs, this message translates to:
+  /// **'Kurzíva'**
+  String get editor_fmtItalic;
+
+  /// Semantic label of the heading button.
+  ///
+  /// In cs, this message translates to:
+  /// **'Nadpis'**
+  String get editor_fmtHeading;
+
+  /// Semantic label of the bulleted list button.
+  ///
+  /// In cs, this message translates to:
+  /// **'Odrážky'**
+  String get editor_fmtList;
+
+  /// Semantic label of the checklist button.
+  ///
+  /// In cs, this message translates to:
+  /// **'Úkoly'**
+  String get editor_fmtChecklist;
+
+  /// Semantic label of the quote button.
+  ///
+  /// In cs, this message translates to:
+  /// **'Citace'**
+  String get editor_fmtQuote;
+
+  /// Semantic label of the code button.
+  ///
+  /// In cs, this message translates to:
+  /// **'Kód'**
+  String get editor_fmtCode;
+
+  /// Semantic label of the link button and title of the link sheet.
+  ///
+  /// In cs, this message translates to:
+  /// **'Odkaz'**
+  String get editor_fmtLink;
+
+  /// Label of the address field of the link sheet.
+  ///
+  /// In cs, this message translates to:
+  /// **'Adresa'**
+  String get editor_linkLabel;
+
+  /// Primary button of the link sheet.
+  ///
+  /// In cs, this message translates to:
+  /// **'Použít odkaz'**
+  String get editor_linkApply;
+
+  /// Semantic label of the Node_Menu button.
+  ///
+  /// In cs, this message translates to:
+  /// **'Nabídka položky'**
+  String get a11y_nodeMenu;
+
+  /// Semantic label of a Folder_Row.
+  ///
+  /// In cs, this message translates to:
+  /// **'Otevřít složku {name}'**
+  String a11y_openFolder(String name);
+
+  /// Semantic label of a Note_Row.
+  ///
+  /// In cs, this message translates to:
+  /// **'Otevřít poznámku {name}'**
+  String a11y_openNote(String name);
+
+  /// Semantic label of the rename action of a row.
+  ///
+  /// In cs, this message translates to:
+  /// **'Přejmenovat {name}'**
+  String a11y_renameNode(String name);
+
+  /// Semantic label of the move action of a row.
+  ///
+  /// In cs, this message translates to:
+  /// **'Přesunout {name}'**
+  String a11y_moveNode(String name);
+
+  /// Semantic label of the delete action of a row.
+  ///
+  /// In cs, this message translates to:
+  /// **'Smazat {name}'**
+  String a11y_trashNode(String name);
+
+  /// Semantic label of the restore action of a Trash row.
+  ///
+  /// In cs, this message translates to:
+  /// **'Obnovit {name}'**
+  String a11y_restoreNode(String name);
+
+  /// Semantic label of the permanent delete action of a Trash row.
+  ///
+  /// In cs, this message translates to:
+  /// **'Smazat {name} navždy'**
+  String a11y_foreverNode(String name);
+
+  /// Semantic label of a Breadcrumb segment.
+  ///
+  /// In cs, this message translates to:
+  /// **'Přejít na {name}'**
+  String a11y_breadcrumbTo(String name);
 }
 
 class _AppLocalizationsDelegate
