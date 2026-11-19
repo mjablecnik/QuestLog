@@ -1,0 +1,515 @@
+<title>Questlog Kalendář</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&display=swap">
+<style>
+/* Layout: a review page. One block per screen = caption, phone mock-up in Questlog's own tokens,
+   and the functions of that screen with Ano / Ne switches. Page chrome follows the viewer's theme;
+   the phones have their own Dark/Light switch because they show the app, not the page. */
+:root {
+  --pg-bg: #edf1f6; --pg-card: #f8fafd; --pg-line: rgba(21,32,43,.12); --pg-text: #15202b;
+  --pg-dim: rgba(21,32,43,.68); --pg-accent: #2b7287; --pg-accent-bg: rgba(43,114,135,.14);
+  --pg-yes: #1f7a4d; --pg-yes-bg: rgba(31,122,77,.14); --pg-no: #b0402f; --pg-no-bg: rgba(176,64,47,.13);
+  --font: 'Figtree', system-ui, -apple-system, sans-serif;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --pg-bg: #0f1319; --pg-card: #18202b; --pg-line: rgba(230,234,242,.12); --pg-text: #e6eaf2;
+  --pg-dim: rgba(230,234,242,.68); --pg-accent: #78b4c4; --pg-accent-bg: rgba(120,180,196,.18);
+  --pg-yes: #6fcf9a; --pg-yes-bg: rgba(111,207,154,.16); --pg-no: #ee8a78; --pg-no-bg: rgba(238,138,120,.16);
+  color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --pg-bg: #0f1319; --pg-card: #18202b; --pg-line: rgba(230,234,242,.12); --pg-text: #e6eaf2;
+  --pg-dim: rgba(230,234,242,.68); --pg-accent: #78b4c4; --pg-accent-bg: rgba(120,180,196,.18);
+  --pg-yes: #6fcf9a; --pg-yes-bg: rgba(111,207,154,.16); --pg-no: #ee8a78; --pg-no-bg: rgba(238,138,120,.16);
+  color-scheme: dark; }
+
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--pg-bg); color: var(--pg-text); font-family: var(--font);
+  font-size: 15px; line-height: 1.45; -webkit-font-smoothing: antialiased;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 28px 64px; }
+.wrap { max-width: 1240px; margin: 0 auto; display: flex; flex-direction: column; gap: 40px; }
+h1, h2, h3 { font-weight: 700; letter-spacing: -.02em; line-height: 1.12; margin: 0; text-wrap: balance; }
+h1 { font-size: clamp(30px, 6vw, 44px); }
+h2 { font-size: 22px; }
+p { margin: 0; max-width: 68ch; }
+.lbl { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; font-weight: 600; color: var(--pg-dim); }
+.head { display: flex; flex-direction: column; gap: 12px; }
+.head p { color: var(--pg-dim); }
+
+.bar { display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: center; justify-content: space-between; }
+.seg { display: inline-flex; border: 1px solid var(--pg-line); border-radius: 12px; padding: 3px; background: var(--pg-card); }
+.seg button { font: inherit; font-weight: 600; font-size: 13px; border: 0; background: none; color: var(--pg-dim);
+  padding: 7px 14px; border-radius: 9px; cursor: pointer; min-height: 36px; }
+.seg button[aria-pressed="true"] { background: var(--pg-accent-bg); color: var(--pg-accent); }
+button:focus-visible { outline: 2px solid var(--pg-accent); outline-offset: 2px; }
+
+.types { display: flex; flex-wrap: wrap; gap: 10px; }
+.type { display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px 8px 10px; border-radius: 999px;
+  background: var(--pg-card); border: 1px solid var(--pg-line); font-weight: 600; font-size: 14px; }
+.type i { width: 14px; height: 14px; border-radius: 50%; display: block; }
+
+.screens { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 372px), 1fr)); gap: 44px 28px; align-items: start; }
+.screen { display: flex; flex-direction: column; gap: 14px; align-items: center; }
+.screen > .cap { align-self: stretch; display: flex; flex-direction: column; gap: 4px; }
+.screen > .cap p { color: var(--pg-dim); font-size: 14px; }
+
+.fns { align-self: stretch; max-width: 372px; width: 100%; display: flex; flex-direction: column; gap: 2px;
+  background: var(--pg-card); border: 1px solid var(--pg-line); border-radius: 16px; padding: 6px 14px; }
+.fn { display: grid; grid-template-columns: 1fr auto; gap: 4px 12px; align-items: center; padding: 11px 0; border-top: 1px solid var(--pg-line); }
+.fn:first-child { border-top: 0; }
+.fn .t { font-size: 14px; min-width: 0; }
+.fn .t b { font-weight: 600; }
+.fn .t small { display: block; color: var(--pg-dim); font-size: 12.5px; margin-top: 1px; }
+.tag { font-size: 10px; letter-spacing: .1em; text-transform: uppercase; font-weight: 700; padding: 1px 6px; border-radius: 5px;
+  margin-right: 6px; vertical-align: 1px; background: var(--pg-accent-bg); color: var(--pg-accent); }
+.tag.opt { background: transparent; border: 1px solid var(--pg-line); color: var(--pg-dim); }
+.yn { display: inline-flex; gap: 6px; }
+.yn button { font: inherit; font-size: 13px; font-weight: 700; min-width: 44px; min-height: 36px; padding: 0 10px; border-radius: 9px;
+  border: 1px solid var(--pg-line); background: none; color: var(--pg-dim); cursor: pointer; }
+.yn button[data-v="y"][aria-pressed="true"] { background: var(--pg-yes-bg); color: var(--pg-yes); border-color: var(--pg-yes); }
+.yn button[data-v="n"][aria-pressed="true"] { background: var(--pg-no-bg); color: var(--pg-no); border-color: var(--pg-no); }
+
+.sum { background: var(--pg-card); border: 1px solid var(--pg-line); border-radius: 16px; padding: 20px; display: flex; flex-direction: column; gap: 14px; }
+.sum .row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.btn { font: inherit; font-weight: 700; font-size: 14px; min-height: 44px; padding: 0 18px; border-radius: 12px; cursor: pointer;
+  border: 1px solid var(--pg-line); background: none; color: var(--pg-text); }
+.btn.p { background: var(--pg-accent); color: var(--pg-card); border-color: transparent; }
+pre#out { margin: 0; white-space: pre-wrap; font: 13px/1.5 ui-monospace, Menlo, monospace; background: var(--pg-bg);
+  border: 1px solid var(--pg-line); border-radius: 12px; padding: 14px; max-height: 320px; overflow: auto; }
+.notes { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 14px; }
+.notes div { background: var(--pg-card); border: 1px solid var(--pg-line); border-radius: 14px; padding: 16px; display: flex; flex-direction: column; gap: 6px; }
+.notes p { font-size: 14px; color: var(--pg-dim); }
+.notes h3 { font-size: 16px; }
+
+/* ===== phone (Questlog tokens, dark default) ===== */
+.phone { --board:#0f1319; --raised:#18202b; --line:rgba(230,234,242,.10); --text:#e6eaf2; --dim:rgba(230,234,242,.65);
+  --faint:rgba(230,234,242,.40); --brass:#78b4c4; --brass-soft:rgba(120,180,196,.18); --ink-on-brass:#08131a;
+  --field:rgba(230,234,242,.06); --scrim:rgba(7,10,16,.72); --destr:#d96b5a; --on-destr:#fff4f1;
+  position: relative; width: 360px; height: 740px; flex: none; border-radius: 38px; overflow: hidden; background: var(--board); color: var(--text);
+  border: 1px solid var(--pg-line); box-shadow: 0 18px 50px rgba(0,0,0,.28); display: flex; flex-direction: column; font-size: 14px; line-height: 1.3; }
+.phone.light { --board:#edf1f6; --raised:#f8fafd; --line:rgba(21,32,43,.08); --text:#15202b; --dim:rgba(21,32,43,.70);
+  --faint:rgba(21,32,43,.42); --brass:#2b7287; --brass-soft:rgba(43,114,135,.14); --ink-on-brass:#f4fafc; --field:rgba(21,32,43,.05);
+  --scrim:rgba(21,32,43,.5); }
+.phone * { box-sizing: border-box; }
+.phone svg { display: block; }
+.sb { height: 42px; flex: none; display: flex; justify-content: space-between; align-items: flex-end; padding: 0 26px 6px; font-weight: 600; font-size: 14px; font-variant-numeric: tabular-nums; }
+.disp { font-weight: 700; letter-spacing: -.02em; }
+.body { flex: 1; min-height: 0; display: flex; flex-direction: column; position: relative; }
+.scroll { overflow-y: auto; scrollbar-width: none; }
+.scroll::-webkit-scrollbar { display: none; }
+
+.mhead { display: flex; align-items: center; justify-content: space-between; padding: 4px 14px 10px; gap: 8px; }
+.mhead .mt { display: flex; align-items: center; gap: 4px; }
+.mhead .mt h4 { margin: 0; font-size: 19px; text-align: center; white-space: nowrap; }
+.ib.sm { width: 30px; height: 34px; border-radius: 10px; }
+.mhead { padding: 4px 10px 10px; gap: 2px; }
+.ib { width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center; color: var(--text); flex: none; }
+.pill { height: 32px; padding: 0 14px; border-radius: 999px; background: var(--brass-soft); color: var(--brass); font-weight: 700; font-size: 13px; display: inline-flex; align-items: center; }
+.wd { display: grid; grid-template-columns: repeat(7, 1fr); padding: 0 8px; }
+.wd span { text-align: center; font-size: 10.5px; letter-spacing: .1em; font-weight: 700; color: var(--faint); padding-bottom: 6px; }
+.grid { flex: 1; min-height: 0; display: grid; grid-template-columns: repeat(7, 1fr); grid-template-rows: repeat(6, 1fr); margin: 0 8px; border-top: 1px solid var(--line); }
+.cell { border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 3px 2px 2px; display: flex; flex-direction: column; gap: 2px; min-width: 0; overflow: hidden; }
+.cell:nth-child(7n+1) { border-left: 1px solid var(--line); }
+.cell .d { font-size: 11px; font-weight: 600; padding-left: 2px; font-variant-numeric: tabular-nums; }
+.cell.out .d { color: var(--faint); font-weight: 500; }
+.cell.today { background: var(--brass-soft); box-shadow: inset 0 0 0 1.5px var(--brass); }
+.cell.today .d { color: var(--brass); font-weight: 800; }
+.chip { height: 14px; line-height: 14px; font-size: 9px; font-weight: 700; padding: 0 3px; border-radius: 3px; color: #14110a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: none; }
+.chip.soft { background: color-mix(in srgb, var(--tc) 24%, transparent); color: var(--text); box-shadow: inset 2px 0 0 var(--tc); padding-left: 5px; }
+.more { font-size: 9px; font-weight: 700; color: var(--dim); padding-left: 3px; }
+.fab { position: absolute; right: 16px; bottom: 14px; width: 54px; height: 54px; border-radius: 50%; background: var(--brass); color: var(--ink-on-brass);
+  display: grid; place-items: center; box-shadow: 0 10px 24px rgba(120,180,196,.32); }
+.tabs { flex: none; height: 74px; padding: 9px 8px 0; border-top: 1px solid var(--line); background: var(--raised); display: flex; justify-content: space-around; }
+.tab { width: 76px; display: flex; flex-direction: column; align-items: center; gap: 3px; font-size: 10.5px; font-weight: 600; color: var(--faint); }
+.tab.on { color: var(--brass); }
+
+.scrim { position: absolute; inset: 0; background: var(--scrim); }
+.sheet { position: absolute; left: 0; right: 0; bottom: 0; background: var(--raised); border-radius: 24px 24px 0 0; padding: 10px 18px 22px; display: flex; flex-direction: column; gap: 14px; box-shadow: 0 -10px 40px rgba(0,0,0,.35); }
+.grab { width: 38px; height: 4px; border-radius: 2px; background: var(--faint); align-self: center; opacity: .6; }
+.sh-title { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.sh-title h4 { margin: 0; font-size: 21px; }
+.sh-title small { display: block; color: var(--dim); font-size: 12.5px; font-weight: 500; margin-top: 2px; letter-spacing: 0; }
+.add { width: 40px; height: 40px; border-radius: 50%; background: var(--brass); color: var(--ink-on-brass); display: grid; place-items: center; flex: none; }
+.ev { display: grid; grid-template-columns: 46px 4px 1fr; gap: 12px; align-items: stretch; padding: 10px 0; border-top: 1px solid var(--line); }
+.ev:first-of-type { border-top: 0; }
+.ev .tm { display: flex; flex-direction: column; justify-content: space-between; text-align: right; font-size: 12.5px; color: var(--dim); font-variant-numeric: tabular-nums; }
+.ev .tm.all { justify-content: center; font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--faint); }
+.ev .bar { border-radius: 2px; min-height: 34px; }
+.ev .nm { font-size: 16px; font-weight: 600; align-self: center; }
+.ev .nm small { display: block; font-size: 12px; font-weight: 600; margin-top: 1px; }
+
+.topbar { display: flex; align-items: center; justify-content: space-between; padding: 4px 14px 12px; gap: 8px; }
+.topbar h4 { margin: 0; font-size: 17px; text-align: center; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.topbar .ib { background: var(--raised); border: 1px solid var(--line); }
+.save { height: 38px; padding: 0 18px; border-radius: 999px; background: var(--brass); color: var(--ink-on-brass); font-weight: 700; font-size: 14px; display: inline-flex; align-items: center; flex: none; }
+.save.off { background: var(--field); color: var(--faint); }
+.card { background: var(--raised); border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px; display: flex; flex-direction: column; gap: 12px; }
+.pad { padding: 0 14px 90px; display: flex; flex-direction: column; gap: 12px; }
+.tbadge { display: inline-flex; align-items: center; gap: 6px; align-self: flex-start; font-size: 12px; font-weight: 700; padding: 3px 10px 3px 8px; border-radius: 999px; color: #14110a; }
+.tbadge i { width: 7px; height: 7px; border-radius: 50%; background: rgba(20,17,10,.55); }
+.range { display: grid; grid-template-columns: 1fr auto 1fr; gap: 8px; align-items: center; }
+.range .k { font-size: 11px; letter-spacing: .12em; text-transform: uppercase; font-weight: 700; color: var(--brass); }
+.range .v { font-size: 15px; font-weight: 600; margin-top: 3px; }
+.range .tt { font-size: 14px; color: var(--dim); font-variant-numeric: tabular-nums; }
+.row { display: grid; grid-template-columns: 28px 1fr; gap: 10px; align-items: start; }
+.row svg { color: var(--brass); margin-top: 2px; }
+.row b { font-size: 15px; font-weight: 600; display: block; }
+.row span { font-size: 13px; color: var(--dim); }
+.cta { position: absolute; left: 50%; bottom: 22px; transform: translateX(-50%); height: 50px; padding: 0 28px; border-radius: 999px; background: var(--brass); color: var(--ink-on-brass);
+  font-weight: 700; font-size: 16px; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 10px 24px rgba(120,180,196,.28); }
+
+.fld { background: var(--field); border-radius: 12px; padding: 12px 14px; font-size: 16px; font-weight: 600; }
+.fld.ph { color: var(--faint); font-weight: 500; }
+.fld.act { box-shadow: inset 0 0 0 1px var(--brass); background: var(--brass-soft); }
+.fld.sm { font-size: 14px; font-weight: 500; }
+.sw { display: flex; align-items: center; justify-content: space-between; font-size: 15px; font-weight: 600; }
+.tg { width: 40px; height: 24px; border-radius: 12px; background: var(--field); position: relative; border: 1px solid var(--line); }
+.tg::after { content: ""; position: absolute; top: 2px; left: 2px; width: 18px; height: 18px; border-radius: 50%; background: var(--faint); }
+.tg.on { background: var(--brass); border-color: transparent; }
+.tg.on::after { left: 18px; background: var(--ink-on-brass); }
+.dt { display: flex; justify-content: space-between; align-items: center; font-size: 15px; font-variant-numeric: tabular-nums; }
+.dt .a { display: flex; gap: 8px; }
+.dt .a span { background: var(--field); border-radius: 8px; padding: 5px 10px; font-weight: 600; }
+.tgrid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+.tsel { display: flex; align-items: center; gap: 8px; padding: 9px 10px; border-radius: 12px; border: 1px solid var(--line); font-size: 13.5px; font-weight: 600; background: var(--field); }
+.tsel i { width: 12px; height: 12px; border-radius: 50%; flex: none; }
+.tsel.on { box-shadow: inset 0 0 0 1.5px var(--brass); background: var(--brass-soft); }
+.sub { font-size: 11px; letter-spacing: .12em; text-transform: uppercase; font-weight: 700; color: var(--faint); }
+.opt { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; border-radius: 14px; background: var(--field); font-weight: 600; font-size: 15px; }
+.opt.d { background: var(--destr); color: var(--on-destr); }
+.dim .body > *:not(.scrim):not(.sheet) { filter: saturate(.7); }
+.note { font-size: 13px; color: var(--dim); }
+.mini { font-size: 11.5px; color: var(--faint); text-align: center; padding: 4px 0; }
+.hero { display: flex; align-items: center; gap: 12px; padding: 4px 16px 12px; }
+.hero .lv { width: 46px; height: 46px; border-radius: 50%; border: 2px solid var(--brass); background: var(--brass-soft); color: var(--brass); display: grid; place-items: center; font-weight: 700; font-size: 19px; flex: none; }
+.hero .m { flex: 1; min-width: 0; font-size: 15px; font-weight: 600; }
+.hero .m small { display: flex; justify-content: space-between; font-size: 11.5px; font-weight: 500; color: var(--dim); margin-top: 2px; }
+.xpb { height: 6px; border-radius: 3px; background: var(--line); margin-top: 6px; overflow: hidden; }
+.xpb i { display: block; height: 100%; background: var(--brass); border-radius: 3px; }
+.sec { padding: 6px 16px 4px; }
+.qc { margin: 0 16px 8px; background: var(--raised); border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px; display: flex; align-items: center; gap: 12px; }
+.qc .ck { width: 26px; height: 26px; border-radius: 50%; border: 2px solid var(--faint); flex: none; display: grid; place-items: center; }
+.qc .ck.on { background: var(--brass); border-color: var(--brass); color: var(--ink-on-brass); }
+.qc .b { flex: 1; min-width: 0; font-size: 15px; font-weight: 600; }
+.qc .b small { display: flex; align-items: center; gap: 6px; font-size: 11.5px; font-weight: 500; color: var(--dim); margin-top: 3px; }
+.qc .b small i { width: 8px; height: 8px; border-radius: 50%; display: block; flex: none; }
+.qc .xp { font-weight: 700; font-size: 14px; color: var(--brass); font-variant-numeric: tabular-nums; text-align: right; }
+.qc .xp small { display: block; font-size: 9px; letter-spacing: .1em; color: var(--faint); font-weight: 600; }
+.qc.done { background: transparent; }
+.qc.done .b { text-decoration: line-through; color: var(--dim); }
+.qc .cm { color: var(--faint); flex: none; }
+@media (prefers-reduced-motion: no-preference) { .yn button { transition: background .12s, color .12s; } }
+</style>
+
+<div class="wrap">
+  <header class="head">
+    <span class="lbl">Questlog · nová záložka</span>
+    <h1>Kalendář: náhled stránek</h1>
+    <p>Šest stránek podle tvých screenshotů, ale ve vzhledu Questlogu: modrá paleta (akcent 78B4C4), tmavé karty, Figtree. Pod každou stránkou je seznam funkcí. U každé klikni <b>Ano</b> nebo <b>Ne</b>. Dole se z toho složí rozhodnutí, které mi zkopíruješ zpět do chatu.</p>
+  </header>
+
+  <section class="head" aria-labelledby="t-types">
+    <h2 id="t-types">Typy událostí místo barev</h2>
+    <p>Barvu si nevybíráš. Vybereš typ a ten má svou pevnou barvu. Státní svátek je červený a plný, významný den má podobný, ale tlumený odstín a jen jemný štítek s barevným proužkem. Jmeniny jsou žluté a narozeniny oranžové.</p>
+    <div class="types" id="types"></div>
+  </section>
+
+  <div class="bar">
+    <span class="lbl">Ukázkové údaje: listopad 2026, dnes je 19.</span>
+    <div class="seg" role="group" aria-label="Vzhled telefonu">
+      <button type="button" data-th="dark" aria-pressed="true">Tmavý</button>
+      <button type="button" data-th="light" aria-pressed="false">Světlý</button>
+    </div>
+  </div>
+
+  <div class="screens" id="screens"></div>
+
+  <section class="head" aria-labelledby="t-notes">
+    <h2 id="t-notes">Co z toho plyne</h2>
+    <div class="notes">
+      <div><h3>Data zůstanou v telefonu</h3><p>Události se ukládají do stejné lokální databáze jako questy (nové schema v3). Žádný server, žádný účet, žádná synchronizace s kalendářem iOS.</p></div>
+      <div><h3>XP jen přes nástěnku</h3><p>Událost dá XP, až když ji splníš na nástěnce. Kalendář sám lištu s hrdinou nemá a s misemi se nepropojuje.</p></div>
+      <div><h3>Největší dopad má opakování</h3><p>Opakování (E4, F6). Potřebují ho narozeniny, svátky i lekce. URL a upozornění jsou vypuštěné a přijdou případně později.</p></div>
+    </div>
+  </section>
+
+  <section class="sum" aria-labelledby="t-sum">
+    <h2 id="t-sum">Tvoje rozhodnutí</h2>
+    <div class="row2" id="count" style="color:var(--pg-dim);font-size:14px"></div>
+    <div class="row" style="display:flex;flex-wrap:wrap;gap:10px">
+      <button class="btn" type="button" id="allCore">Potvrdit všechny základní</button>
+      <button class="btn" type="button" id="reset">Vymazat volby</button>
+      <button class="btn p" type="button" id="copy">Zkopírovat rozhodnutí</button>
+    </div>
+    <pre id="out" aria-live="polite"></pre>
+  </section>
+</div>
+
+<script>
+(function () {
+  var TYPES = [
+    { k: 'svatek', n: 'Státní svátek', c: '#e5594f' }, { k: 'vyznamny', n: 'Významný den', c: '#c98a7d', soft: true },
+    { k: 'narozeniny', n: 'Narozeniny', c: '#f2a05e' }, { k: 'jmeniny', n: 'Jmeniny', c: '#e8d36a' },
+    { k: 'tanec', n: 'Tanec', c: '#ee7aa8' }, { k: 'rande', n: 'Rande', c: '#b983e0' },
+    { k: 'meeting', n: 'Meeting', c: '#6fa3e6' }, { k: 'seminar', n: 'Seminář', c: '#6fd0d8' },
+    { k: 'lekce', n: 'Lekce', c: '#62cf9f' }, { k: 'prace', n: 'Práce', c: '#8ca0b3' }
+  ];
+  var T = {}; TYPES.forEach(function (t) { T[t.k] = t; });
+
+  var ICON = {
+    plus: '<svg width="18" height="18" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 2v10M2 7h10"/></svg>',
+    left: '<svg width="11" height="18" viewBox="0 0 12 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2L2 10l8 8"/></svg>',
+    right: '<svg width="11" height="18" viewBox="0 0 12 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 2l8 8-8 8"/></svg>',
+    close: '<svg width="14" height="14" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 2l8 8M10 2l-8 8"/></svg>',
+    more: '<svg width="18" height="18" viewBox="0 0 18 18" fill="currentColor"><circle cx="9" cy="3.5" r="1.8"/><circle cx="9" cy="9" r="1.8"/><circle cx="9" cy="14.5" r="1.8"/></svg>',
+    edit: '<svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13.5 3.5l3 3L7 16H4v-3z"/></svg>',
+    note: '<svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="16" height="16" rx="3"/><path d="M7 9h8M7 13h5"/></svg>',
+    bell: '<svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 15V10a6 6 0 0 1 12 0v5l1.5 2h-15z"/><path d="M9 19.5a2.2 2.2 0 0 0 4 0"/></svg>',
+    repeat: '<svg width="22" height="22" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9a7 7 0 0 1 12-4.5M17 11a7 7 0 0 1-12 4.5"/><path d="M15 1.5v3.5h-3.5M5 18.5V15h3.5"/></svg>',
+    link: '<svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 13a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M13 9a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg>',
+    pin: '<svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20s6-5.2 6-10a6 6 0 0 0-12 0c0 4.8 6 10 6 10z"/><circle cx="11" cy="10" r="2.2"/></svg>',
+    search: '<svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="9" cy="9" r="5.8"/><path d="M13.5 13.5L17 17"/></svg>',
+    filter: '<svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 5h14M6 10h8M8.5 15h3"/></svg>',
+    clock: '<svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="10" cy="10" r="7.5"/><path d="M10 5.5V10l3 2"/></svg>',
+    trash: '<svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h12M8 6V4h4v2M6 6l1 10h6l1-10"/></svg>',
+    quests: '<svg width="24" height="24" viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h12a2 2 0 0 1 2 2v16l-3-2-3 2-3-2-3 2-3-2V5a2 2 0 0 1 2-2z"/><path d="M9 9h8M9 13h8M9 17h5"/></svg>',
+    missions: '<svg width="24" height="24" viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 23V4"/><path d="M6 4h14l-3 5 3 5H6"/></svg>',
+    cal: '<svg width="24" height="24" viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="19" height="17" rx="3"/><path d="M3.5 10.5h19M9 3v4M17 3v4"/><circle cx="13" cy="16" r="1.4" fill="currentColor" stroke="none"/></svg>',
+    gear: '<svg width="24" height="24" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="2.6"/><path d="M8.34 3.82 L8.61 1.72 L11.39 1.72 L11.66 3.82 L13.20 4.46 L14.88 3.16 L16.84 5.12 L15.54 6.80 L16.18 8.34 L18.28 8.61 L18.28 11.39 L16.18 11.66 L15.54 13.20 L16.84 14.88 L14.88 16.84 L13.20 15.54 L11.66 16.18 L11.39 18.28 L8.61 18.28 L8.34 16.18 L6.80 15.54 L5.12 16.84 L3.16 14.88 L4.46 13.20 L3.82 11.66 L1.72 11.39 L1.72 8.61 L3.82 8.34 L4.46 6.80 L3.16 5.12 L5.12 3.16 L6.80 4.46Z"/></svg>'
+  };
+
+  var EV = {
+    '2026-10-27': [['tanec', 'Zouk']],
+    '2026-10-28': [['svatek', 'Státní svátek'], ['meeting', 'Pohovor'], ['lekce', 'Leandro']],
+    '2026-10-30': [['rande', 'Večeře']],
+    '2026-11-03': [['meeting', 'Standup']],
+    '2026-11-04': [['lekce', 'Leandro'], ['seminar', 'Webinář']],
+    '2026-11-06': [['tanec', 'Zouk']],
+    '2026-11-07': [['tanec', 'Bachata'], ['seminar', 'Workshop'], ['narozeniny', 'Eva']],
+    '2026-11-08': [['tanec', 'Salsa']],
+    '2026-11-11': [['jmeniny', 'Martin'], ['vyznamny', 'Den válečných veteránů'], ['lekce', 'Leandro']],
+    '2026-11-13': [['prace', 'Release']],
+    '2026-11-16': [['meeting', 'Schůzka']],
+    '2026-11-17': [['svatek', '17. listopad']],
+    '2026-11-18': [['narozeniny', 'Narozeniny Evy'], ['meeting', 'Porada'], ['seminar', 'TS seminář'], ['lekce', 'Leandro Salsa']],
+    '2026-11-19': [['meeting', 'Schůzka']],
+    '2026-11-20': [['tanec', 'Zouk']],
+    '2026-11-21': [['rande', 'Večeře']],
+    '2026-11-25': [['lekce', 'Leandro'], ['jmeniny', 'Kateřina']],
+    '2026-11-27': [['narozeniny', 'Tomáš']],
+    '2026-11-28': [['prace', 'Deadline']],
+    '2026-11-30': [['prace', 'Plánování']],
+    '2026-12-02': [['lekce', 'Leandro']],
+    '2026-12-04': [['meeting', '1:1']]
+  };
+
+  function pad(n) { return (n < 10 ? '0' : '') + n; }
+  function sb(t) { return '<div class="sb"><span>' + (t || '9:41') + '</span><span style="display:flex;gap:6px;align-items:center"><svg width="17" height="11" viewBox="0 0 18 12" fill="currentColor"><rect y="8" width="3" height="4" rx=".8"/><rect x="5" y="5.5" width="3" height="6.5" rx=".8"/><rect x="10" y="3" width="3" height="9" rx=".8"/><rect x="15" width="3" height="12" rx=".8"/></svg><svg width="25" height="12" viewBox="0 0 27 13"><rect x=".5" y=".5" width="22" height="12" rx="3" fill="none" stroke="currentColor" opacity=".5"/><rect x="2" y="2" width="19" height="9" rx="1.8" fill="currentColor"/></svg></span></div>'; }
+  function tabs(on) {
+    on = on || 'cal';
+    function t(k, ic, l) { return '<div class="tab' + (on === k ? ' on' : '') + '">' + ic + l + '</div>'; }
+    return '<div class="tabs">' + t('q', ICON.quests, 'Questy') + t('m', ICON.missions, 'Mise') + t('cal', ICON.cal, 'Kalendář') + t('s', ICON.gear, 'Nastavení') + '</div>';
+  }
+
+  function monthBody() {
+    var html = '<div class="mhead"><span class="ib sm">' + ICON.left + '</span><div class="mt"><h4 class="disp">Listopad 2026</h4></div><span class="ib sm">' + ICON.right + '</span><span class="pill">Dnes</span><span class="ib sm">' + ICON.search + '</span><span class="ib sm">' + ICON.filter + '</span></div>';
+    html += '<div class="wd">' + ['PO', 'ÚT', 'ST', 'ČT', 'PÁ', 'SO', 'NE'].map(function (d) { return '<span>' + d + '</span>'; }).join('') + '</div><div class="grid">';
+    var d = new Date(Date.UTC(2026, 9, 26));
+    for (var i = 0; i < 42; i++) {
+      var key = d.getUTCFullYear() + '-' + pad(d.getUTCMonth() + 1) + '-' + pad(d.getUTCDate());
+      var out = d.getUTCMonth() !== 10, today = key === '2026-11-19';
+      var evs = EV[key] || [], shown = evs.length > 3 ? evs.slice(0, 2) : evs;
+      html += '<div class="cell' + (out ? ' out' : '') + (today ? ' today' : '') + '"><span class="d">' + d.getUTCDate() + '</span>' +
+        shown.map(function (e) { return T[e[0]].soft ? '<span class="chip soft" style="--tc:' + T[e[0]].c + '">' + e[1] + '</span>' : '<span class="chip" style="background:' + T[e[0]].c + '">' + e[1] + '</span>'; }).join('') +
+        (evs.length > 3 ? '<span class="more">+' + (evs.length - 2) + '</span>' : '') + '</div>';
+      d.setUTCDate(d.getUTCDate() + 1);
+    }
+    return html + '</div>';
+  }
+
+  function swatch(t) { return T[t].soft ? '<span class="tbadge" style="background:color-mix(in srgb,' + T[t].c + ' 24%,transparent);color:var(--text);box-shadow:inset 3px 0 0 ' + T[t].c + '"><i style="background:' + T[t].c + '"></i>' + T[t].n + '</span>' : '<span class="tbadge" style="background:' + T[t].c + '"><i></i>' + T[t].n + '</span>'; }
+  function evRow(time, end, type, name, all) {
+    return '<div class="ev"><div class="tm' + (all ? ' all' : '') + '">' + (all ? 'Celý den' : '<span>' + time + '</span><span>' + end + '</span>') + '</div><div class="bar" style="background:' + T[type].c + '"></div><div class="nm">' + name + '<small style="color:' + T[type].c + '">' + T[type].n + '</small></div></div>';
+  }
+  function infoRow(ic, t, s) { return '<div class="row">' + ICON[ic] + '<div><b>' + t + '</b><span>' + s + '</span></div></div>'; }
+  function toggleRow(t, on) { return '<div class="sw"><span>' + t + '</span><span class="tg' + (on ? ' on' : '') + '"></span></div>'; }
+  function typeGrid(sel) {
+    return '<div class="sub">Typ události</div><div class="tgrid">' + TYPES.map(function (t) {
+      return '<div class="tsel' + (t.k === sel ? ' on' : '') + '"><i style="background:' + t.c + '"></i>' + t.n + '</div>';
+    }).join('') + '</div>';
+  }
+
+  var PH = {};
+  function etask(type, name, meta, xp, done) {
+    return '<div class="qc' + (done ? ' done' : '') + '"><span class="ck' + (done ? ' on' : '') + '">' + (done ? '<svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 6.5l2.5 2.5 4.5-5"/></svg>' : '') + '</span><div class="b">' + name + '<small><i style="background:' + T[type].c + '"></i>' + T[type].n + ' · ' + meta + '</small></div><span class="cm">' + ICON.cal.replace('width="24" height="24"', 'width="15" height="15"') + '</span><div class="xp">+' + xp + '<small>XP</small></div></div>';
+  }
+  function qcard(name, pips, xp) {
+    return '<div class="qc"><span class="ck"></span><div class="b">' + name + '<small>' + '◆'.repeat(pips) + '<span style="opacity:.3">' + '◆'.repeat(4 - pips) + '</span></small></div><div class="xp">+' + xp + '<small>XP</small></div></div>';
+  }
+  PH.board = '<div class="phone">' + sb('7:05') + '<div class="body"><div class="hero"><span class="lv">4</span><div class="m">Martin · Úroveň 4<small><span>1 240 / 1 500 XP</span><span>260 XP do úrovně 5</span></small><div class="xpb"><i style="width:83%"></i></div></div></div>' +
+    '<div class="sec sub">Dnes · středa 18. listopadu</div>' +
+    etask('narozeniny', 'Popřát Evě k narozeninám', 'Celý den', 10) + etask('meeting', 'Porada', '08:15–10:00', 25, true) + etask('seminar', 'TS seminář', '11:00–15:32', 50) + etask('lekce', 'Leandro Salsa', '18:00–19:00', 25) + qcard('Koupit dárek pro Evu', 2, 25) +
+    '<div class="sec sub" style="padding-top:12px">Todo</div>' + qcard('Objednat vodu', 1, 10) + '<div class="mini">Úkoly z kalendáře nejdou přesouvat ani mazat tažením</div></div>' + tabs('q') + '</div>';
+  PH.month = '<div class="phone">' + sb() + '<div class="body">' + monthBody() + '<span class="fab">' + ICON.plus.replace('width="18" height="18"', 'width="24" height="24"') + '</span></div>' + tabs() + '</div>';
+
+  PH.day = '<div class="phone">' + sb() + '<div class="body">' + monthBody() + '<div class="scrim"></div><div class="sheet"><div class="grab"></div>' +
+    '<div class="sh-title"><div><h4 class="disp">Středa 18. listopadu</h4><small>4 události</small></div><span class="add">' + ICON.plus + '</span></div>' +
+    '<div>' + evRow('', '', 'narozeniny', 'Narozeniny Evy', true) + evRow('08:15', '10:00', 'meeting', 'Porada') + evRow('11:00', '15:32', 'seminar', 'TS seminář') + evRow('18:00', '19:00', 'lekce', 'Leandro Salsa') + '</div>' +
+    '<div class="mini">Prázdný den: „Žádné události“ a tlačítko Přidat</div></div></div>' + tabs() + '</div>';
+
+  PH.detail = '<div class="phone">' + sb('19:31') + '<div class="body"><div class="topbar"><span class="ib">' + ICON.close + '</span><h4 class="disp">Leandro Salsa</h4><span class="ib">' + ICON.more + '</span></div><div class="pad">' +
+    '<div class="card"><div class="disp" style="font-size:20px">Leandro Salsa</div>' + swatch('lekce') +
+    '<div class="range"><div><div class="k">Začátek</div><div class="v">st, 18 lis, 2026</div><div class="tt">18:00</div></div><span style="color:var(--faint)">' + ICON.right + '</span><div><div class="k">Konec</div><div class="v">st, 18 lis, 2026</div><div class="tt">19:00</div></div></div></div>' +
+    '<div class="card" style="gap:16px">' + infoRow('note', 'Podrobnosti', 'Nenastaveno') + infoRow('repeat', 'Opakovat', 'středa každý týden') + infoRow('pin', 'Umístění', 'Taneční studio, Brno') + '</div>' +
+    '</div><span class="cta">' + ICON.edit + 'Upravit</span></div></div>';
+
+  PH.edit = '<div class="phone">' + sb('19:31') + '<div class="body"><div class="topbar"><span class="ib">' + ICON.left + '</span><h4 class="disp">Upravit událost</h4><span class="save">Uložit</span></div><div class="pad scroll" style="padding-bottom:20px">' +
+    '<div class="card"><div class="fld act">Porada</div><div class="fld ph sm">Přidat podrobnosti</div></div>' +
+    '<div class="card">' + typeGrid('meeting') + '</div>' +
+    '<div class="card">' + toggleRow('Celý den', false) +
+    '<div class="dt"><span>st, 18 lis, 2026</span><span class="a"><span>08:15</span></span></div><div class="dt"><span>st, 18 lis, 2026</span><span class="a"><span>10:00</span></span></div></div>' +
+        '<div class="card"><div class="dt"><b style="font-weight:600">Opakovat</b><span style="color:var(--dim)">Nikdy ' + '</span></div></div>' +
+    '<div class="card"><div class="fld ph sm">Umístění</div></div>' +
+    '<div class="card">' + toggleRow('Na nástěnku', true) + '<div class="note">Za splnění: +25 XP (délka 1 h 45 min)</div></div>' +
+    '<div class="mini">Odsud se dá událost i smazat: tlačítko dole</div>' +
+    '<div class="opt d" style="justify-content:center;gap:8px">' + ICON.trash + 'Smazat událost</div></div></div></div>';
+
+  PH.create = '<div class="phone">' + sb('19:32') + '<div class="body"><div class="topbar"><span class="ib">' + ICON.left + '</span><h4 class="disp">Nová událost</h4><span class="save off">Uložit</span></div><div class="pad scroll" style="padding-bottom:20px">' +
+    '<div class="card"><div class="fld ph act">Název události</div><div class="fld ph sm">Přidat podrobnosti</div></div>' +
+    '<div class="card">' + typeGrid('meeting') + '<div class="note">Předvybraný je naposledy použitý typ.</div></div>' +
+    '<div class="card">' + toggleRow('Celý den', false) +
+    '<div class="dt"><span>čt, 19 lis, 2026</span><span class="a"><span>20:00</span></span></div><div class="dt"><span>čt, 19 lis, 2026</span><span class="a"><span>21:00</span></span></div>' +
+    '<div class="note">Den z kalendáře, začátek na příští celou hodinu, délka 1 hodina.</div></div>' +
+        '<div class="card"><div class="dt"><b style="font-weight:600">Opakovat</b><span style="color:var(--dim)">Nikdy</span></div></div>' +
+    '<div class="card"><div class="fld ph sm">Umístění</div></div>' +
+    '<div class="card">' + toggleRow('Na nástěnku', true) + '<div class="note">Za splnění: +25 XP (délka 1 h). Svátek má přepínač předvypnutý.</div></div></div></div></div>';
+
+  PH.del = '<div class="phone">' + sb('19:31') + '<div class="body"><div class="topbar"><span class="ib">' + ICON.close + '</span><h4 class="disp">Leandro Salsa</h4><span class="ib">' + ICON.more + '</span></div><div class="pad">' +
+    '<div class="card"><div class="disp" style="font-size:20px">Leandro Salsa</div>' + swatch('lekce') + '<div class="note">st, 18 lis, 2026 · 18:00 až 19:00</div></div>' +
+    '<div class="card" style="gap:16px">' + infoRow('repeat', 'Opakovat', 'středa každý týden') + '</div></div>' +
+    '<div class="scrim"></div><div class="sheet"><div class="grab"></div><div class="sh-title"><div><h4 class="disp">Smazat událost?</h4><small>Leandro Salsa se opakuje každou středu.</small></div></div>' +
+    '<div class="opt d" style="justify-content:center">Jen tuto událost</div><div class="opt d" style="justify-content:center">Tuto a všechny další</div><div class="opt d" style="justify-content:center">Všechny události v sérii</div><div class="opt" style="justify-content:center">Zrušit</div>' +
+    '<div class="mini">Událost bez opakování: jedno tlačítko Smazat a Zrušit</div></div></div></div>';
+
+  var SCREENS = [
+    { id: 'N', title: 'Spodní lišta', p: 'Čtvrtá záložka. Je vidět na měsíci i v seznamu dne.', ph: null, fn: [
+      ['N1', 'Nová záložka „Kalendář“ ve spodní liště', 'Pořadí: Questy · Mise · Kalendář · Nastavení. Nastavení zůstává poslední.', 'core']
+    ] },
+    { id: 'B', title: 'Nástěnka: události dne', p: 'Událost s přepínačem „Na nástěnku“ se ten den objeví mezi questy v sekci Dnes a po splnění dá XP.', ph: 'board', fn: [
+      ['B1', 'Událost dne se objeví na nástěnce v sekci Dnes', 'Ráno po 4:00 a při otevření aplikace. Celodenní nahoře, pak podle času, nad questy.', 'core'],
+      ['B2', 'Přepínač „Na nástěnku“ u každé události', 'Předvypnutý jen u typu Svátek, takže státní svátky na nástěnce nejsou.', 'core'],
+      ['B3', 'Odškrtnutí dá XP, odškrtnutí zpět je vrátí', 'Stejně jako u questů.', 'core'],
+      ['B4', 'XP podle délky události', 'Do 30 min 10 · do 2 h 25 · do 5 h 50 · déle 100.', 'core'],
+      ['B5', 'Celodenní událost: XP podle typu', 'Narozeniny, rande, svátek 10. Ostatní 25.', 'core'],
+      ['B6', 'Nesplněná událost den po dni z nástěnky zmizí', 'Bez trestu a bez XP. V kalendáři zůstává.', 'core'],
+      ['B7', 'V detailu události „Splněno“ s časem a XP', '', 'core']
+    ] },
+    { id: 'M', title: '1 · Přehled měsíce', p: 'Celý měsíc v mřížce, štítky událostí v barvě jejich typu.', ph: 'month', fn: [
+      ['M1', 'Mřížka měsíce, týden začíná pondělím', 'Dny sousedních měsíců jsou vybledlé. Názvy dnů a měsíců cs/en podle jazyka aplikace.', 'core'],
+      ['M2', 'Změna měsíce šipkami ‹ ›', '', 'core'],
+      ['M3', 'Změna měsíce tažením do stran', 'Jako druhý způsob k šipkám.', 'opt'],
+      ['M4', 'Tlačítko „Dnes“ skočí na dnešní měsíc', 'Dnešek má rámeček v barvě akcentu.', 'core'],
+      ['M5', 'Události jako barevné štítky v buňce dne', 'Do 3 událostí se ukážou všechny, od 4 dvě a „+n“. Celodenní jsou první.', 'core'],
+      ['M6', 'Klepnutí na den otevře jeho detail', '', 'core'],
+      ['M7', 'Tlačítko + vytvoří událost', 'Datum se předvyplní podle naposledy klepnutého dne, jinak dneška.', 'core'],
+      ['M8', 'Klepnutí na „Listopad 2026“ otevře výběr měsíce a roku', 'Rychlý skok o víc měsíců.', 'opt'],
+      ['M9', 'Filtr podle typu', 'Zobrazit jen např. tanec a lekce.', 'opt'],
+      ['M10', 'Hledání událostí podle názvu', 'Lupa v záhlaví. Ve tvých screenshotech je.', 'opt'],
+      ['M11', 'Pohledy Seznam / Týden / Den', 'Ve screenshotech jsou čtyři pohledy. Navrhuju zatím jen Měsíc.', 'opt']
+    ] },
+    { id: 'D', title: '2 · Detail dne', p: 'Spodní list po klepnutí na den, události podle času.', ph: 'day', fn: [
+      ['D1', 'Seznam událostí dne podle času', 'Čas od a do, barevný proužek a název typu pod názvem.', 'core'],
+      ['D2', 'Celodenní události nahoře', '', 'core'],
+      ['D3', 'Tlačítko + přidá událost do tohoto dne', '', 'core'],
+      ['D4', 'Klepnutí na událost otevře detail', '', 'core'],
+      ['D5', 'Prázdný den ukáže text a tlačítko Přidat', '', 'core'],
+      ['D6', 'Zavření tažením dolů nebo klepnutím mimo list', '', 'core']
+    ] },
+    { id: 'E', title: '3 · Detail události', p: 'Přehled jedné události, jen ke čtení.', ph: 'detail', fn: [
+      ['E1', 'Název, typ (odznak v barvě) a začátek → konec', '', 'core'],
+      ['E2', 'Podrobnosti (poznámka)', '', 'core'],
+      ['E4', 'Opakování: denně, týdně, měsíčně, ročně', 'Bez konce, nebo do data. Potřebují ho narozeniny, svátky a pravidelné lekce.', 'opt'],
+      ['E6', 'Umístění jako text', 'Bez mapy. Klepnutím se zkopíruje.', 'opt'],
+      ['E7', 'Menu ⋮: Upravit, Smazat', 'Volitelně i Duplikovat.', 'core'],
+      ['E8', 'Tlačítko Upravit dole', '', 'core']
+    ] },
+    { id: 'F', title: '4 · Úprava události', p: 'Formulář s předvyplněnými hodnotami. Barvu nahrazuje výběr typu.', ph: 'edit', fn: [
+      ['F1', 'Název (povinný, nejvýš 80 znaků)', '', 'core'],
+      ['F2', 'Výběr typu z deseti: tanec, práce, narozeniny, jmeniny, státní svátek, významný den, rande, meeting, seminář, lekce', 'Každý typ má pevnou barvu. Místo palety barev. Významný den má jemný štítek.', 'core'],
+      ['F3', 'Přepínač Celý den', 'Skryje časy.', 'core'],
+      ['F4', 'Začátek a konec: datum a čas', 'Konec nemůže být před začátkem. Při posunu začátku se konec posune s ním.', 'core'],
+      ['F6', 'Opakování', 'Stejné jako E4.', 'opt'],
+      ['F7', 'Podrobnosti a umístění', 'Stejné jako E2 a E6.', 'opt'],
+      ['F8', 'Uložit, a zpět s dotazem na zahození změn', 'Dotaz jen když se něco změnilo.', 'core'],
+      ['F9', 'Vlastní typy a změna jejich barev v Nastavení', 'Navrhuju pevných osm. Nové typy případně později.', 'opt']
+    ] },
+    { id: 'C', title: '5 · Nová událost', p: 'Stejný formulář, prázdný. Uložit je vypnuté, dokud není název.', ph: 'create', fn: [
+      ['C1', 'Předvyplněný den, začátek na příští celou hodinu, délka 1 hodina', '', 'core'],
+      ['C2', 'Předvybraný naposledy použitý typ', 'Poprvé Meeting.', 'core'],
+      ['C3', 'Uložit je neaktivní bez názvu', '', 'core'],
+      ['C4', 'Po uložení se událost hned ukáže v měsíci', '', 'core']
+    ] },
+    { id: 'X', title: '6 · Smazání události', p: 'Potvrzení ve spodním listu. U opakující se události tři volby.', ph: 'del', fn: [
+      ['X1', 'Smazat z menu detailu i z editace, s potvrzením', 'Červené tlačítko, jako u mazání misí.', 'core'],
+      ['X2', 'U opakující se: jen tuto / tuto a další / celou sérii', 'Platí jen, když bude opakování (E4).', 'opt'],
+      ['X3', 'Po smazání hláška s tlačítkem Zpět', 'Snackbar jako u questů.', 'opt']
+    ] }
+  ];
+
+  var KEY = 'questlog-calendar-decisions', state = {};
+  try { state = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch (e) { state = {}; }
+  function save() { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} }
+
+  document.getElementById('types').innerHTML = TYPES.map(function (t) { return '<span class="type"><i style="background:' + t.c + '"></i>' + t.n + '</span>'; }).join('');
+
+  document.getElementById('screens').innerHTML = SCREENS.map(function (s) {
+    var fns = s.fn.map(function (f) {
+      return '<div class="fn" data-id="' + f[0] + '"><div class="t"><span class="tag' + (f[3] === 'opt' ? ' opt' : '') + '">' + f[0] + '</span><b>' + f[1] + '</b>' + (f[2] ? '<small>' + f[2] + '</small>' : '') + '</div>' +
+        '<div class="yn"><button type="button" data-v="y" aria-pressed="false" aria-label="Ano ' + f[0] + '">Ano</button><button type="button" data-v="n" aria-pressed="false" aria-label="Ne ' + f[0] + '">Ne</button></div></div>';
+    }).join('');
+    return '<article class="screen"><div class="cap"><h2>' + s.title + '</h2><p>' + s.p + '</p></div>' +
+      (s.ph ? PH[s.ph] : '<div class="phone" style="height:auto;border-radius:22px">' + tabs() + '</div>') +
+      '<div class="fns">' + fns + '</div></article>';
+  }).join('');
+
+  var ALL = []; SCREENS.forEach(function (s) { s.fn.forEach(function (f) { ALL.push(f); }); });
+
+  function paint() {
+    document.querySelectorAll('.fn').forEach(function (el) {
+      var v = state[el.getAttribute('data-id')];
+      el.querySelectorAll('button').forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-v') === v)); });
+    });
+    var y = ALL.filter(function (f) { return state[f[0]] === 'y'; }), n = ALL.filter(function (f) { return state[f[0]] === 'n'; }),
+      u = ALL.filter(function (f) { return !state[f[0]]; });
+    document.getElementById('count').textContent = 'Ano: ' + y.length + ' · Ne: ' + n.length + ' · Bez volby: ' + u.length + ' z ' + ALL.length;
+    function line(f) { return '  ' + f[0] + ' ' + f[1]; }
+    document.getElementById('out').textContent =
+      'Kalendář: moje rozhodnutí\n\nANO (' + y.length + ')\n' + (y.map(line).join('\n') || '  -') +
+      '\n\nNE (' + n.length + ')\n' + (n.map(line).join('\n') || '  -') +
+      '\n\nBEZ VOLBY (' + u.length + ')\n' + (u.map(function (f) { return '  ' + f[0] + (f[3] === 'opt' ? ' (volitelné)' : ''); }).join('\n') || '  -');
+  }
+
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest('.yn button');
+    if (b) {
+      var id = b.closest('.fn').getAttribute('data-id'), v = b.getAttribute('data-v');
+      if (state[id] === v) delete state[id]; else state[id] = v;
+      save(); paint(); return;
+    }
+    var th = e.target.closest('[data-th]');
+    if (th) {
+      document.querySelectorAll('[data-th]').forEach(function (x) { x.setAttribute('aria-pressed', String(x === th)); });
+      document.querySelectorAll('.phone').forEach(function (p) { p.classList.toggle('light', th.getAttribute('data-th') === 'light'); });
+    }
+  });
+  document.getElementById('allCore').addEventListener('click', function () { ALL.forEach(function (f) { if (f[3] === 'core') state[f[0]] = 'y'; }); save(); paint(); });
+  document.getElementById('reset').addEventListener('click', function () { state = {}; save(); paint(); });
+  document.getElementById('copy').addEventListener('click', function () {
+    var btn = this, txt = document.getElementById('out').textContent;
+    function done() { btn.textContent = 'Zkopírováno'; setTimeout(function () { btn.textContent = 'Zkopírovat rozhodnutí'; }, 1800); }
+    function fallback() { var r = document.createRange(); r.selectNodeContents(document.getElementById('out')); var s = getSelection(); s.removeAllRanges(); s.addRange(r); btn.textContent = 'Označeno, zkopíruj ručně'; }
+    try { navigator.clipboard.writeText(txt).then(done, fallback); } catch (err) { fallback(); }
+  });
+  paint();
+})();
+</script>
