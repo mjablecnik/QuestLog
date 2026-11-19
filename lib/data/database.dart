@@ -11,13 +11,26 @@ import 'package:path_provider/path_provider.dart';
 import '../core/cadence.dart';
 import '../core/errors.dart';
 import '../core/xp_rules.dart';
+import 'calendar/calendar_seed.dart';
+import 'calendar/calendar_tables.dart';
 import 'models.dart';
 import 'preferences.dart';
 import 'tables.dart';
 
 part 'database.g.dart';
 
-@DriftDatabase(tables: [Missions, Quests, RecurringRules, RuleQuests, AppState])
+@DriftDatabase(
+  tables: [
+    Missions,
+    Quests,
+    RecurringRules,
+    RuleQuests,
+    AppState,
+    CalendarEvents,
+    CalendarSkippedDates,
+    CalendarCompletions,
+  ],
+)
 class QuestlogDatabase extends _$QuestlogDatabase {
   /// Opens the on-device database file, lazily on first use.
   QuestlogDatabase() : super(_openFileDatabase());
@@ -26,7 +39,7 @@ class QuestlogDatabase extends _$QuestlogDatabase {
   QuestlogDatabase.forTesting(super.executor);
 
   @override
-  int get schemaVersion => 2;
+  int get schemaVersion => 3;
 
   /// Runs [action] in a transaction (joining the active one, if any).
   ///
@@ -56,6 +69,7 @@ class QuestlogDatabase extends _$QuestlogDatabase {
           await m.createAll();
           // The singleton row: Total_XP 0 and the default settings.
           await into(appState).insert(AppStateCompanion.insert());
+          await seedCalendarDefaults(this);
         },
         onUpgrade: (m, from, to) async {
           if (from < 2) {
@@ -66,6 +80,14 @@ class QuestlogDatabase extends _$QuestlogDatabase {
             await m.addColumn(missions, missions.sortOrder);
             await customStatement("UPDATE quests SET board = 'todo' WHERE mission_id IS NULL");
             await customStatement('UPDATE missions SET sort_order = id');
+          }
+          if (from < 3) {
+            // The calendar: events, skipped dates and completions, filled once with
+            // the Czech holidays, notable days and name days. No existing table changes.
+            await m.createTable(calendarEvents);
+            await m.createTable(calendarSkippedDates);
+            await m.createTable(calendarCompletions);
+            await seedCalendarDefaults(this);
           }
         },
         beforeOpen: (details) async {
