@@ -13,6 +13,7 @@ const MarkdownSyntax _syntax = MarkdownSyntax.normal;
 
 final RegExp _fenceLine = RegExp(r'^\s*(```|~~~)');
 final RegExp _inlineCode = RegExp(r'`[^`]*`');
+final RegExp _listItemLine = RegExp(r'^\s*([-*+]|\d+[.)])\s');
 final RegExp _rawHtml = RegExp(r'(?<!\\)<(?=[A-Za-z/!?])');
 final RegExp _orderedStart = RegExp(r'^\d+(?=[.)](\s|$))');
 final RegExp _blockStart = RegExp(r'^(#{1,6}(\s|$)|>|[-+](\s|$)|(-{3,}|\*{3,}|_{3,}|={3,})\s*$)');
@@ -33,6 +34,8 @@ MutableDocument documentFromMarkdown(String markdown) {
     for (final DocumentNode node in parsed)
       if (node is ParagraphNode && node.getMetadataValue('blockType') == codeAttribution)
         _trimCodeBlock(node)
+      else if (node is ListItemNode || node is TaskNode)
+        _trimLineBreaks(node as TextNode)
       else
         node,
   ];
@@ -61,22 +64,71 @@ String markdownFromDocument(Document document) {
 }
 
 /// Raw HTML would be dropped by the parser, so a `<` that starts a tag is
-/// escaped to stay visible as text. Fenced code is left alone.
+/// escaped to stay visible as text; a list written with blank lines between its
+/// items is made tight, because the parser loses a checked box in a loose list.
+/// Fenced code is left alone.
 String _keepRawHtmlAsText(String markdown) {
   bool inFence = false;
-  return markdown.split('\n').map((String line) {
+  final List<String> out = <String>[];
+  final List<bool> code = <bool>[];
+  for (final String line in markdown.split('\n')) {
     if (_fenceLine.hasMatch(line)) {
       inFence = !inFence;
-      return line;
+      out.add(line);
+      code.add(true);
+      continue;
     }
-    if (inFence) return line;
+    if (inFence) {
+      out.add(line);
+      code.add(true);
+      continue;
+    }
+    code.add(false);
     // A `<` inside inline code is code, not a tag.
-    return line.splitMapJoin(
+    out.add(line.splitMapJoin(
       _inlineCode,
       onMatch: (Match m) => m[0]!,
       onNonMatch: (String s) => s.replaceAll(_rawHtml, r'\<'),
-    );
-  }).join('\n');
+    ));
+  }
+  // Drop a blank line that sits between two list items.
+  final List<String> tight = <String>[];
+  for (int i = 0; i < out.length; i++) {
+    final bool blank = !code[i] && out[i].trim().isEmpty;
+    if (blank && tight.isNotEmpty && _listItemLine.hasMatch(tight.last)) {
+      int next = i + 1;
+      while (next < out.length && !code[next] && out[next].trim().isEmpty) {
+        next++;
+      }
+      if (next < out.length && !code[next] && _listItemLine.hasMatch(out[next])) {
+        i = next - 1;
+        continue;
+      }
+    }
+    tight.add(out[i]);
+  }
+  return tight.join('\n');
+}
+
+/// A list written with blank lines between its items (a loose list) gives each
+/// item a line break at its start or end; the editor shows items without it.
+DocumentNode _trimLineBreaks(TextNode node) {
+  final String text = node.text.toPlainText();
+  int start = 0;
+  int end = text.length;
+  while (start < end && text[start] == '\n') {
+    start++;
+  }
+  while (end > start && text[end - 1] == '\n') {
+    end--;
+  }
+  if (start == 0 && end == text.length) return node;
+  final AttributedText trimmed = node.text.copyText(start, end);
+  if (node is TaskNode) {
+    return TaskNode(id: node.id, text: trimmed, isComplete: node.isComplete, indent: node.indent, metadata: node.metadata);
+  }
+  final ListItemNode item = node as ListItemNode;
+  return ListItemNode(id: item.id, itemType: item.type, text: trimmed, indent: item.indent, metadata: item.metadata);
 }
 
 ParagraphNode _trimCodeBlock(ParagraphNode node) {

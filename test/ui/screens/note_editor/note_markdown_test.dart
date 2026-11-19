@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter_test/flutter_test.dart';
 import 'package:glados/glados.dart' hide expect, group, test, setUp, tearDown;
 import 'package:questlog/ui/screens/note_editor/note_markdown.dart';
@@ -126,6 +124,18 @@ void main() {
       ])));
       expect((back.first as TextNode).text.toPlainText(), 'x <fs> y');
     });
+  });
+
+  group('loose lists', () {
+    test('items separated by blank lines show no line break at their start', () {
+      final Document doc = documentFromMarkdown('- one\n\n- two\n\n- [ ] task\n\n- [x] done');
+      expect(shape(doc), <String>['unordered:0:one', 'unordered:0:two', 'task:0:task', 'taskx:0:done']);
+    });
+  });
+
+  test('blank lines inside a code fence are kept even between list-looking lines', () {
+    const String md = '```\n- a\n\n- b\n```';
+    expect(roundTrip(md), md);
   });
 
   group('unsupported constructs stay as text', () {
