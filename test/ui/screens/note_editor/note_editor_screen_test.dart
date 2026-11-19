@@ -1,4 +1,6 @@
+import 'dart:ui' show CheckedState;
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:questlog/core/errors.dart';
 import 'package:questlog/core/notes/note_node.dart';
@@ -296,6 +298,23 @@ void main() {
       expect(semantics().properties.selected, isTrue);
       await tapFormat(tester, 'bold');
       expect(semantics().properties.selected, isFalse);
+    });
+  });
+
+  group('checklist', () {
+    notesTest(h, 'tapping the round check toggles the item and the Markdown follows', (tester) async {
+      await open(tester, seedBody: '- [ ] first\n- [x] second');
+      expect(find.byKey(const ValueKey<String>('task-check')), findsNWidgets(2));
+      await tester.tap(find.byKey(const ValueKey<String>('task-check')).first);
+      await tester.pump();
+      await afterAutosave(tester);
+      final NoteNode saved = (await tree(tester)).all.firstWhere((n) => !n.isFolder);
+      expect(saved.body, '- [x] first\n- [x] second');
+      final SemanticsHandle handle = tester.ensureSemantics();
+      final SemanticsNode node = tester.getSemantics(find.byKey(const ValueKey<String>('task-check')).first);
+      expect(node.label, 'Toggle done');
+      expect(node.getSemanticsData().flagsCollection.isChecked, isNot(CheckedState.none));
+      handle.dispose();
     });
   });
 
