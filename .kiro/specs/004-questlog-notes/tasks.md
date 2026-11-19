@@ -90,7 +90,7 @@ Add the Poznámky tab to Questlog: a tree of Folders and Notes, a WYSIWYG Markdo
 - [ ] 5. Markdown conversion for the editor (`lib/ui/screens/note_editor/`)
   - [ ] 5.1 Add the editor dependency and prove it
     - Spike first: `flutter pub add appflowy_editor`, commit the updated `pubspec.yaml` and `pubspec.lock`, run `flutter analyze` and a widget test that pumps an `AppFlowyEditor` under the Questlog theme
-    - Confirm on the Linux desktop run that the editor accepts text, that a Czech diacritic sentence round-trips, and that its styles can be set from `context.palette` with no literal colours; if any of this fails, switch to `super_editor` with `super_editor_markdown`, keep `note_markdown.dart` as the only adapter, and record the change in `design.md` (Overview, "Editor package")
+    - Confirm on the Linux desktop run that the editor accepts text, that a Czech diacritic sentence round-trips, and that its styles can be set from `context.palette` with no literal colours; if any of this fails, switch to `super_editor` with `super_editor_markdown`, keep `note_markdown.dart` as the only adapter, and record the change in `design.md` (Overview, "Editor package" and "Licence of the editor package")
     - The dependency update is its own commit, apart from the feature commits
     - _Requirements: 4.2, 4.8_
 
@@ -117,22 +117,23 @@ Add the Poznámky tab to Questlog: a tree of Folders and Notes, a WYSIWYG Markdo
 
   - [ ] 6.3 Make the tab bar five tabs
     - Add `ShellTab.notes` between `calendar` and `settings` in `lib/ui/screens/shell/questlog_tab_bar.dart` with `IconAsset.notes` and the new label, and build `NotesScreen` for it in `lib/ui/screens/shell/app_shell.dart`
-    - Update the existing tests that expect four tabs, and the doc comments in both files
+    - Update the existing tests that expect four tabs, and the doc comments in both files; regenerate the existing goldens that show the tab bar (`board_*`, `missions_*`, `calendar_*`, `settings_*`) with `flutter test --update-goldens test/goldens` and check in the diff that only the bar changed
     - _Requirements: 1.1, 1.2, 1.5_
 
   - [ ] 6.4 Add Notes UI state
     - Add `lib/ui/state/notes_state.dart` with the kept-alive `currentFolderProvider` (null at start, so the app opens at the Root_Folder) and the `NoteSaveController` from the design
     - Add `Motion.autosave` (500 ms) to `lib/ui/theme/tokens.dart`
-    - _Requirements: 1.2, 1.3, 4.4, 4.5_
+    - If the Current_Folder is not visible any more, the provider falls back to the Root_Folder when it is read
+    - _Requirements: 1.2, 1.3, 1.6, 4.4, 4.5_
 
   - [ ] 6.5 Add the sheets
     - `lib/ui/sheets/notes/`: `add_sheet.dart`, `name_sheet.dart` (80-character limit, disabled primary button while blank or, for rename, unchanged), `move_sheet.dart` (indented tree, current location marked and selected, unavailable Folders dimmed and not tappable, primary button disabled on the current location) and `link_sheet.dart`, all built on `questlog_sheet.dart`
     - _Requirements: 3.1, 3.2, 3.3, 3.4, 5.8, 7.1, 7.2, 8.1, 8.2, 8.3, 8.4, 8.5_
 
   - [ ] 6.6 Add the Notes_Screen
-    - `lib/ui/screens/notes/notes_screen.dart`, `folder_row.dart`, `note_row.dart`, `breadcrumb.dart` and `lib/ui/widgets/notes/trash_button.dart` after `.design/notes-preview.html`: title and counts, Trash button with badge at the Root_Folder, Složky and Poznámky sections, Folder_Row counts, Note_Row preview and date label, Breadcrumb with the ellipsis rule, back button labelled with the parent, empty state, skeleton list, add button opening the Add_Sheet, Name_Sheet and the editor
+    - `lib/ui/screens/notes/notes_screen.dart`, `folder_row.dart`, `note_row.dart`, `breadcrumb.dart` and `lib/ui/widgets/notes/trash_button.dart` after `.design/notes-preview.html`: title and counts, Trash button with badge at the Root_Folder, Složky and Poznámky sections, Folder_Row counts, Note_Row preview and date label, Breadcrumb with the ellipsis rule, back button labelled with the parent, empty state, skeleton list, add button opening the Add_Sheet, Name_Sheet and the editor; a `PopScope` that turns the system back action inside a Folder into "go to the parent"
     - The screen reads `noteTreeProvider` and `currentFolderProvider` only; it shows no Hero_Bar
-    - _Requirements: 1.3, 1.4, 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 2.8, 2.9, 2.10, 2.11, 2.12, 2.13, 3.1, 3.2, 3.5, 3.6, 11.1_
+    - _Requirements: 1.3, 1.4, 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 2.8, 2.9, 2.10, 2.11, 2.12, 2.13, 2.15, 3.1, 3.2, 3.5, 3.6, 11.1_
 
   - [ ] 6.7 Add swipe actions, the Node_Menu and the shared flows
     - `node_swipe_row.dart` (`flutter_slidable`, one open row per list, Přejmenovat, Přesunout, destructive Smazat), `node_menu.dart` (same entries, delete last in the destructive colour, shown in a Folder's top bar) and `notes_actions.dart` with `renameNode`, `moveNode` and `trashNode`
@@ -140,9 +141,9 @@ Add the Poznámky tab to Questlog: a tree of Folders and Notes, a WYSIWYG Markdo
     - _Requirements: 7.1, 8.6, 9.1, 9.2, 9.3, 9.6, 9.7, 9.8, 10.1, 10.2, 10.3, 10.4_
 
   - [ ] 6.8 Write widget tests for the list screens
-    - Sections and omitted empty section, counts, sort order, date labels, Breadcrumb and its ellipsis, back button, empty state, skeleton, add flow for a Folder, Name_Sheet limits and disabled button
+    - Sections and omitted empty section, counts, sort order, date labels, Breadcrumb and its ellipsis, back button, empty state, skeleton, add flow for a Folder, Name_Sheet limits and disabled button, fallback to the Root_Folder when the Current_Folder is gone, system back going to the parent
     - Swipe reveals three actions and only one row stays open; menu and swipe start the same flows; Move_Sheet marks and disables correctly; the warning dialog appears for a Folder with content and not for an empty one; dismiss leaves everything unchanged
-    - _Requirements: 2.2, 2.3, 2.4, 2.5, 2.6, 2.9, 2.10, 2.11, 2.12, 2.13, 3.1, 3.2, 3.3, 3.4, 3.5, 7.1, 7.2, 8.1, 8.2, 8.3, 8.5, 9.1, 9.2, 9.6, 10.1, 10.2, 10.4_
+    - _Requirements: 1.6, 2.2, 2.3, 2.4, 2.5, 2.6, 2.9, 2.10, 2.11, 2.12, 2.13, 2.15, 3.1, 3.2, 3.3, 3.4, 3.5, 7.1, 7.2, 8.1, 8.2, 8.3, 8.5, 9.1, 9.2, 9.6, 10.1, 10.2, 10.4_
 
 - [ ] 7. Note_Editor (`lib/ui/screens/note_editor/`)
   - [ ] 7.1 Add the editor style and the save controller wiring
@@ -170,8 +171,8 @@ Add the Poznámky tab to Questlog: a tree of Folders and Notes, a WYSIWYG Markdo
 - [ ] 9. Trash
   - [ ] 9.1 Add the Trash_Screen
     - `lib/ui/screens/notes/trash_screen.dart` and `trash_row.dart` after the preview: title Koš with the count, information line, rows ordered by `trashEntries`, kind icon, origin ("z <Folder>" or "z Poznámky"), days left with the destructive colour at one day or less, Obnovit pill, swipe with Obnovit and Navždy, `confirmDestructive` for Navždy and for Vysypat koš (with the count), empty state and hidden Vysypat koš when empty; trashed Notes are not opened
-    - Opening the screen calls `purgeExpired()`
-    - _Requirements: 11.2, 11.3, 11.4, 11.5, 11.6, 11.7, 11.8, 11.10, 11.11, 11.12, 11.13, 11.14, 12.2_
+    - Opening the screen calls `purgeExpired()`; restoring and permanent deletion show a Snackbar
+    - _Requirements: 11.2, 11.3, 11.4, 11.5, 11.6, 11.7, 11.8, 11.10, 11.11, 11.12, 11.13, 11.14, 11.15, 12.2_
 
   - [ ] 9.2 Request the Purge from the shell
     - In `app_shell.dart` call `notesService.purgeExpired()` at start and on return from the background, next to the reconciliation triggers; catch, log and ignore any error so the splash and the tabs are never blocked
@@ -180,16 +181,16 @@ Add the Poznámky tab to Questlog: a tree of Folders and Notes, a WYSIWYG Markdo
   - [ ] 9.3 Write widget tests for the Trash
     - Order, labels, days left and the red remaining time at one day; Obnovit to the old parent and to the root; swipe actions; both confirmation dialogs with their counts and the cancel path; empty state; a trashed Note does not open; the badge count on the Notes_Screen follows trashing and restoring
     - Shell test: a failing Purge does not stop the app from showing the tabs
-    - _Requirements: 11.1, 11.2, 11.4, 11.5, 11.7, 11.8, 11.10, 11.11, 11.12, 11.13, 11.14, 12.2, 12.5_
+    - _Requirements: 11.1, 11.2, 11.4, 11.5, 11.7, 11.8, 11.10, 11.11, 11.12, 11.13, 11.14, 11.15, 12.2, 12.5_
 
 - [ ] 10. Cross-cutting checks and documentation
   - [ ] 10.1 Write presentation and accessibility tests
-    - Extend the a11y harness to the Notes_Screen, Trash_Screen and Note_Editor: 44-point targets, semantic labels, custom semantic actions for rename, move and delete on rows, no splash or highlight on press, no clipped text at 200 % text scale, all palettes and both themes
+    - Extend the a11y harness to the Notes_Screen, Trash_Screen and Note_Editor: 44-point targets, semantic labels, custom semantic actions for rename, move and delete on rows, no splash or highlight on press, no clipped text at 200 % text scale, both themes
     - Guard test that `lib/core/notes/` imports no Flutter and no Drift; the existing guard tests (no `DateTime.now`, literal colours, durations or spacing in `lib/ui`) pass with the new files
     - _Requirements: 14.1, 14.2, 14.3, 14.4, 14.5, 14.6_
 
   - [ ]* 10.2 Add golden tests
-    - Goldens for the Notes_Screen at the Root_Folder and inside a Folder, the Trash_Screen, and the Note_Editor, in the Blue palette dark and light, compared against `.design/notes-preview.html`
+    - Goldens for the Notes_Screen at the Root_Folder and inside a Folder, the Trash_Screen, and the Note_Editor, in the dark and light theme, compared against `.design/notes-preview.html`
     - _Requirements: 14.2_
 
   - [ ] 10.3 Write the end-to-end scenario
@@ -226,7 +227,7 @@ Add the Poznámky tab to Questlog: a tree of Folders and Notes, a WYSIWYG Markdo
 ## Notes
 
 - Tasks marked with `*` are optional and can be skipped for faster MVP.
-- Spec `004-questlog-notes` is the next spec after `003-questlog-calendar`; it overrides `003` Requirement 1 criterion 1 (five tabs instead of four) and adds schema version 4. Start from a clean working tree: the repository currently has uncommitted palette-switch changes that are not part of this spec.
+- Spec `004-questlog-notes` is the next spec after `003-questlog-calendar`; it overrides `003` Requirement 1 criterion 1 (five tabs instead of four) and adds schema version 4. The app has one palette (blue), so there is no palette matrix to test.
 - Task 5.1 is a spike on purpose: if `appflowy_editor` fails the checks, the fallback is `super_editor` with `super_editor_markdown`, and only `note_markdown.dart`, `editor_style.dart`, `format_toolbar.dart` and the editor screen change.
 - Run `git config --global --add safe.directory /opt/flutter` once per sandbox. Drift codegen takes about 50 s: run `build_runner` in the background and poll the log. Edit only the `.arb` files for strings.
 - The dependency update (task 5.1) is its own commit. One Conventional Commit per task, author `Martin Jablečník <martin.jablecnik@email.cz>`, no tool-attribution trailers.

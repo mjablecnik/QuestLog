@@ -13,6 +13,8 @@ Notes are added beside the existing domain, in the same layers as the calendar. 
 - **Editor package: `appflowy_editor`.** It is a Flutter-native block editor with its own Markdown codec, checklists, quotes, code blocks, links and a themeable toolbar API, so there is no WebView and no second text engine. `flutter pub add --dry-run` resolves it against this SDK (26 new transitive packages, among them `url_launcher`). The first task is a spike that proves the round trip and the theming; the fallback is `super_editor` with `super_editor_markdown` (20 packages), which resolves too. Everything outside `lib/ui/screens/note_editor/` stays independent of the choice: the rest of the app only sees a `String` body.
 - **Automatic name instead of a mandatory title field.** A new Note is named after its first non-empty line until the user renames it (Requirement 6), so creating a Note is one tap and typing.
 - **Five tabs.** The tab bar already holds Settings as a tab, so Poznámky is inserted before it. Five is the iOS maximum for a tab bar and still fits at the design width.
+- **Licence of the editor package.** `appflowy_editor` is dual-licensed AGPL-3.0 and MPL-2.0, and the app takes it under the MPL-2.0 (file-level copyleft, no obligation for the rest of the app). `super_editor` is MIT. The spike (task 5.1) records the licence of the package that is chosen.
+- **The whole tree is streamed.** `watchAll` emits every row, bodies included, after each write, so an autosave re-emits all Notes. For one user with a few hundred Notes this is cheap; if it ever is not, the Note_Row can read a stored preview column instead (a later schema step, not part of this spec).
 
 ## Architecture
 
@@ -449,6 +451,6 @@ CREATE INDEX idx_note_nodes_deleted ON note_nodes (deleted_at);
 - **Markdown tests** (`test/ui/screens/note_editor/`): Property 9 and a table of constructs (supported, unsupported, empty, 100 000 characters).
 - **Widget tests**: Notes_Screen (sections, counts, breadcrumb, empty state, swipe actions, menu parity), sheets, Trash_Screen, Note_Editor (autosave after 500 ms with fake time, flush on back and on pause, new empty Note not created, toolbar states), tab bar with five tabs. Tests run with the bundled fonts as in `test/ui/a11y/_a11y_harness.dart`.
 - **Guard tests**: the existing ones (no `DateTime.now` outside `clock.dart`, no literal colours, durations or spacing in `lib/ui`) cover the new files; a new one checks that `lib/core/notes/` imports no Flutter and no Drift.
-- **Goldens**: Notes_Screen at the Root_Folder and inside a Folder, the Trash_Screen and the Note_Editor, in the Blue palette dark and light, compared with `.design/notes-preview.html`.
+- **Goldens**: Notes_Screen at the Root_Folder and inside a Folder, the Trash_Screen and the Note_Editor, in the dark and light theme, compared with `.design/notes-preview.html`.
 - **End-to-end** (`test/domain_flow_test.dart` style): create a Folder, a sub-Folder and a Note, type formatted text, leave, reopen and see it formatted, move the Note, delete the Folder, restore it from the Trash, delete for good.
 - The iOS build and on-device checks (keyboard, toolbar above it, swipe feel) are Martin's.

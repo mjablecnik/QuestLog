@@ -4,7 +4,7 @@
 
 This spec adds **notes** to Questlog, the personal gamified to-do application built in Flutter (iOS primary) under `/workspace/QuestLog/`. Notes are a fifth bottom tab, **Poznámky**. The tab shows a list of Folders and Notes; the user creates Folders and sub-Folders to organise Notes, and a Note is the last level: opening it shows its text in a WYSIWYG editor. The text of a Note is Markdown, stored as Markdown, and shown formatted while it is edited. Folders and Notes can be renamed, moved to another Folder and deleted; deleting moves them to a Trash, from which they can be restored and in which they are removed for good after 30 days. The tab shows no Hero_Bar. Notes are not linked to Quests, Missions or the Calendar and award no XP.
 
-All data lives in the local Questlog_Database (schema version 4); there is no server, no account and no synchronisation. The visual reference is the approved preview `.design/notes-preview.html`, drawn in the Blue palette; every colour in the app comes from the Design_Tokens and works in all palettes and both themes.
+All data lives in the local Questlog_Database (schema version 4); there is no server, no account and no synchronisation. The visual reference is the approved preview `.design/notes-preview.html`, drawn in the blue palette, the only palette of the app; every colour comes from the Design_Tokens and works in both themes.
 
 Out of scope: search inside Notes, tags, attachments and images, tables, opening links from a Note, links between Notes, manual ordering of Folders or Notes, duplicating a Node, sharing and export, reminders, XP for Notes, and a Trash undo other than restoring from the Trash. This spec overrides `003-questlog-calendar` Requirement 1 criterion 1 (four tabs): the app has five tabs, with Poznámky between Kalendář and Nastavení.
 
@@ -55,6 +55,7 @@ Terms defined in `001-questlog-domain`, `002-questlog-ui` and `003-questlog-cale
 3. WHEN the Questlog_App starts, THE Notes_Screen SHALL show the Root_Folder
 4. THE Notes_Screen SHALL NOT show a Hero_Bar
 5. THE Poznámky tab SHALL show no highlight, ripple or frame while it is pressed, like the other tabs
+6. IF the Current_Folder is no longer visible when the Notes_Screen is shown, THEN THE Notes_Screen SHALL show the Root_Folder
 
 ### Requirement 2: Browsing Folders and Notes
 
@@ -76,6 +77,7 @@ Terms defined in `001-questlog-domain`, `002-questlog-ui` and `003-questlog-cale
 12. IF the Current_Folder contains no Nodes, THEN THE Notes_Screen SHALL show an empty state that invites the user to add a Note or a Folder
 13. WHILE the Nodes are being read for the first time, THE Notes_Screen SHALL show a skeleton list
 14. THE Notes_Screen SHALL NOT show a Trashed_Node, nor anything inside a Trashed_Node
+15. WHEN the system back action is performed while the Current_Folder is a Folder, THE Notes_Screen SHALL make the parent the Current_Folder instead of leaving the tab
 
 ### Requirement 3: Creating Folders and Notes
 
@@ -212,6 +214,7 @@ Terms defined in `001-questlog-domain`, `002-questlog-ui` and `003-questlog-cale
 12. WHEN Vysypat koš is pressed, THE Trash_Screen SHALL show a confirmation dialog with the number of Trashed_Nodes, and WHEN it is confirmed, THE Notes_Service SHALL delete all Trashed_Nodes and everything inside them permanently
 13. IF the Trash is empty, THEN THE Trash_Screen SHALL show an empty state and SHALL hide the Vysypat koš button
 14. THE Trash_Screen SHALL NOT open a trashed Note for reading or editing
+15. WHEN a Trashed_Node is restored or deleted permanently, THE Trash_Screen SHALL show a Snackbar saying so
 
 ### Requirement 12: Trash Retention and Purge
 
@@ -244,7 +247,7 @@ Terms defined in `001-questlog-domain`, `002-questlog-ui` and `003-questlog-cale
 #### Acceptance Criteria
 
 1. THE Questlog_App SHALL show every text of the Notes in Czech or English according to the Effective_Language
-2. THE Questlog_App SHALL take all colours, sizes, spacing and durations of the Notes screens from the Design_Tokens, and they SHALL read correctly in every palette and in both themes
+2. THE Questlog_App SHALL take all colours, sizes, spacing and durations of the Notes screens from the Design_Tokens, and they SHALL read correctly in both themes
 3. THE Notes_Screen, the Trash_Screen and the Note_Editor SHALL give every control a touch target of at least 44 by 44 points
 4. THE Notes_Screen, the Trash_Screen and the Note_Editor SHALL show no splash, highlight or hover tint while a control is pressed
 5. THE Notes_Screen and the Trash_Screen SHALL offer the actions of a row to assistive technology as custom actions and SHALL give each control a semantic label
