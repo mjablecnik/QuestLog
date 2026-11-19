@@ -1,6 +1,12 @@
 /// The longest name a Node may have.
 const int maxNodeNameLength = 80;
 
+/// Characters a backslash can escape. While a line is stripped each escaped one
+/// is swapped for a private-use code point so that no marker rule can see it.
+const String _escapable = r'\`*_{}[]()#+-.!<>~&|';
+const int _privateBase = 0xE000;
+final RegExp _escaped = RegExp(r'\\([\\`*_{}\[\]()#+\-.!<>~&|])');
+final RegExp _hidden = RegExp('[\uE000-\uE020]');
 final RegExp _fence = RegExp(r'^\s*(```|~~~)');
 final RegExp _thematicBreak = RegExp(r'^\s*([-*_=])(\s*\1){2,}\s*$');
 final RegExp _heading = RegExp(r'^#{1,6}(\s+|$)');
@@ -15,7 +21,12 @@ final RegExp _underscores = RegExp(r'(?<![A-Za-z0-9])_+|_+(?![A-Za-z0-9])');
 /// (a fence, a thematic break or only markers).
 String _plain(String line) {
   if (_fence.hasMatch(line) || _thematicBreak.hasMatch(line)) return '';
-  String text = line.trim();
+  // A backslash-escaped character is plain text: hide the pair from the marker
+  // rules below and put the character back at the end.
+  String text = line.trim().replaceAllMapped(
+    _escaped,
+    (m) => String.fromCharCode(_privateBase + _escapable.indexOf(m[1]!)),
+  );
   String before;
   do {
     before = text;
@@ -29,7 +40,7 @@ String _plain(String line) {
         .replaceAll(_underscores, '')
         .trim();
   } while (text != before);
-  return text;
+  return text.replaceAllMapped(_hidden, (m) => _escapable[m[0]!.codeUnitAt(0) - _privateBase]);
 }
 
 Iterable<String> _plainLines(String body) sync* {

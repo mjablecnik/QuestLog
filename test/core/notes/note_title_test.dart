@@ -16,6 +16,13 @@ void main() {
       expect(deriveNoteName('snake_case_name zůstane'), 'snake_case_name zůstane');
     });
 
+    test('backslash escapes written by the editor are plain text', () {
+      expect(deriveNoteName(r'snake\_case \* \<fs_line\> \[x\]'), 'snake_case * <fs_line> [x]');
+      expect(deriveNoteName(r'\# not a heading'), '# not a heading');
+      expect(deriveNoteName(r'\- not a bullet'), '- not a bullet');
+      expect(notePreview('1\\. one\n\\> two'), '1. one > two');
+    });
+
     test('skips blank lines, fences and thematic breaks; handles CRLF', () {
       expect(deriveNoteName('\n\r\n   \r\nPrvní\r\nDruhý'), 'První');
       expect(deriveNoteName('---\n***\nTeprve tohle'), 'Teprve tohle');
