@@ -412,7 +412,8 @@ void main() {
           find.text(isCs ? 'ZA DOKONČENÍ' : 'ON COMPLETION'),
           findsOneWidget,
         );
-        expect(find.textContaining('/5'), findsOneWidget);
+        // 2 of 5 quests are done, so the ring shows the 3 still open.
+        expect(find.text('3'), findsOneWidget);
         expect(
           find.text(isCs ? 'Připraveno k dokončení' : 'Ready to complete'),
           findsNothing,

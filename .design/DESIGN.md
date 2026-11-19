@@ -130,7 +130,8 @@ check is 28px inside a 44px row).
   Tier names (Chvilka, Hodinka, Část dne, Celý den) are never shown in a list, only in the
   quest sheet.
 - **Mission card** — 56px progress ring (r 24, stroke 5, round caps; stroke hidden at
-  0 %) with `done/total` inside · title + "Zbývá: …" · brass bonus `+XP` with a caps
+  0 %) with the number of quests still open inside (changed 2026-11-19 at Martin's
+  request, was `done/total`: a low number shows a mission that is nearly finished) · title + "Zbývá: …" · brass bonus `+XP` with a caps
   caption ("za dokončení" / "získáno").
 - **Swipe actions** — left swipe reveals *Upravit* (raised ground) and *Smazat*
   (destructive), 84px each.

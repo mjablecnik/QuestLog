@@ -70,14 +70,14 @@ void main() {
     expect(ringFraction(-1, 5), 0);
   });
 
-  testWidgets('ring uses the design geometry and shows done/total', (
+  testWidgets('ring uses the design geometry and shows the quests still open', (
     WidgetTester tester,
   ) async {
     await pumpCards(tester, const ProgressRing(done: 2, total: 5));
 
     expect(tester.getSize(find.byType(ProgressRing)), const Size(56, 56));
-    expect(find.textContaining('2'), findsOneWidget);
-    expect(find.textContaining('/5'), findsOneWidget);
+    expect(find.text('3'), findsOneWidget, reason: '2 of 5 done leaves 3 open');
+    expect(find.textContaining('/'), findsNothing);
 
     final RenderBox paint = tester.renderObject<RenderBox>(
       find.byKey(const ValueKey<String>('progress-ring-paint')),

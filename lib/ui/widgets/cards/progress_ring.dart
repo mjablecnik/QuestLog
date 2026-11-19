@@ -75,7 +75,9 @@ class ProgressRingPainter extends CustomPainter {
       old.progressColor != progressColor;
 }
 
-/// The 56px Mission ring with "done/total" in the middle (or [center]).
+/// The 56px Mission ring: the arc shows how much is done, the figure in the
+/// middle (or [center]) how many quests are still open, so a low number is
+/// the Mission that is nearly finished.
 class ProgressRing extends StatelessWidget {
   const ProgressRing({
     super.key,
@@ -89,7 +91,7 @@ class ProgressRing extends StatelessWidget {
   final int total;
   final double size;
 
-  /// Replaces the "done/total" text, for example with a tick on a finished Mission.
+  /// Replaces the number of open quests, for example with a tick on a finished Mission.
   final Widget? center;
 
   @override
@@ -99,11 +101,6 @@ class ProgressRing extends StatelessWidget {
     final TextStyle figure = context.displayText.titleMedium!.copyWith(
       fontSize: 15,
       color: p.text,
-    );
-    final TextStyle small = context.bodyText.labelSmall!.copyWith(
-      fontSize: 10,
-      letterSpacing: 0,
-      color: p.textFaint,
     );
 
     return Semantics(
@@ -123,14 +120,7 @@ class ProgressRing extends StatelessWidget {
           child: Center(
             child:
                 center ??
-                Text.rich(
-                  TextSpan(
-                    children: <InlineSpan>[
-                      TextSpan(text: '$done', style: figure),
-                      TextSpan(text: '/$total', style: small),
-                    ],
-                  ),
-                ),
+                Text('${math.max(total - done, 0)}', style: figure),
           ),
         ),
       ),

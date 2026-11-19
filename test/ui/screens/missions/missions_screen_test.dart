@@ -158,11 +158,16 @@ void main() {
 
       expect(find.byType(MissionCard), findsNWidgets(2));
       expect(find.text('Clean up'), findsOneWidget);
-      expect(find.text('1/3', findRichText: true), findsOneWidget);
+      // The ring figure is the number of quests still open.
+      Finder ringFigure(int index, String text) => find.descendant(
+        of: find.byType(ProgressRing).at(index),
+        matching: find.text(text, findRichText: true),
+      );
+      expect(ringFigure(0, '2'), findsOneWidget);
       // Two easy quests (+10 each) are still open.
       expect(find.text(l10n.missions_remaining(20)), findsOneWidget);
       expect(find.text(l10n.missions_remaining(30)), findsOneWidget);
-      expect(find.text('0/3', findRichText: true), findsOneWidget);
+      expect(ringFigure(1, '3'), findsOneWidget);
       expect(find.text('+100'), findsOneWidget);
       expect(find.text('+200'), findsOneWidget);
       expect(
