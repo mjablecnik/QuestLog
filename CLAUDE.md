@@ -22,6 +22,11 @@ Calendar (2026-11-19, Martin's request, spec `003-questlog-calendar`; schema v3)
 overview, day sheet, event detail, event form, search and a type filter. Ten fixed event types with their own colour, repeat
 (daily, weekly, monthly, yearly), Czech public holidays, notable days and name days seeded once. An event with `On the board`
 shows on the Board as a task on its day and awards 10-100 XP (by length, or by type when all-day). The tab has no hero bar.
+Notes (2026-11-19, Martin's request, spec `004-questlog-notes`; schema v4): a fifth tab, Poznámky, between Kalendář and Nastavení. Folders and
+sub-Folders of any depth hold Notes written in a WYSIWYG editor (`super_editor`; the stored text is Markdown, converted by
+`lib/ui/screens/note_editor/note_markdown.dart`, which escapes plain text because the package's own codec is lossy) that saves by itself.
+Rename, move and delete work from a swipe and from a menu; deleting moves a node to a Trash (30 days, then purged at start, on
+return from the background and when the Trash opens). No XP, no hero bar. The mission ring now shows the quests still open.
 Not done: the iOS build and every on-device check — Martin does those himself (open LOW
 entry in `.agents/ISSUES.md`).
 
@@ -47,18 +52,18 @@ xvfb-run -a flutter run -d linux          # run the app (the sandbox has no DISP
 ```
 lib/
   main.dart, app.dart   entry point; root widget (theme, locale, shell)
-  core/                 pure Dart: clock, board day (04:00), XP/levels, cadence, errors; calendar/ (types, repeats, Easter, event XP)
-  data/                 Drift tables, database (+ .g.dart), models, mappers, preferences; calendar/ (tables, seed, filter store)
-  services/             quest/mission/recurrence/settings services, XP engine, providers; calendar/ (service, providers)
+  core/                 pure Dart: clock, board day (04:00), XP/levels, cadence, errors; calendar/ (types, repeats, Easter, event XP); notes/ (tree rules, names, trash policy)
+  data/                 Drift tables, database (+ .g.dart), models, mappers, preferences; calendar/ (tables, seed, filter store); notes/ (note_nodes table)
+  services/             quest/mission/recurrence/settings services, XP engine, providers; calendar/ (service, providers); notes/ (service, providers)
   ui/                   theme/ (tokens, typography), state/, screens/, sheets/,
                         widgets/ (cards, common, hero, reward, sheet), forms/
   l10n/                 ARB files (cs, en) + generated localizations
 assets/fonts, assets/icons   bundled static TTFs (+ licenses/ OFL texts) and 24px SVG icons (nothing fetched at runtime)
-drift_schemas/               schema dump per version (currently v3)
+drift_schemas/               schema dump per version (currently v4)
 scripts/                     check.sh, check-structure.sh (max 15 source files per directory)
 screenshots/                 README screenshots (English, dark theme, real app at 2x); retake them after visible UI changes
 test/                        mirrors lib/ (core, data, services, ui) + goldens/, helpers/
-.kiro/specs/                 001 domain, 002 UI, 003 calendar: requirements, design, tasks
+.kiro/specs/                 001 domain, 002 UI, 003 calendar, 004 notes: requirements, design, tasks
 .design/                     approved visual contract (DESIGN.md, artboards/, screens/, icon/generate.mjs = app icon + launch screen)
 .agents/                     pipeline artifacts: PIPELINE_STATE.json, ISSUES.md, MEMORY.md,
                              USE_CASES.md, runs/2026-11-15-1405/ (one report per phase)
