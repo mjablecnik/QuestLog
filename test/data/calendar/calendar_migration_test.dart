@@ -9,7 +9,6 @@ import 'package:questlog/core/xp_rules.dart';
 import 'package:questlog/data/calendar/calendar_mappers.dart';
 import 'package:questlog/data/calendar/calendar_models.dart';
 import 'package:questlog/data/database.dart';
-import 'package:questlog/data/models.dart';
 
 import '../../helpers/generators.dart';
 import '../../helpers/test_database.dart';
