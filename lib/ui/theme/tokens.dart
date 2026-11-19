@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../core/calendar/event_type.dart';
 
 /// Palette roles from `.design/DESIGN.md`; one instance per theme.
 ///
@@ -411,4 +412,28 @@ abstract final class Motion {
   static const Duration none = Duration.zero;
 
   static const Curve curve = Curves.easeInOut;
+}
+
+/// The fixed colour of each calendar Event_Type, the same in every palette and
+/// both themes. Solid chips carry [eventChipInk]; the Soft_Chip of a notable
+/// day tints the colour over the ground and keeps the body text colour.
+extension EventTypeColors on QuestlogPalette {
+  Color eventColor(EventType type) => switch (type) {
+    EventType.publicHoliday => const Color(0xFFE5594F),
+    EventType.notableDay => const Color(0xFFC98A7D),
+    EventType.birthday => const Color(0xFFF2A05E),
+    EventType.nameDay => const Color(0xFFE8D36A),
+    EventType.dance => const Color(0xFFEE7AA8),
+    EventType.date => const Color(0xFFB983E0),
+    EventType.meeting => const Color(0xFF6FA3E6),
+    EventType.seminar => const Color(0xFF6FD0D8),
+    EventType.lesson => const Color(0xFF62CF9F),
+    EventType.work => const Color(0xFF8CA0B3),
+  };
+
+  /// Text and marks on a solid event colour.
+  Color get eventChipInk => const Color(0xFF14110A);
+
+  /// The fill of a Soft_Chip: the type colour tinted over the ground.
+  Color eventSoftFill(EventType type) => eventColor(type).withValues(alpha: 0.24);
 }

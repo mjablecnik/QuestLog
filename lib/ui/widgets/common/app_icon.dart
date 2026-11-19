@@ -7,11 +7,16 @@ import '../../theme/tokens.dart';
 abstract final class IconAsset {
   static const arrowUp = 'arrow_up';
   static const auto = 'auto';
+  static const calendar = 'calendar';
   static const check = 'check';
   static const chevronLeft = 'chevron_left';
   static const chevronRight = 'chevron_right';
   static const close = 'close';
   static const drag = 'drag';
+  static const filter = 'filter';
+  static const location = 'location';
+  static const note = 'note';
+  static const search = 'search';
   static const edit = 'edit';
   static const gear = 'gear';
   static const missions = 'missions';

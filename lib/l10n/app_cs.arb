@@ -1396,5 +1396,466 @@
   "error_unknown": "Něco se pokazilo.",
   "@error_unknown": {
     "description": "Fallback for any unexpected error."
+  },
+  "app_tabCalendar": "Kalendář",
+  "@app_tabCalendar": {
+    "description": "Label of the Calendar tab in the bottom tab bar."
+  },
+  "calendar_today": "Dnes",
+  "@calendar_today": {
+    "description": "Button that jumps the month view to the current month."
+  },
+  "calendar_prevMonth": "Předchozí měsíc",
+  "@calendar_prevMonth": {
+    "description": "Accessibility label of the previous-month arrow."
+  },
+  "calendar_nextMonth": "Další měsíc",
+  "@calendar_nextMonth": {
+    "description": "Accessibility label of the next-month arrow."
+  },
+  "calendar_pickMonth": "Vybrat měsíc a rok",
+  "@calendar_pickMonth": {
+    "description": "Accessibility label of the month title that opens the month picker."
+  },
+  "calendar_search": "Hledat události",
+  "@calendar_search": {
+    "description": "Accessibility label of the search button and hint of the search field."
+  },
+  "calendar_filter": "Filtrovat podle typu",
+  "@calendar_filter": {
+    "description": "Accessibility label of the type filter button."
+  },
+  "calendar_add": "Přidat událost",
+  "@calendar_add": {
+    "description": "Accessibility label of the add buttons of the calendar."
+  },
+  "calendar_cellLabel": "{date}, {count, plural, =0{žádné události} one{1 událost} few{{count} události} other{{count} událostí}}",
+  "@calendar_cellLabel": {
+    "description": "Accessibility label of one day cell: the date and the number of events.",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "calendar_moreEvents": "+{count}",
+  "@calendar_moreEvents": {
+    "description": "Label in a day cell for the events that do not fit.",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "calendar_monthPickerTitle": "Měsíc a rok",
+  "@calendar_monthPickerTitle": {
+    "description": "Title of the month picker sheet."
+  },
+  "calendar_prevYear": "Předchozí rok",
+  "@calendar_prevYear": {
+    "description": "Accessibility label of the previous-year button in the month picker."
+  },
+  "calendar_nextYear": "Další rok",
+  "@calendar_nextYear": {
+    "description": "Accessibility label of the next-year button in the month picker."
+  },
+  "calendar_filterTitle": "Typy událostí",
+  "@calendar_filterTitle": {
+    "description": "Title of the type filter sheet."
+  },
+  "calendar_filterDone": "Hotovo",
+  "@calendar_filterDone": {
+    "description": "Primary button of the type filter sheet."
+  },
+  "calendar_filterShowAll": "Zobrazit všechny typy",
+  "@calendar_filterShowAll": {
+    "description": "Button that turns every event type on again."
+  },
+  "calendar_filterHidesAll": "Filtr schovává všechny události.",
+  "@calendar_filterHidesAll": {
+    "description": "Message over an empty month when no event type is selected in the filter."
+  },
+  "calendar_typeDance": "Tanec",
+  "@calendar_typeDance": {
+    "description": "Name of the event type dance."
+  },
+  "calendar_typeWork": "Práce",
+  "@calendar_typeWork": {
+    "description": "Name of the event type work."
+  },
+  "calendar_typeBirthday": "Narozeniny",
+  "@calendar_typeBirthday": {
+    "description": "Name of the event type birthday."
+  },
+  "calendar_typeNameDay": "Jmeniny",
+  "@calendar_typeNameDay": {
+    "description": "Name of the event type nameDay."
+  },
+  "calendar_typePublicHoliday": "Státní svátek",
+  "@calendar_typePublicHoliday": {
+    "description": "Name of the event type publicHoliday."
+  },
+  "calendar_typeNotableDay": "Významný den",
+  "@calendar_typeNotableDay": {
+    "description": "Name of the event type notableDay."
+  },
+  "calendar_typeDate": "Rande",
+  "@calendar_typeDate": {
+    "description": "Name of the event type date."
+  },
+  "calendar_typeMeeting": "Meeting",
+  "@calendar_typeMeeting": {
+    "description": "Name of the event type meeting."
+  },
+  "calendar_typeSeminar": "Seminář",
+  "@calendar_typeSeminar": {
+    "description": "Name of the event type seminar."
+  },
+  "calendar_typeLesson": "Lekce",
+  "@calendar_typeLesson": {
+    "description": "Name of the event type lesson."
+  },
+  "calendar_allDay": "Celý den",
+  "@calendar_allDay": {
+    "description": "Label of an all-day event and of the all-day switch."
+  },
+  "calendar_dayEvents": "{count, plural, =0{Žádné události} one{1 událost} few{{count} události} other{{count} událostí}}",
+  "@calendar_dayEvents": {
+    "description": "Number of events under the date in the day sheet.",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "calendar_dayEmpty": "Žádné události",
+  "@calendar_dayEmpty": {
+    "description": "Text in the day sheet when the day has no events."
+  },
+  "calendar_start": "Začátek",
+  "@calendar_start": {
+    "description": "Label of the start of an event."
+  },
+  "calendar_end": "Konec",
+  "@calendar_end": {
+    "description": "Label of the end of an event."
+  },
+  "calendar_notes": "Podrobnosti",
+  "@calendar_notes": {
+    "description": "Label of the note row of an event."
+  },
+  "calendar_repeat": "Opakovat",
+  "@calendar_repeat": {
+    "description": "Label of the repeat row of an event."
+  },
+  "calendar_location": "Umístění",
+  "@calendar_location": {
+    "description": "Label of the location row of an event."
+  },
+  "calendar_notSet": "Nenastaveno",
+  "@calendar_notSet": {
+    "description": "Shown for an empty note or location."
+  },
+  "calendar_completedAt": "Splněno v {time} · +{xp} XP",
+  "@calendar_completedAt": {
+    "description": "Status line of a completed event.",
+    "placeholders": {
+      "time": {
+        "type": "String"
+      },
+      "xp": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "calendar_edit": "Upravit",
+  "@calendar_edit": {
+    "description": "Edit button and menu entry of an event."
+  },
+  "calendar_duplicate": "Duplikovat",
+  "@calendar_duplicate": {
+    "description": "Menu entry that copies an event into a new one."
+  },
+  "calendar_menu": "Další akce",
+  "@calendar_menu": {
+    "description": "Accessibility label of the event menu button."
+  },
+  "calendar_locationCopied": "Umístění zkopírováno",
+  "@calendar_locationCopied": {
+    "description": "Snackbar after tapping the location of an event."
+  },
+  "calendar_eventGone": "Událost už neexistuje.",
+  "@calendar_eventGone": {
+    "description": "Message when an open event was deleted."
+  },
+  "calendar_repeatNever": "Nikdy",
+  "@calendar_repeatNever": {
+    "description": "Repeat choice: no repeat."
+  },
+  "calendar_repeatDaily": "Každý den",
+  "@calendar_repeatDaily": {
+    "description": "Repeat choice: daily."
+  },
+  "calendar_repeatWeekly": "Každý týden",
+  "@calendar_repeatWeekly": {
+    "description": "Repeat choice: weekly."
+  },
+  "calendar_repeatMonthly": "Každý měsíc",
+  "@calendar_repeatMonthly": {
+    "description": "Repeat choice: monthly."
+  },
+  "calendar_repeatYearly": "Každý rok",
+  "@calendar_repeatYearly": {
+    "description": "Repeat choice: yearly."
+  },
+  "calendar_repeatEaster": "Každý rok podle Velikonoc",
+  "@calendar_repeatEaster": {
+    "description": "Shown for a built-in event that follows Easter."
+  },
+  "calendar_repeatNth": "Každý rok podle dne v týdnu",
+  "@calendar_repeatNth": {
+    "description": "Shown for a built-in event on the n-th weekday of a month."
+  },
+  "calendar_repeatDescDaily": "každý den",
+  "@calendar_repeatDescDaily": {
+    "description": "Repeat in words, daily."
+  },
+  "calendar_repeatDescWeekly": "{weekday} každý týden",
+  "@calendar_repeatDescWeekly": {
+    "description": "Repeat in words, weekly.",
+    "placeholders": {
+      "weekday": {
+        "type": "String"
+      }
+    }
+  },
+  "calendar_repeatDescMonthly": "každý měsíc {day}.",
+  "@calendar_repeatDescMonthly": {
+    "description": "Repeat in words, monthly.",
+    "placeholders": {
+      "day": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "calendar_repeatDescYearly": "každý rok {date}",
+  "@calendar_repeatDescYearly": {
+    "description": "Repeat in words, yearly.",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "calendar_repeatDescEaster": "každý rok podle Velikonoc",
+  "@calendar_repeatDescEaster": {
+    "description": "Repeat in words, relative to Easter."
+  },
+  "calendar_repeatDescNth": "každý rok, {ordinal} {weekday} ({month})",
+  "@calendar_repeatDescNth": {
+    "description": "Repeat in words, n-th weekday of a month.",
+    "placeholders": {
+      "ordinal": {
+        "type": "String"
+      },
+      "weekday": {
+        "type": "String"
+      },
+      "month": {
+        "type": "String"
+      }
+    }
+  },
+  "calendar_repeatUntil": "{repeat}, do {date}",
+  "@calendar_repeatUntil": {
+    "description": "Repeat in words with its end date.",
+    "placeholders": {
+      "repeat": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "calendar_repeatEnds": "Konec opakování",
+  "@calendar_repeatEnds": {
+    "description": "Label of the repeat end row in the form."
+  },
+  "calendar_repeatNoEnd": "Bez konce",
+  "@calendar_repeatNoEnd": {
+    "description": "Value of the repeat end row when there is none."
+  },
+  "calendar_formCreateTitle": "Nová událost",
+  "@calendar_formCreateTitle": {
+    "description": "Title of the form for a new event."
+  },
+  "calendar_formEditTitle": "Upravit událost",
+  "@calendar_formEditTitle": {
+    "description": "Title of the form for an existing event."
+  },
+  "calendar_formNameHint": "Název události",
+  "@calendar_formNameHint": {
+    "description": "Hint of the name field."
+  },
+  "calendar_formNoteHint": "Přidat podrobnosti",
+  "@calendar_formNoteHint": {
+    "description": "Hint of the note field."
+  },
+  "calendar_formLocationHint": "Umístění",
+  "@calendar_formLocationHint": {
+    "description": "Hint of the location field."
+  },
+  "calendar_formType": "Typ události",
+  "@calendar_formType": {
+    "description": "Label above the type picker."
+  },
+  "calendar_onBoard": "Na nástěnku",
+  "@calendar_onBoard": {
+    "description": "Label of the switch that puts the event on the Board."
+  },
+  "calendar_onBoardXp": "Za splnění: +{xp} XP",
+  "@calendar_onBoardXp": {
+    "description": "XP the event would award, under the board switch.",
+    "placeholders": {
+      "xp": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "calendar_errorName": "Zadej název události.",
+  "@calendar_errorName": {
+    "description": "Inline error of an empty name."
+  },
+  "calendar_errorNameLong": "Název je příliš dlouhý.",
+  "@calendar_errorNameLong": {
+    "description": "Inline error of a name over 80 characters."
+  },
+  "calendar_errorEnd": "Konec nemůže být před začátkem.",
+  "@calendar_errorEnd": {
+    "description": "Inline error when the end is before the start."
+  },
+  "calendar_errorRepeatEnd": "Konec opakování nemůže být před začátkem.",
+  "@calendar_errorRepeatEnd": {
+    "description": "Inline error when the repeat end is before the start."
+  },
+  "calendar_errorNoteLong": "Podrobnosti jsou příliš dlouhé.",
+  "@calendar_errorNoteLong": {
+    "description": "Inline error of a note over 500 characters."
+  },
+  "calendar_errorLocationLong": "Umístění je příliš dlouhé.",
+  "@calendar_errorLocationLong": {
+    "description": "Inline error of a location over 120 characters."
+  },
+  "calendar_saveFailed": "Uložení se nepovedlo. Zkus to znovu.",
+  "@calendar_saveFailed": {
+    "description": "Inline error when saving an event fails."
+  },
+  "calendar_deleteTitle": "Smazat událost?",
+  "@calendar_deleteTitle": {
+    "description": "Title of the delete confirmation of a single event."
+  },
+  "calendar_deleteBody": "Událost „{name}“ se smaže.",
+  "@calendar_deleteBody": {
+    "description": "Body of the delete confirmation of a single event.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "calendar_deleteRepeatBody": "Událost „{name}“ se opakuje. Co chceš smazat?",
+  "@calendar_deleteRepeatBody": {
+    "description": "Body of the delete sheet of a repeating event.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "calendar_deleteOnlyThis": "Jen tuto událost",
+  "@calendar_deleteOnlyThis": {
+    "description": "Delete choice for a repeating event."
+  },
+  "calendar_deleteThisAndFollowing": "Tuto a všechny další",
+  "@calendar_deleteThisAndFollowing": {
+    "description": "Delete choice for a repeating event."
+  },
+  "calendar_deleteAll": "Všechny události v sérii",
+  "@calendar_deleteAll": {
+    "description": "Delete choice for a repeating event."
+  },
+  "calendar_deleted": "Událost „{name}“ smazána",
+  "@calendar_deleted": {
+    "description": "Snackbar after deleting an event.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "calendar_undo": "Zpět",
+  "@calendar_undo": {
+    "description": "Snackbar action that restores a deleted event."
+  },
+  "calendar_deleteFailed": "Smazání se nepovedlo.",
+  "@calendar_deleteFailed": {
+    "description": "Snackbar when deleting an event fails."
+  },
+  "calendar_searchPrompt": "Napiš název, podrobnosti nebo místo.",
+  "@calendar_searchPrompt": {
+    "description": "Hint under the empty search field."
+  },
+  "calendar_searchNone": "Nic nenalezeno",
+  "@calendar_searchNone": {
+    "description": "Text when the search finds nothing."
+  },
+  "a11y_completeEvent": "Splnit událost {name}",
+  "@a11y_completeEvent": {
+    "description": "Accessibility label of the check circle of an open Event_Task.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "a11y_reopenEvent": "Vrátit událost {name}",
+  "@a11y_reopenEvent": {
+    "description": "Accessibility label of the check circle of a completed Event_Task.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "a11y_eventCompleted": "Událost {name} splněna, +{xp} XP",
+  "@a11y_eventCompleted": {
+    "description": "Announcement after completing an Event_Task.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "xp": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "calendar_taskAllDay": "Celý den",
+  "@calendar_taskAllDay": {
+    "description": "Time label of an all-day Event_Task on the Board."
+  },
+  "calendar_clearRepeatEnd": "Zrušit konec opakování",
+  "@calendar_clearRepeatEnd": {
+    "description": "Accessibility label of the button that removes the repeat end date."
   }
 }

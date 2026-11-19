@@ -1579,6 +1579,540 @@ abstract class AppLocalizations {
   /// In cs, this message translates to:
   /// **'Něco se pokazilo.'**
   String get error_unknown;
+
+  /// Label of the Calendar tab in the bottom tab bar.
+  ///
+  /// In cs, this message translates to:
+  /// **'Kalendář'**
+  String get app_tabCalendar;
+
+  /// Button that jumps the month view to the current month.
+  ///
+  /// In cs, this message translates to:
+  /// **'Dnes'**
+  String get calendar_today;
+
+  /// Accessibility label of the previous-month arrow.
+  ///
+  /// In cs, this message translates to:
+  /// **'Předchozí měsíc'**
+  String get calendar_prevMonth;
+
+  /// Accessibility label of the next-month arrow.
+  ///
+  /// In cs, this message translates to:
+  /// **'Další měsíc'**
+  String get calendar_nextMonth;
+
+  /// Accessibility label of the month title that opens the month picker.
+  ///
+  /// In cs, this message translates to:
+  /// **'Vybrat měsíc a rok'**
+  String get calendar_pickMonth;
+
+  /// Accessibility label of the search button and hint of the search field.
+  ///
+  /// In cs, this message translates to:
+  /// **'Hledat události'**
+  String get calendar_search;
+
+  /// Accessibility label of the type filter button.
+  ///
+  /// In cs, this message translates to:
+  /// **'Filtrovat podle typu'**
+  String get calendar_filter;
+
+  /// Accessibility label of the add buttons of the calendar.
+  ///
+  /// In cs, this message translates to:
+  /// **'Přidat událost'**
+  String get calendar_add;
+
+  /// Accessibility label of one day cell: the date and the number of events.
+  ///
+  /// In cs, this message translates to:
+  /// **'{date}, {count, plural, =0{žádné události} one{1 událost} few{{count} události} other{{count} událostí}}'**
+  String calendar_cellLabel(String date, int count);
+
+  /// Label in a day cell for the events that do not fit.
+  ///
+  /// In cs, this message translates to:
+  /// **'+{count}'**
+  String calendar_moreEvents(int count);
+
+  /// Title of the month picker sheet.
+  ///
+  /// In cs, this message translates to:
+  /// **'Měsíc a rok'**
+  String get calendar_monthPickerTitle;
+
+  /// Accessibility label of the previous-year button in the month picker.
+  ///
+  /// In cs, this message translates to:
+  /// **'Předchozí rok'**
+  String get calendar_prevYear;
+
+  /// Accessibility label of the next-year button in the month picker.
+  ///
+  /// In cs, this message translates to:
+  /// **'Další rok'**
+  String get calendar_nextYear;
+
+  /// Title of the type filter sheet.
+  ///
+  /// In cs, this message translates to:
+  /// **'Typy událostí'**
+  String get calendar_filterTitle;
+
+  /// Primary button of the type filter sheet.
+  ///
+  /// In cs, this message translates to:
+  /// **'Hotovo'**
+  String get calendar_filterDone;
+
+  /// Button that turns every event type on again.
+  ///
+  /// In cs, this message translates to:
+  /// **'Zobrazit všechny typy'**
+  String get calendar_filterShowAll;
+
+  /// Message over an empty month when no event type is selected in the filter.
+  ///
+  /// In cs, this message translates to:
+  /// **'Filtr schovává všechny události.'**
+  String get calendar_filterHidesAll;
+
+  /// Name of the event type dance.
+  ///
+  /// In cs, this message translates to:
+  /// **'Tanec'**
+  String get calendar_typeDance;
+
+  /// Name of the event type work.
+  ///
+  /// In cs, this message translates to:
+  /// **'Práce'**
+  String get calendar_typeWork;
+
+  /// Name of the event type birthday.
+  ///
+  /// In cs, this message translates to:
+  /// **'Narozeniny'**
+  String get calendar_typeBirthday;
+
+  /// Name of the event type nameDay.
+  ///
+  /// In cs, this message translates to:
+  /// **'Jmeniny'**
+  String get calendar_typeNameDay;
+
+  /// Name of the event type publicHoliday.
+  ///
+  /// In cs, this message translates to:
+  /// **'Státní svátek'**
+  String get calendar_typePublicHoliday;
+
+  /// Name of the event type notableDay.
+  ///
+  /// In cs, this message translates to:
+  /// **'Významný den'**
+  String get calendar_typeNotableDay;
+
+  /// Name of the event type date.
+  ///
+  /// In cs, this message translates to:
+  /// **'Rande'**
+  String get calendar_typeDate;
+
+  /// Name of the event type meeting.
+  ///
+  /// In cs, this message translates to:
+  /// **'Meeting'**
+  String get calendar_typeMeeting;
+
+  /// Name of the event type seminar.
+  ///
+  /// In cs, this message translates to:
+  /// **'Seminář'**
+  String get calendar_typeSeminar;
+
+  /// Name of the event type lesson.
+  ///
+  /// In cs, this message translates to:
+  /// **'Lekce'**
+  String get calendar_typeLesson;
+
+  /// Label of an all-day event and of the all-day switch.
+  ///
+  /// In cs, this message translates to:
+  /// **'Celý den'**
+  String get calendar_allDay;
+
+  /// Number of events under the date in the day sheet.
+  ///
+  /// In cs, this message translates to:
+  /// **'{count, plural, =0{Žádné události} one{1 událost} few{{count} události} other{{count} událostí}}'**
+  String calendar_dayEvents(int count);
+
+  /// Text in the day sheet when the day has no events.
+  ///
+  /// In cs, this message translates to:
+  /// **'Žádné události'**
+  String get calendar_dayEmpty;
+
+  /// Label of the start of an event.
+  ///
+  /// In cs, this message translates to:
+  /// **'Začátek'**
+  String get calendar_start;
+
+  /// Label of the end of an event.
+  ///
+  /// In cs, this message translates to:
+  /// **'Konec'**
+  String get calendar_end;
+
+  /// Label of the note row of an event.
+  ///
+  /// In cs, this message translates to:
+  /// **'Podrobnosti'**
+  String get calendar_notes;
+
+  /// Label of the repeat row of an event.
+  ///
+  /// In cs, this message translates to:
+  /// **'Opakovat'**
+  String get calendar_repeat;
+
+  /// Label of the location row of an event.
+  ///
+  /// In cs, this message translates to:
+  /// **'Umístění'**
+  String get calendar_location;
+
+  /// Shown for an empty note or location.
+  ///
+  /// In cs, this message translates to:
+  /// **'Nenastaveno'**
+  String get calendar_notSet;
+
+  /// Status line of a completed event.
+  ///
+  /// In cs, this message translates to:
+  /// **'Splněno v {time} · +{xp} XP'**
+  String calendar_completedAt(String time, int xp);
+
+  /// Edit button and menu entry of an event.
+  ///
+  /// In cs, this message translates to:
+  /// **'Upravit'**
+  String get calendar_edit;
+
+  /// Menu entry that copies an event into a new one.
+  ///
+  /// In cs, this message translates to:
+  /// **'Duplikovat'**
+  String get calendar_duplicate;
+
+  /// Accessibility label of the event menu button.
+  ///
+  /// In cs, this message translates to:
+  /// **'Další akce'**
+  String get calendar_menu;
+
+  /// Snackbar after tapping the location of an event.
+  ///
+  /// In cs, this message translates to:
+  /// **'Umístění zkopírováno'**
+  String get calendar_locationCopied;
+
+  /// Message when an open event was deleted.
+  ///
+  /// In cs, this message translates to:
+  /// **'Událost už neexistuje.'**
+  String get calendar_eventGone;
+
+  /// Repeat choice: no repeat.
+  ///
+  /// In cs, this message translates to:
+  /// **'Nikdy'**
+  String get calendar_repeatNever;
+
+  /// Repeat choice: daily.
+  ///
+  /// In cs, this message translates to:
+  /// **'Každý den'**
+  String get calendar_repeatDaily;
+
+  /// Repeat choice: weekly.
+  ///
+  /// In cs, this message translates to:
+  /// **'Každý týden'**
+  String get calendar_repeatWeekly;
+
+  /// Repeat choice: monthly.
+  ///
+  /// In cs, this message translates to:
+  /// **'Každý měsíc'**
+  String get calendar_repeatMonthly;
+
+  /// Repeat choice: yearly.
+  ///
+  /// In cs, this message translates to:
+  /// **'Každý rok'**
+  String get calendar_repeatYearly;
+
+  /// Shown for a built-in event that follows Easter.
+  ///
+  /// In cs, this message translates to:
+  /// **'Každý rok podle Velikonoc'**
+  String get calendar_repeatEaster;
+
+  /// Shown for a built-in event on the n-th weekday of a month.
+  ///
+  /// In cs, this message translates to:
+  /// **'Každý rok podle dne v týdnu'**
+  String get calendar_repeatNth;
+
+  /// Repeat in words, daily.
+  ///
+  /// In cs, this message translates to:
+  /// **'každý den'**
+  String get calendar_repeatDescDaily;
+
+  /// Repeat in words, weekly.
+  ///
+  /// In cs, this message translates to:
+  /// **'{weekday} každý týden'**
+  String calendar_repeatDescWeekly(String weekday);
+
+  /// Repeat in words, monthly.
+  ///
+  /// In cs, this message translates to:
+  /// **'každý měsíc {day}.'**
+  String calendar_repeatDescMonthly(int day);
+
+  /// Repeat in words, yearly.
+  ///
+  /// In cs, this message translates to:
+  /// **'každý rok {date}'**
+  String calendar_repeatDescYearly(String date);
+
+  /// Repeat in words, relative to Easter.
+  ///
+  /// In cs, this message translates to:
+  /// **'každý rok podle Velikonoc'**
+  String get calendar_repeatDescEaster;
+
+  /// Repeat in words, n-th weekday of a month.
+  ///
+  /// In cs, this message translates to:
+  /// **'každý rok, {ordinal} {weekday} ({month})'**
+  String calendar_repeatDescNth(String ordinal, String weekday, String month);
+
+  /// Repeat in words with its end date.
+  ///
+  /// In cs, this message translates to:
+  /// **'{repeat}, do {date}'**
+  String calendar_repeatUntil(String repeat, String date);
+
+  /// Label of the repeat end row in the form.
+  ///
+  /// In cs, this message translates to:
+  /// **'Konec opakování'**
+  String get calendar_repeatEnds;
+
+  /// Value of the repeat end row when there is none.
+  ///
+  /// In cs, this message translates to:
+  /// **'Bez konce'**
+  String get calendar_repeatNoEnd;
+
+  /// Title of the form for a new event.
+  ///
+  /// In cs, this message translates to:
+  /// **'Nová událost'**
+  String get calendar_formCreateTitle;
+
+  /// Title of the form for an existing event.
+  ///
+  /// In cs, this message translates to:
+  /// **'Upravit událost'**
+  String get calendar_formEditTitle;
+
+  /// Hint of the name field.
+  ///
+  /// In cs, this message translates to:
+  /// **'Název události'**
+  String get calendar_formNameHint;
+
+  /// Hint of the note field.
+  ///
+  /// In cs, this message translates to:
+  /// **'Přidat podrobnosti'**
+  String get calendar_formNoteHint;
+
+  /// Hint of the location field.
+  ///
+  /// In cs, this message translates to:
+  /// **'Umístění'**
+  String get calendar_formLocationHint;
+
+  /// Label above the type picker.
+  ///
+  /// In cs, this message translates to:
+  /// **'Typ události'**
+  String get calendar_formType;
+
+  /// Label of the switch that puts the event on the Board.
+  ///
+  /// In cs, this message translates to:
+  /// **'Na nástěnku'**
+  String get calendar_onBoard;
+
+  /// XP the event would award, under the board switch.
+  ///
+  /// In cs, this message translates to:
+  /// **'Za splnění: +{xp} XP'**
+  String calendar_onBoardXp(int xp);
+
+  /// Inline error of an empty name.
+  ///
+  /// In cs, this message translates to:
+  /// **'Zadej název události.'**
+  String get calendar_errorName;
+
+  /// Inline error of a name over 80 characters.
+  ///
+  /// In cs, this message translates to:
+  /// **'Název je příliš dlouhý.'**
+  String get calendar_errorNameLong;
+
+  /// Inline error when the end is before the start.
+  ///
+  /// In cs, this message translates to:
+  /// **'Konec nemůže být před začátkem.'**
+  String get calendar_errorEnd;
+
+  /// Inline error when the repeat end is before the start.
+  ///
+  /// In cs, this message translates to:
+  /// **'Konec opakování nemůže být před začátkem.'**
+  String get calendar_errorRepeatEnd;
+
+  /// Inline error of a note over 500 characters.
+  ///
+  /// In cs, this message translates to:
+  /// **'Podrobnosti jsou příliš dlouhé.'**
+  String get calendar_errorNoteLong;
+
+  /// Inline error of a location over 120 characters.
+  ///
+  /// In cs, this message translates to:
+  /// **'Umístění je příliš dlouhé.'**
+  String get calendar_errorLocationLong;
+
+  /// Inline error when saving an event fails.
+  ///
+  /// In cs, this message translates to:
+  /// **'Uložení se nepovedlo. Zkus to znovu.'**
+  String get calendar_saveFailed;
+
+  /// Title of the delete confirmation of a single event.
+  ///
+  /// In cs, this message translates to:
+  /// **'Smazat událost?'**
+  String get calendar_deleteTitle;
+
+  /// Body of the delete confirmation of a single event.
+  ///
+  /// In cs, this message translates to:
+  /// **'Událost „{name}“ se smaže.'**
+  String calendar_deleteBody(String name);
+
+  /// Body of the delete sheet of a repeating event.
+  ///
+  /// In cs, this message translates to:
+  /// **'Událost „{name}“ se opakuje. Co chceš smazat?'**
+  String calendar_deleteRepeatBody(String name);
+
+  /// Delete choice for a repeating event.
+  ///
+  /// In cs, this message translates to:
+  /// **'Jen tuto událost'**
+  String get calendar_deleteOnlyThis;
+
+  /// Delete choice for a repeating event.
+  ///
+  /// In cs, this message translates to:
+  /// **'Tuto a všechny další'**
+  String get calendar_deleteThisAndFollowing;
+
+  /// Delete choice for a repeating event.
+  ///
+  /// In cs, this message translates to:
+  /// **'Všechny události v sérii'**
+  String get calendar_deleteAll;
+
+  /// Snackbar after deleting an event.
+  ///
+  /// In cs, this message translates to:
+  /// **'Událost „{name}“ smazána'**
+  String calendar_deleted(String name);
+
+  /// Snackbar action that restores a deleted event.
+  ///
+  /// In cs, this message translates to:
+  /// **'Zpět'**
+  String get calendar_undo;
+
+  /// Snackbar when deleting an event fails.
+  ///
+  /// In cs, this message translates to:
+  /// **'Smazání se nepovedlo.'**
+  String get calendar_deleteFailed;
+
+  /// Hint under the empty search field.
+  ///
+  /// In cs, this message translates to:
+  /// **'Napiš název, podrobnosti nebo místo.'**
+  String get calendar_searchPrompt;
+
+  /// Text when the search finds nothing.
+  ///
+  /// In cs, this message translates to:
+  /// **'Nic nenalezeno'**
+  String get calendar_searchNone;
+
+  /// Accessibility label of the check circle of an open Event_Task.
+  ///
+  /// In cs, this message translates to:
+  /// **'Splnit událost {name}'**
+  String a11y_completeEvent(String name);
+
+  /// Accessibility label of the check circle of a completed Event_Task.
+  ///
+  /// In cs, this message translates to:
+  /// **'Vrátit událost {name}'**
+  String a11y_reopenEvent(String name);
+
+  /// Announcement after completing an Event_Task.
+  ///
+  /// In cs, this message translates to:
+  /// **'Událost {name} splněna, +{xp} XP'**
+  String a11y_eventCompleted(String name, int xp);
+
+  /// Time label of an all-day Event_Task on the Board.
+  ///
+  /// In cs, this message translates to:
+  /// **'Celý den'**
+  String get calendar_taskAllDay;
+
+  /// Accessibility label of the button that removes the repeat end date.
+  ///
+  /// In cs, this message translates to:
+  /// **'Zrušit konec opakování'**
+  String get calendar_clearRepeatEnd;
 }
 
 class _AppLocalizationsDelegate

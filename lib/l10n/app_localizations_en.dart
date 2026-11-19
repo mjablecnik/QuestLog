@@ -1033,4 +1033,350 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get error_unknown => 'Something went wrong.';
+
+  @override
+  String get app_tabCalendar => 'Calendar';
+
+  @override
+  String get calendar_today => 'Today';
+
+  @override
+  String get calendar_prevMonth => 'Previous month';
+
+  @override
+  String get calendar_nextMonth => 'Next month';
+
+  @override
+  String get calendar_pickMonth => 'Choose month and year';
+
+  @override
+  String get calendar_search => 'Search events';
+
+  @override
+  String get calendar_filter => 'Filter by type';
+
+  @override
+  String get calendar_add => 'Add event';
+
+  @override
+  String calendar_cellLabel(String date, int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countString events',
+      one: '1 event',
+      zero: 'no events',
+    );
+    return '$date, $_temp0';
+  }
+
+  @override
+  String calendar_moreEvents(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    return '+$countString';
+  }
+
+  @override
+  String get calendar_monthPickerTitle => 'Month and year';
+
+  @override
+  String get calendar_prevYear => 'Previous year';
+
+  @override
+  String get calendar_nextYear => 'Next year';
+
+  @override
+  String get calendar_filterTitle => 'Event types';
+
+  @override
+  String get calendar_filterDone => 'Done';
+
+  @override
+  String get calendar_filterShowAll => 'Show all types';
+
+  @override
+  String get calendar_filterHidesAll => 'The filter hides all events.';
+
+  @override
+  String get calendar_typeDance => 'Dance';
+
+  @override
+  String get calendar_typeWork => 'Work';
+
+  @override
+  String get calendar_typeBirthday => 'Birthday';
+
+  @override
+  String get calendar_typeNameDay => 'Name day';
+
+  @override
+  String get calendar_typePublicHoliday => 'Public holiday';
+
+  @override
+  String get calendar_typeNotableDay => 'Notable day';
+
+  @override
+  String get calendar_typeDate => 'Date';
+
+  @override
+  String get calendar_typeMeeting => 'Meeting';
+
+  @override
+  String get calendar_typeSeminar => 'Seminar';
+
+  @override
+  String get calendar_typeLesson => 'Lesson';
+
+  @override
+  String get calendar_allDay => 'All day';
+
+  @override
+  String calendar_dayEvents(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countString events',
+      one: '1 event',
+      zero: 'No events',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get calendar_dayEmpty => 'No events';
+
+  @override
+  String get calendar_start => 'Start';
+
+  @override
+  String get calendar_end => 'End';
+
+  @override
+  String get calendar_notes => 'Details';
+
+  @override
+  String get calendar_repeat => 'Repeat';
+
+  @override
+  String get calendar_location => 'Location';
+
+  @override
+  String get calendar_notSet => 'Not set';
+
+  @override
+  String calendar_completedAt(String time, int xp) {
+    final intl.NumberFormat xpNumberFormat = intl.NumberFormat.decimalPattern(
+      localeName,
+    );
+    final String xpString = xpNumberFormat.format(xp);
+
+    return 'Done at $time · +$xpString XP';
+  }
+
+  @override
+  String get calendar_edit => 'Edit';
+
+  @override
+  String get calendar_duplicate => 'Duplicate';
+
+  @override
+  String get calendar_menu => 'More actions';
+
+  @override
+  String get calendar_locationCopied => 'Location copied';
+
+  @override
+  String get calendar_eventGone => 'This event no longer exists.';
+
+  @override
+  String get calendar_repeatNever => 'Never';
+
+  @override
+  String get calendar_repeatDaily => 'Every day';
+
+  @override
+  String get calendar_repeatWeekly => 'Every week';
+
+  @override
+  String get calendar_repeatMonthly => 'Every month';
+
+  @override
+  String get calendar_repeatYearly => 'Every year';
+
+  @override
+  String get calendar_repeatEaster => 'Every year, relative to Easter';
+
+  @override
+  String get calendar_repeatNth => 'Every year, by weekday';
+
+  @override
+  String get calendar_repeatDescDaily => 'every day';
+
+  @override
+  String calendar_repeatDescWeekly(String weekday) {
+    return 'every week on $weekday';
+  }
+
+  @override
+  String calendar_repeatDescMonthly(int day) {
+    final intl.NumberFormat dayNumberFormat = intl.NumberFormat.decimalPattern(
+      localeName,
+    );
+    final String dayString = dayNumberFormat.format(day);
+
+    return 'every month on day $dayString';
+  }
+
+  @override
+  String calendar_repeatDescYearly(String date) {
+    return 'every year on $date';
+  }
+
+  @override
+  String get calendar_repeatDescEaster => 'every year, relative to Easter';
+
+  @override
+  String calendar_repeatDescNth(String ordinal, String weekday, String month) {
+    return 'every year, $ordinal $weekday of $month';
+  }
+
+  @override
+  String calendar_repeatUntil(String repeat, String date) {
+    return '$repeat, until $date';
+  }
+
+  @override
+  String get calendar_repeatEnds => 'Repeat until';
+
+  @override
+  String get calendar_repeatNoEnd => 'No end';
+
+  @override
+  String get calendar_formCreateTitle => 'New event';
+
+  @override
+  String get calendar_formEditTitle => 'Edit event';
+
+  @override
+  String get calendar_formNameHint => 'Event title';
+
+  @override
+  String get calendar_formNoteHint => 'Add details';
+
+  @override
+  String get calendar_formLocationHint => 'Location';
+
+  @override
+  String get calendar_formType => 'Event type';
+
+  @override
+  String get calendar_onBoard => 'On the board';
+
+  @override
+  String calendar_onBoardXp(int xp) {
+    final intl.NumberFormat xpNumberFormat = intl.NumberFormat.decimalPattern(
+      localeName,
+    );
+    final String xpString = xpNumberFormat.format(xp);
+
+    return 'For completing: +$xpString XP';
+  }
+
+  @override
+  String get calendar_errorName => 'Enter an event title.';
+
+  @override
+  String get calendar_errorNameLong => 'The title is too long.';
+
+  @override
+  String get calendar_errorEnd => 'The end cannot be before the start.';
+
+  @override
+  String get calendar_errorRepeatEnd =>
+      'The repeat end cannot be before the start.';
+
+  @override
+  String get calendar_errorNoteLong => 'The details are too long.';
+
+  @override
+  String get calendar_errorLocationLong => 'The location is too long.';
+
+  @override
+  String get calendar_saveFailed => 'Saving failed. Try again.';
+
+  @override
+  String get calendar_deleteTitle => 'Delete event?';
+
+  @override
+  String calendar_deleteBody(String name) {
+    return 'The event “$name” will be deleted.';
+  }
+
+  @override
+  String calendar_deleteRepeatBody(String name) {
+    return 'The event “$name” repeats. What do you want to delete?';
+  }
+
+  @override
+  String get calendar_deleteOnlyThis => 'Only this event';
+
+  @override
+  String get calendar_deleteThisAndFollowing => 'This and all following';
+
+  @override
+  String get calendar_deleteAll => 'All events in the series';
+
+  @override
+  String calendar_deleted(String name) {
+    return 'Event “$name” deleted';
+  }
+
+  @override
+  String get calendar_undo => 'Undo';
+
+  @override
+  String get calendar_deleteFailed => 'Deleting failed.';
+
+  @override
+  String get calendar_searchPrompt => 'Type a title, details or a place.';
+
+  @override
+  String get calendar_searchNone => 'Nothing found';
+
+  @override
+  String a11y_completeEvent(String name) {
+    return 'Complete event $name';
+  }
+
+  @override
+  String a11y_reopenEvent(String name) {
+    return 'Reopen event $name';
+  }
+
+  @override
+  String a11y_eventCompleted(String name, int xp) {
+    final intl.NumberFormat xpNumberFormat = intl.NumberFormat.decimalPattern(
+      localeName,
+    );
+    final String xpString = xpNumberFormat.format(xp);
+
+    return 'Event $name completed, +$xpString XP';
+  }
+
+  @override
+  String get calendar_taskAllDay => 'All day';
+
+  @override
+  String get calendar_clearRepeatEnd => 'Remove the repeat end';
 }

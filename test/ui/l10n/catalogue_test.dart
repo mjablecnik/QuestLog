@@ -21,7 +21,7 @@ Set<String> usedPlaceholders(String message) => {
 
 const allowedPrefixes = {
   'app', 'hero', 'board', 'quest', 'missions', 'mission', 'settings', 'rule',
-  'font', 'reward', 'sheet', 'a11y', 'error', 'common', //
+  'font', 'reward', 'sheet', 'a11y', 'error', 'common', 'calendar', //
 };
 
 void main() {

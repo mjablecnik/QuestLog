@@ -1068,4 +1068,352 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get error_unknown => 'Něco se pokazilo.';
+
+  @override
+  String get app_tabCalendar => 'Kalendář';
+
+  @override
+  String get calendar_today => 'Dnes';
+
+  @override
+  String get calendar_prevMonth => 'Předchozí měsíc';
+
+  @override
+  String get calendar_nextMonth => 'Další měsíc';
+
+  @override
+  String get calendar_pickMonth => 'Vybrat měsíc a rok';
+
+  @override
+  String get calendar_search => 'Hledat události';
+
+  @override
+  String get calendar_filter => 'Filtrovat podle typu';
+
+  @override
+  String get calendar_add => 'Přidat událost';
+
+  @override
+  String calendar_cellLabel(String date, int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countString událostí',
+      few: '$countString události',
+      one: '1 událost',
+      zero: 'žádné události',
+    );
+    return '$date, $_temp0';
+  }
+
+  @override
+  String calendar_moreEvents(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    return '+$countString';
+  }
+
+  @override
+  String get calendar_monthPickerTitle => 'Měsíc a rok';
+
+  @override
+  String get calendar_prevYear => 'Předchozí rok';
+
+  @override
+  String get calendar_nextYear => 'Další rok';
+
+  @override
+  String get calendar_filterTitle => 'Typy událostí';
+
+  @override
+  String get calendar_filterDone => 'Hotovo';
+
+  @override
+  String get calendar_filterShowAll => 'Zobrazit všechny typy';
+
+  @override
+  String get calendar_filterHidesAll => 'Filtr schovává všechny události.';
+
+  @override
+  String get calendar_typeDance => 'Tanec';
+
+  @override
+  String get calendar_typeWork => 'Práce';
+
+  @override
+  String get calendar_typeBirthday => 'Narozeniny';
+
+  @override
+  String get calendar_typeNameDay => 'Jmeniny';
+
+  @override
+  String get calendar_typePublicHoliday => 'Státní svátek';
+
+  @override
+  String get calendar_typeNotableDay => 'Významný den';
+
+  @override
+  String get calendar_typeDate => 'Rande';
+
+  @override
+  String get calendar_typeMeeting => 'Meeting';
+
+  @override
+  String get calendar_typeSeminar => 'Seminář';
+
+  @override
+  String get calendar_typeLesson => 'Lekce';
+
+  @override
+  String get calendar_allDay => 'Celý den';
+
+  @override
+  String calendar_dayEvents(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countString událostí',
+      few: '$countString události',
+      one: '1 událost',
+      zero: 'Žádné události',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get calendar_dayEmpty => 'Žádné události';
+
+  @override
+  String get calendar_start => 'Začátek';
+
+  @override
+  String get calendar_end => 'Konec';
+
+  @override
+  String get calendar_notes => 'Podrobnosti';
+
+  @override
+  String get calendar_repeat => 'Opakovat';
+
+  @override
+  String get calendar_location => 'Umístění';
+
+  @override
+  String get calendar_notSet => 'Nenastaveno';
+
+  @override
+  String calendar_completedAt(String time, int xp) {
+    final intl.NumberFormat xpNumberFormat = intl.NumberFormat.decimalPattern(
+      localeName,
+    );
+    final String xpString = xpNumberFormat.format(xp);
+
+    return 'Splněno v $time · +$xpString XP';
+  }
+
+  @override
+  String get calendar_edit => 'Upravit';
+
+  @override
+  String get calendar_duplicate => 'Duplikovat';
+
+  @override
+  String get calendar_menu => 'Další akce';
+
+  @override
+  String get calendar_locationCopied => 'Umístění zkopírováno';
+
+  @override
+  String get calendar_eventGone => 'Událost už neexistuje.';
+
+  @override
+  String get calendar_repeatNever => 'Nikdy';
+
+  @override
+  String get calendar_repeatDaily => 'Každý den';
+
+  @override
+  String get calendar_repeatWeekly => 'Každý týden';
+
+  @override
+  String get calendar_repeatMonthly => 'Každý měsíc';
+
+  @override
+  String get calendar_repeatYearly => 'Každý rok';
+
+  @override
+  String get calendar_repeatEaster => 'Každý rok podle Velikonoc';
+
+  @override
+  String get calendar_repeatNth => 'Každý rok podle dne v týdnu';
+
+  @override
+  String get calendar_repeatDescDaily => 'každý den';
+
+  @override
+  String calendar_repeatDescWeekly(String weekday) {
+    return '$weekday každý týden';
+  }
+
+  @override
+  String calendar_repeatDescMonthly(int day) {
+    final intl.NumberFormat dayNumberFormat = intl.NumberFormat.decimalPattern(
+      localeName,
+    );
+    final String dayString = dayNumberFormat.format(day);
+
+    return 'každý měsíc $dayString.';
+  }
+
+  @override
+  String calendar_repeatDescYearly(String date) {
+    return 'každý rok $date';
+  }
+
+  @override
+  String get calendar_repeatDescEaster => 'každý rok podle Velikonoc';
+
+  @override
+  String calendar_repeatDescNth(String ordinal, String weekday, String month) {
+    return 'každý rok, $ordinal $weekday ($month)';
+  }
+
+  @override
+  String calendar_repeatUntil(String repeat, String date) {
+    return '$repeat, do $date';
+  }
+
+  @override
+  String get calendar_repeatEnds => 'Konec opakování';
+
+  @override
+  String get calendar_repeatNoEnd => 'Bez konce';
+
+  @override
+  String get calendar_formCreateTitle => 'Nová událost';
+
+  @override
+  String get calendar_formEditTitle => 'Upravit událost';
+
+  @override
+  String get calendar_formNameHint => 'Název události';
+
+  @override
+  String get calendar_formNoteHint => 'Přidat podrobnosti';
+
+  @override
+  String get calendar_formLocationHint => 'Umístění';
+
+  @override
+  String get calendar_formType => 'Typ události';
+
+  @override
+  String get calendar_onBoard => 'Na nástěnku';
+
+  @override
+  String calendar_onBoardXp(int xp) {
+    final intl.NumberFormat xpNumberFormat = intl.NumberFormat.decimalPattern(
+      localeName,
+    );
+    final String xpString = xpNumberFormat.format(xp);
+
+    return 'Za splnění: +$xpString XP';
+  }
+
+  @override
+  String get calendar_errorName => 'Zadej název události.';
+
+  @override
+  String get calendar_errorNameLong => 'Název je příliš dlouhý.';
+
+  @override
+  String get calendar_errorEnd => 'Konec nemůže být před začátkem.';
+
+  @override
+  String get calendar_errorRepeatEnd =>
+      'Konec opakování nemůže být před začátkem.';
+
+  @override
+  String get calendar_errorNoteLong => 'Podrobnosti jsou příliš dlouhé.';
+
+  @override
+  String get calendar_errorLocationLong => 'Umístění je příliš dlouhé.';
+
+  @override
+  String get calendar_saveFailed => 'Uložení se nepovedlo. Zkus to znovu.';
+
+  @override
+  String get calendar_deleteTitle => 'Smazat událost?';
+
+  @override
+  String calendar_deleteBody(String name) {
+    return 'Událost „$name“ se smaže.';
+  }
+
+  @override
+  String calendar_deleteRepeatBody(String name) {
+    return 'Událost „$name“ se opakuje. Co chceš smazat?';
+  }
+
+  @override
+  String get calendar_deleteOnlyThis => 'Jen tuto událost';
+
+  @override
+  String get calendar_deleteThisAndFollowing => 'Tuto a všechny další';
+
+  @override
+  String get calendar_deleteAll => 'Všechny události v sérii';
+
+  @override
+  String calendar_deleted(String name) {
+    return 'Událost „$name“ smazána';
+  }
+
+  @override
+  String get calendar_undo => 'Zpět';
+
+  @override
+  String get calendar_deleteFailed => 'Smazání se nepovedlo.';
+
+  @override
+  String get calendar_searchPrompt => 'Napiš název, podrobnosti nebo místo.';
+
+  @override
+  String get calendar_searchNone => 'Nic nenalezeno';
+
+  @override
+  String a11y_completeEvent(String name) {
+    return 'Splnit událost $name';
+  }
+
+  @override
+  String a11y_reopenEvent(String name) {
+    return 'Vrátit událost $name';
+  }
+
+  @override
+  String a11y_eventCompleted(String name, int xp) {
+    final intl.NumberFormat xpNumberFormat = intl.NumberFormat.decimalPattern(
+      localeName,
+    );
+    final String xpString = xpNumberFormat.format(xp);
+
+    return 'Událost $name splněna, +$xpString XP';
+  }
+
+  @override
+  String get calendar_taskAllDay => 'Celý den';
+
+  @override
+  String get calendar_clearRepeatEnd => 'Zrušit konec opakování';
 }
