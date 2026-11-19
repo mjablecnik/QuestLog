@@ -300,7 +300,7 @@ class _NodeList extends ConsumerWidget {
             NoteRow(
               name: n.name,
               date: noteDateLabel(l, n.updatedAt, now),
-              preview: notePreview(n.body),
+              preview: notePreview(n.body, skipFirstLine: n.autoName),
               onTap: () => openNoteEditor(context, noteId: n.id, parentId: n.parentId),
             ),
           ),

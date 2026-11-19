@@ -48,6 +48,8 @@ void main() {
       expect(notePreview('# Titulek\n\nPrvní **řádek**\nTřetí'), 'Titulek První řádek');
       expect(notePreview('Jen jeden'), 'Jen jeden');
       expect(notePreview(' \n '), '');
+      expect(notePreview('# Titulek\n\nPrvní\nDruhý\nTřetí', skipFirstLine: true), 'První Druhý');
+      expect(notePreview('Jen název', skipFirstLine: true), '');
     });
   });
 

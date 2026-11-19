@@ -21,7 +21,7 @@ Terms defined in `001-questlog-domain`, `002-questlog-ui` and `003-questlog-cale
 - **Current_Folder**: The Folder (or the Root_Folder) whose content the Notes_Screen shows.
 - **Folder_Row**: The row of one Folder in the Notes_Screen.
 - **Note_Row**: The row of one Note in the Notes_Screen, with a Note_Preview and a last-edited date.
-- **Note_Preview**: The first two non-empty lines of a Markdown_Body with the Markdown markers removed.
+- **Note_Preview**: The first two non-empty lines of a Markdown_Body with the Markdown markers removed; while the Note has an Automatic_Name, the first line is left out because it is the name.
 - **Breadcrumb**: The path of Folders from the Root_Folder to the Current_Folder, shown above the title.
 - **Markdown_Body**: The text of a Note, stored as Markdown of at most 100 000 characters.
 - **Supported_Formatting**: Headings of level 1 to 3, bold, italic, inline code, code blocks, links, bulleted lists, checklists and block quotes.

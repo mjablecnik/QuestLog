@@ -68,5 +68,7 @@ String? deriveNoteName(String body) {
 }
 
 /// First two non-empty lines with markers removed, joined by a space; empty
-/// when [body] holds no text.
-String notePreview(String body) => _plainLines(body).take(2).join(' ');
+/// when [body] holds no text. With [skipFirstLine] the line a Note was named
+/// after is left out, so the preview does not repeat the name.
+String notePreview(String body, {bool skipFirstLine = false}) =>
+    _plainLines(body).skip(skipFirstLine ? 1 : 0).take(2).join(' ');

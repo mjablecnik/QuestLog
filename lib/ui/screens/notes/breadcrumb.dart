@@ -43,7 +43,6 @@ class Breadcrumb extends StatelessWidget {
     ];
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
-      reverse: true,
       child: Row(children: parts),
     );
   }
