@@ -13,7 +13,9 @@ the visual contract the Flutter implementation is compared against.
 ├── screens/             the same artboards rendered to PNG at 2×
 ├── render.mjs           artboards → screens/*.png (Playwright)
 ├── build-preview.mjs    screens + notes → preview.html (the review page)
-└── preview.html         generated; published as a Claude artifact for review
+├── preview.html         generated; published as a Claude artifact for review
+├── calendar-preview.html  the approved calendar screens (spec 003)
+└── notes-preview.html     the approved notes screens, Trash and editor (spec 004)
 ```
 
 **Regenerating:** `node .design/render.mjs` then `node .design/build-preview.mjs`, both from
@@ -133,6 +135,12 @@ check is 28px inside a 44px row).
   0 %) with the number of quests still open inside (changed 2026-11-19 at Martin's
   request, was `done/total`: a low number shows a mission that is nearly finished) · title + "Zbývá: …" · brass bonus `+XP` with a caps
   caption ("za dokončení" / "získáno").
+- **Notes** (spec `004-questlog-notes`, approved preview `notes-preview.html`, blue palette) — a fifth tab with no
+  hero bar. Folder row: 40px tinted icon tile, name, summary, chevron, on a raised outlined card. Note row: name,
+  last-edited date, two-line preview (the name line is left out). Swipe reveals three 76px actions (rename, move,
+  delete); the same actions are in a "···" menu in a Folder and in the editor. The editor has no tab bar; its format
+  bar sits above the keyboard with 44px buttons. Checklist checks are round, 44px hit area. The Trash is a bin icon
+  with a count badge at the top level; its rows show where an item came from and the days left, red at one day.
 - **Swipe actions** — left swipe reveals *Upravit* (raised ground) and *Smazat*
   (destructive), 84px each.
 - **Sheets** — bottom sheet over scrim; grabber, `Zrušit` left, display title centred,

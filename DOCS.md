@@ -43,7 +43,7 @@ questlog/
 ├── drift_schemas/           drift_schema_v1.json to v4, the schema dump per version
 ├── test/                    mirrors lib/ (core, data, services, ui); goldens/, helpers/
 ├── scripts/                 check.sh, check-structure.sh
-├── screenshots/             the three README screenshots (English, dark theme, 780x1688)
+├── screenshots/             the five README screenshots (English, dark theme, 780x1688)
 ├── ios/, linux/             platform projects (iOS identity: ios/Flutter/AppIdentity.xcconfig)
 ├── .kiro/specs/             001-questlog-domain, 002-questlog-ui, 003-questlog-calendar and 004-questlog-notes (requirements, design, tasks)
 ├── .design/                 the approved visual design: DESIGN.md, artboards/, screens/, icon/ (app icon + launch screen generator)
