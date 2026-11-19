@@ -18,15 +18,18 @@ questlog/
 │   ├── main.dart            entry point: opens the database, starts the ProviderScope
 │   ├── app.dart             root widget: theme, locale, shell
 │   ├── core/                pure Dart: clock, board day (04:00), XP and levels, cadence,
-│   │                        validation, domain errors
+│   │   │                    validation, domain errors
+│   │   └── calendar/        event types, repeat rules, Easter, event XP, month grid dates
 │   ├── data/                Drift tables, database, models, mappers, preferences enums
+│   │   └── calendar/        calendar tables, models, mappers, the one-time seed, filter store
 │   ├── services/            quest, mission, recurrence and settings services, XP engine,
 │   │                        Riverpod providers
+│   │   └── calendar/        calendar service and its providers
 │   ├── ui/
 │   │   ├── theme/           design tokens (two themes, four temporary palettes), typography, ThemeData
 │   │   ├── state/           UI providers, reorder logic, reward queue, board-day signal
-│   │   ├── screens/         board, missions, mission_detail, settings, shell
-│   │   ├── sheets/          quest, mission, rule and font bottom sheets
+│   │   ├── screens/         board, missions, mission_detail, settings, shell, calendar
+│   │   ├── sheets/          quest, mission, rule and font bottom sheets (calendar/: filter, month picker, delete)
 │   │   ├── widgets/         cards, common, hero, reward, sheet
 │   │   └── forms/           validators, posting day, error text
 │   └── l10n/                app_cs.arb (template), app_en.arb, generated localizations
@@ -49,7 +52,7 @@ questlog/
 ### Data
 
 One SQLite file, `questlog.sqlite`, in the platform's application documents directory
-(`getApplicationDocumentsDirectory()`), opened lazily in a background isolate. Five
+(`getApplicationDocumentsDirectory()`), opened lazily in a background isolate. Eight
 tables:
 
 | Table | Holds |
@@ -59,12 +62,30 @@ tables:
 | `recurring_rules` | name, cadence, anchor date, next index, bonus size, last posted date |
 | `rule_quests` | the quests a rule posts with each mission |
 | `app_state` | the singleton row: total XP, hero name, language, theme, display font |
+| `calendar_events` | name, note, location, event type, start and end (a date plus minutes since midnight, no time zone, no minutes for an all-day event), repeat rule and its end, the On_Board flag |
+| `calendar_skipped_dates` | dates on which a repeating event is deleted for one occurrence |
+| `calendar_completions` | the completed occurrences of events (event, date, time, awarded XP) |
 
-The schema is at version 2 (v2 added `quests.board` and `missions.sort_order`; the upgrade puts every quest without a mission in Todo and keeps the old Mission order). Adding the fourth effort tier (`fullDay`) needed no migration:
+The schema is at version 3 (v3 added the three calendar tables and fills them once with 35 built-in events: 13 Czech public holidays, 16 notable and folk days and 6 name days; v2 added `quests.board` and `missions.sort_order`; the upgrade puts every quest without a mission in Todo and keeps the old Mission order). Adding the fourth effort tier (`fullDay`) needed no migration:
 `quests.difficulty` and `rule_quests.difficulty` are plain text holding the enum name, with no
 `CHECK`, so the stored values `easy`, `normal` and `hard` keep their meaning. A change to the
 schema needs a migration step in
 `lib/data/database.dart` and a new dump in `drift_schemas/`.
+
+### Calendar
+
+The Kalendář tab is independent of quests and missions except for one link: an event with
+`on_board` set appears on the Board, in Today, on the Board_Day whose date is the event's
+start date, and completing it awards XP once (a completion row per event and date; reopening
+removes it and the XP). Occurrences of a repeating event are never stored: the service expands
+the rule for the range on screen (daily, weekly, monthly and yearly reuse `occurrenceDate` of
+`lib/core/cadence.dart`; two built-in rules exist only for the seed: relative to Easter, and
+the n-th weekday of a month). Event XP: a timed event 10 / 25 / 50 / 100 XP by length (up to
+30 min, 2 h, 5 h, longer); an all-day event 10 XP for birthday, name day, public holiday,
+notable day and date, 25 XP for the rest. The calendar uses the calendar day (midnight), the
+Board uses the Board_Day (04:00). The type filter is remembered in `calendar_filter.txt` beside
+the database. Notifications, an event URL, week and day views and user-defined types are not
+part of it (spec `003-questlog-calendar`).
 
 ### Rules of the game
 

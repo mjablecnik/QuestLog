@@ -23,6 +23,13 @@ Questlog is a personal gamified to-do app for one user, built with Flutter for i
   there (Today or Todo) from the quest's edit sheet.
 - **XP and levels** are shown in the hero bar; completing a quest or mission opens a reward
   card, and reopening one takes the XP back.
+- **Calendar** is a fourth tab with a month overview, a day sheet, event detail, an event form,
+  search and a type filter. Events have one of ten types, each with its own colour (dance, work,
+  birthday, name day, public holiday, notable day, date, meeting, seminar, lesson) and may repeat
+  daily, weekly, monthly or yearly. The first start fills it with the Czech public holidays,
+  notable and folk days and a few name days, repeating every year. An event with the "On the
+  board" switch shows up on the Board on its day as a task: completing it earns 10 to 100 XP
+  (by the event's length, or by its type for an all-day event).
 - **Recurring missions** are posted automatically from rules set up in Settings (daily,
   weekly, biweekly, monthly, quarterly or yearly).
 - **Two looks and two languages**: the dark "Guild Board" and the light "Daylight" theme
@@ -75,8 +82,8 @@ scripts/check.sh                    # flutter analyze + all tests (about 4 min) 
 On a machine without a display, run the app as `xvfb-run -a flutter run -d linux`; the
 tests need no display.
 
-The app has three tabs: Quests (the Board), Missions and Settings; new items are created
-with the plus button on the first two. The Board shows the quests without a mission plus the
+The app has four tabs: Quests (the Board), Missions, Calendar and Settings; new items are created
+with the plus button on the first three. The Board shows the quests without a mission plus the
 quests of a mission that you posted there; every quest of a mission is listed in that mission's detail.
 
 The bundle identifier and the display name for iOS are set in one place,

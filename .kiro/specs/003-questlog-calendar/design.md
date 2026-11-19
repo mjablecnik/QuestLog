@@ -101,8 +101,12 @@ lib/
     calendar_filter_store.dart Type_Filter file store
   services/calendar/
     calendar_service.dart      create/update/delete/restore, queries, completion
-    calendar_providers.dart    Riverpod providers and streams
+    calendar_providers.dart    service, filter store and initial filter providers
+  ui/state/
+    calendar_state.dart        Calendar_Today, visible month, selected day, type filter, streams
+    event_task_actions.dart    completing or reopening an Event_Task on the Board
   ui/screens/calendar/
+    calendar_labels.dart       type names, dates, times, repeat in words
     calendar_screen.dart       Month_View screen and header
     month_grid.dart            grid, cells, Event_Chip
     day_sheet.dart             Day_Sheet
@@ -329,7 +333,9 @@ final dayOccurrencesProvider = StreamProvider.family<List<EventOccurrence>, Date
 final eventTasksProvider = StreamProvider.family<List<EventOccurrence>, DateTime>(...);
 ```
 
-`calendarTodayProvider` mirrors `boardDayProvider` (a timer to the next local midnight, a refresh on resume) but uses midnight instead of Day_Start. `eventTasksProvider` takes Today from `boardDayProvider`.
+The providers that follow the clock and the user (`calendarTodayProvider`, `visibleMonthProvider`, `selectedDayProvider`, `typeFilterProvider`, the occurrence streams) live in `lib/ui/state/calendar_state.dart`, next to `boardDayProvider`, because they use the widget binding for lifecycle events. `calendarTodayProvider` mirrors `boardDayProvider` (a timer to the next local midnight, a refresh on resume) but uses midnight instead of Day_Start. `eventTasksProvider` takes Today from `boardDayProvider`.
+
+`CalendarService` builds its streams from `tableUpdates` of the three calendar tables and runs one read at a time, instead of watching a query: a query-based stream delayed other Drift streams (the rules list in the end-to-end test) when many streams were alive.
 
 ### 12. Shell tab (`lib/ui/screens/shell/`)
 

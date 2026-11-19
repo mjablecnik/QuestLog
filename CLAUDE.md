@@ -18,6 +18,11 @@ the mission name on its card; the sheet's "Off the board" removes it again. Miss
 by long-press drag (`missions.sort_order`). Quests without a mission always have a section.
 In the dark theme Quest cards are dark raised cards, not parchment slips (2026-11-18, Martin's
 request; `slip*` roles in `tokens.dart`); the light theme is unchanged.
+Calendar (2026-11-19, Martin's request, spec `003-questlog-calendar`; schema v3): a fourth tab, Kalendář, with a month
+overview, day sheet, event detail, event form, search and a type filter. Ten fixed event types with their own colour, repeat
+(daily, weekly, monthly, yearly), Czech public holidays, notable days and name days seeded once. An event with `On the board`
+shows on the Board as a task on its day and awards 10-100 XP (by length, or by type when all-day). The tab has no hero bar.
+README screenshots do not show the calendar yet (retake them).
 Not done: the iOS build and every on-device check — Martin does those himself (open LOW
 entry in `.agents/ISSUES.md`).
 
@@ -43,18 +48,18 @@ xvfb-run -a flutter run -d linux          # run the app (the sandbox has no DISP
 ```
 lib/
   main.dart, app.dart   entry point; root widget (theme, locale, shell)
-  core/                 pure Dart: clock, board day (04:00), XP/levels, cadence, errors
-  data/                 Drift tables, database (+ .g.dart), models, mappers, preferences
-  services/             quest/mission/recurrence/settings services, XP engine, providers
+  core/                 pure Dart: clock, board day (04:00), XP/levels, cadence, errors; calendar/ (types, repeats, Easter, event XP)
+  data/                 Drift tables, database (+ .g.dart), models, mappers, preferences; calendar/ (tables, seed, filter store)
+  services/             quest/mission/recurrence/settings services, XP engine, providers; calendar/ (service, providers)
   ui/                   theme/ (tokens, typography), state/, screens/, sheets/,
                         widgets/ (cards, common, hero, reward, sheet), forms/
   l10n/                 ARB files (cs, en) + generated localizations
 assets/fonts, assets/icons   bundled static TTFs (+ licenses/ OFL texts) and 24px SVG icons (nothing fetched at runtime)
-drift_schemas/               schema dump per version (currently v2)
+drift_schemas/               schema dump per version (currently v3)
 scripts/                     check.sh, check-structure.sh (max 15 source files per directory)
 screenshots/                 README screenshots (English, dark theme, real app at 2x); retake them after visible UI changes
 test/                        mirrors lib/ (core, data, services, ui) + goldens/, helpers/
-.kiro/specs/                 001 domain, 002 UI: requirements, design, tasks
+.kiro/specs/                 001 domain, 002 UI, 003 calendar: requirements, design, tasks
 .design/                     approved visual contract (DESIGN.md, artboards/, screens/, icon/generate.mjs = app icon + launch screen)
 .agents/                     pipeline artifacts: PIPELINE_STATE.json, ISSUES.md, MEMORY.md,
                              USE_CASES.md, runs/2026-11-15-1405/ (one report per phase)

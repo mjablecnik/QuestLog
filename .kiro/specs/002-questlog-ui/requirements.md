@@ -6,6 +6,8 @@
 
 > **Changed 2026-11-18 at Martin's request.** The Difficulty selector became an **Effort** picker with four tiers (Chvilka +10, Hodinka +25, Část dne +50, Celý den +100; English Moment, Hour, Part of a day, Full day), default Hodinka, each option showing name, XP, four pips and a time description, with one hint line below. Pips are now four. Tier names appear only in the Quest_Sheet and never in a list, card or reward card; accessibility labels give the step ("effort 3 of 4"). The text below is superseded where it says three.
 
+> **Changed 2026-11-19 at Martin's request (spec `003-questlog-calendar`).** The app has four tabs: Questy, Mise, Kalendář, Nastavení; the Kalendář tab shows no Hero_Bar. This overrides Requirement 1, criteria 2 and 3. The Board_Screen also lists Event_Tasks (calendar events with the On_Board flag) in the Today section above the Quests; they cannot be reordered or swiped.
+
 ## Introduction
 
 This spec defines the user interface of Questlog, the personal gamified to-do application built in Flutter (iOS primary) under `/workspace/questlog/`. It builds on `001-questlog-domain`, which provides every service, rule and stream the screens use; the UI contains no business logic of its own. The visual contract is `.design/DESIGN.md` together with the artboards in `.design/artboards/` (direction "Guild Board", dark by default, light variant "Daylight", typeface Figtree).
