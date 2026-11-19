@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
+import '../../../data/calendar/calendar_models.dart';
 import '../../../data/models.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../services/providers.dart';
 import '../../sheets/quest_sheet.dart';
 import '../../state/board_day.dart';
+import '../../state/calendar_state.dart';
 import '../../theme/questlog_theme.dart';
 import '../../theme/tokens.dart';
 import '../../widgets/common/add_fab.dart';
@@ -40,13 +42,19 @@ class _BoardScreenState extends ConsumerState<BoardScreen> {
     final AsyncValue<List<Quest>> doneAsync = ref.watch(
       doneTodayProvider(today),
     );
+    final List<EventOccurrence> eventTasks =
+        ref.watch(eventTasksProvider).value ?? const <EventOccurrence>[];
     if (doneAsync.hasValue) _doneSeen = true;
 
     final List<Quest>? open = openAsync.value;
     final List<Quest> done = doneAsync.value ?? const <Quest>[];
     final bool loading = open == null || (!_doneSeen && !doneAsync.hasValue);
     final bool empty =
-        !loading && open.isEmpty && done.isEmpty && !doneAsync.isLoading;
+        !loading &&
+        open.isEmpty &&
+        done.isEmpty &&
+        eventTasks.isEmpty &&
+        !doneAsync.isLoading;
 
     final Widget body;
     if (loading) {
@@ -61,6 +69,7 @@ class _BoardScreenState extends ConsumerState<BoardScreen> {
         done: done,
         today: today,
         missionNames: <int, String>{for (final m in missions) m.id: m.name},
+        eventTasks: eventTasks,
       );
     }
 

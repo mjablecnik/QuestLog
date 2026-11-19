@@ -4,13 +4,17 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 import '../../../core/xp_rules.dart';
+import '../../../data/calendar/calendar_models.dart';
 import '../../../data/models.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../services/providers.dart';
+import '../../state/event_task_actions.dart';
 import '../../state/quest_actions.dart';
 import '../../sheets/quest_sheet.dart';
 import '../../theme/questlog_theme.dart';
 import '../../theme/tokens.dart';
+import '../calendar/event_detail_screen.dart';
+import '../../widgets/calendar/event_task_card.dart';
 import '../../widgets/cards/quest_card.dart';
 import '../../widgets/common/haptics.dart';
 import '../../widgets/sheet/confirm_destructive.dart';
@@ -36,6 +40,17 @@ class _EmptyEntry extends _Entry {
   final BoardSection section;
   @override
   Key get key => ValueKey<String>('empty-${section.name}');
+}
+
+/// An Event_Task: a calendar event to do today. It sits above the Quests of
+/// the Today section and cannot be dragged.
+class _EventEntry extends _Entry {
+  const _EventEntry(this.occurrence);
+  final EventOccurrence occurrence;
+  @override
+  Key get key => ValueKey<String>(
+    'event-${occurrence.event.id}-${occurrence.start.year}-${occurrence.start.month}-${occurrence.start.day}',
+  );
 }
 
 class _QuestEntry extends _Entry {
@@ -69,6 +84,7 @@ class QuestList extends ConsumerStatefulWidget {
     required this.done,
     required this.today,
     this.missionNames = const <int, String>{},
+    this.eventTasks = const <EventOccurrence>[],
   });
 
   /// Every open Quest on the Board, in the manual order, both sections.
@@ -80,6 +96,9 @@ class QuestList extends ConsumerStatefulWidget {
 
   /// Names of the Missions, to label a Quest that belongs to one.
   final Map<int, String> missionNames;
+
+  /// The Event_Tasks of the current Board_Day, all-day first, then by time.
+  final List<EventOccurrence> eventTasks;
 
   @override
   ConsumerState<QuestList> createState() => _QuestListState();
@@ -156,7 +175,8 @@ class _QuestListState extends ConsumerState<QuestList> {
 
   List<_Entry> _entries(List<Quest> today, List<Quest> todo) => <_Entry>[
     const _HeaderEntry(BoardSection.today),
-    if (today.isEmpty) const _EmptyEntry(BoardSection.today),
+    for (final EventOccurrence task in widget.eventTasks) _EventEntry(task),
+    if (today.isEmpty && widget.eventTasks.isEmpty) const _EmptyEntry(BoardSection.today),
     for (final Quest quest in today) _QuestEntry(quest),
     const _HeaderEntry(BoardSection.todo),
     if (todo.isEmpty) const _EmptyEntry(BoardSection.todo),
@@ -186,7 +206,7 @@ class _QuestListState extends ConsumerState<QuestList> {
           current = section;
         case _QuestEntry(:final Quest quest):
           (current == BoardSection.today ? today : todo).add(quest.id);
-        case _EmptyEntry():
+        case _EmptyEntry() || _EventEntry():
           break;
       }
     }
@@ -307,10 +327,15 @@ class _QuestListState extends ConsumerState<QuestList> {
         final List<Quest> quests = section == BoardSection.today
             ? shown.today
             : shown.todo;
-        final int xp = quests.fold<int>(
+        int xp = quests.fold<int>(
           0,
           (int sum, Quest q) => sum + q.difficulty.xp,
         );
+        if (section == BoardSection.today) {
+          xp += widget.eventTasks
+              .where((EventOccurrence o) => !o.isCompleted)
+              .fold<int>(0, (int sum, EventOccurrence o) => sum + eventTaskXp(o));
+        }
         return KeyedSubtree(
           key: entry.key,
           child: BoardSectionHeader(
@@ -335,6 +360,16 @@ class _QuestListState extends ConsumerState<QuestList> {
                 ? l.board_todayEmpty
                 : l.board_todoEmpty,
             style: context.bodyText.bodySmall!.copyWith(color: p.textFaint),
+          ),
+        );
+      case _EventEntry(:final EventOccurrence occurrence):
+        return Padding(
+          key: entry.key,
+          padding: const EdgeInsets.fromLTRB(Space.s20, 0, Space.s20, Space.s10),
+          child: EventTaskCard(
+            occurrence: occurrence,
+            onToggle: () => toggleEventTask(context, ref, occurrence),
+            onTap: () => showEventDetail(context, occurrence.event.id, occurrence.start),
           ),
         );
       case _QuestEntry(:final Quest quest):
