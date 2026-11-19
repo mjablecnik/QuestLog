@@ -1,0 +1,490 @@
+<title>Questlog Poznámky</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&display=swap">
+<style>
+/* Layout: review page. Caption + phone mock-up per screen in Questlog's Blue palette (dark by default,
+   light switchable). Page chrome uses the same blue tokens and follows the viewer's theme. */
+:root {
+  --pg-bg: #edf1f6; --pg-card: #f8fafd; --pg-line: rgba(21,32,43,.12); --pg-text: #15202b;
+  --pg-dim: rgba(21,32,43,.68); --pg-accent: #2b7287; --pg-accent-bg: rgba(43,114,135,.14);
+  --font: 'Figtree', system-ui, -apple-system, sans-serif;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --pg-bg: #0f1319; --pg-card: #18202b; --pg-line: rgba(230,234,242,.12); --pg-text: #e6eaf2;
+  --pg-dim: rgba(230,234,242,.68); --pg-accent: #78b4c4; --pg-accent-bg: rgba(120,180,196,.18); color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --pg-bg: #0f1319; --pg-card: #18202b; --pg-line: rgba(230,234,242,.12); --pg-text: #e6eaf2;
+  --pg-dim: rgba(230,234,242,.68); --pg-accent: #78b4c4; --pg-accent-bg: rgba(120,180,196,.18); color-scheme: dark; }
+
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--pg-bg); color: var(--pg-text); font-family: var(--font); font-size: 15px; line-height: 1.45;
+  -webkit-font-smoothing: antialiased; padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 28px 64px; }
+.wrap { max-width: 1300px; margin: 0 auto; display: flex; flex-direction: column; gap: 36px; }
+h1, h2, h3 { font-weight: 700; letter-spacing: -.02em; line-height: 1.12; margin: 0; text-wrap: balance; }
+h1 { font-size: clamp(30px, 6vw, 44px); }
+h2 { font-size: 19px; }
+p { margin: 0; max-width: 68ch; }
+.lbl { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; font-weight: 600; color: var(--pg-dim); }
+.head { display: flex; flex-direction: column; gap: 12px; }
+.head p { color: var(--pg-dim); }
+.bar { display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: center; justify-content: space-between; }
+.seg { display: inline-flex; border: 1px solid var(--pg-line); border-radius: 12px; padding: 3px; background: var(--pg-card); }
+.seg button { font: inherit; font-weight: 600; font-size: 13px; border: 0; background: none; color: var(--pg-dim);
+  padding: 7px 14px; border-radius: 9px; cursor: pointer; min-height: 36px; }
+.seg button[aria-pressed="true"] { background: var(--pg-accent-bg); color: var(--pg-accent); }
+button:focus-visible { outline: 2px solid var(--pg-accent); outline-offset: 2px; }
+
+.screens { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 390px), 1fr)); gap: 40px 28px; justify-items: center; }
+.shot { display: flex; flex-direction: column; gap: 14px; width: 100%; max-width: 390px; min-width: 0; }
+.shot .cap { display: flex; flex-direction: column; gap: 4px; }
+.shot .cap p { color: var(--pg-dim); font-size: 14px; }
+.fit { width: 390px; height: 844px; transform-origin: top left; }
+.fitbox { width: 100%; }
+
+.notes { border: 1px solid var(--pg-line); background: var(--pg-card); border-radius: 14px; padding: 20px; display: flex; flex-direction: column; gap: 12px; }
+.notes ul { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 6px; color: var(--pg-dim); max-width: 80ch; }
+.notes li b { color: var(--pg-text); }
+
+/* ---------- phone: Questlog Blue ---------- */
+.phone {
+  --board: #0f1319; --board-raised: #18202b; --board-line: rgba(230,234,242,.10);
+  --text: #e6eaf2; --text-dim: rgba(230,234,242,.65); --text-faint: rgba(230,234,242,.40);
+  --brass: #78b4c4; --brass-soft: rgba(120,180,196,.18); --ink-on-brass: #08131a;
+  --destructive: #d96b5a; --scrim: rgba(7,10,16,.72); --sheet: #18202b;
+  --field: rgba(230,234,242,.06); --field-active: rgba(120,180,196,.10);
+  position: relative; width: 390px; height: 844px; overflow: hidden; background: var(--board); color: var(--text);
+  font-family: var(--font); font-size: 15px; line-height: 1.35; display: flex; flex-direction: column;
+  border-radius: 38px; box-shadow: 0 0 0 1px var(--pg-line), 0 24px 60px rgba(0,0,0,.28);
+}
+.phone.light {
+  --board: #edf1f6; --board-raised: #f8fafd; --board-line: rgba(21,32,43,.08);
+  --text: #15202b; --text-dim: rgba(21,32,43,.70); --text-faint: rgba(21,32,43,.42);
+  --brass: #2b7287; --brass-soft: rgba(43,114,135,.14); --ink-on-brass: #f4fafc;
+  --scrim: rgba(21,32,43,.5); --sheet: #f8fafd; --field: rgba(21,32,43,.05); --field-active: rgba(43,114,135,.10);
+}
+.phone * { box-sizing: border-box; }
+.sb { height: 54px; flex: none; display: flex; align-items: flex-end; justify-content: space-between; padding: 0 28px 10px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.sb .r { display: flex; gap: 6px; align-items: center; }
+.home { position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); width: 134px; height: 5px; border-radius: 3px; background: var(--text); opacity: .85; z-index: 5; }
+.content { flex: 1; min-height: 0; overflow: hidden; padding: 8px 20px 0; display: flex; flex-direction: column; gap: 16px; }
+.disp { font-weight: 700; letter-spacing: -.02em; line-height: 1.1; }
+
+.hero { display: flex; align-items: center; gap: 14px; }
+.hero .level { width: 52px; height: 52px; flex: none; border-radius: 50%; border: 2px solid var(--brass); display: grid; place-items: center; color: var(--brass); font-weight: 700; font-size: 22px; background: var(--brass-soft); }
+.hero .meta { flex: 1; min-width: 0; }
+.hero .name { font-size: 17px; font-weight: 600; }
+.hero .xr { display: flex; justify-content: space-between; font-size: 12px; color: var(--text-dim); margin-top: 3px; font-variant-numeric: tabular-nums; }
+.xpbar { height: 6px; border-radius: 3px; background: var(--board-line); margin-top: 7px; overflow: hidden; }
+.xpbar i { display: block; height: 100%; background: var(--brass); border-radius: 3px; }
+.icon-btn { width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; background: var(--field); color: var(--text); flex: none; }
+
+.title-row { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.title-row h1 { margin: 0; font-size: 32px; min-width: 0; overflow-wrap: anywhere; }
+.title-row .count { font-size: 13px; color: var(--text-dim); white-space: nowrap; }
+.search { height: 44px; border-radius: 12px; background: var(--field); display: flex; align-items: center; gap: 10px; padding: 0 14px; color: var(--text-faint); font-size: 15px; }
+.section { display: flex; flex-direction: column; gap: 10px; }
+.l { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; font-weight: 600; color: var(--text-faint); }
+
+.crumbs { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--text-dim); font-weight: 500; flex-wrap: nowrap; overflow: hidden; white-space: nowrap; }
+.crumbs svg { flex: none; opacity: .6; }
+.crumbs b { color: var(--text); font-weight: 600; }
+.nav-row { display: flex; align-items: center; justify-content: space-between; height: 32px; gap: 12px; }
+.back { display: inline-flex; align-items: center; gap: 2px; font-size: 15px; color: var(--brass); font-weight: 500; }
+
+.folder { display: flex; align-items: center; gap: 14px; min-height: 60px; padding: 10px 14px 10px 12px; border-radius: 14px; background: var(--board-raised); border: 1px solid var(--board-line); }
+.folder .ic { width: 40px; height: 40px; flex: none; border-radius: 12px; background: var(--brass-soft); color: var(--brass); display: grid; place-items: center; }
+.folder .b { flex: 1; min-width: 0; }
+.folder .n { font-size: 16px; font-weight: 600; letter-spacing: -.005em; }
+.folder .s { font-size: 12.5px; color: var(--text-dim); margin-top: 1px; }
+.folder .chev { color: var(--text-faint); flex: none; }
+
+.note { display: flex; flex-direction: column; gap: 5px; padding: 13px 16px 14px; border-radius: 14px; background: var(--board-raised); border: 1px solid var(--board-line); }
+.note .top { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.note .t { font-size: 16px; font-weight: 600; letter-spacing: -.005em; min-width: 0; }
+.note .d { font-size: 12px; color: var(--text-faint); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.note .p { font-size: 13.5px; color: var(--text-dim); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+
+.fab { position: absolute; right: 20px; bottom: 104px; width: 58px; height: 58px; border-radius: 50%; background: var(--brass); color: var(--ink-on-brass); display: grid; place-items: center; box-shadow: 0 10px 26px rgba(120,180,196,.30); z-index: 2; }
+.phone.light .fab { box-shadow: 0 10px 26px rgba(43,114,135,.30); }
+.tabbar { flex: none; height: 84px; padding: 10px 12px 0; border-top: 1px solid var(--board-line); background: var(--board-raised); display: flex; justify-content: space-around; }
+.tab { display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 11px; font-weight: 600; color: var(--text-faint); width: 64px; }
+.tab.on { color: var(--brass); }
+
+/* editor */
+.edtop { display: flex; align-items: center; justify-content: space-between; height: 36px; gap: 12px; }
+.edtop .done { font-size: 15px; font-weight: 700; color: var(--brass); }
+.ed { flex: 1; min-height: 0; overflow: hidden; display: flex; flex-direction: column; gap: 12px; outline: none; font-size: 16px; line-height: 1.55; }
+.ed:focus-visible { outline: none; }
+.ed h1 { font-size: 28px; margin: 0; }
+.ed h2 { font-size: 20px; margin: 6px 0 0; font-weight: 700; letter-spacing: -.015em; }
+.ed p { margin: 0; }
+.ed a { color: var(--brass); text-decoration: underline; text-underline-offset: 3px; }
+.ed code { font-family: ui-monospace, 'SF Mono', Menlo, monospace; font-size: 14px; background: var(--field); padding: 1px 6px; border-radius: 6px; }
+.ed ul { margin: 0; padding-left: 22px; display: flex; flex-direction: column; gap: 4px; }
+.ed ul li::marker { color: var(--brass); }
+.ed blockquote { margin: 0; padding: 2px 0 2px 14px; border-left: 3px solid var(--brass); color: var(--text-dim); }
+.ed pre { margin: 0; padding: 12px 14px; border-radius: 12px; background: var(--field); font-family: ui-monospace, 'SF Mono', Menlo, monospace; font-size: 13px; line-height: 1.5; overflow: hidden; }
+.ed pre .k { color: var(--brass); }
+.ed pre .c { color: var(--text-faint); }
+.tasks { display: flex; flex-direction: column; gap: 8px; }
+.task { display: flex; align-items: center; gap: 12px; }
+.task .cb { width: 22px; height: 22px; flex: none; border-radius: 50%; border: 2px solid var(--text-faint); display: grid; place-items: center; }
+.task.x .cb { background: var(--brass); border-color: var(--brass); color: var(--ink-on-brass); }
+.task.x span { color: var(--text-faint); text-decoration: line-through; }
+.caret { display: inline-block; width: 2px; height: 1.15em; background: var(--brass); vertical-align: text-bottom; margin-left: 1px; animation: blink 1.1s steps(1) infinite; }
+@keyframes blink { 50% { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .caret { animation: none; } }
+.fmt { flex: none; margin: 0 -20px; padding: 8px 14px 30px; border-top: 1px solid var(--board-line); background: var(--board-raised); display: flex; gap: 4px; justify-content: space-between; }
+.fmt button { all: unset; box-sizing: border-box; width: 38px; height: 40px; border-radius: 10px; display: grid; place-items: center; color: var(--text-dim); font-weight: 700; font-size: 16px; cursor: pointer; }
+.fmt button.on { background: var(--brass-soft); color: var(--brass); box-shadow: inset 0 0 0 1px var(--brass); }
+.fmt button:focus-visible { outline: 2px solid var(--brass); }
+.fmt i { font-family: Georgia, serif; font-size: 17px; }
+
+/* sheets */
+.scrim { position: absolute; inset: 0; background: var(--scrim); z-index: 3; }
+.sheet { position: absolute; left: 0; right: 0; bottom: 0; z-index: 4; background: var(--sheet); border-radius: 24px 24px 0 0; padding: 10px 20px 38px; display: flex; flex-direction: column; gap: 16px; box-shadow: 0 -20px 60px rgba(0,0,0,.4); }
+.grab { width: 36px; height: 5px; border-radius: 3px; background: var(--text-faint); margin: 0 auto; }
+.sh { display: flex; align-items: center; justify-content: space-between; }
+.sh h2 { margin: 0; font-size: 24px; position: absolute; left: 0; right: 0; text-align: center; pointer-events: none; }
+.sh { position: relative; height: 32px; }
+.sh .cancel { font-size: 15px; color: var(--text-dim); font-weight: 500; position: relative; }
+.choice { display: flex; align-items: center; gap: 14px; padding: 14px; border-radius: 14px; background: var(--field); }
+.choice .ic { width: 44px; height: 44px; border-radius: 12px; background: var(--brass-soft); color: var(--brass); display: grid; place-items: center; flex: none; }
+.choice .n { font-size: 16px; font-weight: 600; }
+.choice .s { font-size: 12.5px; color: var(--text-dim); margin-top: 1px; }
+.where { font-size: 12.5px; color: var(--text-faint); text-align: center; }
+.fg { display: flex; flex-direction: column; gap: 7px; }
+.field { min-height: 48px; border-radius: 12px; background: var(--field); display: flex; align-items: center; padding: 0 14px; font-size: 16px; }
+.field.active { background: var(--field-active); box-shadow: inset 0 0 0 1px var(--brass); }
+.btn { height: 54px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 700; background: var(--brass); color: var(--ink-on-brass); }
+.folder .n, .note .t { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.swrow { position: relative; overflow: hidden; border-radius: 14px; }
+.swrow .folder { transform: translateX(-216px); position: relative; }
+.acts { position: absolute; right: 0; top: 0; bottom: 0; display: flex; }
+.acts span { width: 72px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; font-size: 11.5px; font-weight: 600; background: var(--field); color: var(--text); }
+.acts span.edit { background: var(--board-raised); box-shadow: inset 0 0 0 1px var(--board-line); }
+.acts span.mv { background: var(--brass-soft); color: var(--brass); }
+.acts span.del { background: var(--destructive); color: #2b0f0a; }
+.tree { display: flex; flex-direction: column; gap: 4px; }
+.tr { display: flex; align-items: center; gap: 12px; min-height: 46px; padding: 0 12px; border-radius: 12px; font-size: 15.5px; font-weight: 500; }
+.tr .ic { color: var(--text-dim); flex: none; display: grid; }
+.tr .tag { margin-left: auto; font-size: 11.5px; color: var(--text-faint); font-weight: 600; white-space: nowrap; }
+.tr.sel { background: var(--brass-soft); box-shadow: inset 0 0 0 1px var(--brass); color: var(--brass); font-weight: 600; }
+.tr.sel .ic { color: var(--brass); }
+.tr.off { opacity: .4; }
+.dlg { position: absolute; z-index: 4; left: 24px; right: 24px; top: 50%; transform: translateY(-50%); background: var(--sheet); border-radius: 22px; padding: 24px 20px 20px; display: flex; flex-direction: column; gap: 14px; box-shadow: 0 20px 60px rgba(0,0,0,.45); }
+.dlg .wi { width: 48px; height: 48px; border-radius: 50%; background: rgba(217,107,90,.18); color: var(--destructive); display: grid; place-items: center; }
+.dlg h2 { margin: 0; font-size: 22px; }
+.dlg p { font-size: 14.5px; color: var(--text-dim); line-height: 1.45; }
+.dlg p b { color: var(--text); font-weight: 600; }
+.btn.danger { background: var(--destructive); color: #2b0f0a; }
+.btn.ghost { background: var(--field); color: var(--text); font-weight: 600; }
+.rt { display: flex; align-items: center; gap: 10px; flex: none; }
+.tb { position: relative; color: var(--text-dim); }
+.tb .bdg { position: absolute; top: -4px; right: -5px; min-width: 16px; height: 16px; padding: 0 4px; border-radius: 8px; background: var(--brass); color: var(--ink-on-brass); font-style: normal; font-size: 10.5px; font-weight: 700; display: grid; place-items: center; font-variant-numeric: tabular-nums; }
+.info { display: flex; gap: 10px; align-items: flex-start; padding: 12px 14px; border-radius: 12px; background: var(--field); font-size: 13px; color: var(--text-dim); line-height: 1.4; }
+.info svg { flex: none; margin-top: 1px; color: var(--brass); }
+.trow { display: flex; align-items: center; gap: 12px; padding: 12px 12px 12px 14px; border-radius: 14px; background: var(--board-raised); border: 1px solid var(--board-line); }
+.trow .ic { width: 36px; height: 36px; flex: none; border-radius: 10px; background: var(--field); color: var(--text-dim); display: grid; place-items: center; }
+.trow .b { flex: 1; min-width: 0; }
+.trow .n { font-size: 15.5px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.trow .s { font-size: 12px; color: var(--text-faint); margin-top: 1px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.trow .s.soon { color: var(--destructive); font-weight: 600; }
+.trow .post { flex: none; height: 30px; padding: 0 12px; border-radius: 15px; display: flex; align-items: center; font-size: 12.5px; font-weight: 600; color: var(--brass); border: 1px solid var(--brass); background: var(--brass-soft); }
+.btn.outline { background: transparent; color: var(--destructive); border: 1px solid var(--destructive); font-weight: 600; }
+.scrim.soft { background: rgba(7,10,16,.45); }
+.phone.light .scrim.soft { background: rgba(21,32,43,.3); }
+.menu { position: absolute; right: 16px; z-index: 4; width: 244px; background: var(--sheet); border-radius: 16px; padding: 6px; box-shadow: 0 16px 44px rgba(0,0,0,.45), 0 0 0 1px var(--board-line); }
+.mi { display: flex; align-items: center; gap: 12px; height: 48px; padding: 0 12px; border-radius: 11px; font-size: 15.5px; font-weight: 500; }
+.mi svg { flex: none; color: var(--text-dim); }
+.mi.dg { color: var(--destructive); }
+.mi.dg svg { color: var(--destructive); }
+.mdiv { height: 1px; background: var(--board-line); margin: 4px 8px; }
+.swrow.two .trow { transform: translateX(-144px); position: relative; }
+.sub { font-size: 13px; color: var(--text-dim); text-align: center; margin-top: -6px; }
+</style>
+
+<div class="wrap">
+  <div class="head">
+    <span class="lbl">Questlog · návrh nové funkce</span>
+    <h1>Poznámky</h1>
+    <p>Nová záložka ve spodní liště. Složky a podsložky třídí poznámky, poznámka je poslední úroveň a otevře se ve WYSIWYG editoru s markdownem. Náhled je v modrém tématu, ve stylu stávajících obrazovek.</p>
+  </div>
+
+  <div class="bar">
+    <span class="lbl">Telefony</span>
+    <div class="seg" role="group" aria-label="Téma telefonu">
+      <button type="button" id="t-dark" aria-pressed="true">Tmavé</button>
+      <button type="button" id="t-light" aria-pressed="false">Světlé</button>
+    </div>
+  </div>
+
+  <div class="screens" id="screens"></div>
+
+  <div class="notes">
+    <h2>Co je v návrhu a co zbývá rozhodnout</h2>
+    <ul>
+      <li><b>Spodní lišta</b> má pět záložek: Questy, Mise, Kalendář, Poznámky, Nastavení.</li>
+      <li><b>Složky</b> se zobrazují nad poznámkami, kliknutím se otevřou. Cesta nahoře (drobečky) ukazuje, kde jsi; hloubka není omezená.</li>
+      <li><b>Editor</b> skrývá spodní lištu a nabízí lištu formátování nad klávesnicí. Zkus psát v 3. telefonu, tlačítka fungují.</li>
+      <li><b>Plus</b> otevře výběr Nová poznámka / Nová složka a vytvoří ji v aktuální složce.</li>
+      <li><b>Přejmenování, přesun, mazání</b> jsou ve swipe akcích u složek i poznámek (obrazovky 6 až 9). Neprázdná složka se maže jen po varování.</li>
+      <li><b>Hledání</b> v první verzi není.</li>
+      <li><b>Koš:</b> smazané položky tam zůstávají 30 dní, pak se smažou navždy. Přístup je přes ikonu v záhlaví seznamu poznámek.</li>
+      <li><b>Akce jsou dvakrát:</b> pod swipem v seznamu a v menu … v detailu složky i v editoru poznámky. V koši lze položky jednotlivě obnovit nebo smazat natrvalo, vždy s potvrzením.</li>
+    </ul>
+  </div>
+</div>
+
+<script>
+(function () {
+  var S = function (w, h, d, extra) { return '<svg width="' + w + '" height="' + h + '" viewBox="0 0 ' + (extra || '24 24') + '" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">' + d + '</svg>'; };
+  var I = {
+    folder: S(22, 22, '<path d="M3 7a2 2 0 0 1 2-2h4l2 2.5h8a2 2 0 0 1 2 2V18a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>'),
+    folderPlus: S(24, 24, '<path d="M3 7a2 2 0 0 1 2-2h4l2 2.5h8a2 2 0 0 1 2 2V18a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M12 11v6M9 14h6"/>'),
+    docPlus: S(24, 24, '<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M12 11v6M9 14h6"/>'),
+    chev: S(18, 18, '<path d="M9 6l6 6-6 6"/>'),
+    left: S(20, 20, '<path d="M15 6l-6 6 6 6"/>'),
+    crumb: S(12, 12, '<path d="M9 6l6 6-6 6"/>'),
+    search: S(18, 18, '<circle cx="11" cy="11" r="6.5"/><path d="M16 16l4 4"/>'),
+    plus: S(26, 26, '<path d="M13 4v18M4 13h18"/>', '26 26').replace('stroke-width="1.8"', 'stroke-width="2.6"'),
+    more: S(18, 18, '<circle cx="5" cy="12" r="1.2" fill="currentColor"/><circle cx="12" cy="12" r="1.2" fill="currentColor"/><circle cx="19" cy="12" r="1.2" fill="currentColor"/>'),
+    gear: S(18, 18, '<circle cx="10" cy="10" r="2.6"/><path d="M10 2.5l1.2 2.1 2.4-.4.9 2.3 2.3.9-.4 2.4 2.1 1.2-2.1 1.2.4 2.4-2.3.9-.9 2.3-2.4-.4L10 17.5l-1.2-2.1-2.4.4-.9-2.3-2.3-.9.4-2.4L1.5 10l2.1-1.2-.4-2.4 2.3-.9.9-2.3 2.4.4z"/>', '20 20'),
+    check: S(13, 13, '<path d="M4 10.5l4 4 8-9"/>', '20 20').replace('stroke-width="1.8"', 'stroke-width="3"'),
+    ul: S(20, 20, '<path d="M9 6h11M9 12h11M9 18h11"/><circle cx="4.5" cy="6" r="1" fill="currentColor"/><circle cx="4.5" cy="12" r="1" fill="currentColor"/><circle cx="4.5" cy="18" r="1" fill="currentColor"/>'),
+    task: S(20, 20, '<circle cx="12" cy="12" r="8.5"/><path d="M8.5 12.3l2.5 2.5 4.5-5"/>'),
+    quote: S(20, 20, '<path d="M5 6v12"/><path d="M10 8h9M10 12h9M10 16h6"/>'),
+    code: S(20, 20, '<path d="M8 7l-5 5 5 5M16 7l5 5-5 5"/>'),
+    link: S(20, 20, '<path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/>'),
+    kbd: S(20, 20, '<path d="M6 9l6 6 6-6"/>'),
+    tQ: S(26, 26, '<path d="M7 3h12a2 2 0 0 1 2 2v16l-3-2-3 2-3-2-3 2-3-2V5a2 2 0 0 1 2-2z"/><path d="M9 9h8M9 13h8M9 17h5"/>'),
+    tM: S(26, 26, '<path d="M6 23V4"/><path d="M6 4h14l-3 5 3 5H6"/>'),
+    tC: S(26, 26, '<rect x="4" y="5" width="18" height="17" rx="3"/><path d="M4 11h18M9 3v4M17 3v4"/>'),
+    tN: S(26, 26, '<path d="M16.5 3.5l6 6L10 22H4v-6z"/><path d="M14 6l6 6"/>')
+  };
+
+  I.gearPath = '<circle cx="10" cy="10" r="2.6"/><path d="M10 2.5l1.2 2.1 2.4-.4.9 2.3 2.3.9-.4 2.4 2.1 1.2-2.1 1.2.4 2.4-2.3.9-.9 2.3-2.4-.4L10 17.5l-1.2-2.1-2.4.4-.9-2.3-2.3-.9.4-2.4L1.5 10l2.1-1.2-.4-2.4 2.3-.9.9-2.3 2.4.4z"/>';
+  function statusbar(t) {
+    return '<div class="sb"><span>' + t + '</span><span class="r">' +
+      '<svg width="18" height="12" viewBox="0 0 18 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx=".8"/><rect x="5" y="5.5" width="3" height="6.5" rx=".8"/><rect x="10" y="3" width="3" height="9" rx=".8"/><rect x="15" y="0" width="3" height="12" rx=".8"/></svg>' +
+      '<svg width="27" height="13" viewBox="0 0 27 13"><rect x=".5" y=".5" width="22" height="12" rx="3" fill="none" stroke="currentColor" opacity=".5"/><rect x="2" y="2" width="19" height="9" rx="1.8" fill="currentColor"/><rect x="24" y="4" width="2" height="5" rx="1" fill="currentColor" opacity=".5"/></svg></span></div>';
+  }
+  function tabs() {
+    var t = [['Questy', I.tQ], ['Mise', I.tM], ['Kalendář', I.tC], ['Poznámky', I.tN], ['Nastavení', S(26, 26, I.gearPath, '20 20')]];
+    return '<div class="tabbar">' + t.map(function (x, i) { return '<div class="tab' + (i === 3 ? ' on' : '') + '">' + x[1] + '<span>' + x[0] + '</span></div>'; }).join('') + '</div>';
+  }
+  function hero() { return ''; }
+  function heroUnused() {
+    return '<div class="hero"><div class="level">4</div><div class="meta"><div class="name">Martin · Úroveň 4</div><div class="xr"><span>1 240 / 1 500 XP</span><span>260 XP do úrovně 5</span></div><div class="xpbar"><i style="width:83%"></i></div></div><span class="icon-btn" style="color:var(--text-dim)">' + I.gear + '</span></div>';
+  }
+  function folder(n, s) { return '<div class="folder"><span class="ic">' + I.folder + '</span><div class="b"><div class="n">' + n + '</div><div class="s">' + s + '</div></div><span class="chev">' + I.chev + '</span></div>'; }
+  function note(t, d, p) { return '<div class="note"><div class="top"><span class="t">' + t + '</span><span class="d">' + d + '</span></div><div class="p">' + p + '</div></div>'; }
+  function trashBtn() { return '<span class="rt"><span class="count">4 složky · 3 poznámky</span><span class="icon-btn tb" aria-label="Koš">' + I.trash + '<i class="bdg">6</i></span></span>'; }
+  function phone(inner) { return '<div class="phone">' + inner + '<div class="home"></div></div>'; }
+
+  var P = {};
+
+  P.root = phone(statusbar('19:41') + '<div class="content">' + hero() +
+    '<div class="title-row"><h1 class="disp">Poznámky</h1>' + trashBtn() + '</div>' +
+    '<div class="section"><span class="l">Složky</span>' +
+      folder('ABAP', '2 složky · 9 poznámek') + folder('Domov', '5 poznámek') + folder('Nápady na appky', '3 poznámky') + folder('Cestování', '1 složka · 2 poznámky') + '</div>' +
+    '<div class="section"><span class="l">Poznámky</span>' +
+      note('Nákupní seznam', 'dnes', 'Mléko, chleba, kávová zrna, citrony, pesto, parmazán, něco na víkend') +
+      note('Co si přečíst', 'včera', 'Clean ABAP, ABAP Cloud intro, Designing Data-Intensive Applications') + '</div>' +
+    '</div><div class="fab">' + I.plus + '</div>' + tabs());
+
+  P.folder = phone(statusbar('19:43') + '<div class="content">' +
+    '<div class="nav-row"><span class="back">' + I.left + 'Poznámky</span><span class="icon-btn">' + I.more + '</span></div>' +
+    '<div class="crumbs"><span>Poznámky</span>' + I.crumb + '<span>ABAP</span>' + I.crumb + '<b>Syntaxe</b></div>' +
+    '<div class="title-row"><h1 class="disp">Syntaxe</h1><span class="count">1 složka · 4 poznámky</span></div>' +
+    '<div class="section"><span class="l">Složky</span>' + folder('Interní tabulky', '3 poznámky') + '</div>' +
+    '<div class="section"><span class="l">Poznámky</span>' +
+      note('Inline deklarace', '17. 11.', 'DATA(lv_text) = |Ahoj { sy-uname }|. Odpovídá Dartu var, jen s typem odvozeným z pravé strany.') +
+      note('SELECT a JOIN', '15. 11.', 'SELECT carrid, connid FROM spfli INTO TABLE @DATA(lt_flights) WHERE cityfrom = @lv_city.') +
+      note('Řetězcové šablony', '12. 11.', 'Pipe znaky |…| a výrazy ve složených závorkách. Formátování pomocí WIDTH, ALIGN a DECIMALS.') +
+      note('Konstruktorové výrazy', '9. 11.', 'VALUE, NEW, CONV, COND, SWITCH. Hodí se hlavně při plnění tabulek.') + '</div>' +
+    '</div><div class="fab">' + I.plus + '</div>' + tabs());
+
+  P.editor = phone(statusbar('19:45') + '<div class="content" style="gap:12px">' +
+    '<div class="edtop"><span class="back">' + I.left + 'Syntaxe</span><span class="rt" style="gap:14px"><span class="icon-btn">' + I.more + '</span><span class="done">Hotovo</span></span></div>' +
+    '<div class="ed" id="ed" contenteditable="true" spellcheck="false" aria-label="Text poznámky">' +
+      '<h1 class="disp">Inline deklarace</h1>' +
+      '<p>V <b>moderním ABAPu</b> už nemusíš proměnné deklarovat předem. Typ se odvodí z <i>pravé strany</i> přiřazení, podobně jako <code>var</code> v Dartu.</p>' +
+      '<h2>Kdy se hodí</h2>' +
+      '<ul><li>výsledek <code>SELECT</code> do nové tabulky</li><li>pomocné proměnné ve smyčce</li><li>řetězec složený z více částí</li></ul>' +
+      '<blockquote>Čti zleva doprava: co dostanu, to je typ.</blockquote>' +
+      '<pre><span class="c">" nová tabulka rovnou z dotazu</span>\n<span class="k">SELECT</span> * <span class="k">FROM</span> spfli\n  <span class="k">INTO TABLE</span> @<span class="k">DATA</span>(lt_flights).</pre>' +
+      '<div class="tasks"><div class="task x"><span class="cb">' + I.check + '</span><span>Projít kapitolu o výrazech</span></div><div class="task"><span class="cb"></span><span>Vyzkoušet na cvičném systému<span class="caret"></span></span></div></div>' +
+    '</div>' +
+    '<div class="fmt" id="fmt">' +
+      '<button type="button" data-c="bold" aria-label="Tučně">B</button>' +
+      '<button type="button" data-c="italic" aria-label="Kurzíva"><i>I</i></button>' +
+      '<button type="button" data-c="h2" aria-label="Nadpis">H</button>' +
+      '<button type="button" data-c="insertUnorderedList" aria-label="Odrážky">' + I.ul + '</button>' +
+      '<button type="button" data-c="quote" aria-label="Citace">' + I.quote + '</button>' +
+      '<button type="button" data-c="code" aria-label="Kód">' + I.code + '</button>' +
+      '<button type="button" data-c="link" aria-label="Odkaz">' + I.link + '</button>' +
+    '</div></div>');
+
+  P.add = phone(statusbar('19:44') + '<div class="content">' +
+    '<div class="nav-row"><span class="back">' + I.left + 'ABAP</span><span class="icon-btn">' + I.more + '</span></div>' +
+    '<div class="crumbs"><span>Poznámky</span>' + I.crumb + '<b>ABAP</b></div>' +
+    '<div class="title-row"><h1 class="disp">ABAP</h1><span class="count">2 složky · 9 poznámek</span></div>' +
+    '<div class="section"><span class="l">Složky</span>' + folder('Syntaxe', '1 složka · 4 poznámky') + folder('Cvičení', '5 poznámek') + '</div>' +
+    '<div class="section"><span class="l">Poznámky</span>' + note('Cheatsheet odkazy', '3. 11.', 'Odkazy na dokumentaci, ABAP Keyword Documentation a Clean ABAP styleguide.') + '</div>' +
+    '</div>' + tabs() +
+    '<div class="scrim"></div><div class="sheet"><div class="grab"></div>' +
+      '<div class="sh"><span class="cancel">Zrušit</span><h2 class="disp">Přidat</h2></div>' +
+      '<div class="choice"><span class="ic">' + I.docPlus + '</span><div><div class="n">Nová poznámka</div><div class="s">Prázdná stránka s editorem</div></div></div>' +
+      '<div class="choice"><span class="ic">' + I.folderPlus + '</span><div><div class="n">Nová složka</div><div class="s">Pro třídění poznámek a dalších složek</div></div></div>' +
+      '<div class="where">Vytvoří se ve složce ABAP</div></div>');
+
+  P.newfolder = phone(statusbar('19:44') + '<div class="content">' +
+    '<div class="nav-row"><span class="back">' + I.left + 'ABAP</span><span class="icon-btn">' + I.more + '</span></div>' +
+    '<div class="crumbs"><span>Poznámky</span>' + I.crumb + '<b>ABAP</b></div>' +
+    '<div class="title-row"><h1 class="disp">ABAP</h1><span class="count">2 složky · 9 poznámek</span></div>' +
+    '<div class="section"><span class="l">Složky</span>' + folder('Syntaxe', '1 složka · 4 poznámky') + folder('Cvičení', '5 poznámek') + '</div>' +
+    '</div>' + tabs() +
+    '<div class="scrim"></div><div class="sheet" style="gap:18px"><div class="grab"></div>' +
+      '<div class="sh"><span class="cancel">Zrušit</span><h2 class="disp">Nová složka</h2></div>' +
+      '<div class="fg"><span class="l">Název</span><div class="field active">Objekty a třídy<span class="caret"></span></div></div>' +
+      '<div class="where" style="text-align:left">Vytvoří se ve složce ABAP</div>' +
+      '<div class="btn">Vytvořit složku</div></div>');
+
+  I.pen = S(20, 20, '<path d="M4 20l1-4L16 5l3 3L8 19z"/><path d="M14 7l3 3"/>');
+  I.move = S(20, 20, '<path d="M3 7a2 2 0 0 1 2-2h4l2 2.5h8a2 2 0 0 1 2 2V18a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 14h7M13 11l3 3-3 3"/>');
+  I.trash = S(20, 20, '<path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/>');
+  I.warn = S(26, 26, '<path d="M12 4l9.5 16.5h-19z"/><path d="M12 10v4.5M12 17.6v.1"/>');
+  I.tick = S(18, 18, '<path d="M4 10.5l4 4 8-9"/>', '20 20').replace('stroke-width="1.8"', 'stroke-width="2.4"');
+
+  function rootBody(swipe) {
+    var sw = '<div class="swrow"><div class="acts"><span class="edit">' + I.pen + 'Název</span><span class="mv">' + I.move + 'Přesunout</span><span class="del">' + I.trash + 'Smazat</span></div>' + folder('ABAP', '2 složky · 9 poznámek') + '</div>';
+    return statusbar('19:46') + '<div class="content">' + hero() +
+      '<div class="title-row"><h1 class="disp">Poznámky</h1>' + trashBtn() + '</div>' +
+      '<div class="section"><span class="l">Složky</span>' + (swipe ? sw : folder('ABAP', '2 složky · 9 poznámek')) + folder('Domov', '5 poznámek') + folder('Nápady na appky', '3 poznámky') + folder('Cestování', '1 složka · 2 poznámky') + '</div>' +
+      '<div class="section"><span class="l">Poznámky</span>' + note('Nákupní seznam', 'dnes', 'Mléko, chleba, kávová zrna, citrony, pesto, parmazán, něco na víkend') + note('Co si přečíst', 'včera', 'Clean ABAP, ABAP Cloud intro, Designing Data-Intensive Applications') + '</div>' +
+      '</div><div class="fab">' + I.plus + '</div>' + tabs();
+  }
+  P.swipe = phone(rootBody(true));
+
+  function tr(name, ind, o) {
+    o = o || {};
+    return '<div class="tr' + (o.sel ? ' sel' : '') + (o.off ? ' off' : '') + '" style="margin-left:' + ind * 22 + 'px"><span class="ic">' + I.folder + '</span><span>' + name + '</span>' + (o.tag ? '<span class="tag">' + o.tag + '</span>' : '') + (o.sel ? '<span style="margin-left:auto;display:grid">' + I.tick + '</span>' : '') + '</div>';
+  }
+  P.move = phone(statusbar('19:47') + '<div class="content">' + hero() + '<div class="title-row"><h1 class="disp">Poznámky</h1></div></div>' + tabs() +
+    '<div class="scrim"></div><div class="sheet" style="gap:12px"><div class="grab"></div>' +
+      '<div class="sh"><span class="cancel">Zrušit</span><h2 class="disp">Přesunout</h2></div>' +
+      '<div class="sub">Poznámka „Inline deklarace“</div>' +
+      '<div class="tree">' + tr('Poznámky', 0, { tag: 'kořen' }) + tr('ABAP', 1) + tr('Syntaxe', 2, { tag: 'současné umístění' }) + tr('Cvičení', 2, { sel: true }) + tr('Domov', 1) + tr('Nápady na appky', 1) + tr('Cestování', 1) + '</div>' +
+      '<div class="btn" style="margin-top:6px">Přesunout do složky Cvičení</div></div>');
+
+  P.del = phone(rootBody(false) + '<div class="scrim"></div><div class="dlg"><div class="wi">' + I.warn + '</div>' +
+    '<h2 class="disp">Smazat složku ABAP?</h2>' +
+    '<p>Složka obsahuje <b>2 složky</b> a <b>9 poznámek</b>. Přesunou se i s celým obsahem do koše a po <b>30 dnech</b> se smažou navždy.</p>' +
+    '<div class="btn danger" style="margin-top:4px">Přesunout do koše</div><div class="btn ghost">Zrušit</div></div>');
+
+  P.rename = phone(statusbar('19:46') + '<div class="content">' + hero() + '<div class="title-row"><h1 class="disp">Poznámky</h1></div></div>' + tabs() +
+    '<div class="scrim"></div><div class="sheet" style="gap:18px"><div class="grab"></div>' +
+      '<div class="sh"><span class="cancel">Zrušit</span><h2 class="disp">Přejmenovat</h2></div>' +
+      '<div class="fg"><span class="l">Název složky</span><div class="field active">ABAP<span class="caret"></span></div></div>' +
+      '<div class="btn">Uložit</div></div>');
+
+  function trow(icon, n, s, soon) { return '<div class="trow"><span class="ic">' + icon + '</span><div class="b"><div class="n">' + n + '</div><div class="s' + (soon ? ' soon' : '') + '">' + s + '</div></div><span class="post">Obnovit</span></div>'; }
+  var docI = S(20, 20, '<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/>');
+  P.trash = phone(statusbar('19:48') + '<div class="content">' +
+    '<div class="nav-row"><span class="back">' + I.left + 'Poznámky</span></div>' +
+    '<div class="title-row"><h1 class="disp">Koš</h1><span class="count">6 položek</span></div>' +
+    '<div class="info">' + S(18, 18, '<circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8v.1"/>') + '<span>Položky se v koši uchovávají 30 dní, pak se smažou navždy. Složka se obnoví i s obsahem.</span></div>' +
+    '<div class="section"><span class="l">Smazané</span>' +
+      trow(docI, 'Starý nákupní seznam', 'z Poznámky · smaže se za 1 den', true) +
+      trow(I.folder, 'Staré projekty', 'složka, 3 poznámky · smaže se za 9 dní') +
+      trow(docI, 'Poznámky z porady', 'z Práce · smaže se za 17 dní') +
+      trow(docI, 'Recept na focaccii', 'z Domov · smaže se za 24 dní') +
+      trow(docI, 'Seznam filmů', 'z Poznámky · smaže se za 29 dní') +
+      trow(docI, 'Napády na název appky', 'z Nápady na appky · smaže se za 30 dní') + '</div>' +
+    '<div class="btn outline" style="margin-top:auto;margin-bottom:12px">Vysypat koš</div></div>' + tabs());
+
+  function menuHtml(top) {
+    return '<div class="scrim soft"></div><div class="menu" style="top:' + top + 'px">' +
+      '<div class="mi">' + I.pen + 'Přejmenovat</div><div class="mi">' + I.move + 'Přesunout</div><div class="mdiv"></div><div class="mi dg">' + I.trash + 'Přesunout do koše</div></div>';
+  }
+  var HOME = '<div class="home"></div></div>';
+  P.menuFolder = P.folder.replace(HOME, menuHtml(90) + HOME);
+  P.menuNote = P.editor.replace('id="ed"', '').replace('id="fmt"', '').replace('contenteditable="true"', 'contenteditable="false"').replace(HOME, menuHtml(94) + HOME);
+
+  function trashPhone(mode) {
+    var first = trow(docI, 'Starý nákupní seznam', 'z Poznámky · smaže se za 1 den', true);
+    if (mode) first = '<div class="swrow two"><div class="acts"><span class="mv">' + I.undo + 'Obnovit</span><span class="del">' + I.trash + 'Navždy</span></div>' + first + '</div>';
+    return phone(statusbar('19:49') + '<div class="content">' +
+      '<div class="nav-row"><span class="back">' + I.left + 'Poznámky</span></div>' +
+      '<div class="title-row"><h1 class="disp">Koš</h1><span class="count">6 položek</span></div>' +
+      '<div class="section"><span class="l">Smazané</span>' + first +
+        trow(I.folder, 'Staré projekty', 'složka, 3 poznámky · smaže se za 9 dní') +
+        trow(docI, 'Poznámky z porady', 'z Práce · smaže se za 17 dní') +
+        trow(docI, 'Recept na focaccii', 'z Domov · smaže se za 24 dní') + '</div>' +
+      '<div class="btn outline" style="margin-top:auto;margin-bottom:12px">Vysypat koš</div></div>' + tabs() +
+      (mode === 2 ? '<div class="scrim"></div><div class="dlg"><div class="wi">' + I.warn + '</div><h2 class="disp">Smazat navždy?</h2><p>Poznámka <b>Starý nákupní seznam</b> se smaže natrvalo a nepůjde vrátit.</p><div class="btn danger" style="margin-top:4px">Smazat navždy</div><div class="btn ghost">Zrušit</div></div>' : ''));
+  }
+  I.undo = S(20, 20, '<path d="M9 8L5 12l4 4"/><path d="M5 12h9a5 5 0 0 1 0 10h-3" transform="translate(0 -5)"/>');
+  P.trashSwipe = trashPhone(1);
+  P.trashDel = trashPhone(2);
+
+  var screens = [
+    ['root', '1 · Seznam poznámek', 'Nová záložka. Nahoře složky, pod nimi poznámky z kořenové úrovně. Plus vytváří nové položky.'],
+    ['folder', '2 · Uvnitř složky', 'Drobečková cesta a zpětná šipka. Složka může obsahovat podsložky i poznámky, hloubka není omezená.'],
+    ['editor', '3 · Editor poznámky', 'WYSIWYG, markdown se rovnou vykresluje. Lišta formátování je nad klávesnicí. Kliknutím do textu si zkus psát.'],
+    ['add', '4 · Tlačítko plus', 'Sheet ve stejném stylu jako u questů. Říká, kam se položka vytvoří.'],
+    ['newfolder', '5 · Nová složka', 'Jediné pole s názvem. Nová poznámka se rovnou otevře v editoru, název se bere z prvního nadpisu.'],
+    ['swipe', '6 · Akce na položce', 'Swipe doleva u složky i poznámky ukáže Název, Přesunout a Smazat, stejně jako u questů. Obsah poznámky se upravuje otevřením.'],
+    ['rename', '7 · Přejmenování', 'Stejný sheet jako nová složka, předvyplněný aktuálním názvem. U poznámky se mění název stejným způsobem.'],
+    ['move', '8 · Přesunutí', 'Strom složek, současné umístění je označené. Při přesouvání složky jsou ona sama a její podsložky nedostupné, aby nešla vložit sama do sebe.'],
+    ['del', '9 · Smazání neprázdné složky', 'Varování uvádí, kolik složek a poznámek se smaže. Prázdná složka a jednotlivá poznámka se do koše přesouvají bez dialogu.'],
+    ['menuFolder', '11 · Menu složky', 'Stejné akce jako pod swipem, i v detailu složky přes ikonu … vpravo nahoře. Přejmenovat otevře sheet z obrazovky 7, Přesunout strom z obrazovky 8, smazání neprázdné složky ukazuje varování z obrazovky 9.'],
+    ['menuNote', '12 · Menu poznámky', 'V editoru je … vedle tlačítka Hotovo. Nabízí stejné tři akce, takže poznámku nemusíš zavírat a házet swipem v seznamu.'],
+    ['trashSwipe', '13 · Koš: akce swipem', 'Swipe doleva u položky v koši nabízí Obnovit a Navždy. Tlačítko Obnovit na řádku zůstává jako zkratka.'],
+    ['trashDel', '14 · Smazání natrvalo', 'Mazání z koše je nevratné, proto se před ním ptáme. Stejný dialog platí pro Vysypat koš, s počtem položek.'],
+    ['trash', '10 · Koš', 'Vstup je ikona koše s počtem položek vpravo v záhlaví seznamu (viz obrazovka 1). Každá položka ukazuje, odkud je a za kolik dní se smaže. Obnovit ji vrátí na původní místo, a když už neexistuje, do kořene.']
+  ];
+  var host = document.getElementById('screens');
+  host.innerHTML = screens.map(function (s) {
+    return '<div class="shot"><div class="cap"><h2>' + s[1] + '</h2><p>' + s[2] + '</p></div><div class="fitbox"><div class="fit">' + P[s[0]] + '</div></div></div>';
+  }).join('');
+
+  // scale phones down on narrow screens
+  function fit() {
+    document.querySelectorAll('.fitbox').forEach(function (b) {
+      var k = Math.min(1, b.clientWidth / 390);
+      var f = b.firstElementChild;
+      f.style.transform = k < 1 ? 'scale(' + k + ')' : '';
+      b.style.height = (844 * k) + 'px';
+    });
+  }
+  window.addEventListener('resize', fit); fit();
+
+  // theme switch for the phones
+  function setTheme(light) {
+    document.querySelectorAll('.phone').forEach(function (p) { p.classList.toggle('light', light); });
+    document.getElementById('t-dark').setAttribute('aria-pressed', String(!light));
+    document.getElementById('t-light').setAttribute('aria-pressed', String(light));
+  }
+  document.getElementById('t-dark').onclick = function () { setTheme(false); };
+  document.getElementById('t-light').onclick = function () { setTheme(true); };
+
+  // working toolbar in the editor mock-up
+  var ed = document.getElementById('ed');
+  document.getElementById('fmt').addEventListener('mousedown', function (e) { e.preventDefault(); });
+  document.getElementById('fmt').addEventListener('click', function (e) {
+    var b = e.target.closest('button'); if (!b) return;
+    var c = b.dataset.c; ed.focus();
+    try {
+      if (c === 'h2') document.execCommand('formatBlock', false, 'h2');
+      else if (c === 'quote') document.execCommand('formatBlock', false, 'blockquote');
+      else if (c === 'code') { var sel = window.getSelection(); if (sel && sel.toString()) document.execCommand('insertHTML', false, '<code>' + sel.toString() + '</code>'); }
+      else if (c === 'link') { var s2 = window.getSelection(); if (s2 && s2.toString()) document.execCommand('insertHTML', false, '<a href="#">' + s2.toString() + '</a>'); }
+      else document.execCommand(c);
+    } catch (err) {}
+    b.classList.toggle('on', c === 'bold' || c === 'italic' ? document.queryCommandState(c) : false);
+  });
+})();
+</script>

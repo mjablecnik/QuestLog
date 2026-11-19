@@ -32,10 +32,10 @@ Questlog is a personal gamified to-do app for one user, built with Flutter for i
   (by the event's length, or by its type for an all-day event).
 - **Recurring missions** are posted automatically from rules set up in Settings (daily,
   weekly, biweekly, monthly, quarterly or yearly).
-- **Two looks and two languages**: the dark "Guild Board" and the light "Daylight" theme
+- **Two looks and two languages**: a dark and a light theme of the blue palette
   (or follow the system), in Czech or English.
-  Two temporary Settings controls (a title-font picker and a palette switch between the
-  original and a higher-contrast look) exist only until the final choices are made.
+  One temporary Settings control, the title-font picker, exists only until the final choice
+  is made.
 - **Licences**: the bundled fonts are under the SIL Open Font License; their texts ship in
   `assets/fonts/licenses/` and are listed under Settings → About → Licenses.
 - **Local only**: data lives in a SQLite file on the device through Drift. There is no

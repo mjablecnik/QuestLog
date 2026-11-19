@@ -91,21 +91,12 @@ fonts), and the `font_*` ARB keys. The `display_font` column of `app_state` need
 migration to drop it (plus a new dump in `drift_schemas/`), or can stay unused.
 Figtree stays as the body face either way.
 
-## Temporary palette switch
+## Palette
 
-Settings has a "Palette" control with four options (Original, Higher contrast, Blue, Green),
-same lifetime as the font picker. In every palette `brass` is the accent colour. Remove once
-Martin has chosen: `lib/ui/screens/settings/palette_section.dart`,
-`lib/ui/state/palette_choice.dart`, `lib/data/palette_choice_store.dart`, the palette
-selection in `lib/app.dart` and `lib/main.dart`, the losing palettes in `tokens.dart`
-(`guildBoardHighContrast`, `daylightHighContrast`, `blueDark/Light`, `greenDark/Light`), the
-`settings_palette*` ARB keys, their tests (`palette_section_test.dart`, the palette cases in
-`palette_choice_store_test.dart`, `contrast_test.dart`, `theme_test.dart`, `layout_test.dart`)
-and the `board_{blue,green}_*` goldens (regenerate `settings_*` goldens). The winner's values
-are folded into `guildBoard`/`daylight` (including the `slip*` roles, which dark palettes derive from `brightness` and light ones from the parchment values); if a non-Original palette wins, keep or drop
-`brassText`/`brassOnParchment` and delete `_knownGaps` in `test/ui/theme/contrast_test.dart`.
-The choice lives in `palette_choice.txt` beside the database (not in it), so no migration is
-involved. The app icon and launch screen are not re-tinted by any palette.
+The only palette is the blue one (Martin's choice, 2026-11-19): `guildBoard` is its dark theme,
+`daylight` its light theme, both in `lib/ui/theme/tokens.dart`; `brass` is the accent colour. The
+temporary palette switch is gone. The old `palette_choice.txt` beside the database is no longer
+read. The app icon and launch screen were not re-tinted.
 
 ## Sandbox gotchas
 

@@ -42,33 +42,4 @@ void main() {
       });
     }
   }
-
-  // Temporary palette experiments: the Board is the screen that shows slips,
-  // ground, accent and tab bar together.
-  const Map<String, QuestlogPalette> experiments = <String, QuestlogPalette>{
-    'blue_dark': QuestlogPalette.blueDark,
-    'blue_light': QuestlogPalette.blueLight,
-    'green_dark': QuestlogPalette.greenDark,
-    'green_light': QuestlogPalette.greenLight,
-  };
-  for (final MapEntry<String, QuestlogPalette> experiment
-      in experiments.entries) {
-    a11yTest('board in the ${experiment.key.replaceAll('_', ' ')} palette', (
-      WidgetTester tester,
-      void Function(A11yEnv) track,
-    ) async {
-      track(
-        await A11yEnv.pump(
-          tester,
-          Subject.board,
-          palette: experiment.value,
-          locale: const Locale('cs'),
-        ),
-      );
-      await expectLater(
-        find.byKey(A11yEnv.boundaryKey),
-        matchesGoldenFile('board_${experiment.key}.png'),
-      );
-    });
-  }
 }

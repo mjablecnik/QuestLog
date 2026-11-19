@@ -371,7 +371,20 @@ void main() {
         screen: SettingsScreen,
         tab: _settingsTab,
         other: _questsTab,
-        seed: () async {},
+        // Enough recurring rules to make the Settings list taller than the screen.
+        seed: () async {
+          for (int i = 0; i < 12; i++) {
+            await db.into(db.recurringRules).insert(
+              RecurringRulesCompanion.insert(
+                name: 'Rule $i',
+                cadence: Cadence.monthly,
+                anchorDate: DateTime(2026, 12, 1),
+                bonus: MissionBonus.small,
+                createdAt: DateTime(2026, 11, 15),
+              ),
+            );
+          }
+        },
       );
     });
 

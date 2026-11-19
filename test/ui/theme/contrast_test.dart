@@ -41,9 +41,6 @@ double contrastRatio(Color foreground, Color ground) {
 /// | textFaint/board (decorative)  |       3.50 |     2.41 |
 /// | inkFaint/parchment (decor.)   |       2.17 |     2.24 |
 ///
-/// `(!)` marks pairs below their threshold. They are listed in [_knownGaps]
-/// with a regression floor so the suite stays green without hiding the gap;
-/// fixing the palette means deleting the entry.
 typedef _Pair = (
   String,
   Color Function(QuestlogPalette),
@@ -99,21 +96,6 @@ final List<_Pair> _darkSlipGraphicPairs = <_Pair>[
   ('brass/slip (pips, check)', (p) => p.brass, (p) => p.slip),
 ];
 
-/// Pairs below their threshold in the approved palette: `palette/pair` ->
-/// floor the ratio must not drop under. Remove an entry once the palette fixes it.
-const Map<String, double> _knownGaps = <String, double>{
-  'guildBoard/inkDim/parchment': 3.75,
-  'guildBoard/inkOnDestructive/destructive': 3.10,
-  'guildBoard/brass/parchment': 1.65,
-  'daylight/textDim/board': 4.05,
-  'daylight/textDim/boardRaised': 4.20,
-  'daylight/textDim/sheet': 4.20,
-  'daylight/inkDim/parchment': 4.00,
-  'daylight/inkOnBrass/brass': 3.15,
-  'daylight/inkOnDestructive/destructive': 3.10,
-  'daylight/brass/board': 2.90,
-};
-
 void _checkPairs(
   Map<String, QuestlogPalette> palettes,
   List<_Pair> pairs,
@@ -124,25 +106,11 @@ void _checkPairs(
       final String key = '${e.key}/${pair.$1}';
       test(key, () {
         final double ratio = contrastRatio(pair.$2(e.value), pair.$3(e.value));
-        final double? floor = _knownGaps[key];
-        if (floor == null) {
-          expect(
-            ratio,
-            greaterThanOrEqualTo(threshold),
-            reason: '$key = ${ratio.toStringAsFixed(2)}',
-          );
-        } else {
-          expect(
-            ratio,
-            lessThan(threshold),
-            reason: '$key now passes: drop it from _knownGaps',
-          );
-          expect(
-            ratio,
-            greaterThanOrEqualTo(floor),
-            reason: '$key = ${ratio.toStringAsFixed(2)}',
-          );
-        }
+        expect(
+          ratio,
+          greaterThanOrEqualTo(threshold),
+          reason: '$key = ${ratio.toStringAsFixed(2)}',
+        );
       });
     }
   }
@@ -154,97 +122,49 @@ void main() {
     'daylight': QuestlogPalette.daylight,
   };
 
-  group('Property 7: body text pairs reach 4.5:1', () {
+  // The blue palette has no gaps: every pair meets its threshold.
+  group('body text pairs reach 4.5:1', () {
     _checkPairs(palettes, _bodyPairs, 4.5);
   });
 
-  group('brass as text or accent reaches 3:1', () {
-    _checkPairs(palettes, _brassPairs, 3.0);
+  group('accent text roles reach 4.5:1', () {
+    _checkPairs(palettes, _highContrastBrassPairs, 4.5);
   });
 
-  // Temporary palette switch: the higher-contrast variants have no gaps, so
-  // none of their keys may appear in _knownGaps.
-  final Map<String, QuestlogPalette> highContrast = <String, QuestlogPalette>{
-    'guildBoardHighContrast': QuestlogPalette.guildBoardHighContrast,
-    'daylightHighContrast': QuestlogPalette.daylightHighContrast,
-  };
-
-  group('higher-contrast palette: body text pairs reach 4.5:1, no gaps', () {
-    _checkPairs(highContrast, _bodyPairs, 4.5);
+  group('accent fill reaches 3:1 on the ground', () {
+    _checkPairs(palettes, _brassPairs.take(3).toList(), 3.0);
   });
 
-  group('higher-contrast palette: brass text roles reach 4.5:1, no gaps', () {
-    _checkPairs(highContrast, _highContrastBrassPairs, 4.5);
-  });
-
-  // Temporary palette experiments: blue and green have no gaps either.
-  final Map<String, QuestlogPalette> experiments = <String, QuestlogPalette>{
-    'blueDark': QuestlogPalette.blueDark,
-    'blueLight': QuestlogPalette.blueLight,
-    'greenDark': QuestlogPalette.greenDark,
-    'greenLight': QuestlogPalette.greenLight,
-  };
-
-  group('blue and green palettes: body text pairs reach 4.5:1, no gaps', () {
-    _checkPairs(experiments, _bodyPairs, 4.5);
-  });
-
-  group('blue and green palettes: accent text roles reach 4.5:1, no gaps', () {
-    _checkPairs(experiments, _highContrastBrassPairs, 4.5);
-  });
-
-  group('blue and green palettes: accent fill reaches 3:1 on the ground', () {
-    _checkPairs(experiments, _brassPairs.take(3).toList(), 3.0);
-  });
-
-  // Dark Quest cards: every dark palette, no gaps.
   final Map<String, QuestlogPalette> darkPalettes = <String, QuestlogPalette>{
     'guildBoard': QuestlogPalette.guildBoard,
-    'guildBoardHighContrast': QuestlogPalette.guildBoardHighContrast,
-    'blueDark': QuestlogPalette.blueDark,
-    'greenDark': QuestlogPalette.greenDark,
   };
 
-  group('dark Quest cards: text pairs reach 4.5:1, no gaps', () {
+  group('dark Quest cards: text pairs reach 4.5:1', () {
     _checkPairs(darkPalettes, _darkSlipTextPairs, 4.5);
   });
 
-  group('dark Quest cards: check ring, pips and tick reach 3:1, no gaps', () {
+  group('dark Quest cards: check ring, pips and tick reach 3:1', () {
     _checkPairs(darkPalettes, _darkSlipGraphicPairs, 3.0);
   });
 
-  test('dark palettes draw Quest cards as the raised board, not parchment', () {
-    for (final QuestlogPalette p in darkPalettes.values) {
-      expect(p.slip, p.boardRaised);
-      expect(p.slipEdge, p.boardLine);
-      expect(p.slipText, p.text);
-      expect(p.slipTextDim, p.textDim);
-      expect(p.slipTextFaint, p.textFaint);
-      expect(p.slipDone.a, 0, reason: 'a done card is outlined, not filled');
-    }
+  test('the dark palette draws Quest cards as the raised board, not parchment', () {
+    final QuestlogPalette p = QuestlogPalette.guildBoard;
+    expect(p.slip, p.boardRaised);
+    expect(p.slipEdge, p.boardLine);
+    expect(p.slipText, p.text);
+    expect(p.slipTextDim, p.textDim);
+    expect(p.slipTextFaint, p.textFaint);
+    expect(p.slipDone.a, 0, reason: 'a done card is outlined, not filled');
   });
 
-  test('light palettes keep the parchment slip, role for role', () {
-    for (final QuestlogPalette p in <QuestlogPalette>[
-      QuestlogPalette.daylight,
-      QuestlogPalette.daylightHighContrast,
-      QuestlogPalette.blueLight,
-      QuestlogPalette.greenLight,
-    ]) {
-      expect(p.slip, p.parchment);
-      expect(p.slipEdge, p.parchmentEdge);
-      expect(p.slipText, p.ink);
-      expect(p.slipTextDim, p.inkDim);
-      expect(p.slipTextFaint, p.inkFaint);
-      expect(p.slipDone, p.boardRaised);
-    }
-  });
-
-  test('the original palettes keep brass text roles equal to brass', () {
-    for (final QuestlogPalette p in palettes.values) {
-      expect(p.brassText, p.brass);
-      expect(p.brassOnParchment, p.brass);
-    }
+  test('the light palette keeps the parchment slip, role for role', () {
+    final QuestlogPalette p = QuestlogPalette.daylight;
+    expect(p.slip, p.parchment);
+    expect(p.slipEdge, p.parchmentEdge);
+    expect(p.slipText, p.ink);
+    expect(p.slipTextDim, p.inkDim);
+    expect(p.slipTextFaint, p.inkFaint);
+    expect(p.slipDone, p.boardRaised);
   });
 
   test('contrast helper matches known values', () {

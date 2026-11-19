@@ -15,7 +15,6 @@ import '../../widgets/common/app_icon.dart';
 import '../../widgets/common/questlog_segmented.dart';
 import '../../widgets/common/snackbar_host.dart';
 import 'font_section.dart';
-import 'palette_section.dart';
 import 'rules_section.dart';
 
 /// The "Nastavení" tab: profile, language, appearance, recurring rules,
@@ -65,7 +64,6 @@ class SettingsScreen extends ConsumerWidget {
               label: l.settings_groupAppearance,
               child: const _ThemeControl(),
             ),
-            const PaletteSection(),
             const SizedBox(height: Space.s24),
             // These two draw their own group headers.
             const RulesSection(),

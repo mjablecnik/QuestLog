@@ -38,12 +38,6 @@ void main() {
   final List<QuestlogPalette> all = <QuestlogPalette>[
     QuestlogPalette.guildBoard,
     QuestlogPalette.daylight,
-    QuestlogPalette.guildBoardHighContrast,
-    QuestlogPalette.daylightHighContrast,
-    QuestlogPalette.blueDark,
-    QuestlogPalette.blueLight,
-    QuestlogPalette.greenDark,
-    QuestlogPalette.greenLight,
   ];
 
   test('there is one distinct colour per type', () {

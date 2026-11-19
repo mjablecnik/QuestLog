@@ -995,26 +995,6 @@
   "@settings_temporaryHint": {
     "description": "Small text next to the Temporary group label."
   },
-  "settings_paletteLabel": "Paleta",
-  "@settings_paletteLabel": {
-    "description": "Label of the temporary colour-palette switch."
-  },
-  "settings_paletteOriginal": "Původní",
-  "@settings_paletteOriginal": {
-    "description": "Option of the temporary palette switch: the approved palette."
-  },
-  "settings_paletteHighContrast": "Vyšší kontrast",
-  "@settings_paletteHighContrast": {
-    "description": "Option of the temporary palette switch: the higher-contrast palette."
-  },
-  "settings_paletteBlue": "Modrá",
-  "@settings_paletteBlue": {
-    "description": "Option of the temporary palette switch: the blue palette after TimeLog."
-  },
-  "settings_paletteGreen": "Zelená",
-  "@settings_paletteGreen": {
-    "description": "Option of the temporary palette switch: the experimental green palette."
-  },
   "settings_licenses": "Licence",
   "@settings_licenses": {
     "description": "Row in the About group that opens the open-source licences page."

@@ -16,12 +16,6 @@ void main() {
   final List<QuestlogPalette> palettes = <QuestlogPalette>[
     QuestlogPalette.guildBoard,
     QuestlogPalette.daylight,
-    QuestlogPalette.guildBoardHighContrast,
-    QuestlogPalette.daylightHighContrast,
-    QuestlogPalette.blueDark,
-    QuestlogPalette.blueLight,
-    QuestlogPalette.greenDark,
-    QuestlogPalette.greenLight,
   ];
 
   test('the theme has no tap splash, highlight or hover for any palette', () {

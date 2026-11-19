@@ -78,24 +78,16 @@ celebratory or pinned paper, and short-lived). Light palettes are unchanged. The
 `slip*` in `QuestlogPalette`; dark palettes derive them from `brightness`, so no palette
 restates them.
 
-### Palette experiments (temporary)
+### Palette (chosen 2026-11-19)
 
-Requested 2026-11-18: Settings lets Martin switch between four palettes while he lives with
-them, then pick one and delete the rest (same lifetime as the font picker). The structure of
-§ 2 stays; only colour values change, and `--brass` is always the accent.
-
-- **Original** — Guild Board and Daylight above, unchanged.
-- **Higher contrast** — the same hues with darker dim text, dark text on destructive fills and
-  accent text from separate `brassText` / `brassOnParchment` roles; every body pair reaches 4.5:1.
-- **Blue** — cool slate paper. Dark: board `#0F1319`, raised `#18202B`, text `#E6EAF2`, accent
-  `#78B4C4`, ink on accent `#08131A`; light: board `#EDF1F6`, accent `#2B7287`. The dark values
-  are taken from TimeLog's Midnight theme (`timelog_app/lib/core/theme.dart`: background
-  `#0F1319`, text `#E6EAF2`, accent `#78B4C4`, ink `#08131A`, panel white 4 %, border white 10 %).
-- **Green** (experimental) — forest ground, mint accent. Dark: board `#0C1B13`, raised
-  `#15291E`, text `#E4F0E6`, accent `#5CC98F`; light: board `#E7F0E4`, accent `#1E7A4B`.
-
-Blue and Green meet 4.5:1 for every text pair and 3:1 for the accent fill. The app icon and
-launch screen (§ 6) are not re-tinted. Values live in `lib/ui/theme/tokens.dart`.
+Martin chose the **Blue** palette; the other experiments (Original, Higher contrast, Green) and the
+Settings switch were removed. The tables above describe the structure; the values are now:
+dark board `#0F1319`, raised `#18202B`, text `#E6EAF2`, accent (`--brass`) `#78B4C4`, ink on accent
+`#08131A`, sheet `#18202B`; light board `#EDF1F6`, raised `#F8FAFD`, text `#15202B`, accent
+`#2B7287`, ink on accent `#F4FAFC`, parchment `#FFFFFF`. The dark values follow TimeLog's Midnight
+theme (`timelog_app/lib/core/theme.dart`). Every text pair reaches 4.5:1 and the accent fill 3:1.
+The app icon and launch screen (§ 6) are not re-tinted. Values live in `lib/ui/theme/tokens.dart`;
+the green-and-brass values in the tables above are historical.
 
 ### Shape
 

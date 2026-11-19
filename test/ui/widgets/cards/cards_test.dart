@@ -281,9 +281,6 @@ void main() {
 
     final List<QuestlogPalette> darkPalettes = <QuestlogPalette>[
       QuestlogPalette.guildBoard,
-      QuestlogPalette.guildBoardHighContrast,
-      QuestlogPalette.blueDark,
-      QuestlogPalette.greenDark,
     ];
     for (int i = 0; i < darkPalettes.length; i++) {
       final QuestlogPalette p = darkPalettes[i];
