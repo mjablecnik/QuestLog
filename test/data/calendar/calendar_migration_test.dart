@@ -13,13 +13,14 @@ import 'package:questlog/data/database.dart';
 import '../../helpers/generators.dart';
 import '../../helpers/test_database.dart';
 
-/// A schema 2 file is a schema 3 file without the calendar tables, with
+/// A schema 2 file is a schema 4 file without the calendar and notes tables, with
 /// `user_version = 2`. The [NativeDatabase.setup] callback runs right before
 /// Drift reads that version, so opening the file with it simulates an old install.
 QuestlogDatabase openAsSchema2(File file) => QuestlogDatabase.forTesting(
   NativeDatabase(
     file,
     setup: (dynamic raw) {
+      raw.execute('DROP TABLE note_nodes');
       raw.execute('DROP TABLE calendar_completions');
       raw.execute('DROP TABLE calendar_skipped_dates');
       raw.execute('DROP TABLE calendar_events');

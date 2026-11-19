@@ -4068,6 +4068,565 @@ class CalendarCompletionsCompanion
   }
 }
 
+class $NoteNodesTable extends NoteNodes
+    with TableInfo<$NoteNodesTable, NoteNodeRow> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $NoteNodesTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _parentIdMeta = const VerificationMeta(
+    'parentId',
+  );
+  @override
+  late final GeneratedColumn<int> parentId = GeneratedColumn<int>(
+    'parent_id',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES note_nodes (id) ON DELETE CASCADE',
+    ),
+  );
+  static const VerificationMeta _isFolderMeta = const VerificationMeta(
+    'isFolder',
+  );
+  @override
+  late final GeneratedColumn<bool> isFolder = GeneratedColumn<bool>(
+    'is_folder',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("is_folder" IN (0, 1))',
+    ),
+  );
+  static const VerificationMeta _nameMeta = const VerificationMeta('name');
+  @override
+  late final GeneratedColumn<String> name = GeneratedColumn<String>(
+    'name',
+    aliasedName,
+    false,
+    check: () =>
+        ComparableExpr(StringExpressionOperators(name).trim().length)
+            .isBetweenValues(1, 80),
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _bodyMeta = const VerificationMeta('body');
+  @override
+  late final GeneratedColumn<String> body = GeneratedColumn<String>(
+    'body',
+    aliasedName,
+    false,
+    check: () => ComparableExpr(body.length).isSmallerOrEqualValue(100000),
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(''),
+  );
+  static const VerificationMeta _autoNameMeta = const VerificationMeta(
+    'autoName',
+  );
+  @override
+  late final GeneratedColumn<bool> autoName = GeneratedColumn<bool>(
+    'auto_name',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("auto_name" IN (0, 1))',
+    ),
+    defaultValue: const Constant(false),
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
+    'updatedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
+    'updated_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _deletedAtMeta = const VerificationMeta(
+    'deletedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> deletedAt = GeneratedColumn<DateTime>(
+    'deleted_at',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    parentId,
+    isFolder,
+    name,
+    body,
+    autoName,
+    createdAt,
+    updatedAt,
+    deletedAt,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'note_nodes';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<NoteNodeRow> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('parent_id')) {
+      context.handle(
+        _parentIdMeta,
+        parentId.isAcceptableOrUnknown(data['parent_id']!, _parentIdMeta),
+      );
+    }
+    if (data.containsKey('is_folder')) {
+      context.handle(
+        _isFolderMeta,
+        isFolder.isAcceptableOrUnknown(data['is_folder']!, _isFolderMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_isFolderMeta);
+    }
+    if (data.containsKey('name')) {
+      context.handle(
+        _nameMeta,
+        name.isAcceptableOrUnknown(data['name']!, _nameMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_nameMeta);
+    }
+    if (data.containsKey('body')) {
+      context.handle(
+        _bodyMeta,
+        body.isAcceptableOrUnknown(data['body']!, _bodyMeta),
+      );
+    }
+    if (data.containsKey('auto_name')) {
+      context.handle(
+        _autoNameMeta,
+        autoName.isAcceptableOrUnknown(data['auto_name']!, _autoNameMeta),
+      );
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_createdAtMeta);
+    }
+    if (data.containsKey('updated_at')) {
+      context.handle(
+        _updatedAtMeta,
+        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_updatedAtMeta);
+    }
+    if (data.containsKey('deleted_at')) {
+      context.handle(
+        _deletedAtMeta,
+        deletedAt.isAcceptableOrUnknown(data['deleted_at']!, _deletedAtMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  NoteNodeRow map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return NoteNodeRow(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      parentId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}parent_id'],
+      ),
+      isFolder: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}is_folder'],
+      )!,
+      name: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}name'],
+      )!,
+      body: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}body'],
+      )!,
+      autoName: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}auto_name'],
+      )!,
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created_at'],
+      )!,
+      updatedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}updated_at'],
+      )!,
+      deletedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}deleted_at'],
+      ),
+    );
+  }
+
+  @override
+  $NoteNodesTable createAlias(String alias) {
+    return $NoteNodesTable(attachedDatabase, alias);
+  }
+}
+
+class NoteNodeRow extends DataClass implements Insertable<NoteNodeRow> {
+  final int id;
+  final int? parentId;
+  final bool isFolder;
+  final String name;
+
+  /// The Markdown_Body; always empty for a Folder.
+  final String body;
+  final bool autoName;
+  final DateTime createdAt;
+  final DateTime updatedAt;
+  final DateTime? deletedAt;
+  const NoteNodeRow({
+    required this.id,
+    this.parentId,
+    required this.isFolder,
+    required this.name,
+    required this.body,
+    required this.autoName,
+    required this.createdAt,
+    required this.updatedAt,
+    this.deletedAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    if (!nullToAbsent || parentId != null) {
+      map['parent_id'] = Variable<int>(parentId);
+    }
+    map['is_folder'] = Variable<bool>(isFolder);
+    map['name'] = Variable<String>(name);
+    map['body'] = Variable<String>(body);
+    map['auto_name'] = Variable<bool>(autoName);
+    map['created_at'] = Variable<DateTime>(createdAt);
+    map['updated_at'] = Variable<DateTime>(updatedAt);
+    if (!nullToAbsent || deletedAt != null) {
+      map['deleted_at'] = Variable<DateTime>(deletedAt);
+    }
+    return map;
+  }
+
+  NoteNodesCompanion toCompanion(bool nullToAbsent) {
+    return NoteNodesCompanion(
+      id: Value(id),
+      parentId: parentId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(parentId),
+      isFolder: Value(isFolder),
+      name: Value(name),
+      body: Value(body),
+      autoName: Value(autoName),
+      createdAt: Value(createdAt),
+      updatedAt: Value(updatedAt),
+      deletedAt: deletedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(deletedAt),
+    );
+  }
+
+  factory NoteNodeRow.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return NoteNodeRow(
+      id: serializer.fromJson<int>(json['id']),
+      parentId: serializer.fromJson<int?>(json['parentId']),
+      isFolder: serializer.fromJson<bool>(json['isFolder']),
+      name: serializer.fromJson<String>(json['name']),
+      body: serializer.fromJson<String>(json['body']),
+      autoName: serializer.fromJson<bool>(json['autoName']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+      updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
+      deletedAt: serializer.fromJson<DateTime?>(json['deletedAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'parentId': serializer.toJson<int?>(parentId),
+      'isFolder': serializer.toJson<bool>(isFolder),
+      'name': serializer.toJson<String>(name),
+      'body': serializer.toJson<String>(body),
+      'autoName': serializer.toJson<bool>(autoName),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+      'updatedAt': serializer.toJson<DateTime>(updatedAt),
+      'deletedAt': serializer.toJson<DateTime?>(deletedAt),
+    };
+  }
+
+  NoteNodeRow copyWith({
+    int? id,
+    Value<int?> parentId = const Value.absent(),
+    bool? isFolder,
+    String? name,
+    String? body,
+    bool? autoName,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    Value<DateTime?> deletedAt = const Value.absent(),
+  }) => NoteNodeRow(
+    id: id ?? this.id,
+    parentId: parentId.present ? parentId.value : this.parentId,
+    isFolder: isFolder ?? this.isFolder,
+    name: name ?? this.name,
+    body: body ?? this.body,
+    autoName: autoName ?? this.autoName,
+    createdAt: createdAt ?? this.createdAt,
+    updatedAt: updatedAt ?? this.updatedAt,
+    deletedAt: deletedAt.present ? deletedAt.value : this.deletedAt,
+  );
+  NoteNodeRow copyWithCompanion(NoteNodesCompanion data) {
+    return NoteNodeRow(
+      id: data.id.present ? data.id.value : this.id,
+      parentId: data.parentId.present ? data.parentId.value : this.parentId,
+      isFolder: data.isFolder.present ? data.isFolder.value : this.isFolder,
+      name: data.name.present ? data.name.value : this.name,
+      body: data.body.present ? data.body.value : this.body,
+      autoName: data.autoName.present ? data.autoName.value : this.autoName,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
+      deletedAt: data.deletedAt.present ? data.deletedAt.value : this.deletedAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('NoteNodeRow(')
+          ..write('id: $id, ')
+          ..write('parentId: $parentId, ')
+          ..write('isFolder: $isFolder, ')
+          ..write('name: $name, ')
+          ..write('body: $body, ')
+          ..write('autoName: $autoName, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('deletedAt: $deletedAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    parentId,
+    isFolder,
+    name,
+    body,
+    autoName,
+    createdAt,
+    updatedAt,
+    deletedAt,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is NoteNodeRow &&
+          other.id == this.id &&
+          other.parentId == this.parentId &&
+          other.isFolder == this.isFolder &&
+          other.name == this.name &&
+          other.body == this.body &&
+          other.autoName == this.autoName &&
+          other.createdAt == this.createdAt &&
+          other.updatedAt == this.updatedAt &&
+          other.deletedAt == this.deletedAt);
+}
+
+class NoteNodesCompanion extends UpdateCompanion<NoteNodeRow> {
+  final Value<int> id;
+  final Value<int?> parentId;
+  final Value<bool> isFolder;
+  final Value<String> name;
+  final Value<String> body;
+  final Value<bool> autoName;
+  final Value<DateTime> createdAt;
+  final Value<DateTime> updatedAt;
+  final Value<DateTime?> deletedAt;
+  const NoteNodesCompanion({
+    this.id = const Value.absent(),
+    this.parentId = const Value.absent(),
+    this.isFolder = const Value.absent(),
+    this.name = const Value.absent(),
+    this.body = const Value.absent(),
+    this.autoName = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+    this.deletedAt = const Value.absent(),
+  });
+  NoteNodesCompanion.insert({
+    this.id = const Value.absent(),
+    this.parentId = const Value.absent(),
+    required bool isFolder,
+    required String name,
+    this.body = const Value.absent(),
+    this.autoName = const Value.absent(),
+    required DateTime createdAt,
+    required DateTime updatedAt,
+    this.deletedAt = const Value.absent(),
+  }) : isFolder = Value(isFolder),
+       name = Value(name),
+       createdAt = Value(createdAt),
+       updatedAt = Value(updatedAt);
+  static Insertable<NoteNodeRow> custom({
+    Expression<int>? id,
+    Expression<int>? parentId,
+    Expression<bool>? isFolder,
+    Expression<String>? name,
+    Expression<String>? body,
+    Expression<bool>? autoName,
+    Expression<DateTime>? createdAt,
+    Expression<DateTime>? updatedAt,
+    Expression<DateTime>? deletedAt,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (parentId != null) 'parent_id': parentId,
+      if (isFolder != null) 'is_folder': isFolder,
+      if (name != null) 'name': name,
+      if (body != null) 'body': body,
+      if (autoName != null) 'auto_name': autoName,
+      if (createdAt != null) 'created_at': createdAt,
+      if (updatedAt != null) 'updated_at': updatedAt,
+      if (deletedAt != null) 'deleted_at': deletedAt,
+    });
+  }
+
+  NoteNodesCompanion copyWith({
+    Value<int>? id,
+    Value<int?>? parentId,
+    Value<bool>? isFolder,
+    Value<String>? name,
+    Value<String>? body,
+    Value<bool>? autoName,
+    Value<DateTime>? createdAt,
+    Value<DateTime>? updatedAt,
+    Value<DateTime?>? deletedAt,
+  }) {
+    return NoteNodesCompanion(
+      id: id ?? this.id,
+      parentId: parentId ?? this.parentId,
+      isFolder: isFolder ?? this.isFolder,
+      name: name ?? this.name,
+      body: body ?? this.body,
+      autoName: autoName ?? this.autoName,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      deletedAt: deletedAt ?? this.deletedAt,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (parentId.present) {
+      map['parent_id'] = Variable<int>(parentId.value);
+    }
+    if (isFolder.present) {
+      map['is_folder'] = Variable<bool>(isFolder.value);
+    }
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
+    }
+    if (body.present) {
+      map['body'] = Variable<String>(body.value);
+    }
+    if (autoName.present) {
+      map['auto_name'] = Variable<bool>(autoName.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<DateTime>(updatedAt.value);
+    }
+    if (deletedAt.present) {
+      map['deleted_at'] = Variable<DateTime>(deletedAt.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('NoteNodesCompanion(')
+          ..write('id: $id, ')
+          ..write('parentId: $parentId, ')
+          ..write('isFolder: $isFolder, ')
+          ..write('name: $name, ')
+          ..write('body: $body, ')
+          ..write('autoName: $autoName, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('deletedAt: $deletedAt')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$QuestlogDatabase extends GeneratedDatabase {
   _$QuestlogDatabase(QueryExecutor e) : super(e);
   $QuestlogDatabaseManager get managers => $QuestlogDatabaseManager(this);
@@ -4081,6 +4640,7 @@ abstract class _$QuestlogDatabase extends GeneratedDatabase {
       $CalendarSkippedDatesTable(this);
   late final $CalendarCompletionsTable calendarCompletions =
       $CalendarCompletionsTable(this);
+  late final $NoteNodesTable noteNodes = $NoteNodesTable(this);
   late final Index idxQuestsMission = Index(
     'idx_quests_mission',
     'CREATE INDEX idx_quests_mission ON quests (mission_id)',
@@ -4092,6 +4652,14 @@ abstract class _$QuestlogDatabase extends GeneratedDatabase {
   late final Index idxCalendarEventsStart = Index(
     'idx_calendar_events_start',
     'CREATE INDEX idx_calendar_events_start ON calendar_events (start_date)',
+  );
+  late final Index idxNoteNodesParent = Index(
+    'idx_note_nodes_parent',
+    'CREATE INDEX idx_note_nodes_parent ON note_nodes (parent_id)',
+  );
+  late final Index idxNoteNodesDeleted = Index(
+    'idx_note_nodes_deleted',
+    'CREATE INDEX idx_note_nodes_deleted ON note_nodes (deleted_at)',
   );
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
@@ -4106,9 +4674,12 @@ abstract class _$QuestlogDatabase extends GeneratedDatabase {
     calendarEvents,
     calendarSkippedDates,
     calendarCompletions,
+    noteNodes,
     idxQuestsMission,
     idxQuestsCompleted,
     idxCalendarEventsStart,
+    idxNoteNodesParent,
+    idxNoteNodesDeleted,
   ];
   @override
   StreamQueryUpdateRules get streamUpdateRules => const StreamQueryUpdateRules([
@@ -4146,6 +4717,13 @@ abstract class _$QuestlogDatabase extends GeneratedDatabase {
         limitUpdateKind: UpdateKind.delete,
       ),
       result: [TableUpdate('calendar_completions', kind: UpdateKind.delete)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'note_nodes',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('note_nodes', kind: UpdateKind.delete)],
     ),
   ]);
 }
@@ -7324,6 +7902,389 @@ typedef $$CalendarCompletionsTableProcessedTableManager =
       CalendarCompletionRow,
       PrefetchHooks Function({bool eventId})
     >;
+typedef $$NoteNodesTableCreateCompanionBuilder = NoteNodesCompanion Function({
+  Value<int> id,
+  Value<int?> parentId,
+  required bool isFolder,
+  required String name,
+  Value<String> body,
+  Value<bool> autoName,
+  required DateTime createdAt,
+  required DateTime updatedAt,
+  Value<DateTime?> deletedAt,
+});
+typedef $$NoteNodesTableUpdateCompanionBuilder = NoteNodesCompanion Function({
+  Value<int> id,
+  Value<int?> parentId,
+  Value<bool> isFolder,
+  Value<String> name,
+  Value<String> body,
+  Value<bool> autoName,
+  Value<DateTime> createdAt,
+  Value<DateTime> updatedAt,
+  Value<DateTime?> deletedAt,
+});
+
+final class $$NoteNodesTableReferences
+    extends BaseReferences<_$QuestlogDatabase, $NoteNodesTable, NoteNodeRow> {
+  $$NoteNodesTableReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static $NoteNodesTable _parentIdTable(_$QuestlogDatabase db) =>
+      db.noteNodes.createAlias('note_nodes__parent_id__note_nodes__id');
+
+  $$NoteNodesTableProcessedTableManager? get parentId {
+    final $_column = $_itemColumn<int>('parent_id');
+    if ($_column == null) return null;
+    final manager = $$NoteNodesTableTableManager(
+      $_db,
+      $_db.noteNodes,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_parentIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
+
+class $$NoteNodesTableFilterComposer
+    extends Composer<_$QuestlogDatabase, $NoteNodesTable> {
+  $$NoteNodesTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get isFolder => $composableBuilder(
+    column: $table.isFolder,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get name => $composableBuilder(
+    column: $table.name,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get body => $composableBuilder(
+    column: $table.body,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get autoName => $composableBuilder(
+    column: $table.autoName,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get deletedAt => $composableBuilder(
+    column: $table.deletedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  $$NoteNodesTableFilterComposer get parentId {
+    final $$NoteNodesTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.parentId,
+      referencedTable: $db.noteNodes,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$NoteNodesTableFilterComposer(
+            $db: $db,
+            $table: $db.noteNodes,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$NoteNodesTableOrderingComposer
+    extends Composer<_$QuestlogDatabase, $NoteNodesTable> {
+  $$NoteNodesTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get isFolder => $composableBuilder(
+    column: $table.isFolder,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get name => $composableBuilder(
+    column: $table.name,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get body => $composableBuilder(
+    column: $table.body,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get autoName => $composableBuilder(
+    column: $table.autoName,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get deletedAt => $composableBuilder(
+    column: $table.deletedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $$NoteNodesTableOrderingComposer get parentId {
+    final $$NoteNodesTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.parentId,
+      referencedTable: $db.noteNodes,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$NoteNodesTableOrderingComposer(
+            $db: $db,
+            $table: $db.noteNodes,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$NoteNodesTableAnnotationComposer
+    extends Composer<_$QuestlogDatabase, $NoteNodesTable> {
+  $$NoteNodesTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<bool> get isFolder =>
+      $composableBuilder(column: $table.isFolder, builder: (column) => column);
+
+  GeneratedColumn<String> get name =>
+      $composableBuilder(column: $table.name, builder: (column) => column);
+
+  GeneratedColumn<String> get body =>
+      $composableBuilder(column: $table.body, builder: (column) => column);
+
+  GeneratedColumn<bool> get autoName =>
+      $composableBuilder(column: $table.autoName, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get deletedAt =>
+      $composableBuilder(column: $table.deletedAt, builder: (column) => column);
+
+  $$NoteNodesTableAnnotationComposer get parentId {
+    final $$NoteNodesTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.parentId,
+      referencedTable: $db.noteNodes,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$NoteNodesTableAnnotationComposer(
+            $db: $db,
+            $table: $db.noteNodes,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$NoteNodesTableTableManager
+    extends
+        RootTableManager<
+          _$QuestlogDatabase,
+          $NoteNodesTable,
+          NoteNodeRow,
+          $$NoteNodesTableFilterComposer,
+          $$NoteNodesTableOrderingComposer,
+          $$NoteNodesTableAnnotationComposer,
+          $$NoteNodesTableCreateCompanionBuilder,
+          $$NoteNodesTableUpdateCompanionBuilder,
+          (NoteNodeRow, $$NoteNodesTableReferences),
+          NoteNodeRow,
+          PrefetchHooks Function({bool parentId})
+        > {
+  $$NoteNodesTableTableManager(_$QuestlogDatabase db, $NoteNodesTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$NoteNodesTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$NoteNodesTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$NoteNodesTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<int?> parentId = const Value.absent(),
+                Value<bool> isFolder = const Value.absent(),
+                Value<String> name = const Value.absent(),
+                Value<String> body = const Value.absent(),
+                Value<bool> autoName = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<DateTime> updatedAt = const Value.absent(),
+                Value<DateTime?> deletedAt = const Value.absent(),
+              }) => NoteNodesCompanion(
+                id: id,
+                parentId: parentId,
+                isFolder: isFolder,
+                name: name,
+                body: body,
+                autoName: autoName,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+                deletedAt: deletedAt,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<int?> parentId = const Value.absent(),
+                required bool isFolder,
+                required String name,
+                Value<String> body = const Value.absent(),
+                Value<bool> autoName = const Value.absent(),
+                required DateTime createdAt,
+                required DateTime updatedAt,
+                Value<DateTime?> deletedAt = const Value.absent(),
+              }) => NoteNodesCompanion.insert(
+                id: id,
+                parentId: parentId,
+                isFolder: isFolder,
+                name: name,
+                body: body,
+                autoName: autoName,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+                deletedAt: deletedAt,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<$NoteNodesTable, NoteNodeRow>(table),
+                  $$NoteNodesTableReferences(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: ({parentId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (parentId) {
+                      state = state.withJoin(
+                        currentTable: table,
+                        currentColumn: table.parentId,
+                        referencedTable: $$NoteNodesTableReferences
+                            ._parentIdTable(db),
+                        referencedColumn: $$NoteNodesTableReferences
+                            ._parentIdTable(db)
+                            .id,
+                      ) as T;
+                    }
+
+                    return state;
+                  },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ),
+      );
+}
+
+typedef $$NoteNodesTableProcessedTableManager =
+    ProcessedTableManager<
+      _$QuestlogDatabase,
+      $NoteNodesTable,
+      NoteNodeRow,
+      $$NoteNodesTableFilterComposer,
+      $$NoteNodesTableOrderingComposer,
+      $$NoteNodesTableAnnotationComposer,
+      $$NoteNodesTableCreateCompanionBuilder,
+      $$NoteNodesTableUpdateCompanionBuilder,
+      (NoteNodeRow, $$NoteNodesTableReferences),
+      NoteNodeRow,
+      PrefetchHooks Function({bool parentId})
+    >;
 
 class $QuestlogDatabaseManager {
   final _$QuestlogDatabase _db;
@@ -7344,4 +8305,6 @@ class $QuestlogDatabaseManager {
       $$CalendarSkippedDatesTableTableManager(_db, _db.calendarSkippedDates);
   $$CalendarCompletionsTableTableManager get calendarCompletions =>
       $$CalendarCompletionsTableTableManager(_db, _db.calendarCompletions);
+  $$NoteNodesTableTableManager get noteNodes =>
+      $$NoteNodesTableTableManager(_db, _db.noteNodes);
 }

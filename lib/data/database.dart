@@ -14,6 +14,7 @@ import '../core/xp_rules.dart';
 import 'calendar/calendar_seed.dart';
 import 'calendar/calendar_tables.dart';
 import 'models.dart';
+import 'notes/notes_tables.dart';
 import 'preferences.dart';
 import 'tables.dart';
 
@@ -29,6 +30,7 @@ part 'database.g.dart';
     CalendarEvents,
     CalendarSkippedDates,
     CalendarCompletions,
+    NoteNodes,
   ],
 )
 class QuestlogDatabase extends _$QuestlogDatabase {
@@ -39,7 +41,7 @@ class QuestlogDatabase extends _$QuestlogDatabase {
   QuestlogDatabase.forTesting(super.executor);
 
   @override
-  int get schemaVersion => 3;
+  int get schemaVersion => 4;
 
   /// Runs [action] in a transaction (joining the active one, if any).
   ///
@@ -88,6 +90,10 @@ class QuestlogDatabase extends _$QuestlogDatabase {
             await m.createTable(calendarSkippedDates);
             await m.createTable(calendarCompletions);
             await seedCalendarDefaults(this);
+          }
+          if (from < 4) {
+            // Notes: one table for Folders and Notes. No existing table changes.
+            await m.createTable(noteNodes);
           }
         },
         beforeOpen: (details) async {
