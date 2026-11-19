@@ -11,6 +11,7 @@ import '../../state/ui_providers.dart';
 import '../../theme/questlog_theme.dart';
 import '../../widgets/common/snackbar_host.dart';
 import '../board/board_screen.dart';
+import '../calendar/calendar_screen.dart';
 import '../missions/missions_screen.dart';
 import '../settings/settings_screen.dart';
 import 'questlog_tab_bar.dart';
@@ -18,7 +19,7 @@ import 'reconcile_banner.dart';
 import 'splash_screen.dart';
 
 /// Root screen: splash until the first Reconciliation has finished, then the
-/// three tabs (Questy, Mise, Nastavení). The reward overlay is hosted by `QuestlogApp`, above
+/// four tabs (Questy, Mise, Kalendář, Nastavení). The reward overlay is hosted by `QuestlogApp`, above
 /// the Navigator, so it also covers pushed routes.
 ///
 /// Reconciliation runs at start, once per return from the background, when the
@@ -170,6 +171,7 @@ class _AppShellState extends ConsumerState<AppShell>
             children: <Widget>[
               BoardScreen(),
               MissionsScreen(),
+              CalendarScreen(),
               SettingsScreen(),
             ],
           ),

@@ -164,3 +164,25 @@ final eventTasksProvider = StreamProvider<List<EventOccurrence>>((ref) {
   final DateTime today = ref.watch(boardDayProvider);
   return ref.watch(calendarServiceProvider).watchEventTasks(today);
 });
+
+/// One stored event, to follow it on its detail screen and in its form.
+final eventProvider = StreamProvider.family<CalendarEvent?, int>(
+  (ref, int id) => ref.watch(calendarServiceProvider).watchEvent(id),
+);
+
+/// One occurrence (an event and the date it starts on) with its completion;
+/// null once the event or that occurrence is gone. The Type_Filter does not apply.
+final occurrenceProvider = StreamProvider.family<EventOccurrence?, (int, DateTime)>((
+  ref,
+  (int, DateTime) key,
+) {
+  final (int id, DateTime date) = key;
+  return ref.watch(calendarServiceProvider).watchRange(date, date).map(
+    (List<EventOccurrence> all) {
+      for (final EventOccurrence o in all) {
+        if (o.event.id == id && o.start == date) return o;
+      }
+      return null;
+    },
+  );
+});
