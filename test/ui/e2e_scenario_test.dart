@@ -52,12 +52,6 @@ Finder _completeCheck(String name) => find.byWidgetPredicate(
       w is CheckCircle && w.semanticLabel == en.a11y_completeQuest(name),
 );
 
-/// [text] inside the Reward_Card (the Mission detail has its own button).
-Finder _inRewardCard(String text) => find.descendant(
-  of: find.byType(RewardCard),
-  matching: find.text(text),
-);
-
 QuestlogPalette _palette(WidgetTester tester) =>
     tester.element(find.byType(SettingsScreen)).palette;
 
@@ -160,23 +154,17 @@ void main() {
       await _tap(tester, find.text('Autumn clean-up'));
       expect(find.text('Rake the leaves'), findsOneWidget);
       expect(find.text('Clean the gutters'), findsOneWidget);
+      // A completed Quest shows no reward card: it moves to the done list.
       await _tap(tester, _completeCheck('Rake the leaves'));
-      expect(find.text(en.reward_questComplete), findsOneWidget);
-      expect(find.text('+25 XP'), findsOneWidget);
-      expect(find.text(en.reward_missionProgress(1, 2)), findsOneWidget);
-      // Not the last Quest: no mission button, "Continue" closes the card.
-      expect(_inRewardCard(en.reward_completeMission), findsNothing);
-      await _tap(tester, find.text(en.common_continue));
       expect(find.text(en.reward_questComplete), findsNothing);
+      expect(find.text(en.mission_completeAction), findsNothing);
 
       await _tap(tester, _completeCheck('Clean the gutters'));
-      expect(find.text(en.reward_questComplete), findsOneWidget);
-      expect(find.text('+50 XP'), findsOneWidget);
-      // Every Quest is done: the card offers to complete the Mission.
-      expect(find.text(en.reward_missionReady), findsOneWidget);
-      expect(_inRewardCard(en.reward_completeMission), findsOneWidget);
+      expect(find.text(en.reward_questComplete), findsNothing);
+      // Every Quest is done: the detail screen offers to complete the Mission.
+      expect(find.text(en.mission_completeAction), findsOneWidget);
 
-      await _tap(tester, _inRewardCard(en.reward_completeMission));
+      await _tap(tester, find.text(en.mission_completeAction));
       // The Mission bonus crosses the Level boundary: Level-up variant.
       expect(find.text(en.reward_levelUp), findsOneWidget);
       expect(find.text(en.reward_levelUpBody(2)), findsOneWidget);
@@ -267,6 +255,13 @@ void main() {
       await tester.pump();
       await _tap(tester, find.text(cs.rule_saveAction));
       expect(find.text(cs.rule_sheetTitle), findsNothing);
+      // The rules sit below the language, theme, font and palette groups.
+      await tester.dragUntilVisible(
+        find.text('Water plants'),
+        find.byType(Scrollable).first,
+        const Offset(0, -200),
+      );
+      await tester.pump();
       expect(find.text('Water plants'), findsOneWidget);
       expect(find.text(cs.settings_rulesActive(1).toUpperCase()), findsOneWidget);
       expect(find.text(cs.rule_postNow), findsOneWidget);

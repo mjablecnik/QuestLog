@@ -14,6 +14,7 @@ import 'package:questlog/services/providers.dart';
 import 'package:questlog/services/recurrence_service.dart';
 import 'package:questlog/services/settings_service.dart';
 import 'package:questlog/ui/screens/board/board_screen.dart';
+import 'package:questlog/ui/screens/calendar/calendar_screen.dart';
 import 'package:questlog/ui/screens/missions/missions_screen.dart';
 import 'package:questlog/ui/screens/settings/settings_screen.dart';
 import 'package:questlog/ui/screens/shell/questlog_tab_bar.dart';
@@ -61,6 +62,7 @@ Mission _mission(int id, String name) => Mission(
 const Key _questsTab = ValueKey<ShellTab>(ShellTab.quests);
 const Key _missionsTab = ValueKey<ShellTab>(ShellTab.missions);
 const Key _settingsTab = ValueKey<ShellTab>(ShellTab.settings);
+const Key _calendarTab = ValueKey<ShellTab>(ShellTab.calendar);
 
 void main() {
   late QuestlogDatabase db;
@@ -184,7 +186,7 @@ void main() {
   });
 
   group('tabs', () {
-    shellTest('three tabs, Quests, Missions, then Settings, switch on tap', (
+    shellTest('four tabs, Quests, Missions, Calendar, then Settings, switch on tap', (
       tester,
     ) async {
       await pumpApp(tester);
@@ -195,10 +197,11 @@ void main() {
           of: find.byType(QuestlogTabBar),
           matching: find.byType(InkWell),
         ),
-        findsNWidgets(3),
+        findsNWidgets(4),
       );
       expect(find.byKey(_questsTab), findsOneWidget);
       expect(find.byKey(_missionsTab), findsOneWidget);
+      expect(find.byKey(_calendarTab), findsOneWidget);
       expect(find.byKey(_settingsTab), findsOneWidget);
       expect(
         find.descendant(
@@ -227,9 +230,15 @@ void main() {
       await settle(tester);
       expect(tabIndex(tester), 1);
 
-      await tester.tap(find.byKey(_settingsTab));
+      await tester.tap(find.byKey(_calendarTab));
       await settle(tester);
       expect(tabIndex(tester), 2);
+      expect(find.byType(CalendarScreen), findsOneWidget);
+      expect(find.byType(HeroBar), findsNothing);
+
+      await tester.tap(find.byKey(_settingsTab));
+      await settle(tester);
+      expect(tabIndex(tester), 3);
       expect(find.byType(SettingsScreen), findsOneWidget);
 
       await tester.tap(find.byKey(_questsTab));
@@ -243,7 +252,7 @@ void main() {
     ) async {
       await pumpApp(tester);
       await settle(tester);
-      for (final Key key in <Key>[_questsTab, _missionsTab, _settingsTab]) {
+      for (final Key key in <Key>[_questsTab, _missionsTab, _calendarTab, _settingsTab]) {
         final Size size = tester.getSize(find.byKey(key));
         expect(size.height, greaterThanOrEqualTo(44));
         expect(size.width, greaterThanOrEqualTo(44));
@@ -254,6 +263,7 @@ void main() {
       // `toString` is stable enough to read the flags without private API.
       expect(quests.label, 'Quests');
       expect(missions.label, 'Missions');
+      expect(tester.getSemantics(find.byKey(_calendarTab)).label, 'Calendar');
       expect(tester.getSemantics(find.byKey(_settingsTab)).label, 'Settings');
       expect(
         quests.flagsCollection.isSelected,

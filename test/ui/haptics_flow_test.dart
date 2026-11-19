@@ -83,10 +83,7 @@ void main() {
     haptics.clear();
     await tester.tap(check('Alpha'));
     await _settle(tester);
-    expect(find.text(en.reward_questComplete), findsOneWidget);
     expect(haptics, contains(_heavy));
-    await tester.tap(find.text(en.common_continue));
-    await _settle(tester);
 
     // Completing a mission: open it (the Board lists no mission quests),
     // complete its last quest, then the reward's mission button.
@@ -96,16 +93,14 @@ void main() {
     await _settle(tester);
     await tester.tap(check('Mission step'));
     await _settle(tester);
-    final Finder rewardButton = find.descendant(
-      of: find.byType(RewardCard),
-      matching: find.text(en.reward_completeMission),
-    );
-    expect(rewardButton, findsOneWidget);
+    final Finder completeButton = find.text(en.mission_completeAction);
+    expect(completeButton, findsOneWidget);
     haptics.clear();
-    await tester.tap(rewardButton);
+    await tester.ensureVisible(completeButton);
+    await tester.tap(completeButton);
     await _settle(tester);
     expect(find.byType(RewardCard), findsOneWidget);
-    expect(rewardButton, findsNothing);
+    expect(completeButton, findsNothing);
     expect(haptics, contains(_heavy));
     await tester.tap(find.text(en.common_continue));
     await _settle(tester);
