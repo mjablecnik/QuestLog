@@ -344,7 +344,7 @@ class _EventFormScreenState extends ConsumerState<EventFormScreen> {
     );
     if (deleted && mounted) {
       _closing = true;
-      Navigator.of(context).popUntil((Route<dynamic> r) => r is! CupertinoPageRoute);
+      Navigator.of(context).popUntil((Route<dynamic> r) => r.isFirst);
     }
   }
 

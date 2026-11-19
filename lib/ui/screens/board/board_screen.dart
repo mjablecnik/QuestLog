@@ -91,7 +91,12 @@ class _BoardScreenState extends ConsumerState<BoardScreen> {
                   ),
                   child: const HeroBar(),
                 ),
-                _TitleRow(openCount: open?.length, today: today),
+                _TitleRow(
+                  openCount: open == null
+                      ? null
+                      : open.length + eventTasks.where((EventOccurrence o) => !o.isCompleted).length,
+                  today: today,
+                ),
                 const SizedBox(height: Space.s10),
                 Expanded(child: body),
               ],

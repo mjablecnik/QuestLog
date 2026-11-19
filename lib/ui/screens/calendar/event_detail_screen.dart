@@ -79,7 +79,7 @@ class _EventDetailScreenState extends ConsumerState<EventDetailScreen> {
         final bool deleted = await deleteEventFlow(context, ref, occurrence.event, occurrence.start);
         if (deleted && mounted) {
           _closing = true;
-          Navigator.of(context).popUntil((Route<dynamic> r) => r is! CupertinoPageRoute);
+          Navigator.of(context).popUntil((Route<dynamic> r) => r.isFirst);
         }
     }
   }

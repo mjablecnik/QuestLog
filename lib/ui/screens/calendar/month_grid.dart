@@ -104,6 +104,8 @@ class MonthPage extends ConsumerWidget {
             for (int row = 0; row < 6; row++)
               Expanded(
                 child: Row(
+                  // Every cell fills the whole row, so its border and tap area do.
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
                     for (int col = 0; col < 7; col++)
                       Expanded(

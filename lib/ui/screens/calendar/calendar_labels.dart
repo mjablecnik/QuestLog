@@ -70,7 +70,9 @@ String repeatDescription(AppLocalizations l, RepeatRule rule, DateTime start) {
     CadenceRepeat(:final Cadence cadence) => switch (cadence) {
       Cadence.weekly => l.calendar_repeatDescWeekly(DateFormat.EEEE(locale).format(start)),
       Cadence.monthly => l.calendar_repeatDescMonthly(start.day),
-      Cadence.yearly => l.calendar_repeatDescYearly(DateFormat('d. MMMM', locale).format(start)),
+      Cadence.yearly => l.calendar_repeatDescYearly(
+        locale == 'cs' ? DateFormat('d. MMMM', locale).format(start) : DateFormat.MMMMd(locale).format(start),
+      ),
       _ => l.calendar_repeatDescDaily,
     },
     EasterRelative() => l.calendar_repeatDescEaster,
