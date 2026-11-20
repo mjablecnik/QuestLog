@@ -143,6 +143,10 @@ void main() {
     _checkPairs(darkPalettes, _darkSlipTextPairs, 4.5);
   });
 
+  group('the overdue Deadline text reaches 4.5:1 on the Quest card', () {
+    _checkPairs(palettes, <_Pair>[('destructiveText/slip', (p) => p.destructiveText, (p) => p.slip)], 4.5);
+  });
+
   group('dark Quest cards: check ring, pips and tick reach 3:1', () {
     _checkPairs(darkPalettes, _darkSlipGraphicPairs, 3.0);
   });

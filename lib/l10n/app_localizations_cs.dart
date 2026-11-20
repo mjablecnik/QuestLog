@@ -255,6 +255,26 @@ class AppLocalizationsCs extends AppLocalizations {
   }
 
   @override
+  String get quest_deadlineLabel => 'Termín';
+
+  @override
+  String get quest_deadlineNone => 'Bez termínu';
+
+  @override
+  String get quest_deadlineLinkedHint =>
+      'Quest se zobrazí v kalendáři jako událost.';
+
+  @override
+  String quest_dueOn(String date) {
+    return 'Termín $date';
+  }
+
+  @override
+  String quest_overdueOn(String date) {
+    return 'Po termínu: $date';
+  }
+
+  @override
   String get quest_effortMoment => 'Chvilka';
 
   @override

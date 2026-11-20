@@ -300,6 +300,36 @@
       }
     }
   },
+  "quest_deadlineLabel": "Termín",
+  "@quest_deadlineLabel": {
+    "description": "Label of the Deadline field of the Quest sheet, and of its date chip before a date is chosen."
+  },
+  "quest_deadlineNone": "Bez termínu",
+  "@quest_deadlineNone": {
+    "description": "Chip that clears the Deadline of a Quest."
+  },
+  "quest_deadlineLinkedHint": "Quest se zobrazí v kalendáři jako událost.",
+  "@quest_deadlineLinkedHint": {
+    "description": "Help under the Deadline field: the Quest shows in the calendar as an event."
+  },
+  "quest_dueOn": "Termín {date}",
+  "@quest_dueOn": {
+    "description": "Deadline of an open Quest on its card; date is formatted in the locale.",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "quest_overdueOn": "Po termínu: {date}",
+  "@quest_overdueOn": {
+    "description": "Overdue Deadline of an open Quest on its card; date is formatted in the locale.",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
   "quest_effortMoment": "Chvilka",
   "@quest_effortMoment": {
     "description": "Effort step 1 name; shown only while creating or editing a quest, never in a list."

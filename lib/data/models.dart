@@ -86,6 +86,7 @@ class Quest {
     required this.completedAt,
     required this.awardedXp,
     this.board,
+    this.eventId,
   });
 
   final int id;
@@ -103,6 +104,9 @@ class Quest {
   /// XP recorded at completion; null while the Quest is open.
   final int? awardedXp;
 
+  /// The calendar event that carries the Quest's Deadline, if it has one.
+  final int? eventId;
+
   bool get isDone => completedAt != null;
 }
 
@@ -114,11 +118,15 @@ class QuestDraft {
     this.note,
     this.missionId,
     this.board,
+    this.deadline,
   });
 
   final String name;
   final String? note;
   final Difficulty difficulty;
+
+  /// The date the Quest is meant to be done by; null for none.
+  final DateTime? deadline;
   final int? missionId;
 
   /// The Board section. A Quest without a Mission is always on the Board, so

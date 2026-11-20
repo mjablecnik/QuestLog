@@ -40,7 +40,7 @@ questlog/
 │   ├── fonts/               static TTFs of Figtree, the one typeface of the app
 │   │   └── licenses/        one SIL OFL text per family, `<Family>-OFL.txt`
 │   └── icons/               24px SVG icons drawn with currentColor strokes
-├── drift_schemas/           drift_schema_v1.json to v5, the schema dump per version
+├── drift_schemas/           drift_schema_v1.json to v6, the schema dump per version
 ├── test/                    mirrors lib/ (core, data, services, ui); goldens/, helpers/
 ├── scripts/                 check.sh, check-structure.sh
 ├── screenshots/             the five README screenshots (English, dark theme, 780x1688)
@@ -60,7 +60,7 @@ tables:
 
 | Table | Holds |
 |---|---|
-| `quests` | name, note, effort tier (column `difficulty`), optional mission, Board section (`board`: `todo`, `today` or null = not on the Board; quests without a mission are never null), sort order, completion time and awarded XP |
+| `quests` | event (`event_id`, the calendar event of the Deadline, cleared when that event is deleted), name, note, effort tier (column `difficulty`), optional mission, Board section (`board`: `todo`, `today` or null = not on the Board; quests without a mission are never null), sort order, completion time and awarded XP |
 | `missions` | name, bonus size, status (open, completed, closed), sort order, awarded bonus, optional rule |
 | `recurring_rules` | name, cadence, anchor date, next index, bonus size, last posted date |
 | `rule_quests` | the quests a rule posts with each mission |
@@ -71,7 +71,7 @@ tables:
 | `calendar_addresses` | the addresses saved on events (lower-cased key, last spelling, last use), for suggestions; forgotten 30 days after the last use |
 | `note_nodes` | Folders and Notes in one table: optional parent (none is the top level; deleting a folder row deletes what is inside it), folder flag, name, the Markdown body, whether the name follows the first line, created, edited and deleted times |
 
-The schema is at version 5 (v5 added `calendar_addresses`; v4 added `note_nodes`; v3 added the three calendar tables and fills them once with 35 built-in events: 13 Czech public holidays, 16 notable and folk days and 6 name days; v2 added `quests.board` and `missions.sort_order`; the upgrade puts every quest without a mission in Todo and keeps the old Mission order). Adding the fourth effort tier (`fullDay`) needed no migration:
+The schema is at version 6 (v6 added `quests.event_id`; v5 added `calendar_addresses`; v4 added `note_nodes`; v3 added the three calendar tables and fills them once with 35 built-in events: 13 Czech public holidays, 16 notable and folk days and 6 name days; v2 added `quests.board` and `missions.sort_order`; the upgrade puts every quest without a mission in Todo and keeps the old Mission order). Adding the fourth effort tier (`fullDay`) needed no migration:
 `quests.difficulty` and `rule_quests.difficulty` are plain text holding the enum name, with no
 `CHECK`, so the stored values `easy`, `normal` and `hard` keep their meaning. A change to the
 schema needs a migration step in
@@ -115,6 +115,10 @@ Search, tags, images, tables, opening links and a Trash undo are not part of it 
 `004-questlog-notes`, `005-questlog-note-title`, `007-questlog-trash-preview`). The editor keeps the package's own overlays (accent colour
 set) so that iOS shows the caret, the selection handles and the Cut, Copy and Paste toolbar; copy and paste
 carry plain text only.
+
+### Quest Deadline
+
+A Quest may have a Deadline. Saving one creates an all-day event of type Date (not on the Board) named like the Quest and links it in `quests.event_id`; the Deadline is that event's end date, so changing the event in the Calendar changes the Deadline, and deleting the event (or undoing it) only clears (or restores) the link. Clearing the Deadline in the Quest sheet deletes the event, deleting the Quest deletes its event, and renaming the Quest renames the event. An open Quest whose Deadline is before the Board_Day shows "Overdue" in the destructive colour on its card (Board and Mission detail); a done Quest does not. Completing is only possible on the Quest (spec `010-questlog-quest-deadline`).
 
 ### Deep links
 

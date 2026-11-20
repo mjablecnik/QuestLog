@@ -7,6 +7,7 @@ import '../../../l10n/app_localizations.dart';
 import '../../theme/questlog_theme.dart';
 import '../../theme/tokens.dart';
 import '../../widgets/cards/check_circle.dart';
+import '../../widgets/cards/deadline_label.dart';
 import '../../widgets/cards/difficulty_pips.dart';
 import '../../widgets/common/app_icon.dart';
 
@@ -26,7 +27,13 @@ class DetailQuestRow extends StatelessWidget {
     required this.onEdit,
     required this.onDelete,
     this.completedLabel,
+    this.deadline,
+    this.today,
   });
+
+  /// The Deadline of an open Quest and the Board_Day date.
+  final DateTime? deadline;
+  final DateTime? today;
 
   final Quest quest;
   final VoidCallback onToggle;
@@ -115,7 +122,16 @@ class DetailQuestRow extends StatelessWidget {
                           else
                             const SizedBox.shrink()
                         else
-                          DifficultyPips(quest.difficulty),
+                          Wrap(
+                            spacing: Space.s8,
+                            runSpacing: Space.s4,
+                            crossAxisAlignment: WrapCrossAlignment.center,
+                            children: <Widget>[
+                              DifficultyPips(quest.difficulty),
+                              if (deadline != null && today != null)
+                                DeadlineLabel(deadline: deadline!, today: today!, style: meta),
+                            ],
+                          ),
                       ],
                     ),
                   ),

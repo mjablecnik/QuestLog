@@ -35,6 +35,7 @@ Month view (2026-11-20, Martin's request, spec `006-questlog-calendar-spans`): a
 row across its days, lanes from `layoutWeek` (`lib/ui/screens/calendar/week_lanes.dart`) so a bar keeps one height.
 Address history (2026-11-20, Martin's request, spec `008-questlog-address-history`; schema v5): the Event_Form suggests addresses saved on earlier events, from the `calendar_addresses` table, forgotten after 30 days without use (no map service: there is no network).
 Deep links (spec `009-questlog-deep-links`): `questlog://calendar` (also quests, missions, notes, settings) opens that tab; Martin makes the Home Screen icon in Shortcuts (Open URL, Add to Home Screen). Package `app_links`; `deepLinksProvider` is empty except in `main`.
+Quest Deadline (2026-11-20, Martin's request, spec `010-questlog-quest-deadline`; schema v6): a Quest may have a date; it is an all-day Date event in the Calendar linked by `quests.event_id` (`ON DELETE SET NULL`), the Deadline is the event's end date, so editing the event moves it, deleting the event leaves the Quest without a date. An open Quest after its Deadline shows "Po termínu" (`destructiveText`). Completing happens only on the Quest.
 Not done: the iOS build and every on-device check — Martin does those himself (open LOW
 entry in `.agents/ISSUES.md`).
 
@@ -67,11 +68,11 @@ lib/
                         widgets/ (cards, common, hero, reward, sheet), forms/
   l10n/                 ARB files (cs, en) + generated localizations
 assets/fonts, assets/icons   bundled static TTFs (+ licenses/ OFL texts) and 24px SVG icons (nothing fetched at runtime)
-drift_schemas/               schema dump per version (currently v5)
+drift_schemas/               schema dump per version (currently v6)
 scripts/                     check.sh, check-structure.sh (max 15 source files per directory)
 screenshots/                 README screenshots (English, dark theme, real app at 2x); retake them after visible UI changes
 test/                        mirrors lib/ (core, data, services, ui) + goldens/, helpers/
-.kiro/specs/                 001 domain, 002 UI, 003 calendar, 004 notes, 005-009 later changes: requirements, design, tasks
+.kiro/specs/                 001 domain, 002 UI, 003 calendar, 004 notes, 005-010 later changes: requirements, design, tasks
 .design/                     approved visual contract (DESIGN.md, artboards/, screens/, icon/generate.mjs = app icon + launch screen)
 .agents/                     pipeline artifacts: PIPELINE_STATE.json, ISSUES.md, MEMORY.md,
                              USE_CASES.md, runs/2026-11-15-1405/ (one report per phase)
@@ -84,8 +85,8 @@ Humans read `README.md` and `DOCS.md`; do not duplicate them here.
 - Follow the Kiro spec workflow (`kiro-spec` skill) and the global standards in
   `~/.claude/standards/` (English code/docs, Czech+English user-facing strings).
 - Where `.design/` artboards and spec requirements differ, the requirements win.
-- No due dates, streaks, history screen, notifications or projects in v1 — do not add
-  scope the specs do not ask for.
+- No streaks, history screen, notifications or projects in v1, and no due dates except the
+  optional Quest Deadline of spec `010` — do not add scope the specs do not ask for.
 - No `DateTime.now` outside `lib/core/clock.dart`, no literal colours, durations or
   spacing in `lib/ui`, no icon-font icons; guard tests under `test/` fail on them.
 - Bundle id `com.jablecnik.questlog`, display name `Questlog`: iOS reads both from

@@ -6,6 +6,7 @@ import 'package:drift/drift.dart';
 
 import '../core/cadence.dart';
 import '../core/xp_rules.dart';
+import 'calendar/calendar_tables.dart';
 import 'models.dart';
 import 'preferences.dart';
 
@@ -57,6 +58,11 @@ class Quests extends Table {
   DateTimeColumn get createdAt => dateTime()();
   DateTimeColumn get completedAt => dateTime().nullable()();
   IntColumn get awardedXp => integer().nullable()();
+
+  /// The calendar event of the Quest's Deadline. Deleting the event only clears
+  /// this link; the Quest stays.
+  IntColumn get eventId =>
+      integer().nullable().references(CalendarEvents, #id, onDelete: KeyAction.setNull)();
 }
 
 @DataClassName('RecurringRuleRow')

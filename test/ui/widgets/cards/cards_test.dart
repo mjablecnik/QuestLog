@@ -481,6 +481,72 @@ void main() {
       expect(paint, paintsExactlyCountTimes(#drawArc, 0));
     });
   });
+
+  group('QuestCard deadline', () {
+    final DateTime today = DateTime(2026, 11, 20);
+
+    testWidgets(
+      'an open Quest shows its Deadline, and "Overdue" once it has passed',
+      (tester) async {
+        await pumpCards(
+          tester,
+          QuestCard(
+            quest: boardQuest(),
+            onToggle: () {},
+            deadline: DateTime(2026, 11, 25),
+            today: today,
+          ),
+        );
+        expect(find.text('Due 11/25/2026'), findsOneWidget);
+        await pumpCards(
+          tester,
+          QuestCard(
+            quest: boardQuest(),
+            onToggle: () {},
+            deadline: DateTime(2026, 11, 19),
+            today: today,
+          ),
+        );
+        expect(find.text('Overdue: 11/19/2026'), findsOneWidget);
+        final Text text = tester.widget<Text>(
+          find.byKey(const ValueKey<String>('quest-deadline')),
+        );
+        expect(text.style!.color, QuestlogPalette.guildBoard.destructiveText);
+        await pumpCards(
+          tester,
+          QuestCard(
+            quest: boardQuest(),
+            onToggle: () {},
+            deadline: today,
+            today: today,
+          ),
+        );
+        expect(find.text('Due 11/20/2026'), findsOneWidget);
+      },
+    );
+
+    testWidgets(
+      'a done Quest is never shown as overdue and shows no Deadline',
+      (tester) async {
+        await pumpCards(
+          tester,
+          QuestCard(
+            quest: boardQuest(
+              completedAt: DateTime(2026, 11, 20, 8),
+              awardedXp: 25,
+            ),
+            onToggle: () {},
+            deadline: DateTime(2026, 11, 1),
+            today: today,
+          ),
+        );
+        expect(
+          find.byKey(const ValueKey<String>('quest-deadline')),
+          findsNothing,
+        );
+      },
+    );
+  });
 }
 
 BoxDecoration _cardDecoration(WidgetTester tester) {

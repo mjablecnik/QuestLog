@@ -5,6 +5,9 @@ import '../core/clock.dart';
 import '../core/errors.dart';
 import '../core/xp_rules.dart';
 import '../core/validation.dart';
+import '../core/calendar/event_type.dart';
+import '../data/calendar/calendar_mappers.dart';
+import '../data/calendar/calendar_models.dart';
 import '../data/database.dart';
 import '../data/mappers.dart';
 import '../data/quest_writes.dart';
@@ -38,6 +41,7 @@ class QuestService {
         createdAt: _clock.now(),
         board: draft.board,
       );
+      await _applyDeadline(id, null, name, draft.deadline);
       return (await _load(id)).toModel();
     });
   }
@@ -52,6 +56,7 @@ class QuestService {
       final change = QuestsCompanion(name: Value(name), note: Value(note));
       if (quest.completedAt != null) {
         await (_db.update(_db.quests)..where((q) => q.id.equals(id))).write(change);
+        await _applyDeadline(id, quest.eventId, name, null, keepDate: true);
       } else {
         final missionId = draft.missionId;
         if (missionId != null) {
@@ -64,6 +69,7 @@ class QuestService {
             board: Value(missionId == null ? (draft.board ?? BoardSection.todo) : draft.board),
           ),
         );
+        await _applyDeadline(id, quest.eventId, name, draft.deadline);
       }
       return (await _load(id)).toModel();
     });
@@ -72,9 +78,77 @@ class QuestService {
   /// Removes a Quest permanently; Total_XP is left unchanged.
   Future<void> delete(int id) {
     return _db.runTransaction(() async {
-      await _load(id);
+      final quest = await _load(id);
       await (_db.delete(_db.quests)..where((q) => q.id.equals(id))).go();
+      final eventId = quest.eventId;
+      if (eventId != null) {
+        await (_db.delete(_db.calendarEvents)..where((e) => e.id.equals(eventId))).go();
+      }
     });
+  }
+
+  /// The Deadline of every Quest that has one, by Quest id: the end date of its
+  /// linked calendar event, so a change made to the event in the Calendar shows.
+  Stream<Map<int, DateTime>> watchDeadlines() {
+    final query = _db.select(_db.quests).join([
+      innerJoin(_db.calendarEvents, _db.calendarEvents.id.equalsExp(_db.quests.eventId)),
+    ]);
+    return query.watch().map(
+      (rows) => <int, DateTime>{
+        for (final row in rows) row.readTable(_db.quests).id: row.readTable(_db.calendarEvents).endDate,
+      },
+    );
+  }
+
+  /// Keeps the linked calendar event of Quest [questId] in line with [deadline]:
+  /// creates it, moves it (keeping its length and times), renames it, or deletes
+  /// it when [deadline] is null. With [keepDate] only the name is brought along.
+  Future<void> _applyDeadline(
+    int questId,
+    int? eventId,
+    String name,
+    DateTime? deadline, {
+    bool keepDate = false,
+  }) async {
+    final CalendarEventRow? event = eventId == null
+        ? null
+        : await (_db.select(_db.calendarEvents)..where((e) => e.id.equals(eventId))).getSingleOrNull();
+    final DateTime now = _clock.now();
+    if (event != null) {
+      if (!keepDate && deadline == null) {
+        await (_db.delete(_db.calendarEvents)..where((e) => e.id.equals(event.id))).go();
+        return;
+      }
+      final DateTime end = keepDate ? event.endDate : DateTime(deadline!.year, deadline.month, deadline.day);
+      final int span = event.endDate.difference(event.startDate).inDays;
+      await (_db.update(_db.calendarEvents)..where((e) => e.id.equals(event.id))).write(
+        CalendarEventsCompanion(
+          name: Value(name),
+          startDate: Value(DateTime(end.year, end.month, end.day - span)),
+          endDate: Value(end),
+          updatedAt: Value(now),
+        ),
+      );
+      return;
+    }
+    if (deadline == null || keepDate) return;
+    final DateTime day = DateTime(deadline.year, deadline.month, deadline.day);
+    final int newEventId = await _db.into(_db.calendarEvents).insert(
+      eventCompanion(
+        EventDraft(
+          name: name,
+          type: EventType.date,
+          startDate: day,
+          endDate: day,
+          onBoard: false,
+        ),
+        createdAt: now,
+        updatedAt: now,
+      ),
+    );
+    await (_db.update(_db.quests)..where((q) => q.id.equals(questId))).write(
+      QuestsCompanion(eventId: Value(newEventId)),
+    );
   }
 
   /// Marks the Quest done, records its XP and adds it to Total_XP.

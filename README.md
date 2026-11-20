@@ -21,6 +21,7 @@ Questlog is a personal gamified to-do app for one user, built with Flutter for i
   reward (small, medium, large) when the last quest is done. Missions can be reordered by
   dragging. Their quests live in the mission and reach the Board only when you post them
   there (Today or Todo) from the quest's edit sheet.
+- **Deadline**: a Quest can have a date. It then shows in the Calendar as an event you can edit or delete without touching the Quest, and an open Quest past its date is marked Overdue.
 - **XP and levels** are shown in the hero bar; completing a quest or mission opens a reward
   card, and reopening one takes the XP back.
 - **Calendar** is a tab with a month overview, a day sheet, event detail, an event form,

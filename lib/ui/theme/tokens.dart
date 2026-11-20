@@ -29,6 +29,7 @@ class QuestlogPalette {
     Color? slipTextDim,
     Color? slipTextFaint,
     Color? slipDone,
+    Color? destructiveText,
     required this.inkOnBrass,
     required this.destructive,
     required this.inkOnDestructive,
@@ -37,6 +38,7 @@ class QuestlogPalette {
     required this.field,
     required this.fieldActive,
   }) : brassText = brassText ?? brass,
+       destructiveText = destructiveText ?? destructive,
        brassOnParchment = brassOnParchment ?? brass,
        slip = slip ?? (brightness == Brightness.dark ? boardRaised : parchment),
        slipEdge =
@@ -59,6 +61,10 @@ class QuestlogPalette {
   final Color parchment, parchmentEdge, ink, inkDim, inkFaint;
   final Color brass, brassSoft, inkOnBrass, destructive, inkOnDestructive;
   final Color scrim, sheet, field, fieldActive;
+
+  /// The destructive colour as text on a Quest card (the overdue Deadline); darker
+  /// than the fill in the light theme so that it reaches 4.5:1 on parchment.
+  final Color destructiveText;
 
   /// Brass as text or an icon stroke on the ground.
   final Color brassText;
@@ -128,6 +134,7 @@ class QuestlogPalette {
     brassOnParchment: Color(0xFF2B7287),
     inkOnBrass: Color(0xFFF4FAFC),
     destructive: Color(0xFFD96B5A),
+    destructiveText: Color(0xFFB03A2A),
     inkOnDestructive: Color(0xFF2B0F0A),
     scrim: Color(0x8015202B),
     sheet: Color(0xFFF8FAFD),

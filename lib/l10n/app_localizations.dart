@@ -386,6 +386,36 @@ abstract class AppLocalizations {
   /// **'{date}'**
   String quest_completedOn(String date);
 
+  /// Label of the Deadline field of the Quest sheet, and of its date chip before a date is chosen.
+  ///
+  /// In cs, this message translates to:
+  /// **'Termín'**
+  String get quest_deadlineLabel;
+
+  /// Chip that clears the Deadline of a Quest.
+  ///
+  /// In cs, this message translates to:
+  /// **'Bez termínu'**
+  String get quest_deadlineNone;
+
+  /// Help under the Deadline field: the Quest shows in the calendar as an event.
+  ///
+  /// In cs, this message translates to:
+  /// **'Quest se zobrazí v kalendáři jako událost.'**
+  String get quest_deadlineLinkedHint;
+
+  /// Deadline of an open Quest on its card; date is formatted in the locale.
+  ///
+  /// In cs, this message translates to:
+  /// **'Termín {date}'**
+  String quest_dueOn(String date);
+
+  /// Overdue Deadline of an open Quest on its card; date is formatted in the locale.
+  ///
+  /// In cs, this message translates to:
+  /// **'Po termínu: {date}'**
+  String quest_overdueOn(String date);
+
   /// Effort step 1 name; shown only while creating or editing a quest, never in a list.
   ///
   /// In cs, this message translates to:

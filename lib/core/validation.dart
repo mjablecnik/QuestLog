@@ -28,3 +28,8 @@ String? validatedNote(String? raw, {String field = 'note'}) {
 
 /// Characters, not UTF-16 code units, so that it agrees with SQLite's `length()`.
 int _length(String value) => value.runes.length;
+
+/// Whether a Quest with [deadline] that is still open is Overdue on [today]
+/// (both calendar dates).
+bool isOverdue(DateTime deadline, DateTime today) =>
+    DateTime(deadline.year, deadline.month, deadline.day).isBefore(DateTime(today.year, today.month, today.day));

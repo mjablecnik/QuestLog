@@ -229,8 +229,12 @@ class _MissionDetailScreenState extends ConsumerState<MissionDetailScreen> {
     ]..sort((Quest a, Quest b) => b.completedAt!.compareTo(a.completedAt!));
     final DateTime today = ref.watch(boardDayProvider);
 
+    final Map<int, DateTime> deadlines = ref.watch(questDeadlinesProvider).value ?? const <int, DateTime>{};
+
     Widget row(Quest quest) => DetailQuestRow(
       quest: quest,
+      deadline: deadlines[quest.id],
+      today: today,
       completedLabel: quest.completedAt == null
           ? null
           : questCompletedLabel(l, quest.completedAt!, today),

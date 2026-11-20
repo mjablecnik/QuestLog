@@ -63,6 +63,11 @@ final settingsProvider = StreamProvider<AppSettings>(
   (ref) => ref.watch(settingsServiceProvider).watch(),
 );
 
+/// The Deadline of each Quest that has one, by Quest id.
+final questDeadlinesProvider = StreamProvider<Map<int, DateTime>>(
+  (ref) => ref.watch(questServiceProvider).watchDeadlines(),
+);
+
 final openBoardProvider = StreamProvider<List<Quest>>(
   (ref) => ref.watch(questServiceProvider).watchOpenBoard(),
 );

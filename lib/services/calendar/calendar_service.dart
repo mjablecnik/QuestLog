@@ -129,6 +129,7 @@ class CalendarService {
       final DeletedEventSnapshot snapshot = DeletedEventSnapshot(
         event: event,
         skippedDates: await _skipped(id),
+        questId: (await (_db.select(_db.quests)..where((q) => q.eventId.equals(id))).getSingleOrNull())?.id,
         completions: (await (_db.select(_db.calendarCompletions)..where((t) => t.eventId.equals(id))).get())
             .map((CalendarCompletionRow r) => r.toModel())
             .toList(),
@@ -187,6 +188,12 @@ class CalendarService {
       for (final DateTime d in snapshot.skippedDates) {
         await _db.into(_db.calendarSkippedDates).insert(
           CalendarSkippedDatesCompanion.insert(eventId: e.id, skippedOn: d),
+        );
+      }
+      final int? questId = snapshot.questId;
+      if (questId != null) {
+        await (_db.update(_db.quests)..where((q) => q.id.equals(questId))).write(
+          QuestsCompanion(eventId: Value(e.id)),
         );
       }
       for (final EventCompletion c in snapshot.completions) {

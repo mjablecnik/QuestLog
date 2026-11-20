@@ -19,6 +19,8 @@ class QuestRow extends StatelessWidget {
     required this.quest,
     required this.completedLabel,
     this.missionName,
+    this.deadline,
+    this.today,
     required this.onToggle,
     required this.onEdit,
     required this.onDelete,
@@ -31,6 +33,9 @@ class QuestRow extends StatelessWidget {
 
   /// Name of the Mission the Quest belongs to, shown on its card.
   final String? missionName;
+  /// The Quest's Deadline and the Board_Day date, for the card.
+  final DateTime? deadline;
+  final DateTime? today;
   final VoidCallback onToggle;
   final VoidCallback onEdit;
   final VoidCallback onDelete;
@@ -80,6 +85,8 @@ class QuestRow extends StatelessWidget {
               quest: quest,
               completedLabel: completedLabel,
               missionName: missionName,
+              deadline: deadline,
+              today: today,
               onToggle: onToggle,
               onTap: onEdit,
             ),

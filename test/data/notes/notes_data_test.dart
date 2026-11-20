@@ -47,8 +47,8 @@ Future<void> main() async {
     setUp(() => db = createTestDatabase());
     tearDown(() => db.close());
 
-    test('a fresh database is at version 5 with an empty notes table', () async {
-      expect(db.schemaVersion, 5);
+    test('a fresh database is at version 6 with an empty notes table', () async {
+      expect(db.schemaVersion, 6);
       expect(await db.select(db.noteNodes).get(), isEmpty);
     });
 
@@ -125,7 +125,7 @@ Future<void> main() async {
 
       db = QuestlogDatabase.forTesting(NativeDatabase(file));
       expect(await db.select(db.noteNodes).get(), hasLength(1));
-      expect(db.schemaVersion, 5);
+      expect(db.schemaVersion, 6);
       await db.close();
     });
   });

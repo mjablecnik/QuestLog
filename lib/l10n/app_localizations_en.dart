@@ -244,6 +244,26 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get quest_deadlineLabel => 'Deadline';
+
+  @override
+  String get quest_deadlineNone => 'No deadline';
+
+  @override
+  String get quest_deadlineLinkedHint =>
+      'The quest shows in the calendar as an event.';
+
+  @override
+  String quest_dueOn(String date) {
+    return 'Due $date';
+  }
+
+  @override
+  String quest_overdueOn(String date) {
+    return 'Overdue: $date';
+  }
+
+  @override
   String get quest_effortMoment => 'Moment';
 
   @override

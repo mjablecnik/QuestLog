@@ -176,8 +176,11 @@ class DeletedEventSnapshot {
     required this.event,
     required this.skippedDates,
     required this.completions,
+    this.questId,
   });
 
+  /// The Quest whose Deadline this event was, so that an undo can link it again.
+  final int? questId;
   final CalendarEvent event;
   final List<DateTime> skippedDates;
   final List<EventCompletion> completions;

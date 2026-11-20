@@ -276,6 +276,8 @@ class _QuestListState extends ConsumerState<QuestList> {
     final DateTime? completedAt = quest.completedAt;
     return QuestRow(
       quest: quest,
+      deadline: ref.watch(questDeadlinesProvider).value?[quest.id],
+      today: widget.today,
       completedLabel: completedAt == null
           ? null
           : questCompletedLabel(l, completedAt, widget.today),

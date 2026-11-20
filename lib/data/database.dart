@@ -42,7 +42,7 @@ class QuestlogDatabase extends _$QuestlogDatabase {
   QuestlogDatabase.forTesting(super.executor);
 
   @override
-  int get schemaVersion => 5;
+  int get schemaVersion => 6;
 
   /// Runs [action] in a transaction (joining the active one, if any).
   ///
@@ -99,6 +99,14 @@ class QuestlogDatabase extends _$QuestlogDatabase {
           if (from < 5) {
             // Address suggestions for the event form. No existing table changes.
             await m.createTable(calendarAddresses);
+          }
+          if (from < 6) {
+            // A Quest's Deadline is a calendar event it points to. Added only when
+            // missing, so a file that already has the column is left alone.
+            final columns = await customSelect('PRAGMA table_info(quests)').get();
+            if (!columns.any((row) => row.read<String>('name') == 'event_id')) {
+              await m.addColumn(quests, quests.eventId);
+            }
           }
         },
         beforeOpen: (details) async {

@@ -8,6 +8,7 @@ import '../../../l10n/app_localizations.dart';
 import '../../theme/questlog_theme.dart';
 import '../../theme/tokens.dart';
 import 'check_circle.dart';
+import 'deadline_label.dart';
 import 'difficulty_pips.dart';
 
 /// Completion time label of a done Quest: "today 8:52", "yesterday" or a date.
@@ -40,9 +41,16 @@ class QuestCard extends StatelessWidget {
     this.completedLabel,
     this.missionName,
     this.trailing,
+    this.deadline,
+    this.today,
   });
 
   final Quest quest;
+
+  /// The Deadline of the Quest, shown while it is open, with the Board_Day date
+  /// [today] that decides whether it is overdue.
+  final DateTime? deadline;
+  final DateTime? today;
 
   /// The check circle: completes an open Quest, reopens a done one.
   final VoidCallback onToggle;
@@ -80,6 +88,8 @@ class QuestCard extends StatelessWidget {
       if (missionName != null)
         Text(missionName!, style: meta.copyWith(fontWeight: FontWeight.w600)),
       if (done && completedLabel != null) Text(completedLabel!, style: meta),
+      if (!done && deadline != null && today != null)
+        DeadlineLabel(deadline: deadline!, today: today!, style: meta),
     ];
 
     final Widget xpText = Text(

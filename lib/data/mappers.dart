@@ -13,6 +13,7 @@ extension QuestRowMapping on QuestRow {
         createdAt: createdAt,
         completedAt: completedAt,
         awardedXp: awardedXp,
+        eventId: eventId,
       );
 }
 

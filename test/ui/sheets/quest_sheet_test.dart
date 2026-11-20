@@ -716,4 +716,39 @@ void main() {
       expect(await f.quests(), isEmpty);
     });
   });
+
+  group('deadline', () {
+    testWidgets('picking a date saves the Quest with a Deadline and a calendar event', (tester) async {
+      final _Fixture f = await _pumpCreate(tester);
+      await tester.enterText(_nameField, 'Pay rent');
+      await tester.pumpAndSettle();
+      expect(find.text(l10n.quest_deadlineNone), findsOneWidget);
+      await tester.tap(find.byKey(const ValueKey<String>('quest-deadline-pick')));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('20'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('OK'));
+      await tester.pumpAndSettle();
+      expect(find.text('11/20/2026'), findsOneWidget);
+      expect(find.text(l10n.quest_deadlineLinkedHint), findsOneWidget);
+      await _submit(tester);
+      final events = await f.db.select(f.db.calendarEvents).get();
+      expect(events.where((e) => e.name == 'Pay rent' && e.endDate == DateTime(2026, 11, 20)), hasLength(1));
+      expect((await f.db.select(f.db.quests).get()).single.eventId, isNotNull);
+    });
+
+    testWidgets('"No deadline" clears a chosen date', (tester) async {
+      final _Fixture f = await _pumpCreate(tester);
+      await tester.enterText(_nameField, 'Pay rent');
+      await tester.tap(find.byKey(const ValueKey<String>('quest-deadline-pick')));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('OK'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text(l10n.quest_deadlineNone));
+      await tester.pumpAndSettle();
+      expect(find.text(l10n.quest_deadlineLinkedHint), findsNothing);
+      await _submit(tester);
+      expect((await f.db.select(f.db.quests).get()).single.eventId, isNull);
+    });
+  });
 }

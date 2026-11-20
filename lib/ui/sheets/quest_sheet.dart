@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 
 import '../../core/errors.dart';
 import '../../core/xp_rules.dart';
@@ -59,6 +60,8 @@ class _QuestSheetState extends ConsumerState<QuestSheet> {
   late Difficulty _difficulty;
   late int? _missionId;
   late BoardSection? _board;
+  late DateTime? _deadline;
+  late final DateTime? _initialDeadline;
 
   FieldError? _nameError;
   FieldError? _noteError;
@@ -83,6 +86,8 @@ class _QuestSheetState extends ConsumerState<QuestSheet> {
     _note = TextEditingController(text: quest?.note ?? '');
     _difficulty = quest?.difficulty ?? Difficulty.normal;
     _missionId = quest != null ? quest.missionId : widget.presetMissionId;
+    _initialDeadline = quest == null ? null : ref.read(questDeadlinesProvider).value?[quest.id];
+    _deadline = _initialDeadline;
     // A new Quest of a Mission starts off the Board, any other one in Todo.
     _board = quest != null
         ? quest.board
@@ -110,7 +115,8 @@ class _QuestSheetState extends ConsumerState<QuestSheet> {
         _note.text != initialNote ||
         _difficulty != initialDifficulty ||
         _missionId != initialMission ||
-        _board != (quest != null ? quest.board : _initialNewBoard);
+        _board != (quest != null ? quest.board : _initialNewBoard) ||
+        _deadline != _initialDeadline;
   }
 
   BoardSection? get _initialNewBoard =>
@@ -126,6 +132,23 @@ class _QuestSheetState extends ConsumerState<QuestSheet> {
   void _onNoteChanged(String value) {
     setState(() {
       if (_noteError != null) _noteError = validateNote(value);
+      _serviceError = null;
+    });
+  }
+
+  /// Opens the date picker for the Deadline; a cancelled picker changes nothing.
+  Future<void> _pickDeadline() async {
+    final DateTime now = ref.read(clockProvider).now();
+    final DateTime initial = _deadline ?? DateTime(now.year, now.month, now.day);
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: initial,
+      firstDate: DateTime(initial.year - 1),
+      lastDate: DateTime(initial.year + 10),
+    );
+    if (picked == null || !mounted) return;
+    setState(() {
+      _deadline = DateTime(picked.year, picked.month, picked.day);
       _serviceError = null;
     });
   }
@@ -160,6 +183,7 @@ class _QuestSheetState extends ConsumerState<QuestSheet> {
       difficulty: _difficulty,
       missionId: _missionId,
       board: _board,
+      deadline: _deadline,
     );
     try {
       final Quest saved = _isEditing
@@ -296,6 +320,36 @@ class _QuestSheetState extends ConsumerState<QuestSheet> {
               allowOff: _missionId != null,
               onSelected: (BoardSection? value) =>
                   setState(() => _board = value),
+            ),
+          ),
+          const SizedBox(height: Space.s20),
+          _FieldGroup(
+            label: l10n.quest_deadlineLabel,
+            help: _deadline != null ? l10n.quest_deadlineLinkedHint : null,
+            child: LayoutBuilder(
+              builder: (BuildContext context, BoxConstraints constraints) => Wrap(
+                spacing: Space.s8,
+                runSpacing: Space.s8,
+                children: <Widget>[
+                  _PickChip(
+                    label: l10n.quest_deadlineNone,
+                    selected: _deadline == null,
+                    enabled: !_isDone,
+                    maxWidth: constraints.maxWidth,
+                    onTap: () => setState(() => _deadline = null),
+                  ),
+                  _PickChip(
+                    key: const ValueKey<String>('quest-deadline-pick'),
+                    label: _deadline == null
+                        ? l10n.quest_deadlineLabel
+                        : DateFormat.yMd(l10n.localeName).format(_deadline!),
+                    selected: _deadline != null,
+                    enabled: !_isDone,
+                    maxWidth: constraints.maxWidth,
+                    onTap: _pickDeadline,
+                  ),
+                ],
+              ),
             ),
           ),
           const SizedBox(height: Space.s20),
@@ -638,6 +692,7 @@ class _MissionPicker extends ConsumerWidget {
 
 class _PickChip extends StatelessWidget {
   const _PickChip({
+    super.key,
     required this.label,
     required this.selected,
     required this.enabled,

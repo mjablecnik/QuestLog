@@ -1093,1395 +1093,6 @@ class MissionsCompanion extends UpdateCompanion<MissionRow> {
   }
 }
 
-class $QuestsTable extends Quests with TableInfo<$QuestsTable, QuestRow> {
-  @override
-  final GeneratedDatabase attachedDatabase;
-  final String? _alias;
-  $QuestsTable(this.attachedDatabase, [this._alias]);
-  static const VerificationMeta _idMeta = const VerificationMeta('id');
-  @override
-  late final GeneratedColumn<int> id = GeneratedColumn<int>(
-    'id',
-    aliasedName,
-    false,
-    hasAutoIncrement: true,
-    type: DriftSqlType.int,
-    requiredDuringInsert: false,
-    defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'PRIMARY KEY AUTOINCREMENT',
-    ),
-  );
-  static const VerificationMeta _nameMeta = const VerificationMeta('name');
-  @override
-  late final GeneratedColumn<String> name = GeneratedColumn<String>(
-    'name',
-    aliasedName,
-    false,
-    check: () =>
-        ComparableExpr(StringExpressionOperators(name).trim().length)
-            .isBetweenValues(1, 80),
-    type: DriftSqlType.string,
-    requiredDuringInsert: true,
-  );
-  static const VerificationMeta _noteMeta = const VerificationMeta('note');
-  @override
-  late final GeneratedColumn<String> note = GeneratedColumn<String>(
-    'note',
-    aliasedName,
-    true,
-    check: () => ComparableExpr(note.length).isSmallerOrEqualValue(500),
-    type: DriftSqlType.string,
-    requiredDuringInsert: false,
-  );
-  @override
-  late final GeneratedColumnWithTypeConverter<Difficulty, String> difficulty =
-      GeneratedColumn<String>(
-        'difficulty',
-        aliasedName,
-        false,
-        type: DriftSqlType.string,
-        requiredDuringInsert: true,
-      ).withConverter<Difficulty>($QuestsTable.$converterdifficulty);
-  static const VerificationMeta _missionIdMeta = const VerificationMeta(
-    'missionId',
-  );
-  @override
-  late final GeneratedColumn<int> missionId = GeneratedColumn<int>(
-    'mission_id',
-    aliasedName,
-    true,
-    type: DriftSqlType.int,
-    requiredDuringInsert: false,
-    defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'REFERENCES missions (id) ON DELETE CASCADE',
-    ),
-  );
-  @override
-  late final GeneratedColumnWithTypeConverter<BoardSection?, String> board =
-      GeneratedColumn<String>(
-        'board',
-        aliasedName,
-        true,
-        type: DriftSqlType.string,
-        requiredDuringInsert: false,
-      ).withConverter<BoardSection?>($QuestsTable.$converterboardn);
-  static const VerificationMeta _sortOrderMeta = const VerificationMeta(
-    'sortOrder',
-  );
-  @override
-  late final GeneratedColumn<int> sortOrder = GeneratedColumn<int>(
-    'sort_order',
-    aliasedName,
-    false,
-    type: DriftSqlType.int,
-    requiredDuringInsert: true,
-  );
-  static const VerificationMeta _createdAtMeta = const VerificationMeta(
-    'createdAt',
-  );
-  @override
-  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
-    'created_at',
-    aliasedName,
-    false,
-    type: DriftSqlType.dateTime,
-    requiredDuringInsert: true,
-  );
-  static const VerificationMeta _completedAtMeta = const VerificationMeta(
-    'completedAt',
-  );
-  @override
-  late final GeneratedColumn<DateTime> completedAt = GeneratedColumn<DateTime>(
-    'completed_at',
-    aliasedName,
-    true,
-    type: DriftSqlType.dateTime,
-    requiredDuringInsert: false,
-  );
-  static const VerificationMeta _awardedXpMeta = const VerificationMeta(
-    'awardedXp',
-  );
-  @override
-  late final GeneratedColumn<int> awardedXp = GeneratedColumn<int>(
-    'awarded_xp',
-    aliasedName,
-    true,
-    type: DriftSqlType.int,
-    requiredDuringInsert: false,
-  );
-  @override
-  List<GeneratedColumn> get $columns => [
-    id,
-    name,
-    note,
-    difficulty,
-    missionId,
-    board,
-    sortOrder,
-    createdAt,
-    completedAt,
-    awardedXp,
-  ];
-  @override
-  String get aliasedName => _alias ?? actualTableName;
-  @override
-  String get actualTableName => $name;
-  static const String $name = 'quests';
-  @override
-  VerificationContext validateIntegrity(
-    Insertable<QuestRow> instance, {
-    bool isInserting = false,
-  }) {
-    final context = VerificationContext();
-    final data = instance.toColumns(true);
-    if (data.containsKey('id')) {
-      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
-    }
-    if (data.containsKey('name')) {
-      context.handle(
-        _nameMeta,
-        name.isAcceptableOrUnknown(data['name']!, _nameMeta),
-      );
-    } else if (isInserting) {
-      context.missing(_nameMeta);
-    }
-    if (data.containsKey('note')) {
-      context.handle(
-        _noteMeta,
-        note.isAcceptableOrUnknown(data['note']!, _noteMeta),
-      );
-    }
-    if (data.containsKey('mission_id')) {
-      context.handle(
-        _missionIdMeta,
-        missionId.isAcceptableOrUnknown(data['mission_id']!, _missionIdMeta),
-      );
-    }
-    if (data.containsKey('sort_order')) {
-      context.handle(
-        _sortOrderMeta,
-        sortOrder.isAcceptableOrUnknown(data['sort_order']!, _sortOrderMeta),
-      );
-    } else if (isInserting) {
-      context.missing(_sortOrderMeta);
-    }
-    if (data.containsKey('created_at')) {
-      context.handle(
-        _createdAtMeta,
-        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
-      );
-    } else if (isInserting) {
-      context.missing(_createdAtMeta);
-    }
-    if (data.containsKey('completed_at')) {
-      context.handle(
-        _completedAtMeta,
-        completedAt.isAcceptableOrUnknown(
-          data['completed_at']!,
-          _completedAtMeta,
-        ),
-      );
-    }
-    if (data.containsKey('awarded_xp')) {
-      context.handle(
-        _awardedXpMeta,
-        awardedXp.isAcceptableOrUnknown(data['awarded_xp']!, _awardedXpMeta),
-      );
-    }
-    return context;
-  }
-
-  @override
-  Set<GeneratedColumn> get $primaryKey => {id};
-  @override
-  QuestRow map(Map<String, dynamic> data, {String? tablePrefix}) {
-    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return QuestRow(
-      id: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
-        data['${effectivePrefix}id'],
-      )!,
-      name: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}name'],
-      )!,
-      note: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}note'],
-      ),
-      difficulty: $QuestsTable.$converterdifficulty.fromSql(
-        attachedDatabase.typeMapping.read(
-          DriftSqlType.string,
-          data['${effectivePrefix}difficulty'],
-        )!,
-      ),
-      missionId: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
-        data['${effectivePrefix}mission_id'],
-      ),
-      board: $QuestsTable.$converterboardn.fromSql(
-        attachedDatabase.typeMapping.read(
-          DriftSqlType.string,
-          data['${effectivePrefix}board'],
-        ),
-      ),
-      sortOrder: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
-        data['${effectivePrefix}sort_order'],
-      )!,
-      createdAt: attachedDatabase.typeMapping.read(
-        DriftSqlType.dateTime,
-        data['${effectivePrefix}created_at'],
-      )!,
-      completedAt: attachedDatabase.typeMapping.read(
-        DriftSqlType.dateTime,
-        data['${effectivePrefix}completed_at'],
-      ),
-      awardedXp: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
-        data['${effectivePrefix}awarded_xp'],
-      ),
-    );
-  }
-
-  @override
-  $QuestsTable createAlias(String alias) {
-    return $QuestsTable(attachedDatabase, alias);
-  }
-
-  static JsonTypeConverter2<Difficulty, String, String> $converterdifficulty =
-      const EnumNameConverter<Difficulty>(Difficulty.values);
-  static JsonTypeConverter2<BoardSection, String, String> $converterboard =
-      const EnumNameConverter<BoardSection>(BoardSection.values);
-  static JsonTypeConverter2<BoardSection?, String?, String?> $converterboardn =
-      JsonTypeConverter2.asNullable($converterboard);
-}
-
-class QuestRow extends DataClass implements Insertable<QuestRow> {
-  final int id;
-  final String name;
-  final String? note;
-  final Difficulty difficulty;
-  final int? missionId;
-
-  /// Null: not on the Board. Quests without a Mission are always on it.
-  final BoardSection? board;
-  final int sortOrder;
-  final DateTime createdAt;
-  final DateTime? completedAt;
-  final int? awardedXp;
-  const QuestRow({
-    required this.id,
-    required this.name,
-    this.note,
-    required this.difficulty,
-    this.missionId,
-    this.board,
-    required this.sortOrder,
-    required this.createdAt,
-    this.completedAt,
-    this.awardedXp,
-  });
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    map['id'] = Variable<int>(id);
-    map['name'] = Variable<String>(name);
-    if (!nullToAbsent || note != null) {
-      map['note'] = Variable<String>(note);
-    }
-    {
-      map['difficulty'] = Variable<String>(
-        $QuestsTable.$converterdifficulty.toSql(difficulty),
-      );
-    }
-    if (!nullToAbsent || missionId != null) {
-      map['mission_id'] = Variable<int>(missionId);
-    }
-    if (!nullToAbsent || board != null) {
-      map['board'] = Variable<String>(
-        $QuestsTable.$converterboardn.toSql(board),
-      );
-    }
-    map['sort_order'] = Variable<int>(sortOrder);
-    map['created_at'] = Variable<DateTime>(createdAt);
-    if (!nullToAbsent || completedAt != null) {
-      map['completed_at'] = Variable<DateTime>(completedAt);
-    }
-    if (!nullToAbsent || awardedXp != null) {
-      map['awarded_xp'] = Variable<int>(awardedXp);
-    }
-    return map;
-  }
-
-  QuestsCompanion toCompanion(bool nullToAbsent) {
-    return QuestsCompanion(
-      id: Value(id),
-      name: Value(name),
-      note: note == null && nullToAbsent ? const Value.absent() : Value(note),
-      difficulty: Value(difficulty),
-      missionId: missionId == null && nullToAbsent
-          ? const Value.absent()
-          : Value(missionId),
-      board: board == null && nullToAbsent
-          ? const Value.absent()
-          : Value(board),
-      sortOrder: Value(sortOrder),
-      createdAt: Value(createdAt),
-      completedAt: completedAt == null && nullToAbsent
-          ? const Value.absent()
-          : Value(completedAt),
-      awardedXp: awardedXp == null && nullToAbsent
-          ? const Value.absent()
-          : Value(awardedXp),
-    );
-  }
-
-  factory QuestRow.fromJson(
-    Map<String, dynamic> json, {
-    ValueSerializer? serializer,
-  }) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return QuestRow(
-      id: serializer.fromJson<int>(json['id']),
-      name: serializer.fromJson<String>(json['name']),
-      note: serializer.fromJson<String?>(json['note']),
-      difficulty: $QuestsTable.$converterdifficulty.fromJson(
-        serializer.fromJson<String>(json['difficulty']),
-      ),
-      missionId: serializer.fromJson<int?>(json['missionId']),
-      board: $QuestsTable.$converterboardn.fromJson(
-        serializer.fromJson<String?>(json['board']),
-      ),
-      sortOrder: serializer.fromJson<int>(json['sortOrder']),
-      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
-      completedAt: serializer.fromJson<DateTime?>(json['completedAt']),
-      awardedXp: serializer.fromJson<int?>(json['awardedXp']),
-    );
-  }
-  @override
-  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return <String, dynamic>{
-      'id': serializer.toJson<int>(id),
-      'name': serializer.toJson<String>(name),
-      'note': serializer.toJson<String?>(note),
-      'difficulty': serializer.toJson<String>(
-        $QuestsTable.$converterdifficulty.toJson(difficulty),
-      ),
-      'missionId': serializer.toJson<int?>(missionId),
-      'board': serializer.toJson<String?>(
-        $QuestsTable.$converterboardn.toJson(board),
-      ),
-      'sortOrder': serializer.toJson<int>(sortOrder),
-      'createdAt': serializer.toJson<DateTime>(createdAt),
-      'completedAt': serializer.toJson<DateTime?>(completedAt),
-      'awardedXp': serializer.toJson<int?>(awardedXp),
-    };
-  }
-
-  QuestRow copyWith({
-    int? id,
-    String? name,
-    Value<String?> note = const Value.absent(),
-    Difficulty? difficulty,
-    Value<int?> missionId = const Value.absent(),
-    Value<BoardSection?> board = const Value.absent(),
-    int? sortOrder,
-    DateTime? createdAt,
-    Value<DateTime?> completedAt = const Value.absent(),
-    Value<int?> awardedXp = const Value.absent(),
-  }) => QuestRow(
-    id: id ?? this.id,
-    name: name ?? this.name,
-    note: note.present ? note.value : this.note,
-    difficulty: difficulty ?? this.difficulty,
-    missionId: missionId.present ? missionId.value : this.missionId,
-    board: board.present ? board.value : this.board,
-    sortOrder: sortOrder ?? this.sortOrder,
-    createdAt: createdAt ?? this.createdAt,
-    completedAt: completedAt.present ? completedAt.value : this.completedAt,
-    awardedXp: awardedXp.present ? awardedXp.value : this.awardedXp,
-  );
-  QuestRow copyWithCompanion(QuestsCompanion data) {
-    return QuestRow(
-      id: data.id.present ? data.id.value : this.id,
-      name: data.name.present ? data.name.value : this.name,
-      note: data.note.present ? data.note.value : this.note,
-      difficulty: data.difficulty.present
-          ? data.difficulty.value
-          : this.difficulty,
-      missionId: data.missionId.present ? data.missionId.value : this.missionId,
-      board: data.board.present ? data.board.value : this.board,
-      sortOrder: data.sortOrder.present ? data.sortOrder.value : this.sortOrder,
-      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
-      completedAt: data.completedAt.present
-          ? data.completedAt.value
-          : this.completedAt,
-      awardedXp: data.awardedXp.present ? data.awardedXp.value : this.awardedXp,
-    );
-  }
-
-  @override
-  String toString() {
-    return (StringBuffer('QuestRow(')
-          ..write('id: $id, ')
-          ..write('name: $name, ')
-          ..write('note: $note, ')
-          ..write('difficulty: $difficulty, ')
-          ..write('missionId: $missionId, ')
-          ..write('board: $board, ')
-          ..write('sortOrder: $sortOrder, ')
-          ..write('createdAt: $createdAt, ')
-          ..write('completedAt: $completedAt, ')
-          ..write('awardedXp: $awardedXp')
-          ..write(')'))
-        .toString();
-  }
-
-  @override
-  int get hashCode => Object.hash(
-    id,
-    name,
-    note,
-    difficulty,
-    missionId,
-    board,
-    sortOrder,
-    createdAt,
-    completedAt,
-    awardedXp,
-  );
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      (other is QuestRow &&
-          other.id == this.id &&
-          other.name == this.name &&
-          other.note == this.note &&
-          other.difficulty == this.difficulty &&
-          other.missionId == this.missionId &&
-          other.board == this.board &&
-          other.sortOrder == this.sortOrder &&
-          other.createdAt == this.createdAt &&
-          other.completedAt == this.completedAt &&
-          other.awardedXp == this.awardedXp);
-}
-
-class QuestsCompanion extends UpdateCompanion<QuestRow> {
-  final Value<int> id;
-  final Value<String> name;
-  final Value<String?> note;
-  final Value<Difficulty> difficulty;
-  final Value<int?> missionId;
-  final Value<BoardSection?> board;
-  final Value<int> sortOrder;
-  final Value<DateTime> createdAt;
-  final Value<DateTime?> completedAt;
-  final Value<int?> awardedXp;
-  const QuestsCompanion({
-    this.id = const Value.absent(),
-    this.name = const Value.absent(),
-    this.note = const Value.absent(),
-    this.difficulty = const Value.absent(),
-    this.missionId = const Value.absent(),
-    this.board = const Value.absent(),
-    this.sortOrder = const Value.absent(),
-    this.createdAt = const Value.absent(),
-    this.completedAt = const Value.absent(),
-    this.awardedXp = const Value.absent(),
-  });
-  QuestsCompanion.insert({
-    this.id = const Value.absent(),
-    required String name,
-    this.note = const Value.absent(),
-    required Difficulty difficulty,
-    this.missionId = const Value.absent(),
-    this.board = const Value.absent(),
-    required int sortOrder,
-    required DateTime createdAt,
-    this.completedAt = const Value.absent(),
-    this.awardedXp = const Value.absent(),
-  }) : name = Value(name),
-       difficulty = Value(difficulty),
-       sortOrder = Value(sortOrder),
-       createdAt = Value(createdAt);
-  static Insertable<QuestRow> custom({
-    Expression<int>? id,
-    Expression<String>? name,
-    Expression<String>? note,
-    Expression<String>? difficulty,
-    Expression<int>? missionId,
-    Expression<String>? board,
-    Expression<int>? sortOrder,
-    Expression<DateTime>? createdAt,
-    Expression<DateTime>? completedAt,
-    Expression<int>? awardedXp,
-  }) {
-    return RawValuesInsertable({
-      if (id != null) 'id': id,
-      if (name != null) 'name': name,
-      if (note != null) 'note': note,
-      if (difficulty != null) 'difficulty': difficulty,
-      if (missionId != null) 'mission_id': missionId,
-      if (board != null) 'board': board,
-      if (sortOrder != null) 'sort_order': sortOrder,
-      if (createdAt != null) 'created_at': createdAt,
-      if (completedAt != null) 'completed_at': completedAt,
-      if (awardedXp != null) 'awarded_xp': awardedXp,
-    });
-  }
-
-  QuestsCompanion copyWith({
-    Value<int>? id,
-    Value<String>? name,
-    Value<String?>? note,
-    Value<Difficulty>? difficulty,
-    Value<int?>? missionId,
-    Value<BoardSection?>? board,
-    Value<int>? sortOrder,
-    Value<DateTime>? createdAt,
-    Value<DateTime?>? completedAt,
-    Value<int?>? awardedXp,
-  }) {
-    return QuestsCompanion(
-      id: id ?? this.id,
-      name: name ?? this.name,
-      note: note ?? this.note,
-      difficulty: difficulty ?? this.difficulty,
-      missionId: missionId ?? this.missionId,
-      board: board ?? this.board,
-      sortOrder: sortOrder ?? this.sortOrder,
-      createdAt: createdAt ?? this.createdAt,
-      completedAt: completedAt ?? this.completedAt,
-      awardedXp: awardedXp ?? this.awardedXp,
-    );
-  }
-
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    if (id.present) {
-      map['id'] = Variable<int>(id.value);
-    }
-    if (name.present) {
-      map['name'] = Variable<String>(name.value);
-    }
-    if (note.present) {
-      map['note'] = Variable<String>(note.value);
-    }
-    if (difficulty.present) {
-      map['difficulty'] = Variable<String>(
-        $QuestsTable.$converterdifficulty.toSql(difficulty.value),
-      );
-    }
-    if (missionId.present) {
-      map['mission_id'] = Variable<int>(missionId.value);
-    }
-    if (board.present) {
-      map['board'] = Variable<String>(
-        $QuestsTable.$converterboardn.toSql(board.value),
-      );
-    }
-    if (sortOrder.present) {
-      map['sort_order'] = Variable<int>(sortOrder.value);
-    }
-    if (createdAt.present) {
-      map['created_at'] = Variable<DateTime>(createdAt.value);
-    }
-    if (completedAt.present) {
-      map['completed_at'] = Variable<DateTime>(completedAt.value);
-    }
-    if (awardedXp.present) {
-      map['awarded_xp'] = Variable<int>(awardedXp.value);
-    }
-    return map;
-  }
-
-  @override
-  String toString() {
-    return (StringBuffer('QuestsCompanion(')
-          ..write('id: $id, ')
-          ..write('name: $name, ')
-          ..write('note: $note, ')
-          ..write('difficulty: $difficulty, ')
-          ..write('missionId: $missionId, ')
-          ..write('board: $board, ')
-          ..write('sortOrder: $sortOrder, ')
-          ..write('createdAt: $createdAt, ')
-          ..write('completedAt: $completedAt, ')
-          ..write('awardedXp: $awardedXp')
-          ..write(')'))
-        .toString();
-  }
-}
-
-class $RuleQuestsTable extends RuleQuests
-    with TableInfo<$RuleQuestsTable, RuleQuestRow> {
-  @override
-  final GeneratedDatabase attachedDatabase;
-  final String? _alias;
-  $RuleQuestsTable(this.attachedDatabase, [this._alias]);
-  static const VerificationMeta _idMeta = const VerificationMeta('id');
-  @override
-  late final GeneratedColumn<int> id = GeneratedColumn<int>(
-    'id',
-    aliasedName,
-    false,
-    hasAutoIncrement: true,
-    type: DriftSqlType.int,
-    requiredDuringInsert: false,
-    defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'PRIMARY KEY AUTOINCREMENT',
-    ),
-  );
-  static const VerificationMeta _ruleIdMeta = const VerificationMeta('ruleId');
-  @override
-  late final GeneratedColumn<int> ruleId = GeneratedColumn<int>(
-    'rule_id',
-    aliasedName,
-    false,
-    type: DriftSqlType.int,
-    requiredDuringInsert: true,
-    defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'REFERENCES recurring_rules (id) ON DELETE CASCADE',
-    ),
-  );
-  static const VerificationMeta _nameMeta = const VerificationMeta('name');
-  @override
-  late final GeneratedColumn<String> name = GeneratedColumn<String>(
-    'name',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: true,
-  );
-  @override
-  late final GeneratedColumnWithTypeConverter<Difficulty, String> difficulty =
-      GeneratedColumn<String>(
-        'difficulty',
-        aliasedName,
-        false,
-        type: DriftSqlType.string,
-        requiredDuringInsert: true,
-      ).withConverter<Difficulty>($RuleQuestsTable.$converterdifficulty);
-  static const VerificationMeta _sortOrderMeta = const VerificationMeta(
-    'sortOrder',
-  );
-  @override
-  late final GeneratedColumn<int> sortOrder = GeneratedColumn<int>(
-    'sort_order',
-    aliasedName,
-    false,
-    type: DriftSqlType.int,
-    requiredDuringInsert: true,
-  );
-  @override
-  List<GeneratedColumn> get $columns => [
-    id,
-    ruleId,
-    name,
-    difficulty,
-    sortOrder,
-  ];
-  @override
-  String get aliasedName => _alias ?? actualTableName;
-  @override
-  String get actualTableName => $name;
-  static const String $name = 'rule_quests';
-  @override
-  VerificationContext validateIntegrity(
-    Insertable<RuleQuestRow> instance, {
-    bool isInserting = false,
-  }) {
-    final context = VerificationContext();
-    final data = instance.toColumns(true);
-    if (data.containsKey('id')) {
-      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
-    }
-    if (data.containsKey('rule_id')) {
-      context.handle(
-        _ruleIdMeta,
-        ruleId.isAcceptableOrUnknown(data['rule_id']!, _ruleIdMeta),
-      );
-    } else if (isInserting) {
-      context.missing(_ruleIdMeta);
-    }
-    if (data.containsKey('name')) {
-      context.handle(
-        _nameMeta,
-        name.isAcceptableOrUnknown(data['name']!, _nameMeta),
-      );
-    } else if (isInserting) {
-      context.missing(_nameMeta);
-    }
-    if (data.containsKey('sort_order')) {
-      context.handle(
-        _sortOrderMeta,
-        sortOrder.isAcceptableOrUnknown(data['sort_order']!, _sortOrderMeta),
-      );
-    } else if (isInserting) {
-      context.missing(_sortOrderMeta);
-    }
-    return context;
-  }
-
-  @override
-  Set<GeneratedColumn> get $primaryKey => {id};
-  @override
-  RuleQuestRow map(Map<String, dynamic> data, {String? tablePrefix}) {
-    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return RuleQuestRow(
-      id: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
-        data['${effectivePrefix}id'],
-      )!,
-      ruleId: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
-        data['${effectivePrefix}rule_id'],
-      )!,
-      name: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}name'],
-      )!,
-      difficulty: $RuleQuestsTable.$converterdifficulty.fromSql(
-        attachedDatabase.typeMapping.read(
-          DriftSqlType.string,
-          data['${effectivePrefix}difficulty'],
-        )!,
-      ),
-      sortOrder: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
-        data['${effectivePrefix}sort_order'],
-      )!,
-    );
-  }
-
-  @override
-  $RuleQuestsTable createAlias(String alias) {
-    return $RuleQuestsTable(attachedDatabase, alias);
-  }
-
-  static JsonTypeConverter2<Difficulty, String, String> $converterdifficulty =
-      const EnumNameConverter<Difficulty>(Difficulty.values);
-}
-
-class RuleQuestRow extends DataClass implements Insertable<RuleQuestRow> {
-  final int id;
-  final int ruleId;
-  final String name;
-  final Difficulty difficulty;
-  final int sortOrder;
-  const RuleQuestRow({
-    required this.id,
-    required this.ruleId,
-    required this.name,
-    required this.difficulty,
-    required this.sortOrder,
-  });
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    map['id'] = Variable<int>(id);
-    map['rule_id'] = Variable<int>(ruleId);
-    map['name'] = Variable<String>(name);
-    {
-      map['difficulty'] = Variable<String>(
-        $RuleQuestsTable.$converterdifficulty.toSql(difficulty),
-      );
-    }
-    map['sort_order'] = Variable<int>(sortOrder);
-    return map;
-  }
-
-  RuleQuestsCompanion toCompanion(bool nullToAbsent) {
-    return RuleQuestsCompanion(
-      id: Value(id),
-      ruleId: Value(ruleId),
-      name: Value(name),
-      difficulty: Value(difficulty),
-      sortOrder: Value(sortOrder),
-    );
-  }
-
-  factory RuleQuestRow.fromJson(
-    Map<String, dynamic> json, {
-    ValueSerializer? serializer,
-  }) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return RuleQuestRow(
-      id: serializer.fromJson<int>(json['id']),
-      ruleId: serializer.fromJson<int>(json['ruleId']),
-      name: serializer.fromJson<String>(json['name']),
-      difficulty: $RuleQuestsTable.$converterdifficulty.fromJson(
-        serializer.fromJson<String>(json['difficulty']),
-      ),
-      sortOrder: serializer.fromJson<int>(json['sortOrder']),
-    );
-  }
-  @override
-  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return <String, dynamic>{
-      'id': serializer.toJson<int>(id),
-      'ruleId': serializer.toJson<int>(ruleId),
-      'name': serializer.toJson<String>(name),
-      'difficulty': serializer.toJson<String>(
-        $RuleQuestsTable.$converterdifficulty.toJson(difficulty),
-      ),
-      'sortOrder': serializer.toJson<int>(sortOrder),
-    };
-  }
-
-  RuleQuestRow copyWith({
-    int? id,
-    int? ruleId,
-    String? name,
-    Difficulty? difficulty,
-    int? sortOrder,
-  }) => RuleQuestRow(
-    id: id ?? this.id,
-    ruleId: ruleId ?? this.ruleId,
-    name: name ?? this.name,
-    difficulty: difficulty ?? this.difficulty,
-    sortOrder: sortOrder ?? this.sortOrder,
-  );
-  RuleQuestRow copyWithCompanion(RuleQuestsCompanion data) {
-    return RuleQuestRow(
-      id: data.id.present ? data.id.value : this.id,
-      ruleId: data.ruleId.present ? data.ruleId.value : this.ruleId,
-      name: data.name.present ? data.name.value : this.name,
-      difficulty: data.difficulty.present
-          ? data.difficulty.value
-          : this.difficulty,
-      sortOrder: data.sortOrder.present ? data.sortOrder.value : this.sortOrder,
-    );
-  }
-
-  @override
-  String toString() {
-    return (StringBuffer('RuleQuestRow(')
-          ..write('id: $id, ')
-          ..write('ruleId: $ruleId, ')
-          ..write('name: $name, ')
-          ..write('difficulty: $difficulty, ')
-          ..write('sortOrder: $sortOrder')
-          ..write(')'))
-        .toString();
-  }
-
-  @override
-  int get hashCode => Object.hash(id, ruleId, name, difficulty, sortOrder);
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      (other is RuleQuestRow &&
-          other.id == this.id &&
-          other.ruleId == this.ruleId &&
-          other.name == this.name &&
-          other.difficulty == this.difficulty &&
-          other.sortOrder == this.sortOrder);
-}
-
-class RuleQuestsCompanion extends UpdateCompanion<RuleQuestRow> {
-  final Value<int> id;
-  final Value<int> ruleId;
-  final Value<String> name;
-  final Value<Difficulty> difficulty;
-  final Value<int> sortOrder;
-  const RuleQuestsCompanion({
-    this.id = const Value.absent(),
-    this.ruleId = const Value.absent(),
-    this.name = const Value.absent(),
-    this.difficulty = const Value.absent(),
-    this.sortOrder = const Value.absent(),
-  });
-  RuleQuestsCompanion.insert({
-    this.id = const Value.absent(),
-    required int ruleId,
-    required String name,
-    required Difficulty difficulty,
-    required int sortOrder,
-  }) : ruleId = Value(ruleId),
-       name = Value(name),
-       difficulty = Value(difficulty),
-       sortOrder = Value(sortOrder);
-  static Insertable<RuleQuestRow> custom({
-    Expression<int>? id,
-    Expression<int>? ruleId,
-    Expression<String>? name,
-    Expression<String>? difficulty,
-    Expression<int>? sortOrder,
-  }) {
-    return RawValuesInsertable({
-      if (id != null) 'id': id,
-      if (ruleId != null) 'rule_id': ruleId,
-      if (name != null) 'name': name,
-      if (difficulty != null) 'difficulty': difficulty,
-      if (sortOrder != null) 'sort_order': sortOrder,
-    });
-  }
-
-  RuleQuestsCompanion copyWith({
-    Value<int>? id,
-    Value<int>? ruleId,
-    Value<String>? name,
-    Value<Difficulty>? difficulty,
-    Value<int>? sortOrder,
-  }) {
-    return RuleQuestsCompanion(
-      id: id ?? this.id,
-      ruleId: ruleId ?? this.ruleId,
-      name: name ?? this.name,
-      difficulty: difficulty ?? this.difficulty,
-      sortOrder: sortOrder ?? this.sortOrder,
-    );
-  }
-
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    if (id.present) {
-      map['id'] = Variable<int>(id.value);
-    }
-    if (ruleId.present) {
-      map['rule_id'] = Variable<int>(ruleId.value);
-    }
-    if (name.present) {
-      map['name'] = Variable<String>(name.value);
-    }
-    if (difficulty.present) {
-      map['difficulty'] = Variable<String>(
-        $RuleQuestsTable.$converterdifficulty.toSql(difficulty.value),
-      );
-    }
-    if (sortOrder.present) {
-      map['sort_order'] = Variable<int>(sortOrder.value);
-    }
-    return map;
-  }
-
-  @override
-  String toString() {
-    return (StringBuffer('RuleQuestsCompanion(')
-          ..write('id: $id, ')
-          ..write('ruleId: $ruleId, ')
-          ..write('name: $name, ')
-          ..write('difficulty: $difficulty, ')
-          ..write('sortOrder: $sortOrder')
-          ..write(')'))
-        .toString();
-  }
-}
-
-class $AppStateTable extends AppState
-    with TableInfo<$AppStateTable, AppStateRow> {
-  @override
-  final GeneratedDatabase attachedDatabase;
-  final String? _alias;
-  $AppStateTable(this.attachedDatabase, [this._alias]);
-  static const VerificationMeta _idMeta = const VerificationMeta('id');
-  @override
-  late final GeneratedColumn<int> id = GeneratedColumn<int>(
-    'id',
-    aliasedName,
-    false,
-    check: () => id.equals(1),
-    type: DriftSqlType.int,
-    requiredDuringInsert: false,
-    defaultValue: const Constant(1),
-  );
-  static const VerificationMeta _totalXpMeta = const VerificationMeta(
-    'totalXp',
-  );
-  @override
-  late final GeneratedColumn<int> totalXp = GeneratedColumn<int>(
-    'total_xp',
-    aliasedName,
-    false,
-    check: () => ComparableExpr(totalXp).isBiggerOrEqualValue(0),
-    type: DriftSqlType.int,
-    requiredDuringInsert: false,
-    defaultValue: const Constant(0),
-  );
-  static const VerificationMeta _heroNameMeta = const VerificationMeta(
-    'heroName',
-  );
-  @override
-  late final GeneratedColumn<String> heroName = GeneratedColumn<String>(
-    'hero_name',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: false,
-    defaultValue: const Constant(''),
-  );
-  @override
-  late final GeneratedColumnWithTypeConverter<AppLanguage, String> language =
-      GeneratedColumn<String>(
-        'language',
-        aliasedName,
-        false,
-        type: DriftSqlType.string,
-        requiredDuringInsert: false,
-        defaultValue: const Constant('system'),
-      ).withConverter<AppLanguage>($AppStateTable.$converterlanguage);
-  @override
-  late final GeneratedColumnWithTypeConverter<AppTheme, String> theme =
-      GeneratedColumn<String>(
-        'theme',
-        aliasedName,
-        false,
-        type: DriftSqlType.string,
-        requiredDuringInsert: false,
-        defaultValue: const Constant('system'),
-      ).withConverter<AppTheme>($AppStateTable.$convertertheme);
-  static const VerificationMeta _displayFontMeta = const VerificationMeta(
-    'displayFont',
-  );
-  @override
-  late final GeneratedColumn<String> displayFont = GeneratedColumn<String>(
-    'display_font',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: false,
-    defaultValue: const Constant('figtree'),
-  );
-  @override
-  List<GeneratedColumn> get $columns => [
-    id,
-    totalXp,
-    heroName,
-    language,
-    theme,
-    displayFont,
-  ];
-  @override
-  String get aliasedName => _alias ?? actualTableName;
-  @override
-  String get actualTableName => $name;
-  static const String $name = 'app_state';
-  @override
-  VerificationContext validateIntegrity(
-    Insertable<AppStateRow> instance, {
-    bool isInserting = false,
-  }) {
-    final context = VerificationContext();
-    final data = instance.toColumns(true);
-    if (data.containsKey('id')) {
-      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
-    }
-    if (data.containsKey('total_xp')) {
-      context.handle(
-        _totalXpMeta,
-        totalXp.isAcceptableOrUnknown(data['total_xp']!, _totalXpMeta),
-      );
-    }
-    if (data.containsKey('hero_name')) {
-      context.handle(
-        _heroNameMeta,
-        heroName.isAcceptableOrUnknown(data['hero_name']!, _heroNameMeta),
-      );
-    }
-    if (data.containsKey('display_font')) {
-      context.handle(
-        _displayFontMeta,
-        displayFont.isAcceptableOrUnknown(
-          data['display_font']!,
-          _displayFontMeta,
-        ),
-      );
-    }
-    return context;
-  }
-
-  @override
-  Set<GeneratedColumn> get $primaryKey => {id};
-  @override
-  AppStateRow map(Map<String, dynamic> data, {String? tablePrefix}) {
-    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return AppStateRow(
-      id: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
-        data['${effectivePrefix}id'],
-      )!,
-      totalXp: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
-        data['${effectivePrefix}total_xp'],
-      )!,
-      heroName: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}hero_name'],
-      )!,
-      language: $AppStateTable.$converterlanguage.fromSql(
-        attachedDatabase.typeMapping.read(
-          DriftSqlType.string,
-          data['${effectivePrefix}language'],
-        )!,
-      ),
-      theme: $AppStateTable.$convertertheme.fromSql(
-        attachedDatabase.typeMapping.read(
-          DriftSqlType.string,
-          data['${effectivePrefix}theme'],
-        )!,
-      ),
-      displayFont: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}display_font'],
-      )!,
-    );
-  }
-
-  @override
-  $AppStateTable createAlias(String alias) {
-    return $AppStateTable(attachedDatabase, alias);
-  }
-
-  static JsonTypeConverter2<AppLanguage, String, String> $converterlanguage =
-      const EnumNameConverter<AppLanguage>(AppLanguage.values);
-  static JsonTypeConverter2<AppTheme, String, String> $convertertheme =
-      const EnumNameConverter<AppTheme>(AppTheme.values);
-}
-
-class AppStateRow extends DataClass implements Insertable<AppStateRow> {
-  final int id;
-  final int totalXp;
-  final String heroName;
-  final AppLanguage language;
-  final AppTheme theme;
-  final String displayFont;
-  const AppStateRow({
-    required this.id,
-    required this.totalXp,
-    required this.heroName,
-    required this.language,
-    required this.theme,
-    required this.displayFont,
-  });
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    map['id'] = Variable<int>(id);
-    map['total_xp'] = Variable<int>(totalXp);
-    map['hero_name'] = Variable<String>(heroName);
-    {
-      map['language'] = Variable<String>(
-        $AppStateTable.$converterlanguage.toSql(language),
-      );
-    }
-    {
-      map['theme'] = Variable<String>(
-        $AppStateTable.$convertertheme.toSql(theme),
-      );
-    }
-    map['display_font'] = Variable<String>(displayFont);
-    return map;
-  }
-
-  AppStateCompanion toCompanion(bool nullToAbsent) {
-    return AppStateCompanion(
-      id: Value(id),
-      totalXp: Value(totalXp),
-      heroName: Value(heroName),
-      language: Value(language),
-      theme: Value(theme),
-      displayFont: Value(displayFont),
-    );
-  }
-
-  factory AppStateRow.fromJson(
-    Map<String, dynamic> json, {
-    ValueSerializer? serializer,
-  }) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return AppStateRow(
-      id: serializer.fromJson<int>(json['id']),
-      totalXp: serializer.fromJson<int>(json['totalXp']),
-      heroName: serializer.fromJson<String>(json['heroName']),
-      language: $AppStateTable.$converterlanguage.fromJson(
-        serializer.fromJson<String>(json['language']),
-      ),
-      theme: $AppStateTable.$convertertheme.fromJson(
-        serializer.fromJson<String>(json['theme']),
-      ),
-      displayFont: serializer.fromJson<String>(json['displayFont']),
-    );
-  }
-  @override
-  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return <String, dynamic>{
-      'id': serializer.toJson<int>(id),
-      'totalXp': serializer.toJson<int>(totalXp),
-      'heroName': serializer.toJson<String>(heroName),
-      'language': serializer.toJson<String>(
-        $AppStateTable.$converterlanguage.toJson(language),
-      ),
-      'theme': serializer.toJson<String>(
-        $AppStateTable.$convertertheme.toJson(theme),
-      ),
-      'displayFont': serializer.toJson<String>(displayFont),
-    };
-  }
-
-  AppStateRow copyWith({
-    int? id,
-    int? totalXp,
-    String? heroName,
-    AppLanguage? language,
-    AppTheme? theme,
-    String? displayFont,
-  }) => AppStateRow(
-    id: id ?? this.id,
-    totalXp: totalXp ?? this.totalXp,
-    heroName: heroName ?? this.heroName,
-    language: language ?? this.language,
-    theme: theme ?? this.theme,
-    displayFont: displayFont ?? this.displayFont,
-  );
-  AppStateRow copyWithCompanion(AppStateCompanion data) {
-    return AppStateRow(
-      id: data.id.present ? data.id.value : this.id,
-      totalXp: data.totalXp.present ? data.totalXp.value : this.totalXp,
-      heroName: data.heroName.present ? data.heroName.value : this.heroName,
-      language: data.language.present ? data.language.value : this.language,
-      theme: data.theme.present ? data.theme.value : this.theme,
-      displayFont: data.displayFont.present
-          ? data.displayFont.value
-          : this.displayFont,
-    );
-  }
-
-  @override
-  String toString() {
-    return (StringBuffer('AppStateRow(')
-          ..write('id: $id, ')
-          ..write('totalXp: $totalXp, ')
-          ..write('heroName: $heroName, ')
-          ..write('language: $language, ')
-          ..write('theme: $theme, ')
-          ..write('displayFont: $displayFont')
-          ..write(')'))
-        .toString();
-  }
-
-  @override
-  int get hashCode =>
-      Object.hash(id, totalXp, heroName, language, theme, displayFont);
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      (other is AppStateRow &&
-          other.id == this.id &&
-          other.totalXp == this.totalXp &&
-          other.heroName == this.heroName &&
-          other.language == this.language &&
-          other.theme == this.theme &&
-          other.displayFont == this.displayFont);
-}
-
-class AppStateCompanion extends UpdateCompanion<AppStateRow> {
-  final Value<int> id;
-  final Value<int> totalXp;
-  final Value<String> heroName;
-  final Value<AppLanguage> language;
-  final Value<AppTheme> theme;
-  final Value<String> displayFont;
-  const AppStateCompanion({
-    this.id = const Value.absent(),
-    this.totalXp = const Value.absent(),
-    this.heroName = const Value.absent(),
-    this.language = const Value.absent(),
-    this.theme = const Value.absent(),
-    this.displayFont = const Value.absent(),
-  });
-  AppStateCompanion.insert({
-    this.id = const Value.absent(),
-    this.totalXp = const Value.absent(),
-    this.heroName = const Value.absent(),
-    this.language = const Value.absent(),
-    this.theme = const Value.absent(),
-    this.displayFont = const Value.absent(),
-  });
-  static Insertable<AppStateRow> custom({
-    Expression<int>? id,
-    Expression<int>? totalXp,
-    Expression<String>? heroName,
-    Expression<String>? language,
-    Expression<String>? theme,
-    Expression<String>? displayFont,
-  }) {
-    return RawValuesInsertable({
-      if (id != null) 'id': id,
-      if (totalXp != null) 'total_xp': totalXp,
-      if (heroName != null) 'hero_name': heroName,
-      if (language != null) 'language': language,
-      if (theme != null) 'theme': theme,
-      if (displayFont != null) 'display_font': displayFont,
-    });
-  }
-
-  AppStateCompanion copyWith({
-    Value<int>? id,
-    Value<int>? totalXp,
-    Value<String>? heroName,
-    Value<AppLanguage>? language,
-    Value<AppTheme>? theme,
-    Value<String>? displayFont,
-  }) {
-    return AppStateCompanion(
-      id: id ?? this.id,
-      totalXp: totalXp ?? this.totalXp,
-      heroName: heroName ?? this.heroName,
-      language: language ?? this.language,
-      theme: theme ?? this.theme,
-      displayFont: displayFont ?? this.displayFont,
-    );
-  }
-
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    if (id.present) {
-      map['id'] = Variable<int>(id.value);
-    }
-    if (totalXp.present) {
-      map['total_xp'] = Variable<int>(totalXp.value);
-    }
-    if (heroName.present) {
-      map['hero_name'] = Variable<String>(heroName.value);
-    }
-    if (language.present) {
-      map['language'] = Variable<String>(
-        $AppStateTable.$converterlanguage.toSql(language.value),
-      );
-    }
-    if (theme.present) {
-      map['theme'] = Variable<String>(
-        $AppStateTable.$convertertheme.toSql(theme.value),
-      );
-    }
-    if (displayFont.present) {
-      map['display_font'] = Variable<String>(displayFont.value);
-    }
-    return map;
-  }
-
-  @override
-  String toString() {
-    return (StringBuffer('AppStateCompanion(')
-          ..write('id: $id, ')
-          ..write('totalXp: $totalXp, ')
-          ..write('heroName: $heroName, ')
-          ..write('language: $language, ')
-          ..write('theme: $theme, ')
-          ..write('displayFont: $displayFont')
-          ..write(')'))
-        .toString();
-  }
-}
-
 class $CalendarEventsTable extends CalendarEvents
     with TableInfo<$CalendarEventsTable, CalendarEventRow> {
   @override
@@ -3492,6 +2103,1450 @@ class CalendarEventsCompanion extends UpdateCompanion<CalendarEventRow> {
           ..write('onBoard: $onBoard, ')
           ..write('createdAt: $createdAt, ')
           ..write('updatedAt: $updatedAt')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $QuestsTable extends Quests with TableInfo<$QuestsTable, QuestRow> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $QuestsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _nameMeta = const VerificationMeta('name');
+  @override
+  late final GeneratedColumn<String> name = GeneratedColumn<String>(
+    'name',
+    aliasedName,
+    false,
+    check: () =>
+        ComparableExpr(StringExpressionOperators(name).trim().length)
+            .isBetweenValues(1, 80),
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _noteMeta = const VerificationMeta('note');
+  @override
+  late final GeneratedColumn<String> note = GeneratedColumn<String>(
+    'note',
+    aliasedName,
+    true,
+    check: () => ComparableExpr(note.length).isSmallerOrEqualValue(500),
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  @override
+  late final GeneratedColumnWithTypeConverter<Difficulty, String> difficulty =
+      GeneratedColumn<String>(
+        'difficulty',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: true,
+      ).withConverter<Difficulty>($QuestsTable.$converterdifficulty);
+  static const VerificationMeta _missionIdMeta = const VerificationMeta(
+    'missionId',
+  );
+  @override
+  late final GeneratedColumn<int> missionId = GeneratedColumn<int>(
+    'mission_id',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES missions (id) ON DELETE CASCADE',
+    ),
+  );
+  @override
+  late final GeneratedColumnWithTypeConverter<BoardSection?, String> board =
+      GeneratedColumn<String>(
+        'board',
+        aliasedName,
+        true,
+        type: DriftSqlType.string,
+        requiredDuringInsert: false,
+      ).withConverter<BoardSection?>($QuestsTable.$converterboardn);
+  static const VerificationMeta _sortOrderMeta = const VerificationMeta(
+    'sortOrder',
+  );
+  @override
+  late final GeneratedColumn<int> sortOrder = GeneratedColumn<int>(
+    'sort_order',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _completedAtMeta = const VerificationMeta(
+    'completedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> completedAt = GeneratedColumn<DateTime>(
+    'completed_at',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _awardedXpMeta = const VerificationMeta(
+    'awardedXp',
+  );
+  @override
+  late final GeneratedColumn<int> awardedXp = GeneratedColumn<int>(
+    'awarded_xp',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _eventIdMeta = const VerificationMeta(
+    'eventId',
+  );
+  @override
+  late final GeneratedColumn<int> eventId = GeneratedColumn<int>(
+    'event_id',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES calendar_events (id) ON DELETE SET NULL',
+    ),
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    name,
+    note,
+    difficulty,
+    missionId,
+    board,
+    sortOrder,
+    createdAt,
+    completedAt,
+    awardedXp,
+    eventId,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'quests';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<QuestRow> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('name')) {
+      context.handle(
+        _nameMeta,
+        name.isAcceptableOrUnknown(data['name']!, _nameMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_nameMeta);
+    }
+    if (data.containsKey('note')) {
+      context.handle(
+        _noteMeta,
+        note.isAcceptableOrUnknown(data['note']!, _noteMeta),
+      );
+    }
+    if (data.containsKey('mission_id')) {
+      context.handle(
+        _missionIdMeta,
+        missionId.isAcceptableOrUnknown(data['mission_id']!, _missionIdMeta),
+      );
+    }
+    if (data.containsKey('sort_order')) {
+      context.handle(
+        _sortOrderMeta,
+        sortOrder.isAcceptableOrUnknown(data['sort_order']!, _sortOrderMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_sortOrderMeta);
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_createdAtMeta);
+    }
+    if (data.containsKey('completed_at')) {
+      context.handle(
+        _completedAtMeta,
+        completedAt.isAcceptableOrUnknown(
+          data['completed_at']!,
+          _completedAtMeta,
+        ),
+      );
+    }
+    if (data.containsKey('awarded_xp')) {
+      context.handle(
+        _awardedXpMeta,
+        awardedXp.isAcceptableOrUnknown(data['awarded_xp']!, _awardedXpMeta),
+      );
+    }
+    if (data.containsKey('event_id')) {
+      context.handle(
+        _eventIdMeta,
+        eventId.isAcceptableOrUnknown(data['event_id']!, _eventIdMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  QuestRow map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return QuestRow(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      name: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}name'],
+      )!,
+      note: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}note'],
+      ),
+      difficulty: $QuestsTable.$converterdifficulty.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}difficulty'],
+        )!,
+      ),
+      missionId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}mission_id'],
+      ),
+      board: $QuestsTable.$converterboardn.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}board'],
+        ),
+      ),
+      sortOrder: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}sort_order'],
+      )!,
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created_at'],
+      )!,
+      completedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}completed_at'],
+      ),
+      awardedXp: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}awarded_xp'],
+      ),
+      eventId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}event_id'],
+      ),
+    );
+  }
+
+  @override
+  $QuestsTable createAlias(String alias) {
+    return $QuestsTable(attachedDatabase, alias);
+  }
+
+  static JsonTypeConverter2<Difficulty, String, String> $converterdifficulty =
+      const EnumNameConverter<Difficulty>(Difficulty.values);
+  static JsonTypeConverter2<BoardSection, String, String> $converterboard =
+      const EnumNameConverter<BoardSection>(BoardSection.values);
+  static JsonTypeConverter2<BoardSection?, String?, String?> $converterboardn =
+      JsonTypeConverter2.asNullable($converterboard);
+}
+
+class QuestRow extends DataClass implements Insertable<QuestRow> {
+  final int id;
+  final String name;
+  final String? note;
+  final Difficulty difficulty;
+  final int? missionId;
+
+  /// Null: not on the Board. Quests without a Mission are always on it.
+  final BoardSection? board;
+  final int sortOrder;
+  final DateTime createdAt;
+  final DateTime? completedAt;
+  final int? awardedXp;
+
+  /// The calendar event of the Quest's Deadline. Deleting the event only clears
+  /// this link; the Quest stays.
+  final int? eventId;
+  const QuestRow({
+    required this.id,
+    required this.name,
+    this.note,
+    required this.difficulty,
+    this.missionId,
+    this.board,
+    required this.sortOrder,
+    required this.createdAt,
+    this.completedAt,
+    this.awardedXp,
+    this.eventId,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['name'] = Variable<String>(name);
+    if (!nullToAbsent || note != null) {
+      map['note'] = Variable<String>(note);
+    }
+    {
+      map['difficulty'] = Variable<String>(
+        $QuestsTable.$converterdifficulty.toSql(difficulty),
+      );
+    }
+    if (!nullToAbsent || missionId != null) {
+      map['mission_id'] = Variable<int>(missionId);
+    }
+    if (!nullToAbsent || board != null) {
+      map['board'] = Variable<String>(
+        $QuestsTable.$converterboardn.toSql(board),
+      );
+    }
+    map['sort_order'] = Variable<int>(sortOrder);
+    map['created_at'] = Variable<DateTime>(createdAt);
+    if (!nullToAbsent || completedAt != null) {
+      map['completed_at'] = Variable<DateTime>(completedAt);
+    }
+    if (!nullToAbsent || awardedXp != null) {
+      map['awarded_xp'] = Variable<int>(awardedXp);
+    }
+    if (!nullToAbsent || eventId != null) {
+      map['event_id'] = Variable<int>(eventId);
+    }
+    return map;
+  }
+
+  QuestsCompanion toCompanion(bool nullToAbsent) {
+    return QuestsCompanion(
+      id: Value(id),
+      name: Value(name),
+      note: note == null && nullToAbsent ? const Value.absent() : Value(note),
+      difficulty: Value(difficulty),
+      missionId: missionId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(missionId),
+      board: board == null && nullToAbsent
+          ? const Value.absent()
+          : Value(board),
+      sortOrder: Value(sortOrder),
+      createdAt: Value(createdAt),
+      completedAt: completedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(completedAt),
+      awardedXp: awardedXp == null && nullToAbsent
+          ? const Value.absent()
+          : Value(awardedXp),
+      eventId: eventId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(eventId),
+    );
+  }
+
+  factory QuestRow.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return QuestRow(
+      id: serializer.fromJson<int>(json['id']),
+      name: serializer.fromJson<String>(json['name']),
+      note: serializer.fromJson<String?>(json['note']),
+      difficulty: $QuestsTable.$converterdifficulty.fromJson(
+        serializer.fromJson<String>(json['difficulty']),
+      ),
+      missionId: serializer.fromJson<int?>(json['missionId']),
+      board: $QuestsTable.$converterboardn.fromJson(
+        serializer.fromJson<String?>(json['board']),
+      ),
+      sortOrder: serializer.fromJson<int>(json['sortOrder']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+      completedAt: serializer.fromJson<DateTime?>(json['completedAt']),
+      awardedXp: serializer.fromJson<int?>(json['awardedXp']),
+      eventId: serializer.fromJson<int?>(json['eventId']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'name': serializer.toJson<String>(name),
+      'note': serializer.toJson<String?>(note),
+      'difficulty': serializer.toJson<String>(
+        $QuestsTable.$converterdifficulty.toJson(difficulty),
+      ),
+      'missionId': serializer.toJson<int?>(missionId),
+      'board': serializer.toJson<String?>(
+        $QuestsTable.$converterboardn.toJson(board),
+      ),
+      'sortOrder': serializer.toJson<int>(sortOrder),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+      'completedAt': serializer.toJson<DateTime?>(completedAt),
+      'awardedXp': serializer.toJson<int?>(awardedXp),
+      'eventId': serializer.toJson<int?>(eventId),
+    };
+  }
+
+  QuestRow copyWith({
+    int? id,
+    String? name,
+    Value<String?> note = const Value.absent(),
+    Difficulty? difficulty,
+    Value<int?> missionId = const Value.absent(),
+    Value<BoardSection?> board = const Value.absent(),
+    int? sortOrder,
+    DateTime? createdAt,
+    Value<DateTime?> completedAt = const Value.absent(),
+    Value<int?> awardedXp = const Value.absent(),
+    Value<int?> eventId = const Value.absent(),
+  }) => QuestRow(
+    id: id ?? this.id,
+    name: name ?? this.name,
+    note: note.present ? note.value : this.note,
+    difficulty: difficulty ?? this.difficulty,
+    missionId: missionId.present ? missionId.value : this.missionId,
+    board: board.present ? board.value : this.board,
+    sortOrder: sortOrder ?? this.sortOrder,
+    createdAt: createdAt ?? this.createdAt,
+    completedAt: completedAt.present ? completedAt.value : this.completedAt,
+    awardedXp: awardedXp.present ? awardedXp.value : this.awardedXp,
+    eventId: eventId.present ? eventId.value : this.eventId,
+  );
+  QuestRow copyWithCompanion(QuestsCompanion data) {
+    return QuestRow(
+      id: data.id.present ? data.id.value : this.id,
+      name: data.name.present ? data.name.value : this.name,
+      note: data.note.present ? data.note.value : this.note,
+      difficulty: data.difficulty.present
+          ? data.difficulty.value
+          : this.difficulty,
+      missionId: data.missionId.present ? data.missionId.value : this.missionId,
+      board: data.board.present ? data.board.value : this.board,
+      sortOrder: data.sortOrder.present ? data.sortOrder.value : this.sortOrder,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+      completedAt: data.completedAt.present
+          ? data.completedAt.value
+          : this.completedAt,
+      awardedXp: data.awardedXp.present ? data.awardedXp.value : this.awardedXp,
+      eventId: data.eventId.present ? data.eventId.value : this.eventId,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('QuestRow(')
+          ..write('id: $id, ')
+          ..write('name: $name, ')
+          ..write('note: $note, ')
+          ..write('difficulty: $difficulty, ')
+          ..write('missionId: $missionId, ')
+          ..write('board: $board, ')
+          ..write('sortOrder: $sortOrder, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('completedAt: $completedAt, ')
+          ..write('awardedXp: $awardedXp, ')
+          ..write('eventId: $eventId')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    name,
+    note,
+    difficulty,
+    missionId,
+    board,
+    sortOrder,
+    createdAt,
+    completedAt,
+    awardedXp,
+    eventId,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is QuestRow &&
+          other.id == this.id &&
+          other.name == this.name &&
+          other.note == this.note &&
+          other.difficulty == this.difficulty &&
+          other.missionId == this.missionId &&
+          other.board == this.board &&
+          other.sortOrder == this.sortOrder &&
+          other.createdAt == this.createdAt &&
+          other.completedAt == this.completedAt &&
+          other.awardedXp == this.awardedXp &&
+          other.eventId == this.eventId);
+}
+
+class QuestsCompanion extends UpdateCompanion<QuestRow> {
+  final Value<int> id;
+  final Value<String> name;
+  final Value<String?> note;
+  final Value<Difficulty> difficulty;
+  final Value<int?> missionId;
+  final Value<BoardSection?> board;
+  final Value<int> sortOrder;
+  final Value<DateTime> createdAt;
+  final Value<DateTime?> completedAt;
+  final Value<int?> awardedXp;
+  final Value<int?> eventId;
+  const QuestsCompanion({
+    this.id = const Value.absent(),
+    this.name = const Value.absent(),
+    this.note = const Value.absent(),
+    this.difficulty = const Value.absent(),
+    this.missionId = const Value.absent(),
+    this.board = const Value.absent(),
+    this.sortOrder = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.completedAt = const Value.absent(),
+    this.awardedXp = const Value.absent(),
+    this.eventId = const Value.absent(),
+  });
+  QuestsCompanion.insert({
+    this.id = const Value.absent(),
+    required String name,
+    this.note = const Value.absent(),
+    required Difficulty difficulty,
+    this.missionId = const Value.absent(),
+    this.board = const Value.absent(),
+    required int sortOrder,
+    required DateTime createdAt,
+    this.completedAt = const Value.absent(),
+    this.awardedXp = const Value.absent(),
+    this.eventId = const Value.absent(),
+  }) : name = Value(name),
+       difficulty = Value(difficulty),
+       sortOrder = Value(sortOrder),
+       createdAt = Value(createdAt);
+  static Insertable<QuestRow> custom({
+    Expression<int>? id,
+    Expression<String>? name,
+    Expression<String>? note,
+    Expression<String>? difficulty,
+    Expression<int>? missionId,
+    Expression<String>? board,
+    Expression<int>? sortOrder,
+    Expression<DateTime>? createdAt,
+    Expression<DateTime>? completedAt,
+    Expression<int>? awardedXp,
+    Expression<int>? eventId,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (name != null) 'name': name,
+      if (note != null) 'note': note,
+      if (difficulty != null) 'difficulty': difficulty,
+      if (missionId != null) 'mission_id': missionId,
+      if (board != null) 'board': board,
+      if (sortOrder != null) 'sort_order': sortOrder,
+      if (createdAt != null) 'created_at': createdAt,
+      if (completedAt != null) 'completed_at': completedAt,
+      if (awardedXp != null) 'awarded_xp': awardedXp,
+      if (eventId != null) 'event_id': eventId,
+    });
+  }
+
+  QuestsCompanion copyWith({
+    Value<int>? id,
+    Value<String>? name,
+    Value<String?>? note,
+    Value<Difficulty>? difficulty,
+    Value<int?>? missionId,
+    Value<BoardSection?>? board,
+    Value<int>? sortOrder,
+    Value<DateTime>? createdAt,
+    Value<DateTime?>? completedAt,
+    Value<int?>? awardedXp,
+    Value<int?>? eventId,
+  }) {
+    return QuestsCompanion(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      note: note ?? this.note,
+      difficulty: difficulty ?? this.difficulty,
+      missionId: missionId ?? this.missionId,
+      board: board ?? this.board,
+      sortOrder: sortOrder ?? this.sortOrder,
+      createdAt: createdAt ?? this.createdAt,
+      completedAt: completedAt ?? this.completedAt,
+      awardedXp: awardedXp ?? this.awardedXp,
+      eventId: eventId ?? this.eventId,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
+    }
+    if (note.present) {
+      map['note'] = Variable<String>(note.value);
+    }
+    if (difficulty.present) {
+      map['difficulty'] = Variable<String>(
+        $QuestsTable.$converterdifficulty.toSql(difficulty.value),
+      );
+    }
+    if (missionId.present) {
+      map['mission_id'] = Variable<int>(missionId.value);
+    }
+    if (board.present) {
+      map['board'] = Variable<String>(
+        $QuestsTable.$converterboardn.toSql(board.value),
+      );
+    }
+    if (sortOrder.present) {
+      map['sort_order'] = Variable<int>(sortOrder.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    if (completedAt.present) {
+      map['completed_at'] = Variable<DateTime>(completedAt.value);
+    }
+    if (awardedXp.present) {
+      map['awarded_xp'] = Variable<int>(awardedXp.value);
+    }
+    if (eventId.present) {
+      map['event_id'] = Variable<int>(eventId.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('QuestsCompanion(')
+          ..write('id: $id, ')
+          ..write('name: $name, ')
+          ..write('note: $note, ')
+          ..write('difficulty: $difficulty, ')
+          ..write('missionId: $missionId, ')
+          ..write('board: $board, ')
+          ..write('sortOrder: $sortOrder, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('completedAt: $completedAt, ')
+          ..write('awardedXp: $awardedXp, ')
+          ..write('eventId: $eventId')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $RuleQuestsTable extends RuleQuests
+    with TableInfo<$RuleQuestsTable, RuleQuestRow> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $RuleQuestsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _ruleIdMeta = const VerificationMeta('ruleId');
+  @override
+  late final GeneratedColumn<int> ruleId = GeneratedColumn<int>(
+    'rule_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES recurring_rules (id) ON DELETE CASCADE',
+    ),
+  );
+  static const VerificationMeta _nameMeta = const VerificationMeta('name');
+  @override
+  late final GeneratedColumn<String> name = GeneratedColumn<String>(
+    'name',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  @override
+  late final GeneratedColumnWithTypeConverter<Difficulty, String> difficulty =
+      GeneratedColumn<String>(
+        'difficulty',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: true,
+      ).withConverter<Difficulty>($RuleQuestsTable.$converterdifficulty);
+  static const VerificationMeta _sortOrderMeta = const VerificationMeta(
+    'sortOrder',
+  );
+  @override
+  late final GeneratedColumn<int> sortOrder = GeneratedColumn<int>(
+    'sort_order',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    ruleId,
+    name,
+    difficulty,
+    sortOrder,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'rule_quests';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<RuleQuestRow> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('rule_id')) {
+      context.handle(
+        _ruleIdMeta,
+        ruleId.isAcceptableOrUnknown(data['rule_id']!, _ruleIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_ruleIdMeta);
+    }
+    if (data.containsKey('name')) {
+      context.handle(
+        _nameMeta,
+        name.isAcceptableOrUnknown(data['name']!, _nameMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_nameMeta);
+    }
+    if (data.containsKey('sort_order')) {
+      context.handle(
+        _sortOrderMeta,
+        sortOrder.isAcceptableOrUnknown(data['sort_order']!, _sortOrderMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_sortOrderMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  RuleQuestRow map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return RuleQuestRow(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      ruleId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}rule_id'],
+      )!,
+      name: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}name'],
+      )!,
+      difficulty: $RuleQuestsTable.$converterdifficulty.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}difficulty'],
+        )!,
+      ),
+      sortOrder: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}sort_order'],
+      )!,
+    );
+  }
+
+  @override
+  $RuleQuestsTable createAlias(String alias) {
+    return $RuleQuestsTable(attachedDatabase, alias);
+  }
+
+  static JsonTypeConverter2<Difficulty, String, String> $converterdifficulty =
+      const EnumNameConverter<Difficulty>(Difficulty.values);
+}
+
+class RuleQuestRow extends DataClass implements Insertable<RuleQuestRow> {
+  final int id;
+  final int ruleId;
+  final String name;
+  final Difficulty difficulty;
+  final int sortOrder;
+  const RuleQuestRow({
+    required this.id,
+    required this.ruleId,
+    required this.name,
+    required this.difficulty,
+    required this.sortOrder,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['rule_id'] = Variable<int>(ruleId);
+    map['name'] = Variable<String>(name);
+    {
+      map['difficulty'] = Variable<String>(
+        $RuleQuestsTable.$converterdifficulty.toSql(difficulty),
+      );
+    }
+    map['sort_order'] = Variable<int>(sortOrder);
+    return map;
+  }
+
+  RuleQuestsCompanion toCompanion(bool nullToAbsent) {
+    return RuleQuestsCompanion(
+      id: Value(id),
+      ruleId: Value(ruleId),
+      name: Value(name),
+      difficulty: Value(difficulty),
+      sortOrder: Value(sortOrder),
+    );
+  }
+
+  factory RuleQuestRow.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return RuleQuestRow(
+      id: serializer.fromJson<int>(json['id']),
+      ruleId: serializer.fromJson<int>(json['ruleId']),
+      name: serializer.fromJson<String>(json['name']),
+      difficulty: $RuleQuestsTable.$converterdifficulty.fromJson(
+        serializer.fromJson<String>(json['difficulty']),
+      ),
+      sortOrder: serializer.fromJson<int>(json['sortOrder']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'ruleId': serializer.toJson<int>(ruleId),
+      'name': serializer.toJson<String>(name),
+      'difficulty': serializer.toJson<String>(
+        $RuleQuestsTable.$converterdifficulty.toJson(difficulty),
+      ),
+      'sortOrder': serializer.toJson<int>(sortOrder),
+    };
+  }
+
+  RuleQuestRow copyWith({
+    int? id,
+    int? ruleId,
+    String? name,
+    Difficulty? difficulty,
+    int? sortOrder,
+  }) => RuleQuestRow(
+    id: id ?? this.id,
+    ruleId: ruleId ?? this.ruleId,
+    name: name ?? this.name,
+    difficulty: difficulty ?? this.difficulty,
+    sortOrder: sortOrder ?? this.sortOrder,
+  );
+  RuleQuestRow copyWithCompanion(RuleQuestsCompanion data) {
+    return RuleQuestRow(
+      id: data.id.present ? data.id.value : this.id,
+      ruleId: data.ruleId.present ? data.ruleId.value : this.ruleId,
+      name: data.name.present ? data.name.value : this.name,
+      difficulty: data.difficulty.present
+          ? data.difficulty.value
+          : this.difficulty,
+      sortOrder: data.sortOrder.present ? data.sortOrder.value : this.sortOrder,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('RuleQuestRow(')
+          ..write('id: $id, ')
+          ..write('ruleId: $ruleId, ')
+          ..write('name: $name, ')
+          ..write('difficulty: $difficulty, ')
+          ..write('sortOrder: $sortOrder')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, ruleId, name, difficulty, sortOrder);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is RuleQuestRow &&
+          other.id == this.id &&
+          other.ruleId == this.ruleId &&
+          other.name == this.name &&
+          other.difficulty == this.difficulty &&
+          other.sortOrder == this.sortOrder);
+}
+
+class RuleQuestsCompanion extends UpdateCompanion<RuleQuestRow> {
+  final Value<int> id;
+  final Value<int> ruleId;
+  final Value<String> name;
+  final Value<Difficulty> difficulty;
+  final Value<int> sortOrder;
+  const RuleQuestsCompanion({
+    this.id = const Value.absent(),
+    this.ruleId = const Value.absent(),
+    this.name = const Value.absent(),
+    this.difficulty = const Value.absent(),
+    this.sortOrder = const Value.absent(),
+  });
+  RuleQuestsCompanion.insert({
+    this.id = const Value.absent(),
+    required int ruleId,
+    required String name,
+    required Difficulty difficulty,
+    required int sortOrder,
+  }) : ruleId = Value(ruleId),
+       name = Value(name),
+       difficulty = Value(difficulty),
+       sortOrder = Value(sortOrder);
+  static Insertable<RuleQuestRow> custom({
+    Expression<int>? id,
+    Expression<int>? ruleId,
+    Expression<String>? name,
+    Expression<String>? difficulty,
+    Expression<int>? sortOrder,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (ruleId != null) 'rule_id': ruleId,
+      if (name != null) 'name': name,
+      if (difficulty != null) 'difficulty': difficulty,
+      if (sortOrder != null) 'sort_order': sortOrder,
+    });
+  }
+
+  RuleQuestsCompanion copyWith({
+    Value<int>? id,
+    Value<int>? ruleId,
+    Value<String>? name,
+    Value<Difficulty>? difficulty,
+    Value<int>? sortOrder,
+  }) {
+    return RuleQuestsCompanion(
+      id: id ?? this.id,
+      ruleId: ruleId ?? this.ruleId,
+      name: name ?? this.name,
+      difficulty: difficulty ?? this.difficulty,
+      sortOrder: sortOrder ?? this.sortOrder,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (ruleId.present) {
+      map['rule_id'] = Variable<int>(ruleId.value);
+    }
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
+    }
+    if (difficulty.present) {
+      map['difficulty'] = Variable<String>(
+        $RuleQuestsTable.$converterdifficulty.toSql(difficulty.value),
+      );
+    }
+    if (sortOrder.present) {
+      map['sort_order'] = Variable<int>(sortOrder.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('RuleQuestsCompanion(')
+          ..write('id: $id, ')
+          ..write('ruleId: $ruleId, ')
+          ..write('name: $name, ')
+          ..write('difficulty: $difficulty, ')
+          ..write('sortOrder: $sortOrder')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $AppStateTable extends AppState
+    with TableInfo<$AppStateTable, AppStateRow> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $AppStateTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    check: () => id.equals(1),
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(1),
+  );
+  static const VerificationMeta _totalXpMeta = const VerificationMeta(
+    'totalXp',
+  );
+  @override
+  late final GeneratedColumn<int> totalXp = GeneratedColumn<int>(
+    'total_xp',
+    aliasedName,
+    false,
+    check: () => ComparableExpr(totalXp).isBiggerOrEqualValue(0),
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0),
+  );
+  static const VerificationMeta _heroNameMeta = const VerificationMeta(
+    'heroName',
+  );
+  @override
+  late final GeneratedColumn<String> heroName = GeneratedColumn<String>(
+    'hero_name',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(''),
+  );
+  @override
+  late final GeneratedColumnWithTypeConverter<AppLanguage, String> language =
+      GeneratedColumn<String>(
+        'language',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: false,
+        defaultValue: const Constant('system'),
+      ).withConverter<AppLanguage>($AppStateTable.$converterlanguage);
+  @override
+  late final GeneratedColumnWithTypeConverter<AppTheme, String> theme =
+      GeneratedColumn<String>(
+        'theme',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: false,
+        defaultValue: const Constant('system'),
+      ).withConverter<AppTheme>($AppStateTable.$convertertheme);
+  static const VerificationMeta _displayFontMeta = const VerificationMeta(
+    'displayFont',
+  );
+  @override
+  late final GeneratedColumn<String> displayFont = GeneratedColumn<String>(
+    'display_font',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('figtree'),
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    totalXp,
+    heroName,
+    language,
+    theme,
+    displayFont,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'app_state';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<AppStateRow> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('total_xp')) {
+      context.handle(
+        _totalXpMeta,
+        totalXp.isAcceptableOrUnknown(data['total_xp']!, _totalXpMeta),
+      );
+    }
+    if (data.containsKey('hero_name')) {
+      context.handle(
+        _heroNameMeta,
+        heroName.isAcceptableOrUnknown(data['hero_name']!, _heroNameMeta),
+      );
+    }
+    if (data.containsKey('display_font')) {
+      context.handle(
+        _displayFontMeta,
+        displayFont.isAcceptableOrUnknown(
+          data['display_font']!,
+          _displayFontMeta,
+        ),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  AppStateRow map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return AppStateRow(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      totalXp: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}total_xp'],
+      )!,
+      heroName: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}hero_name'],
+      )!,
+      language: $AppStateTable.$converterlanguage.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}language'],
+        )!,
+      ),
+      theme: $AppStateTable.$convertertheme.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}theme'],
+        )!,
+      ),
+      displayFont: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}display_font'],
+      )!,
+    );
+  }
+
+  @override
+  $AppStateTable createAlias(String alias) {
+    return $AppStateTable(attachedDatabase, alias);
+  }
+
+  static JsonTypeConverter2<AppLanguage, String, String> $converterlanguage =
+      const EnumNameConverter<AppLanguage>(AppLanguage.values);
+  static JsonTypeConverter2<AppTheme, String, String> $convertertheme =
+      const EnumNameConverter<AppTheme>(AppTheme.values);
+}
+
+class AppStateRow extends DataClass implements Insertable<AppStateRow> {
+  final int id;
+  final int totalXp;
+  final String heroName;
+  final AppLanguage language;
+  final AppTheme theme;
+  final String displayFont;
+  const AppStateRow({
+    required this.id,
+    required this.totalXp,
+    required this.heroName,
+    required this.language,
+    required this.theme,
+    required this.displayFont,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['total_xp'] = Variable<int>(totalXp);
+    map['hero_name'] = Variable<String>(heroName);
+    {
+      map['language'] = Variable<String>(
+        $AppStateTable.$converterlanguage.toSql(language),
+      );
+    }
+    {
+      map['theme'] = Variable<String>(
+        $AppStateTable.$convertertheme.toSql(theme),
+      );
+    }
+    map['display_font'] = Variable<String>(displayFont);
+    return map;
+  }
+
+  AppStateCompanion toCompanion(bool nullToAbsent) {
+    return AppStateCompanion(
+      id: Value(id),
+      totalXp: Value(totalXp),
+      heroName: Value(heroName),
+      language: Value(language),
+      theme: Value(theme),
+      displayFont: Value(displayFont),
+    );
+  }
+
+  factory AppStateRow.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return AppStateRow(
+      id: serializer.fromJson<int>(json['id']),
+      totalXp: serializer.fromJson<int>(json['totalXp']),
+      heroName: serializer.fromJson<String>(json['heroName']),
+      language: $AppStateTable.$converterlanguage.fromJson(
+        serializer.fromJson<String>(json['language']),
+      ),
+      theme: $AppStateTable.$convertertheme.fromJson(
+        serializer.fromJson<String>(json['theme']),
+      ),
+      displayFont: serializer.fromJson<String>(json['displayFont']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'totalXp': serializer.toJson<int>(totalXp),
+      'heroName': serializer.toJson<String>(heroName),
+      'language': serializer.toJson<String>(
+        $AppStateTable.$converterlanguage.toJson(language),
+      ),
+      'theme': serializer.toJson<String>(
+        $AppStateTable.$convertertheme.toJson(theme),
+      ),
+      'displayFont': serializer.toJson<String>(displayFont),
+    };
+  }
+
+  AppStateRow copyWith({
+    int? id,
+    int? totalXp,
+    String? heroName,
+    AppLanguage? language,
+    AppTheme? theme,
+    String? displayFont,
+  }) => AppStateRow(
+    id: id ?? this.id,
+    totalXp: totalXp ?? this.totalXp,
+    heroName: heroName ?? this.heroName,
+    language: language ?? this.language,
+    theme: theme ?? this.theme,
+    displayFont: displayFont ?? this.displayFont,
+  );
+  AppStateRow copyWithCompanion(AppStateCompanion data) {
+    return AppStateRow(
+      id: data.id.present ? data.id.value : this.id,
+      totalXp: data.totalXp.present ? data.totalXp.value : this.totalXp,
+      heroName: data.heroName.present ? data.heroName.value : this.heroName,
+      language: data.language.present ? data.language.value : this.language,
+      theme: data.theme.present ? data.theme.value : this.theme,
+      displayFont: data.displayFont.present
+          ? data.displayFont.value
+          : this.displayFont,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('AppStateRow(')
+          ..write('id: $id, ')
+          ..write('totalXp: $totalXp, ')
+          ..write('heroName: $heroName, ')
+          ..write('language: $language, ')
+          ..write('theme: $theme, ')
+          ..write('displayFont: $displayFont')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(id, totalXp, heroName, language, theme, displayFont);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is AppStateRow &&
+          other.id == this.id &&
+          other.totalXp == this.totalXp &&
+          other.heroName == this.heroName &&
+          other.language == this.language &&
+          other.theme == this.theme &&
+          other.displayFont == this.displayFont);
+}
+
+class AppStateCompanion extends UpdateCompanion<AppStateRow> {
+  final Value<int> id;
+  final Value<int> totalXp;
+  final Value<String> heroName;
+  final Value<AppLanguage> language;
+  final Value<AppTheme> theme;
+  final Value<String> displayFont;
+  const AppStateCompanion({
+    this.id = const Value.absent(),
+    this.totalXp = const Value.absent(),
+    this.heroName = const Value.absent(),
+    this.language = const Value.absent(),
+    this.theme = const Value.absent(),
+    this.displayFont = const Value.absent(),
+  });
+  AppStateCompanion.insert({
+    this.id = const Value.absent(),
+    this.totalXp = const Value.absent(),
+    this.heroName = const Value.absent(),
+    this.language = const Value.absent(),
+    this.theme = const Value.absent(),
+    this.displayFont = const Value.absent(),
+  });
+  static Insertable<AppStateRow> custom({
+    Expression<int>? id,
+    Expression<int>? totalXp,
+    Expression<String>? heroName,
+    Expression<String>? language,
+    Expression<String>? theme,
+    Expression<String>? displayFont,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (totalXp != null) 'total_xp': totalXp,
+      if (heroName != null) 'hero_name': heroName,
+      if (language != null) 'language': language,
+      if (theme != null) 'theme': theme,
+      if (displayFont != null) 'display_font': displayFont,
+    });
+  }
+
+  AppStateCompanion copyWith({
+    Value<int>? id,
+    Value<int>? totalXp,
+    Value<String>? heroName,
+    Value<AppLanguage>? language,
+    Value<AppTheme>? theme,
+    Value<String>? displayFont,
+  }) {
+    return AppStateCompanion(
+      id: id ?? this.id,
+      totalXp: totalXp ?? this.totalXp,
+      heroName: heroName ?? this.heroName,
+      language: language ?? this.language,
+      theme: theme ?? this.theme,
+      displayFont: displayFont ?? this.displayFont,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (totalXp.present) {
+      map['total_xp'] = Variable<int>(totalXp.value);
+    }
+    if (heroName.present) {
+      map['hero_name'] = Variable<String>(heroName.value);
+    }
+    if (language.present) {
+      map['language'] = Variable<String>(
+        $AppStateTable.$converterlanguage.toSql(language.value),
+      );
+    }
+    if (theme.present) {
+      map['theme'] = Variable<String>(
+        $AppStateTable.$convertertheme.toSql(theme.value),
+      );
+    }
+    if (displayFont.present) {
+      map['display_font'] = Variable<String>(displayFont.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('AppStateCompanion(')
+          ..write('id: $id, ')
+          ..write('totalXp: $totalXp, ')
+          ..write('heroName: $heroName, ')
+          ..write('language: $language, ')
+          ..write('theme: $theme, ')
+          ..write('displayFont: $displayFont')
           ..write(')'))
         .toString();
   }
@@ -4903,10 +4958,10 @@ abstract class _$QuestlogDatabase extends GeneratedDatabase {
   $QuestlogDatabaseManager get managers => $QuestlogDatabaseManager(this);
   late final $RecurringRulesTable recurringRules = $RecurringRulesTable(this);
   late final $MissionsTable missions = $MissionsTable(this);
+  late final $CalendarEventsTable calendarEvents = $CalendarEventsTable(this);
   late final $QuestsTable quests = $QuestsTable(this);
   late final $RuleQuestsTable ruleQuests = $RuleQuestsTable(this);
   late final $AppStateTable appState = $AppStateTable(this);
-  late final $CalendarEventsTable calendarEvents = $CalendarEventsTable(this);
   late final $CalendarSkippedDatesTable calendarSkippedDates =
       $CalendarSkippedDatesTable(this);
   late final $CalendarCompletionsTable calendarCompletions =
@@ -4941,10 +4996,10 @@ abstract class _$QuestlogDatabase extends GeneratedDatabase {
   List<DatabaseSchemaEntity> get allSchemaEntities => [
     recurringRules,
     missions,
+    calendarEvents,
     quests,
     ruleQuests,
     appState,
-    calendarEvents,
     calendarSkippedDates,
     calendarCompletions,
     calendarAddresses,
@@ -4970,6 +5025,13 @@ abstract class _$QuestlogDatabase extends GeneratedDatabase {
         limitUpdateKind: UpdateKind.delete,
       ),
       result: [TableUpdate('quests', kind: UpdateKind.delete)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'calendar_events',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('quests', kind: UpdateKind.update)],
     ),
     WritePropagation(
       on: TableUpdateQuery.onTableName(
@@ -5944,6 +6006,782 @@ typedef $$MissionsTableProcessedTableManager =
       MissionRow,
       PrefetchHooks Function({bool ruleId, bool questsRefs})
     >;
+typedef $$CalendarEventsTableCreateCompanionBuilder =
+    CalendarEventsCompanion Function({
+      Value<int> id,
+      required String name,
+      Value<String?> note,
+      Value<String?> location,
+      required String eventType,
+      required DateTime startDate,
+      required DateTime endDate,
+      Value<int?> startMinute,
+      Value<int?> endMinute,
+      Value<String> repeatKind,
+      Value<int?> easterOffset,
+      Value<int?> nthMonth,
+      Value<int?> nthWeekday,
+      Value<int?> nthOrdinal,
+      Value<DateTime?> repeatEnd,
+      Value<bool> onBoard,
+      required DateTime createdAt,
+      required DateTime updatedAt,
+    });
+typedef $$CalendarEventsTableUpdateCompanionBuilder =
+    CalendarEventsCompanion Function({
+      Value<int> id,
+      Value<String> name,
+      Value<String?> note,
+      Value<String?> location,
+      Value<String> eventType,
+      Value<DateTime> startDate,
+      Value<DateTime> endDate,
+      Value<int?> startMinute,
+      Value<int?> endMinute,
+      Value<String> repeatKind,
+      Value<int?> easterOffset,
+      Value<int?> nthMonth,
+      Value<int?> nthWeekday,
+      Value<int?> nthOrdinal,
+      Value<DateTime?> repeatEnd,
+      Value<bool> onBoard,
+      Value<DateTime> createdAt,
+      Value<DateTime> updatedAt,
+    });
+
+final class $$CalendarEventsTableReferences
+    extends
+        BaseReferences<
+          _$QuestlogDatabase,
+          $CalendarEventsTable,
+          CalendarEventRow
+        > {
+  $$CalendarEventsTableReferences(
+    super.$_db,
+    super.$_table,
+    super.$_typedResult,
+  );
+
+  static MultiTypedResultKey<$QuestsTable, List<QuestRow>> _questsRefsTable(
+    _$QuestlogDatabase db,
+  ) => MultiTypedResultKey.fromTable(
+    db.quests,
+    aliasName: 'calendar_events__id__quests__event_id',
+  );
+
+  $$QuestsTableProcessedTableManager get questsRefs {
+    final manager = $$QuestsTableTableManager(
+      $_db,
+      $_db.quests,
+    ).filter((f) => f.eventId.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(_questsRefsTable($_db));
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+
+  static MultiTypedResultKey<
+    $CalendarSkippedDatesTable,
+    List<CalendarSkippedDateRow>
+  >
+  _calendarSkippedDatesRefsTable(_$QuestlogDatabase db) =>
+      MultiTypedResultKey.fromTable(
+        db.calendarSkippedDates,
+        aliasName: 'calendar_events__id__calendar_skipped_dates__event_id',
+      );
+
+  $$CalendarSkippedDatesTableProcessedTableManager
+  get calendarSkippedDatesRefs {
+    final manager = $$CalendarSkippedDatesTableTableManager(
+      $_db,
+      $_db.calendarSkippedDates,
+    ).filter((f) => f.eventId.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(
+      _calendarSkippedDatesRefsTable($_db),
+    );
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+
+  static MultiTypedResultKey<
+    $CalendarCompletionsTable,
+    List<CalendarCompletionRow>
+  >
+  _calendarCompletionsRefsTable(_$QuestlogDatabase db) =>
+      MultiTypedResultKey.fromTable(
+        db.calendarCompletions,
+        aliasName: 'calendar_events__id__calendar_completions__event_id',
+      );
+
+  $$CalendarCompletionsTableProcessedTableManager get calendarCompletionsRefs {
+    final manager = $$CalendarCompletionsTableTableManager(
+      $_db,
+      $_db.calendarCompletions,
+    ).filter((f) => f.eventId.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(
+      _calendarCompletionsRefsTable($_db),
+    );
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+}
+
+class $$CalendarEventsTableFilterComposer
+    extends Composer<_$QuestlogDatabase, $CalendarEventsTable> {
+  $$CalendarEventsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get name => $composableBuilder(
+    column: $table.name,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get note => $composableBuilder(
+    column: $table.note,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get location => $composableBuilder(
+    column: $table.location,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get eventType => $composableBuilder(
+    column: $table.eventType,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnWithTypeConverterFilters<DateTime, DateTime, String> get startDate =>
+      $composableBuilder(
+        column: $table.startDate,
+        builder: (column) => ColumnWithTypeConverterFilters(column),
+      );
+
+  ColumnWithTypeConverterFilters<DateTime, DateTime, String> get endDate =>
+      $composableBuilder(
+        column: $table.endDate,
+        builder: (column) => ColumnWithTypeConverterFilters(column),
+      );
+
+  ColumnFilters<int> get startMinute => $composableBuilder(
+    column: $table.startMinute,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get endMinute => $composableBuilder(
+    column: $table.endMinute,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get repeatKind => $composableBuilder(
+    column: $table.repeatKind,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get easterOffset => $composableBuilder(
+    column: $table.easterOffset,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get nthMonth => $composableBuilder(
+    column: $table.nthMonth,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get nthWeekday => $composableBuilder(
+    column: $table.nthWeekday,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get nthOrdinal => $composableBuilder(
+    column: $table.nthOrdinal,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnWithTypeConverterFilters<DateTime?, DateTime, String> get repeatEnd =>
+      $composableBuilder(
+        column: $table.repeatEnd,
+        builder: (column) => ColumnWithTypeConverterFilters(column),
+      );
+
+  ColumnFilters<bool> get onBoard => $composableBuilder(
+    column: $table.onBoard,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  Expression<bool> questsRefs(
+    Expression<bool> Function($$QuestsTableFilterComposer f) f,
+  ) {
+    final $$QuestsTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.quests,
+      getReferencedColumn: (t) => t.eventId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$QuestsTableFilterComposer(
+            $db: $db,
+            $table: $db.quests,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<bool> calendarSkippedDatesRefs(
+    Expression<bool> Function($$CalendarSkippedDatesTableFilterComposer f) f,
+  ) {
+    final $$CalendarSkippedDatesTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.calendarSkippedDates,
+      getReferencedColumn: (t) => t.eventId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$CalendarSkippedDatesTableFilterComposer(
+            $db: $db,
+            $table: $db.calendarSkippedDates,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<bool> calendarCompletionsRefs(
+    Expression<bool> Function($$CalendarCompletionsTableFilterComposer f) f,
+  ) {
+    final $$CalendarCompletionsTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.calendarCompletions,
+      getReferencedColumn: (t) => t.eventId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$CalendarCompletionsTableFilterComposer(
+            $db: $db,
+            $table: $db.calendarCompletions,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+}
+
+class $$CalendarEventsTableOrderingComposer
+    extends Composer<_$QuestlogDatabase, $CalendarEventsTable> {
+  $$CalendarEventsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get name => $composableBuilder(
+    column: $table.name,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get note => $composableBuilder(
+    column: $table.note,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get location => $composableBuilder(
+    column: $table.location,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get eventType => $composableBuilder(
+    column: $table.eventType,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get startDate => $composableBuilder(
+    column: $table.startDate,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get endDate => $composableBuilder(
+    column: $table.endDate,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get startMinute => $composableBuilder(
+    column: $table.startMinute,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get endMinute => $composableBuilder(
+    column: $table.endMinute,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get repeatKind => $composableBuilder(
+    column: $table.repeatKind,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get easterOffset => $composableBuilder(
+    column: $table.easterOffset,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get nthMonth => $composableBuilder(
+    column: $table.nthMonth,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get nthWeekday => $composableBuilder(
+    column: $table.nthWeekday,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get nthOrdinal => $composableBuilder(
+    column: $table.nthOrdinal,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get repeatEnd => $composableBuilder(
+    column: $table.repeatEnd,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get onBoard => $composableBuilder(
+    column: $table.onBoard,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$CalendarEventsTableAnnotationComposer
+    extends Composer<_$QuestlogDatabase, $CalendarEventsTable> {
+  $$CalendarEventsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get name =>
+      $composableBuilder(column: $table.name, builder: (column) => column);
+
+  GeneratedColumn<String> get note =>
+      $composableBuilder(column: $table.note, builder: (column) => column);
+
+  GeneratedColumn<String> get location =>
+      $composableBuilder(column: $table.location, builder: (column) => column);
+
+  GeneratedColumn<String> get eventType =>
+      $composableBuilder(column: $table.eventType, builder: (column) => column);
+
+  GeneratedColumnWithTypeConverter<DateTime, String> get startDate =>
+      $composableBuilder(column: $table.startDate, builder: (column) => column);
+
+  GeneratedColumnWithTypeConverter<DateTime, String> get endDate =>
+      $composableBuilder(column: $table.endDate, builder: (column) => column);
+
+  GeneratedColumn<int> get startMinute => $composableBuilder(
+    column: $table.startMinute,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get endMinute =>
+      $composableBuilder(column: $table.endMinute, builder: (column) => column);
+
+  GeneratedColumn<String> get repeatKind => $composableBuilder(
+    column: $table.repeatKind,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get easterOffset => $composableBuilder(
+    column: $table.easterOffset,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get nthMonth =>
+      $composableBuilder(column: $table.nthMonth, builder: (column) => column);
+
+  GeneratedColumn<int> get nthWeekday => $composableBuilder(
+    column: $table.nthWeekday,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get nthOrdinal => $composableBuilder(
+    column: $table.nthOrdinal,
+    builder: (column) => column,
+  );
+
+  GeneratedColumnWithTypeConverter<DateTime?, String> get repeatEnd =>
+      $composableBuilder(column: $table.repeatEnd, builder: (column) => column);
+
+  GeneratedColumn<bool> get onBoard =>
+      $composableBuilder(column: $table.onBoard, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
+
+  Expression<T> questsRefs<T extends Object>(
+    Expression<T> Function($$QuestsTableAnnotationComposer a) f,
+  ) {
+    final $$QuestsTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.quests,
+      getReferencedColumn: (t) => t.eventId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$QuestsTableAnnotationComposer(
+            $db: $db,
+            $table: $db.quests,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<T> calendarSkippedDatesRefs<T extends Object>(
+    Expression<T> Function($$CalendarSkippedDatesTableAnnotationComposer a) f,
+  ) {
+    final $$CalendarSkippedDatesTableAnnotationComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.id,
+          referencedTable: $db.calendarSkippedDates,
+          getReferencedColumn: (t) => t.eventId,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$CalendarSkippedDatesTableAnnotationComposer(
+                $db: $db,
+                $table: $db.calendarSkippedDates,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return f(composer);
+  }
+
+  Expression<T> calendarCompletionsRefs<T extends Object>(
+    Expression<T> Function($$CalendarCompletionsTableAnnotationComposer a) f,
+  ) {
+    final $$CalendarCompletionsTableAnnotationComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.id,
+          referencedTable: $db.calendarCompletions,
+          getReferencedColumn: (t) => t.eventId,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$CalendarCompletionsTableAnnotationComposer(
+                $db: $db,
+                $table: $db.calendarCompletions,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return f(composer);
+  }
+}
+
+class $$CalendarEventsTableTableManager
+    extends
+        RootTableManager<
+          _$QuestlogDatabase,
+          $CalendarEventsTable,
+          CalendarEventRow,
+          $$CalendarEventsTableFilterComposer,
+          $$CalendarEventsTableOrderingComposer,
+          $$CalendarEventsTableAnnotationComposer,
+          $$CalendarEventsTableCreateCompanionBuilder,
+          $$CalendarEventsTableUpdateCompanionBuilder,
+          (CalendarEventRow, $$CalendarEventsTableReferences),
+          CalendarEventRow,
+          PrefetchHooks Function({
+            bool questsRefs,
+            bool calendarSkippedDatesRefs,
+            bool calendarCompletionsRefs,
+          })
+        > {
+  $$CalendarEventsTableTableManager(
+    _$QuestlogDatabase db,
+    $CalendarEventsTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$CalendarEventsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$CalendarEventsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$CalendarEventsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<String> name = const Value.absent(),
+                Value<String?> note = const Value.absent(),
+                Value<String?> location = const Value.absent(),
+                Value<String> eventType = const Value.absent(),
+                Value<DateTime> startDate = const Value.absent(),
+                Value<DateTime> endDate = const Value.absent(),
+                Value<int?> startMinute = const Value.absent(),
+                Value<int?> endMinute = const Value.absent(),
+                Value<String> repeatKind = const Value.absent(),
+                Value<int?> easterOffset = const Value.absent(),
+                Value<int?> nthMonth = const Value.absent(),
+                Value<int?> nthWeekday = const Value.absent(),
+                Value<int?> nthOrdinal = const Value.absent(),
+                Value<DateTime?> repeatEnd = const Value.absent(),
+                Value<bool> onBoard = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<DateTime> updatedAt = const Value.absent(),
+              }) => CalendarEventsCompanion(
+                id: id,
+                name: name,
+                note: note,
+                location: location,
+                eventType: eventType,
+                startDate: startDate,
+                endDate: endDate,
+                startMinute: startMinute,
+                endMinute: endMinute,
+                repeatKind: repeatKind,
+                easterOffset: easterOffset,
+                nthMonth: nthMonth,
+                nthWeekday: nthWeekday,
+                nthOrdinal: nthOrdinal,
+                repeatEnd: repeatEnd,
+                onBoard: onBoard,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                required String name,
+                Value<String?> note = const Value.absent(),
+                Value<String?> location = const Value.absent(),
+                required String eventType,
+                required DateTime startDate,
+                required DateTime endDate,
+                Value<int?> startMinute = const Value.absent(),
+                Value<int?> endMinute = const Value.absent(),
+                Value<String> repeatKind = const Value.absent(),
+                Value<int?> easterOffset = const Value.absent(),
+                Value<int?> nthMonth = const Value.absent(),
+                Value<int?> nthWeekday = const Value.absent(),
+                Value<int?> nthOrdinal = const Value.absent(),
+                Value<DateTime?> repeatEnd = const Value.absent(),
+                Value<bool> onBoard = const Value.absent(),
+                required DateTime createdAt,
+                required DateTime updatedAt,
+              }) => CalendarEventsCompanion.insert(
+                id: id,
+                name: name,
+                note: note,
+                location: location,
+                eventType: eventType,
+                startDate: startDate,
+                endDate: endDate,
+                startMinute: startMinute,
+                endMinute: endMinute,
+                repeatKind: repeatKind,
+                easterOffset: easterOffset,
+                nthMonth: nthMonth,
+                nthWeekday: nthWeekday,
+                nthOrdinal: nthOrdinal,
+                repeatEnd: repeatEnd,
+                onBoard: onBoard,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<$CalendarEventsTable, CalendarEventRow>(table),
+                  $$CalendarEventsTableReferences(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback:
+              ({
+                questsRefs = false,
+                calendarSkippedDatesRefs = false,
+                calendarCompletionsRefs = false,
+              }) {
+                return PrefetchHooks(
+                  db: db,
+                  explicitlyWatchedTables: [
+                    if (questsRefs) db.quests,
+                    if (calendarSkippedDatesRefs) db.calendarSkippedDates,
+                    if (calendarCompletionsRefs) db.calendarCompletions,
+                  ],
+                  addJoins: null,
+                  getPrefetchedDataCallback: (items) async {
+                    return [
+                      if (questsRefs)
+                        await $_getPrefetchedDataByColumns<
+                          CalendarEventRow,
+                          $CalendarEventsTable,
+                          QuestRow,
+                          $QuestsTable
+                        >(
+                          currentTable: table,
+                          referencedTable: $$CalendarEventsTableReferences
+                              ._questsRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$CalendarEventsTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).questsRefs,
+                          currentColumn: 'id',
+                          referencedColumn: 'event_id',
+                          typedResults: items,
+                        ),
+                      if (calendarSkippedDatesRefs)
+                        await $_getPrefetchedDataByColumns<
+                          CalendarEventRow,
+                          $CalendarEventsTable,
+                          CalendarSkippedDateRow,
+                          $CalendarSkippedDatesTable
+                        >(
+                          currentTable: table,
+                          referencedTable: $$CalendarEventsTableReferences
+                              ._calendarSkippedDatesRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$CalendarEventsTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).calendarSkippedDatesRefs,
+                          currentColumn: 'id',
+                          referencedColumn: 'event_id',
+                          typedResults: items,
+                        ),
+                      if (calendarCompletionsRefs)
+                        await $_getPrefetchedDataByColumns<
+                          CalendarEventRow,
+                          $CalendarEventsTable,
+                          CalendarCompletionRow,
+                          $CalendarCompletionsTable
+                        >(
+                          currentTable: table,
+                          referencedTable: $$CalendarEventsTableReferences
+                              ._calendarCompletionsRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$CalendarEventsTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).calendarCompletionsRefs,
+                          currentColumn: 'id',
+                          referencedColumn: 'event_id',
+                          typedResults: items,
+                        ),
+                    ];
+                  },
+                );
+              },
+        ),
+      );
+}
+
+typedef $$CalendarEventsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$QuestlogDatabase,
+      $CalendarEventsTable,
+      CalendarEventRow,
+      $$CalendarEventsTableFilterComposer,
+      $$CalendarEventsTableOrderingComposer,
+      $$CalendarEventsTableAnnotationComposer,
+      $$CalendarEventsTableCreateCompanionBuilder,
+      $$CalendarEventsTableUpdateCompanionBuilder,
+      (CalendarEventRow, $$CalendarEventsTableReferences),
+      CalendarEventRow,
+      PrefetchHooks Function({
+        bool questsRefs,
+        bool calendarSkippedDatesRefs,
+        bool calendarCompletionsRefs,
+      })
+    >;
 typedef $$QuestsTableCreateCompanionBuilder = QuestsCompanion Function({
   Value<int> id,
   required String name,
@@ -5955,6 +6793,7 @@ typedef $$QuestsTableCreateCompanionBuilder = QuestsCompanion Function({
   required DateTime createdAt,
   Value<DateTime?> completedAt,
   Value<int?> awardedXp,
+  Value<int?> eventId,
 });
 typedef $$QuestsTableUpdateCompanionBuilder = QuestsCompanion Function({
   Value<int> id,
@@ -5967,6 +6806,7 @@ typedef $$QuestsTableUpdateCompanionBuilder = QuestsCompanion Function({
   Value<DateTime> createdAt,
   Value<DateTime?> completedAt,
   Value<int?> awardedXp,
+  Value<int?> eventId,
 });
 
 final class $$QuestsTableReferences
@@ -5984,6 +6824,23 @@ final class $$QuestsTableReferences
       $_db.missions,
     ).filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_missionIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+
+  static $CalendarEventsTable _eventIdTable(_$QuestlogDatabase db) =>
+      db.calendarEvents.createAlias('quests__event_id__calendar_events__id');
+
+  $$CalendarEventsTableProcessedTableManager? get eventId {
+    final $_column = $_itemColumn<int>('event_id');
+    if ($_column == null) return null;
+    final manager = $$CalendarEventsTableTableManager(
+      $_db,
+      $_db.calendarEvents,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_eventIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
       manager.$state.copyWith(prefetchedData: [item]),
@@ -6061,6 +6918,29 @@ class $$QuestsTableFilterComposer
           }) => $$MissionsTableFilterComposer(
             $db: $db,
             $table: $db.missions,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $$CalendarEventsTableFilterComposer get eventId {
+    final $$CalendarEventsTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.eventId,
+      referencedTable: $db.calendarEvents,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$CalendarEventsTableFilterComposer(
+            $db: $db,
+            $table: $db.calendarEvents,
             $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
             joinBuilder: joinBuilder,
             $removeJoinBuilderFromRootComposer:
@@ -6147,6 +7027,29 @@ class $$QuestsTableOrderingComposer
     );
     return composer;
   }
+
+  $$CalendarEventsTableOrderingComposer get eventId {
+    final $$CalendarEventsTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.eventId,
+      referencedTable: $db.calendarEvents,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$CalendarEventsTableOrderingComposer(
+            $db: $db,
+            $table: $db.calendarEvents,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
 }
 
 class $$QuestsTableAnnotationComposer
@@ -6212,6 +7115,29 @@ class $$QuestsTableAnnotationComposer
     );
     return composer;
   }
+
+  $$CalendarEventsTableAnnotationComposer get eventId {
+    final $$CalendarEventsTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.eventId,
+      referencedTable: $db.calendarEvents,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$CalendarEventsTableAnnotationComposer(
+            $db: $db,
+            $table: $db.calendarEvents,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
 }
 
 class $$QuestsTableTableManager
@@ -6227,7 +7153,7 @@ class $$QuestsTableTableManager
           $$QuestsTableUpdateCompanionBuilder,
           (QuestRow, $$QuestsTableReferences),
           QuestRow,
-          PrefetchHooks Function({bool missionId})
+          PrefetchHooks Function({bool missionId, bool eventId})
         > {
   $$QuestsTableTableManager(_$QuestlogDatabase db, $QuestsTable table)
     : super(
@@ -6252,6 +7178,7 @@ class $$QuestsTableTableManager
                 Value<DateTime> createdAt = const Value.absent(),
                 Value<DateTime?> completedAt = const Value.absent(),
                 Value<int?> awardedXp = const Value.absent(),
+                Value<int?> eventId = const Value.absent(),
               }) => QuestsCompanion(
                 id: id,
                 name: name,
@@ -6263,6 +7190,7 @@ class $$QuestsTableTableManager
                 createdAt: createdAt,
                 completedAt: completedAt,
                 awardedXp: awardedXp,
+                eventId: eventId,
               ),
           createCompanionCallback:
               ({
@@ -6276,6 +7204,7 @@ class $$QuestsTableTableManager
                 required DateTime createdAt,
                 Value<DateTime?> completedAt = const Value.absent(),
                 Value<int?> awardedXp = const Value.absent(),
+                Value<int?> eventId = const Value.absent(),
               }) => QuestsCompanion.insert(
                 id: id,
                 name: name,
@@ -6287,6 +7216,7 @@ class $$QuestsTableTableManager
                 createdAt: createdAt,
                 completedAt: completedAt,
                 awardedXp: awardedXp,
+                eventId: eventId,
               ),
           withReferenceMapper: (p0) => p0
               .map(
@@ -6296,7 +7226,7 @@ class $$QuestsTableTableManager
                 ),
               )
               .toList(),
-          prefetchHooksCallback: ({missionId = false}) {
+          prefetchHooksCallback: ({missionId = false, eventId = false}) {
             return PrefetchHooks(
               db: db,
               explicitlyWatchedTables: [],
@@ -6327,6 +7257,18 @@ class $$QuestsTableTableManager
                             .id,
                       ) as T;
                     }
+                    if (eventId) {
+                      state = state.withJoin(
+                        currentTable: table,
+                        currentColumn: table.eventId,
+                        referencedTable: $$QuestsTableReferences._eventIdTable(
+                          db,
+                        ),
+                        referencedColumn: $$QuestsTableReferences
+                            ._eventIdTable(db)
+                            .id,
+                      ) as T;
+                    }
 
                     return state;
                   },
@@ -6351,7 +7293,7 @@ typedef $$QuestsTableProcessedTableManager =
       $$QuestsTableUpdateCompanionBuilder,
       (QuestRow, $$QuestsTableReferences),
       QuestRow,
-      PrefetchHooks Function({bool missionId})
+      PrefetchHooks Function({bool missionId, bool eventId})
     >;
 typedef $$RuleQuestsTableCreateCompanionBuilder = RuleQuestsCompanion Function({
   Value<int> id,
@@ -6888,689 +7830,6 @@ typedef $$AppStateTableProcessedTableManager =
       ),
       AppStateRow,
       PrefetchHooks Function()
-    >;
-typedef $$CalendarEventsTableCreateCompanionBuilder =
-    CalendarEventsCompanion Function({
-      Value<int> id,
-      required String name,
-      Value<String?> note,
-      Value<String?> location,
-      required String eventType,
-      required DateTime startDate,
-      required DateTime endDate,
-      Value<int?> startMinute,
-      Value<int?> endMinute,
-      Value<String> repeatKind,
-      Value<int?> easterOffset,
-      Value<int?> nthMonth,
-      Value<int?> nthWeekday,
-      Value<int?> nthOrdinal,
-      Value<DateTime?> repeatEnd,
-      Value<bool> onBoard,
-      required DateTime createdAt,
-      required DateTime updatedAt,
-    });
-typedef $$CalendarEventsTableUpdateCompanionBuilder =
-    CalendarEventsCompanion Function({
-      Value<int> id,
-      Value<String> name,
-      Value<String?> note,
-      Value<String?> location,
-      Value<String> eventType,
-      Value<DateTime> startDate,
-      Value<DateTime> endDate,
-      Value<int?> startMinute,
-      Value<int?> endMinute,
-      Value<String> repeatKind,
-      Value<int?> easterOffset,
-      Value<int?> nthMonth,
-      Value<int?> nthWeekday,
-      Value<int?> nthOrdinal,
-      Value<DateTime?> repeatEnd,
-      Value<bool> onBoard,
-      Value<DateTime> createdAt,
-      Value<DateTime> updatedAt,
-    });
-
-final class $$CalendarEventsTableReferences
-    extends
-        BaseReferences<
-          _$QuestlogDatabase,
-          $CalendarEventsTable,
-          CalendarEventRow
-        > {
-  $$CalendarEventsTableReferences(
-    super.$_db,
-    super.$_table,
-    super.$_typedResult,
-  );
-
-  static MultiTypedResultKey<
-    $CalendarSkippedDatesTable,
-    List<CalendarSkippedDateRow>
-  >
-  _calendarSkippedDatesRefsTable(_$QuestlogDatabase db) =>
-      MultiTypedResultKey.fromTable(
-        db.calendarSkippedDates,
-        aliasName: 'calendar_events__id__calendar_skipped_dates__event_id',
-      );
-
-  $$CalendarSkippedDatesTableProcessedTableManager
-  get calendarSkippedDatesRefs {
-    final manager = $$CalendarSkippedDatesTableTableManager(
-      $_db,
-      $_db.calendarSkippedDates,
-    ).filter((f) => f.eventId.id.sqlEquals($_itemColumn<int>('id')!));
-
-    final cache = $_typedResult.readTableOrNull(
-      _calendarSkippedDatesRefsTable($_db),
-    );
-    return ProcessedTableManager(
-      manager.$state.copyWith(prefetchedData: cache),
-    );
-  }
-
-  static MultiTypedResultKey<
-    $CalendarCompletionsTable,
-    List<CalendarCompletionRow>
-  >
-  _calendarCompletionsRefsTable(_$QuestlogDatabase db) =>
-      MultiTypedResultKey.fromTable(
-        db.calendarCompletions,
-        aliasName: 'calendar_events__id__calendar_completions__event_id',
-      );
-
-  $$CalendarCompletionsTableProcessedTableManager get calendarCompletionsRefs {
-    final manager = $$CalendarCompletionsTableTableManager(
-      $_db,
-      $_db.calendarCompletions,
-    ).filter((f) => f.eventId.id.sqlEquals($_itemColumn<int>('id')!));
-
-    final cache = $_typedResult.readTableOrNull(
-      _calendarCompletionsRefsTable($_db),
-    );
-    return ProcessedTableManager(
-      manager.$state.copyWith(prefetchedData: cache),
-    );
-  }
-}
-
-class $$CalendarEventsTableFilterComposer
-    extends Composer<_$QuestlogDatabase, $CalendarEventsTable> {
-  $$CalendarEventsTableFilterComposer({
-    required super.$db,
-    required super.$table,
-    super.joinBuilder,
-    super.$addJoinBuilderToRootComposer,
-    super.$removeJoinBuilderFromRootComposer,
-  });
-  ColumnFilters<int> get id => $composableBuilder(
-    column: $table.id,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<String> get name => $composableBuilder(
-    column: $table.name,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<String> get note => $composableBuilder(
-    column: $table.note,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<String> get location => $composableBuilder(
-    column: $table.location,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<String> get eventType => $composableBuilder(
-    column: $table.eventType,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnWithTypeConverterFilters<DateTime, DateTime, String> get startDate =>
-      $composableBuilder(
-        column: $table.startDate,
-        builder: (column) => ColumnWithTypeConverterFilters(column),
-      );
-
-  ColumnWithTypeConverterFilters<DateTime, DateTime, String> get endDate =>
-      $composableBuilder(
-        column: $table.endDate,
-        builder: (column) => ColumnWithTypeConverterFilters(column),
-      );
-
-  ColumnFilters<int> get startMinute => $composableBuilder(
-    column: $table.startMinute,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<int> get endMinute => $composableBuilder(
-    column: $table.endMinute,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<String> get repeatKind => $composableBuilder(
-    column: $table.repeatKind,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<int> get easterOffset => $composableBuilder(
-    column: $table.easterOffset,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<int> get nthMonth => $composableBuilder(
-    column: $table.nthMonth,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<int> get nthWeekday => $composableBuilder(
-    column: $table.nthWeekday,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<int> get nthOrdinal => $composableBuilder(
-    column: $table.nthOrdinal,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnWithTypeConverterFilters<DateTime?, DateTime, String> get repeatEnd =>
-      $composableBuilder(
-        column: $table.repeatEnd,
-        builder: (column) => ColumnWithTypeConverterFilters(column),
-      );
-
-  ColumnFilters<bool> get onBoard => $composableBuilder(
-    column: $table.onBoard,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<DateTime> get createdAt => $composableBuilder(
-    column: $table.createdAt,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<DateTime> get updatedAt => $composableBuilder(
-    column: $table.updatedAt,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  Expression<bool> calendarSkippedDatesRefs(
-    Expression<bool> Function($$CalendarSkippedDatesTableFilterComposer f) f,
-  ) {
-    final $$CalendarSkippedDatesTableFilterComposer composer = $composerBuilder(
-      composer: this,
-      getCurrentColumn: (t) => t.id,
-      referencedTable: $db.calendarSkippedDates,
-      getReferencedColumn: (t) => t.eventId,
-      builder:
-          (
-            joinBuilder, {
-            $addJoinBuilderToRootComposer,
-            $removeJoinBuilderFromRootComposer,
-          }) => $$CalendarSkippedDatesTableFilterComposer(
-            $db: $db,
-            $table: $db.calendarSkippedDates,
-            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-            joinBuilder: joinBuilder,
-            $removeJoinBuilderFromRootComposer:
-                $removeJoinBuilderFromRootComposer,
-          ),
-    );
-    return f(composer);
-  }
-
-  Expression<bool> calendarCompletionsRefs(
-    Expression<bool> Function($$CalendarCompletionsTableFilterComposer f) f,
-  ) {
-    final $$CalendarCompletionsTableFilterComposer composer = $composerBuilder(
-      composer: this,
-      getCurrentColumn: (t) => t.id,
-      referencedTable: $db.calendarCompletions,
-      getReferencedColumn: (t) => t.eventId,
-      builder:
-          (
-            joinBuilder, {
-            $addJoinBuilderToRootComposer,
-            $removeJoinBuilderFromRootComposer,
-          }) => $$CalendarCompletionsTableFilterComposer(
-            $db: $db,
-            $table: $db.calendarCompletions,
-            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-            joinBuilder: joinBuilder,
-            $removeJoinBuilderFromRootComposer:
-                $removeJoinBuilderFromRootComposer,
-          ),
-    );
-    return f(composer);
-  }
-}
-
-class $$CalendarEventsTableOrderingComposer
-    extends Composer<_$QuestlogDatabase, $CalendarEventsTable> {
-  $$CalendarEventsTableOrderingComposer({
-    required super.$db,
-    required super.$table,
-    super.joinBuilder,
-    super.$addJoinBuilderToRootComposer,
-    super.$removeJoinBuilderFromRootComposer,
-  });
-  ColumnOrderings<int> get id => $composableBuilder(
-    column: $table.id,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<String> get name => $composableBuilder(
-    column: $table.name,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<String> get note => $composableBuilder(
-    column: $table.note,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<String> get location => $composableBuilder(
-    column: $table.location,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<String> get eventType => $composableBuilder(
-    column: $table.eventType,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<String> get startDate => $composableBuilder(
-    column: $table.startDate,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<String> get endDate => $composableBuilder(
-    column: $table.endDate,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<int> get startMinute => $composableBuilder(
-    column: $table.startMinute,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<int> get endMinute => $composableBuilder(
-    column: $table.endMinute,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<String> get repeatKind => $composableBuilder(
-    column: $table.repeatKind,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<int> get easterOffset => $composableBuilder(
-    column: $table.easterOffset,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<int> get nthMonth => $composableBuilder(
-    column: $table.nthMonth,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<int> get nthWeekday => $composableBuilder(
-    column: $table.nthWeekday,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<int> get nthOrdinal => $composableBuilder(
-    column: $table.nthOrdinal,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<String> get repeatEnd => $composableBuilder(
-    column: $table.repeatEnd,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<bool> get onBoard => $composableBuilder(
-    column: $table.onBoard,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
-    column: $table.createdAt,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
-    column: $table.updatedAt,
-    builder: (column) => ColumnOrderings(column),
-  );
-}
-
-class $$CalendarEventsTableAnnotationComposer
-    extends Composer<_$QuestlogDatabase, $CalendarEventsTable> {
-  $$CalendarEventsTableAnnotationComposer({
-    required super.$db,
-    required super.$table,
-    super.joinBuilder,
-    super.$addJoinBuilderToRootComposer,
-    super.$removeJoinBuilderFromRootComposer,
-  });
-  GeneratedColumn<int> get id =>
-      $composableBuilder(column: $table.id, builder: (column) => column);
-
-  GeneratedColumn<String> get name =>
-      $composableBuilder(column: $table.name, builder: (column) => column);
-
-  GeneratedColumn<String> get note =>
-      $composableBuilder(column: $table.note, builder: (column) => column);
-
-  GeneratedColumn<String> get location =>
-      $composableBuilder(column: $table.location, builder: (column) => column);
-
-  GeneratedColumn<String> get eventType =>
-      $composableBuilder(column: $table.eventType, builder: (column) => column);
-
-  GeneratedColumnWithTypeConverter<DateTime, String> get startDate =>
-      $composableBuilder(column: $table.startDate, builder: (column) => column);
-
-  GeneratedColumnWithTypeConverter<DateTime, String> get endDate =>
-      $composableBuilder(column: $table.endDate, builder: (column) => column);
-
-  GeneratedColumn<int> get startMinute => $composableBuilder(
-    column: $table.startMinute,
-    builder: (column) => column,
-  );
-
-  GeneratedColumn<int> get endMinute =>
-      $composableBuilder(column: $table.endMinute, builder: (column) => column);
-
-  GeneratedColumn<String> get repeatKind => $composableBuilder(
-    column: $table.repeatKind,
-    builder: (column) => column,
-  );
-
-  GeneratedColumn<int> get easterOffset => $composableBuilder(
-    column: $table.easterOffset,
-    builder: (column) => column,
-  );
-
-  GeneratedColumn<int> get nthMonth =>
-      $composableBuilder(column: $table.nthMonth, builder: (column) => column);
-
-  GeneratedColumn<int> get nthWeekday => $composableBuilder(
-    column: $table.nthWeekday,
-    builder: (column) => column,
-  );
-
-  GeneratedColumn<int> get nthOrdinal => $composableBuilder(
-    column: $table.nthOrdinal,
-    builder: (column) => column,
-  );
-
-  GeneratedColumnWithTypeConverter<DateTime?, String> get repeatEnd =>
-      $composableBuilder(column: $table.repeatEnd, builder: (column) => column);
-
-  GeneratedColumn<bool> get onBoard =>
-      $composableBuilder(column: $table.onBoard, builder: (column) => column);
-
-  GeneratedColumn<DateTime> get createdAt =>
-      $composableBuilder(column: $table.createdAt, builder: (column) => column);
-
-  GeneratedColumn<DateTime> get updatedAt =>
-      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
-
-  Expression<T> calendarSkippedDatesRefs<T extends Object>(
-    Expression<T> Function($$CalendarSkippedDatesTableAnnotationComposer a) f,
-  ) {
-    final $$CalendarSkippedDatesTableAnnotationComposer composer =
-        $composerBuilder(
-          composer: this,
-          getCurrentColumn: (t) => t.id,
-          referencedTable: $db.calendarSkippedDates,
-          getReferencedColumn: (t) => t.eventId,
-          builder:
-              (
-                joinBuilder, {
-                $addJoinBuilderToRootComposer,
-                $removeJoinBuilderFromRootComposer,
-              }) => $$CalendarSkippedDatesTableAnnotationComposer(
-                $db: $db,
-                $table: $db.calendarSkippedDates,
-                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-                joinBuilder: joinBuilder,
-                $removeJoinBuilderFromRootComposer:
-                    $removeJoinBuilderFromRootComposer,
-              ),
-        );
-    return f(composer);
-  }
-
-  Expression<T> calendarCompletionsRefs<T extends Object>(
-    Expression<T> Function($$CalendarCompletionsTableAnnotationComposer a) f,
-  ) {
-    final $$CalendarCompletionsTableAnnotationComposer composer =
-        $composerBuilder(
-          composer: this,
-          getCurrentColumn: (t) => t.id,
-          referencedTable: $db.calendarCompletions,
-          getReferencedColumn: (t) => t.eventId,
-          builder:
-              (
-                joinBuilder, {
-                $addJoinBuilderToRootComposer,
-                $removeJoinBuilderFromRootComposer,
-              }) => $$CalendarCompletionsTableAnnotationComposer(
-                $db: $db,
-                $table: $db.calendarCompletions,
-                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-                joinBuilder: joinBuilder,
-                $removeJoinBuilderFromRootComposer:
-                    $removeJoinBuilderFromRootComposer,
-              ),
-        );
-    return f(composer);
-  }
-}
-
-class $$CalendarEventsTableTableManager
-    extends
-        RootTableManager<
-          _$QuestlogDatabase,
-          $CalendarEventsTable,
-          CalendarEventRow,
-          $$CalendarEventsTableFilterComposer,
-          $$CalendarEventsTableOrderingComposer,
-          $$CalendarEventsTableAnnotationComposer,
-          $$CalendarEventsTableCreateCompanionBuilder,
-          $$CalendarEventsTableUpdateCompanionBuilder,
-          (CalendarEventRow, $$CalendarEventsTableReferences),
-          CalendarEventRow,
-          PrefetchHooks Function({
-            bool calendarSkippedDatesRefs,
-            bool calendarCompletionsRefs,
-          })
-        > {
-  $$CalendarEventsTableTableManager(
-    _$QuestlogDatabase db,
-    $CalendarEventsTable table,
-  ) : super(
-        TableManagerState(
-          db: db,
-          table: table,
-          createFilteringComposer: () =>
-              $$CalendarEventsTableFilterComposer($db: db, $table: table),
-          createOrderingComposer: () =>
-              $$CalendarEventsTableOrderingComposer($db: db, $table: table),
-          createComputedFieldComposer: () =>
-              $$CalendarEventsTableAnnotationComposer($db: db, $table: table),
-          updateCompanionCallback:
-              ({
-                Value<int> id = const Value.absent(),
-                Value<String> name = const Value.absent(),
-                Value<String?> note = const Value.absent(),
-                Value<String?> location = const Value.absent(),
-                Value<String> eventType = const Value.absent(),
-                Value<DateTime> startDate = const Value.absent(),
-                Value<DateTime> endDate = const Value.absent(),
-                Value<int?> startMinute = const Value.absent(),
-                Value<int?> endMinute = const Value.absent(),
-                Value<String> repeatKind = const Value.absent(),
-                Value<int?> easterOffset = const Value.absent(),
-                Value<int?> nthMonth = const Value.absent(),
-                Value<int?> nthWeekday = const Value.absent(),
-                Value<int?> nthOrdinal = const Value.absent(),
-                Value<DateTime?> repeatEnd = const Value.absent(),
-                Value<bool> onBoard = const Value.absent(),
-                Value<DateTime> createdAt = const Value.absent(),
-                Value<DateTime> updatedAt = const Value.absent(),
-              }) => CalendarEventsCompanion(
-                id: id,
-                name: name,
-                note: note,
-                location: location,
-                eventType: eventType,
-                startDate: startDate,
-                endDate: endDate,
-                startMinute: startMinute,
-                endMinute: endMinute,
-                repeatKind: repeatKind,
-                easterOffset: easterOffset,
-                nthMonth: nthMonth,
-                nthWeekday: nthWeekday,
-                nthOrdinal: nthOrdinal,
-                repeatEnd: repeatEnd,
-                onBoard: onBoard,
-                createdAt: createdAt,
-                updatedAt: updatedAt,
-              ),
-          createCompanionCallback:
-              ({
-                Value<int> id = const Value.absent(),
-                required String name,
-                Value<String?> note = const Value.absent(),
-                Value<String?> location = const Value.absent(),
-                required String eventType,
-                required DateTime startDate,
-                required DateTime endDate,
-                Value<int?> startMinute = const Value.absent(),
-                Value<int?> endMinute = const Value.absent(),
-                Value<String> repeatKind = const Value.absent(),
-                Value<int?> easterOffset = const Value.absent(),
-                Value<int?> nthMonth = const Value.absent(),
-                Value<int?> nthWeekday = const Value.absent(),
-                Value<int?> nthOrdinal = const Value.absent(),
-                Value<DateTime?> repeatEnd = const Value.absent(),
-                Value<bool> onBoard = const Value.absent(),
-                required DateTime createdAt,
-                required DateTime updatedAt,
-              }) => CalendarEventsCompanion.insert(
-                id: id,
-                name: name,
-                note: note,
-                location: location,
-                eventType: eventType,
-                startDate: startDate,
-                endDate: endDate,
-                startMinute: startMinute,
-                endMinute: endMinute,
-                repeatKind: repeatKind,
-                easterOffset: easterOffset,
-                nthMonth: nthMonth,
-                nthWeekday: nthWeekday,
-                nthOrdinal: nthOrdinal,
-                repeatEnd: repeatEnd,
-                onBoard: onBoard,
-                createdAt: createdAt,
-                updatedAt: updatedAt,
-              ),
-          withReferenceMapper: (p0) => p0
-              .map(
-                (e) => (
-                  e.readTable<$CalendarEventsTable, CalendarEventRow>(table),
-                  $$CalendarEventsTableReferences(db, table, e),
-                ),
-              )
-              .toList(),
-          prefetchHooksCallback:
-              ({
-                calendarSkippedDatesRefs = false,
-                calendarCompletionsRefs = false,
-              }) {
-                return PrefetchHooks(
-                  db: db,
-                  explicitlyWatchedTables: [
-                    if (calendarSkippedDatesRefs) db.calendarSkippedDates,
-                    if (calendarCompletionsRefs) db.calendarCompletions,
-                  ],
-                  addJoins: null,
-                  getPrefetchedDataCallback: (items) async {
-                    return [
-                      if (calendarSkippedDatesRefs)
-                        await $_getPrefetchedDataByColumns<
-                          CalendarEventRow,
-                          $CalendarEventsTable,
-                          CalendarSkippedDateRow,
-                          $CalendarSkippedDatesTable
-                        >(
-                          currentTable: table,
-                          referencedTable: $$CalendarEventsTableReferences
-                              ._calendarSkippedDatesRefsTable(db),
-                          managerFromTypedResult: (p0) =>
-                              $$CalendarEventsTableReferences(
-                                db,
-                                table,
-                                p0,
-                              ).calendarSkippedDatesRefs,
-                          currentColumn: 'id',
-                          referencedColumn: 'event_id',
-                          typedResults: items,
-                        ),
-                      if (calendarCompletionsRefs)
-                        await $_getPrefetchedDataByColumns<
-                          CalendarEventRow,
-                          $CalendarEventsTable,
-                          CalendarCompletionRow,
-                          $CalendarCompletionsTable
-                        >(
-                          currentTable: table,
-                          referencedTable: $$CalendarEventsTableReferences
-                              ._calendarCompletionsRefsTable(db),
-                          managerFromTypedResult: (p0) =>
-                              $$CalendarEventsTableReferences(
-                                db,
-                                table,
-                                p0,
-                              ).calendarCompletionsRefs,
-                          currentColumn: 'id',
-                          referencedColumn: 'event_id',
-                          typedResults: items,
-                        ),
-                    ];
-                  },
-                );
-              },
-        ),
-      );
-}
-
-typedef $$CalendarEventsTableProcessedTableManager =
-    ProcessedTableManager<
-      _$QuestlogDatabase,
-      $CalendarEventsTable,
-      CalendarEventRow,
-      $$CalendarEventsTableFilterComposer,
-      $$CalendarEventsTableOrderingComposer,
-      $$CalendarEventsTableAnnotationComposer,
-      $$CalendarEventsTableCreateCompanionBuilder,
-      $$CalendarEventsTableUpdateCompanionBuilder,
-      (CalendarEventRow, $$CalendarEventsTableReferences),
-      CalendarEventRow,
-      PrefetchHooks Function({
-        bool calendarSkippedDatesRefs,
-        bool calendarCompletionsRefs,
-      })
     >;
 typedef $$CalendarSkippedDatesTableCreateCompanionBuilder =
     CalendarSkippedDatesCompanion Function({
@@ -8753,14 +9012,14 @@ class $QuestlogDatabaseManager {
       $$RecurringRulesTableTableManager(_db, _db.recurringRules);
   $$MissionsTableTableManager get missions =>
       $$MissionsTableTableManager(_db, _db.missions);
+  $$CalendarEventsTableTableManager get calendarEvents =>
+      $$CalendarEventsTableTableManager(_db, _db.calendarEvents);
   $$QuestsTableTableManager get quests =>
       $$QuestsTableTableManager(_db, _db.quests);
   $$RuleQuestsTableTableManager get ruleQuests =>
       $$RuleQuestsTableTableManager(_db, _db.ruleQuests);
   $$AppStateTableTableManager get appState =>
       $$AppStateTableTableManager(_db, _db.appState);
-  $$CalendarEventsTableTableManager get calendarEvents =>
-      $$CalendarEventsTableTableManager(_db, _db.calendarEvents);
   $$CalendarSkippedDatesTableTableManager get calendarSkippedDates =>
       $$CalendarSkippedDatesTableTableManager(_db, _db.calendarSkippedDates);
   $$CalendarCompletionsTableTableManager get calendarCompletions =>
