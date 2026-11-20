@@ -18,6 +18,7 @@ import 'package:questlog/ui/screens/calendar/calendar_screen.dart';
 import 'package:questlog/ui/screens/missions/missions_screen.dart';
 import 'package:questlog/ui/screens/notes/notes_screen.dart';
 import 'package:questlog/ui/screens/settings/settings_screen.dart';
+import 'package:questlog/ui/screens/shell/deep_link.dart';
 import 'package:questlog/ui/screens/shell/questlog_tab_bar.dart';
 import 'package:questlog/ui/screens/shell/reconcile_banner.dart';
 import 'package:questlog/ui/screens/shell/splash_screen.dart';
@@ -106,6 +107,7 @@ void main() {
     bool realRecurrence = false,
     Future<void> Function()? seed,
     void Function(SpyRecurrence spy)? prime,
+    Stream<Uri>? links,
   }) async {
     tester.view.physicalSize = const Size(390, 844);
     tester.view.devicePixelRatio = 1;
@@ -121,6 +123,7 @@ void main() {
       if (!realRecurrence) recurrenceServiceProvider.overrideWithValue(spy),
       deviceLocaleProvider.overrideWithValue(const Locale('en')),
       appVersionProvider.overrideWith((ref) async => '1.0.0'),
+      if (links != null) deepLinksProvider.overrideWithValue(links),
     ];
     await tester.pumpWidget(
       ProviderScope(overrides: overrides, child: const QuestlogApp()),
@@ -599,6 +602,31 @@ void main() {
       final Size size = tester.getSize(find.byType(TextButton));
       expect(size.height, greaterThanOrEqualTo(44));
       expect(size.width, greaterThanOrEqualTo(44));
+    });
+  });
+
+  group('links', () {
+    test('shellTabFromUri reads questlog://<tab> and ignores the rest', () {
+      expect(shellTabFromUri(Uri.parse('questlog://calendar')), ShellTab.calendar);
+      expect(shellTabFromUri(Uri.parse('questlog://Notes')), ShellTab.notes);
+      expect(shellTabFromUri(Uri.parse('questlog:///missions')), ShellTab.missions);
+      expect(shellTabFromUri(Uri.parse('questlog://nowhere')), isNull);
+      expect(shellTabFromUri(Uri.parse('https://calendar')), isNull);
+      expect(shellTabFromUri(Uri.parse('questlog://')), isNull);
+    });
+
+    shellTest('a questlog://calendar link opens the Calendar tab, also when it arrives later', (tester) async {
+      final StreamController<Uri> links = StreamController<Uri>();
+      addTearDown(links.close);
+      await pumpApp(tester, links: links.stream);
+      await settle(tester);
+      expect(find.byType(BoardScreen), findsOneWidget);
+      links.add(Uri.parse('questlog://calendar'));
+      await settle(tester);
+      expect(tabIndex(tester), 2);
+      links.add(Uri.parse('questlog://bogus'));
+      await settle(tester);
+      expect(tabIndex(tester), 2);
     });
   });
 }

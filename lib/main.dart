@@ -12,6 +12,7 @@ import 'data/calendar/calendar_filter_store.dart';
 import 'data/database.dart';
 import 'services/calendar/calendar_providers.dart';
 import 'services/providers.dart';
+import 'ui/screens/shell/deep_link.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,6 +31,7 @@ Future<void> main() async {
         clockProvider.overrideWithValue(const SystemClock()),
         calendarFilterStoreProvider.overrideWithValue(calendarFilterStore),
         initialCalendarFilterProvider.overrideWithValue(calendarFilter),
+        deepLinksProvider.overrideWithValue(appLinksStream()),
       ],
       child: const QuestlogApp(),
     ),

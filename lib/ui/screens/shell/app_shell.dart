@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../data/models.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../../services/calendar/calendar_providers.dart';
 import '../../../services/notes/notes_providers.dart';
 import '../../../services/providers.dart';
 import '../../state/board_day.dart';
@@ -16,6 +17,7 @@ import '../calendar/calendar_screen.dart';
 import '../missions/missions_screen.dart';
 import '../notes/notes_screen.dart';
 import '../settings/settings_screen.dart';
+import 'deep_link.dart';
 import 'questlog_tab_bar.dart';
 import 'reconcile_banner.dart';
 import 'splash_screen.dart';
@@ -44,17 +46,20 @@ class _AppShellState extends ConsumerState<AppShell>
   bool _running = false;
   bool _requested = false;
   bool _wentToBackground = false;
+  StreamSubscription<Uri>? _links;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     _requestReconcile();
+    _links = ref.read(deepLinksProvider).listen(_openLink, onError: (Object _) {});
   }
 
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
+    _links?.cancel();
     super.dispose();
   }
 
@@ -107,6 +112,10 @@ class _AppShellState extends ConsumerState<AppShell>
     try {
       await ref.read(notesServiceProvider).purgeExpired();
     } catch (_) {}
+    // Calendar: addresses not used for 30 days are forgotten; same tolerance.
+    try {
+      await ref.read(calendarServiceProvider).purgeExpiredAddresses();
+    } catch (_) {}
     if (!mounted) return;
     setState(() {
       _ready = true;
@@ -143,6 +152,15 @@ class _AppShellState extends ConsumerState<AppShell>
       actionLabel: action?.label,
       onAction: action?.onPressed,
     );
+  }
+
+  /// A `questlog://calendar` style link: closes what is open above the shell and
+  /// shows the tab. Anything else is ignored.
+  void _openLink(Uri uri) {
+    final ShellTab? tab = shellTabFromUri(uri);
+    if (tab == null || !mounted) return;
+    Navigator.of(context).popUntil((Route<dynamic> route) => route.isFirst);
+    _selectTab(tab);
   }
 
   void _selectTab(ShellTab tab) {
