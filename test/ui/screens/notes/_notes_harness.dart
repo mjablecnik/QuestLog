@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:questlog/core/notes/note_node.dart';
 import 'package:questlog/data/database.dart';
-import 'package:questlog/data/preferences.dart';
 import 'package:questlog/l10n/app_localizations.dart';
 import 'package:questlog/services/notes/notes_providers.dart';
 import 'package:questlog/services/notes/notes_service.dart';
@@ -52,7 +51,6 @@ class NotesUiHarness {
         child: MaterialApp(
           theme: buildTheme(
             palette: brightness == Brightness.dark ? QuestlogPalette.guildBoard : QuestlogPalette.daylight,
-            font: DisplayFont.figtree,
           ),
           locale: locale,
           localizationsDelegates: AppLocalizations.localizationsDelegates,

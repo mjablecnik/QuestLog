@@ -205,50 +205,101 @@ class _TitleRow extends ConsumerWidget {
   final NoteTree? tree;
   final NoteNode? folder;
 
+  /// Width of [text] on one line at the current text scale.
+  static double _width(BuildContext context, String text, TextStyle style) {
+    final TextPainter painter = TextPainter(
+      text: TextSpan(text: text, style: style),
+      textDirection: Directionality.of(context),
+      textScaler: MediaQuery.textScalerOf(context),
+      maxLines: 1,
+    )..layout();
+    final double width = painter.width;
+    painter.dispose();
+    return width;
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final AppLocalizations l = AppLocalizations.of(context);
     final QuestlogPalette p = context.palette;
+    final String title = folder?.name ?? l.notes_title;
     final String counts = tree == null
         ? ''
         : countsLabel(l, tree!.folderCount(folder?.id), tree!.noteCount(folder?.id));
+    final TextStyle titleStyle = context.displayText.headlineLarge!;
+    final TextStyle countsStyle = context.bodyText.bodySmall!.copyWith(color: p.textDim);
+    final bool hasTrash = folder == null;
+    final double trashWidth = hasTrash ? Space.s4 + Metrics.touchTarget : 0;
+
+    /// A single word is shrunk to fit rather than broken in the middle (down to
+    /// half its size); several words wrap and a huge one is cut with an ellipsis.
+    Widget heading(double available) {
+      final bool oneWord = !title.trim().contains(' ');
+      final double natural = _width(context, title, titleStyle);
+      final Widget text = oneWord && natural > available && natural <= available * 2
+          ? FittedBox(
+              fit: BoxFit.scaleDown,
+              alignment: AlignmentDirectional.centerStart,
+              child: Text(title, maxLines: 1, style: titleStyle),
+            )
+          : Text(title, maxLines: 2, overflow: TextOverflow.ellipsis, style: titleStyle);
+      return Semantics(header: true, child: text);
+    }
+
+    final Widget countsText = Text(
+      counts,
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
+      style: countsStyle,
+    );
+    final Widget? trash = hasTrash
+        ? Padding(
+            padding: const EdgeInsets.only(left: Space.s4),
+            child: TrashButton(
+              count: ref.watch(trashCountProvider),
+              onPressed: () => Navigator.of(context).push(
+                CupertinoPageRoute<void>(builder: (_) => const TrashScreen()),
+              ),
+            ),
+          )
+        : null;
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: Space.s20),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          Flexible(
-            child: Semantics(
-              header: true,
-              child: Text(
-                folder?.name ?? l.notes_title,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: context.displayText.headlineLarge,
-              ),
-            ),
-          ),
-          const SizedBox(width: Space.s12),
-          Expanded(
-            child: Text(
-              counts,
-              textAlign: TextAlign.end,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: context.bodyText.bodySmall!.copyWith(color: p.textDim),
-            ),
-          ),
-          if (folder == null)
-            Padding(
-              padding: const EdgeInsets.only(left: Space.s4),
-              child: TrashButton(
-                count: ref.watch(trashCountProvider),
-                onPressed: () => Navigator.of(context).push(
-                  CupertinoPageRoute<void>(builder: (_) => const TrashScreen()),
+      child: LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints box) {
+          // The title is never squeezed to half a row: when it and the counts do
+          // not fit side by side, the counts go under it.
+          final bool sideBySide =
+              _width(context, title, titleStyle) + Space.s12 + _width(context, counts, countsStyle) + trashWidth <=
+              box.maxWidth;
+          return Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              if (sideBySide) ...<Widget>[
+                // Not Flexible: it would split the row evenly with the counts, and the
+                // title would get half of it. It has its natural width; the counts take the rest.
+                heading(box.maxWidth - trashWidth),
+                const SizedBox(width: Space.s12),
+                Expanded(
+                  child: Align(alignment: AlignmentDirectional.centerEnd, child: countsText),
                 ),
-              ),
-            ),
-        ],
+              ] else
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      heading(box.maxWidth - trashWidth),
+                      const SizedBox(height: Space.s4),
+                      countsText,
+                    ],
+                  ),
+                ),
+              ?trash,
+            ],
+          );
+        },
       ),
     );
   }

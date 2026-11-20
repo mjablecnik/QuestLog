@@ -4,9 +4,11 @@ import 'package:questlog/core/notes/note_node.dart';
 import 'package:questlog/core/notes/note_tree.dart';
 import 'package:questlog/services/notes/notes_service.dart';
 import 'package:questlog/ui/screens/note_editor/note_editor_screen.dart';
+import 'package:questlog/ui/screens/notes/trash_preview_screen.dart';
 import 'package:questlog/ui/screens/notes/trash_row.dart';
 import 'package:questlog/ui/screens/notes/trash_screen.dart';
 import 'package:questlog/ui/theme/tokens.dart';
+import 'package:super_editor/super_editor.dart';
 
 import '../../../helpers/fixed_clock.dart';
 import '_notes_harness.dart';
@@ -167,12 +169,114 @@ void main() {
     expect(find.byType(TrashRow), findsOneWidget);
   });
 
-  notesTest(h, 'tapping a trashed note row opens nothing', (tester) async {
+  notesTest(h, 'tapping a trashed note row never opens the editor', (tester) async {
     await open(tester);
     final NoteNode n = await h.note(tester, 'alpha');
     await h.run(tester, () => h.service.moveToTrash(n.id));
     await tester.tap(find.byType(TrashRow));
     await h.settle(tester);
     expect(find.byType(NoteEditorScreen), findsNothing);
+  });
+
+  group('preview of a trashed note', () {
+    Future<NoteNode> trashedNote(WidgetTester tester, String body, {String? title}) async {
+      NoteNode? node;
+      await tester.runAsync(() async {
+        node = await h.service.saveBody(body: body, untitledName: 'u', title: title);
+      });
+      await h.settle(tester);
+      await h.run(tester, () => h.service.moveToTrash(node!.id));
+      return node!;
+    }
+
+    Future<void> openPreview(WidgetTester tester, String rowText) async {
+      await tester.tap(find.text(rowText));
+      await h.settle(tester);
+    }
+
+    Document previewDocument(WidgetTester tester) =>
+        tester.widget<SuperReader>(find.byType(SuperReader)).editor.context.document;
+
+    notesTest(h, 'opens read-only, with the name and the formatted text', (tester) async {
+      await open(tester);
+      await trashedNote(tester, '# Shopping\n\nmilk and **bread**\n\n- [ ] eggs');
+      await openPreview(tester, 'Shopping');
+      expect(find.byType(TrashPreviewScreen), findsOneWidget);
+      expect(find.byType(SuperReader), findsOneWidget);
+      expect(find.byType(SuperEditor), findsNothing);
+      expect(find.byType(TextField), findsNothing, reason: 'no field to type in');
+      expect(find.byKey(const ValueKey<String>('fmt-bold')), findsNothing, reason: 'no toolbar');
+      final List<String> texts = <String>[
+        for (final DocumentNode n in previewDocument(tester)) (n as TextNode).text.toPlainText(),
+      ];
+      expect(texts, <String>['Shopping', 'milk and bread', 'eggs'], reason: 'formatted, without Markdown markers');
+      expect(find.byKey(const ValueKey<String>('preview-restore')), findsOneWidget);
+      expect(find.byKey(const ValueKey<String>('preview-back')), findsOneWidget);
+    });
+
+    notesTest(h, 'a tap on a checklist item changes nothing', (tester) async {
+      await open(tester);
+      final NoteNode n = await trashedNote(tester, 'Tasks\n\n- [ ] eggs');
+      await openPreview(tester, 'Tasks');
+      await tester.tap(find.byKey(const ValueKey<String>('task-check')));
+      await h.settle(tester);
+      final TaskNode task = previewDocument(tester).last as TaskNode;
+      expect(task.isComplete, isFalse);
+      expect((await tree(tester)).byId(n.id)!.body, 'Tasks\n\n- [ ] eggs');
+    });
+
+    notesTest(h, 'a note with no text says so', (tester) async {
+      await open(tester);
+      await trashedNote(tester, '', title: 'Only a title');
+      await openPreview(tester, 'Only a title');
+      expect(find.text('Empty note'), findsOneWidget);
+      expect(find.byType(SuperReader), findsNothing);
+    });
+
+    notesTest(h, 'Restore brings the note back, closes the preview and confirms', (tester) async {
+      await open(tester);
+      final NoteNode n = await trashedNote(tester, 'Come back');
+      await openPreview(tester, 'Come back');
+      await tester.tap(find.byKey(const ValueKey<String>('preview-restore')));
+      await h.settle(tester);
+      expect(find.byType(TrashPreviewScreen), findsNothing);
+      expect(find.text('Restored'), findsOneWidget);
+      expect((await tree(tester)).byId(n.id)!.deletedAt, isNull);
+    });
+
+    notesTest(h, 'back closes it and leaves the note in the Trash with its dates', (tester) async {
+      await open(tester);
+      final NoteNode n = await trashedNote(tester, 'Stay here');
+      final NoteNode before = (await tree(tester)).byId(n.id)!;
+      h.clock.advance(const Duration(days: 3));
+      await openPreview(tester, 'Stay here');
+      await tester.tap(find.byKey(const ValueKey<String>('preview-back')));
+      await h.settle(tester);
+      expect(find.byType(TrashPreviewScreen), findsNothing);
+      final NoteNode after = (await tree(tester)).byId(n.id)!;
+      expect(after.deletedAt, before.deletedAt);
+      expect(after.updatedAt, before.updatedAt);
+      expect(find.byType(TrashRow), findsOneWidget);
+    });
+
+    notesTest(h, 'it closes when the note is deleted for good meanwhile', (tester) async {
+      await open(tester);
+      final NoteNode n = await trashedNote(tester, 'Doomed');
+      await openPreview(tester, 'Doomed');
+      expect(find.byType(TrashPreviewScreen), findsOneWidget);
+      await h.run(tester, () => h.service.deleteForever(n.id));
+      await h.settle(tester);
+      expect(find.byType(TrashPreviewScreen), findsNothing);
+    });
+
+    notesTest(h, 'a folder row opens no preview', (tester) async {
+      await open(tester);
+      final NoteNode f = await h.folder(tester, 'Projects');
+      await h.note(tester, 'inside', parent: f.id);
+      await h.run(tester, () => h.service.moveToTrash(f.id));
+      await tester.tap(find.text('Projects'));
+      await h.settle(tester);
+      expect(find.byType(TrashPreviewScreen), findsNothing);
+    });
   });
 }

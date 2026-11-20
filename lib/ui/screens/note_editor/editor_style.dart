@@ -105,6 +105,14 @@ Stylesheet buildEditorStylesheet(BuildContext context) {
 SelectionStyles buildSelectionStyles(QuestlogPalette p) =>
     SelectionStyles(selectionColor: p.brassSoft);
 
+/// The overlays of the editor: the package's own list with the accent colour
+/// set. On iOS they draw the caret, the selection handles and the anchor of the
+/// Cut, Copy and Paste toolbar; on Android the same; on desktop the caret. A
+/// list with the desktop caret alone leaves iOS with no caret and no handles.
 List<SuperEditorLayerBuilder> buildEditorOverlays(QuestlogPalette p) => <SuperEditorLayerBuilder>[
+  const SuperEditorIosToolbarFocalPointDocumentLayerBuilder(),
+  SuperEditorIosHandlesDocumentLayerBuilder(handleColor: p.brass, caretWidth: Space.s2),
+  const SuperEditorAndroidToolbarFocalPointDocumentLayerBuilder(),
+  SuperEditorAndroidHandlesDocumentLayerBuilder(caretColor: p.brass, caretWidth: Space.s2),
   DefaultCaretOverlayBuilder(caretStyle: CaretStyle(width: Space.s2, color: p.brass)),
 ];

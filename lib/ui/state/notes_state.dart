@@ -35,7 +35,7 @@ final visibleFolderProvider = Provider<int?>((ref) {
 /// Where a save of the Note_Editor stands.
 enum SaveStatus { idle, saving, failed, tooLong }
 
-/// Saves the text of one Note: after [Motion.autosave] without a change, and at
+/// Saves the name and the text of one Note: after [Motion.autosave] without a change, and at
 /// once on [flush]. Saves never overlap. A failed save keeps the text dirty so
 /// that [flush] (the retry) writes it again; a too long text waits for the next edit.
 class NoteSaveController {
@@ -56,6 +56,7 @@ class NoteSaveController {
   NoteNode? _saved;
   Timer? _timer;
   String Function()? _read;
+  String Function()? _readTitle;
   bool _dirty = false;
   bool _disposed = false;
   Future<void> _chain = Future<void>.value();
@@ -72,9 +73,11 @@ class NoteSaveController {
   /// True while a change is waiting to be written.
   bool get hasUnsavedChanges => _dirty;
 
-  /// The text changed: restart the pause before the save.
-  void markChanged(String Function() readMarkdown) {
+  /// The text or the title changed: restart the pause before the save.
+  /// [readTitle] reads the title field; without it the naming is left as it is.
+  void markChanged(String Function() readMarkdown, {String Function()? readTitle}) {
     _read = readMarkdown;
+    _readTitle = readTitle ?? _readTitle;
     _dirty = true;
     _timer?.cancel();
     _timer = Timer(_delay, () => unawaited(flush()));
@@ -92,6 +95,7 @@ class NoteSaveController {
     if (!_dirty || read == null || _disposed) return;
     _dirty = false;
     final String body = read();
+    final String? title = _readTitle?.call();
     _setStatus(SaveStatus.saving);
     try {
       final NoteNode? node = await _service.saveBody(
@@ -99,6 +103,7 @@ class NoteSaveController {
         parentId: parentId,
         body: body,
         untitledName: untitledName,
+        title: title,
       );
       if (node != null) {
         _noteId = node.id;

@@ -97,6 +97,69 @@ void main() {
       expect((await tree()).byId(n.id)!.updatedAt, t0);
     });
 
+    test('a typed title becomes the name and ends the automatic name', () async {
+      final NoteNode n = await note('First line\n\nText');
+      clock.advance(const Duration(minutes: 1));
+      final NoteNode titled =
+          (await service.saveBody(id: n.id, body: 'First line\n\nText', untitledName: 'u', title: '  Moje poznámka  '))!;
+      expect(titled.name, 'Moje poznámka');
+      expect(titled.autoName, isFalse);
+      expect(titled.updatedAt, t0.add(const Duration(minutes: 1)));
+      // The text changes, the chosen name stays.
+      final NoteNode edited =
+          (await service.saveBody(id: n.id, body: '# Other', untitledName: 'u', title: 'Moje poznámka'))!;
+      expect(edited.name, 'Moje poznámka');
+      expect(edited.autoName, isFalse);
+    });
+
+    test('a null title leaves a chosen name alone', () async {
+      final NoteNode n = await note('First');
+      await service.saveBody(id: n.id, body: 'First', untitledName: 'u', title: 'Chosen');
+      final NoteNode edited = (await service.saveBody(id: n.id, body: 'Second', untitledName: 'u'))!;
+      expect(edited.name, 'Chosen');
+      expect(edited.autoName, isFalse);
+    });
+
+    test('a cleared title restores the automatic name', () async {
+      final NoteNode n = await note('First');
+      await service.saveBody(id: n.id, body: 'Second line', untitledName: 'u', title: 'Chosen');
+      final NoteNode cleared =
+          (await service.saveBody(id: n.id, body: 'Second line', untitledName: 'Bez názvu', title: '   '))!;
+      expect(cleared.name, 'Second line');
+      expect(cleared.autoName, isTrue);
+      final NoteNode blank =
+          (await service.saveBody(id: n.id, body: '', untitledName: 'Bez názvu', title: ''))!;
+      expect(blank.name, 'Bez názvu');
+      expect(blank.autoName, isTrue);
+    });
+
+    test('a new note with only a title is created, one with nothing is not', () async {
+      final NoteNode n = (await service.saveBody(body: '', untitledName: 'u', title: 'Jen název'))!;
+      expect(n.name, 'Jen název');
+      expect(n.body, '');
+      expect(n.autoName, isFalse);
+      expect(await service.saveBody(body: ' ', untitledName: 'u', title: '  '), isNull);
+      expect(await service.watchAll().first, hasLength(1));
+    });
+
+    test('a title over 80 characters is rejected and nothing is written', () async {
+      final NoteNode n = await note('Text');
+      expect(
+        service.saveBody(id: n.id, body: 'Changed', untitledName: 'u', title: 'x' * 81),
+        throwsA(isA<ValidationError>()),
+      );
+      expect((await tree()).byId(n.id)!.body, 'Text');
+      expect(service.saveBody(body: 'x', untitledName: 'u', title: 'x' * 81), throwsA(isA<ValidationError>()));
+    });
+
+    test('saving the same body and title twice writes nothing', () async {
+      final NoteNode n = (await service.saveBody(body: 'Text', untitledName: 'u', title: 'Name'))!;
+      clock.advance(const Duration(hours: 1));
+      final NoteNode same = (await service.saveBody(id: n.id, body: 'Text', untitledName: 'u', title: 'Name'))!;
+      expect(same.updatedAt, t0);
+      expect(same, n);
+    });
+
     test('a body over 100 000 characters is rejected, exactly 100 000 is kept', () async {
       expect(service.saveBody(body: 'x' * 100001, untitledName: 'u'), throwsA(isA<ValidationError>()));
       final NoteNode n = await note('a' * 100000);

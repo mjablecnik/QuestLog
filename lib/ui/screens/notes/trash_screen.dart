@@ -17,6 +17,7 @@ import '../../widgets/common/skeleton_list.dart';
 import '../../widgets/common/snackbar_host.dart';
 import '../../widgets/notes/swipe_row.dart';
 import '../../widgets/sheet/confirm_destructive.dart';
+import 'trash_preview_screen.dart';
 import 'trash_row.dart';
 
 /// The Koš screen: every Trashed_Node with the days left until its Purge, with
@@ -44,6 +45,12 @@ class _TrashScreenState extends ConsumerState<TrashScreen> {
     } catch (error) {
       if (mounted) showDomainError(context, error);
     }
+  }
+
+  Future<void> _open(NoteNode node) async {
+    final AppLocalizations l = AppLocalizations.of(context);
+    final bool? restored = await openTrashPreview(context, node.id);
+    if (restored == true && mounted) showQuestlogSnack(context, l.trash_restored);
   }
 
   Future<void> _deleteForever(NoteNode node) async {
@@ -149,6 +156,7 @@ class _TrashScreenState extends ConsumerState<TrashScreen> {
                     detail: _detail(l, tree, node, now),
                     urgent: daysUntilPurge(node.deletedAt!, now) <= 1,
                     onRestore: () => _restore(node),
+                    onTap: node.isFolder ? null : () => _open(node),
                   ),
                 ),
               ),

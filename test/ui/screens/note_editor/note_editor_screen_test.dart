@@ -20,12 +20,18 @@ class FlakyNotesService extends NotesService {
   int failures;
 
   @override
-  Future<NoteNode?> saveBody({int? id, int? parentId, required String body, required String untitledName}) {
+  Future<NoteNode?> saveBody({
+    int? id,
+    int? parentId,
+    required String body,
+    required String untitledName,
+    String? title,
+  }) {
     if (failures > 0) {
       failures--;
       throw StorageError(Exception('disk'));
     }
-    return super.saveBody(id: id, parentId: parentId, body: body, untitledName: untitledName);
+    return super.saveBody(id: id, parentId: parentId, body: body, untitledName: untitledName, title: title);
   }
 }
 
@@ -36,6 +42,7 @@ void main() {
   Future<void> open(
     WidgetTester tester, {
     String? seedBody,
+    String? seedTitle,
     int? parentId,
     NotesService Function(QuestlogDatabase, FixedClock)? serviceBuilder,
   }) async {
@@ -56,7 +63,7 @@ void main() {
       seed: seedBody == null
           ? null
           : (NotesService service, FixedClock clock) async {
-              noteId = (await service.saveBody(body: seedBody, untitledName: 'u'))!.id;
+              noteId = (await service.saveBody(body: seedBody, untitledName: 'u', title: seedTitle))!.id;
             },
       serviceBuilder: serviceBuilder,
     );
@@ -121,6 +128,95 @@ void main() {
     await h.settle(tester);
   }
 
+  Finder titleField() => find.byKey(const ValueKey<String>('note-title'));
+  TextField titleWidget(WidgetTester tester) => tester.widget<TextField>(titleField());
+  Future<NoteNode> theNote(WidgetTester tester) async => (await tree(tester)).all.firstWhere((n) => !n.isFolder);
+
+  group('title field', () {
+    notesTest(h, 'a new note shows a focused title field with a hint, above the text', (tester) async {
+      await open(tester);
+      expect(titleField(), findsOneWidget);
+      expect(titleWidget(tester).focusNode!.hasFocus, isTrue);
+      expect(find.text('Title'), findsOneWidget);
+      expect(tester.getTopLeft(titleField()).dy, lessThan(tester.getTopLeft(find.byType(SuperEditor)).dy));
+    });
+
+    notesTest(h, 'the title is one line of at most 80 characters', (tester) async {
+      await open(tester);
+      expect(titleWidget(tester).maxLines, 1);
+      await tester.enterText(titleField(), 'x' * 100);
+      await tester.pump();
+      expect(titleWidget(tester).controller!.text.length, 80);
+    });
+
+    notesTest(h, 'a typed title becomes the name, the text stays the text', (tester) async {
+      await open(tester);
+      await tester.enterText(titleField(), 'My note');
+      await type(tester, 'Body text');
+      await afterAutosave(tester);
+      final NoteNode saved = await theNote(tester);
+      expect(saved.name, 'My note');
+      expect(saved.body, 'Body text');
+      expect(saved.autoName, isFalse);
+    });
+
+    notesTest(h, 'a title alone creates the note', (tester) async {
+      await open(tester);
+      await tester.enterText(titleField(), 'Only a title');
+      await afterAutosave(tester);
+      final NoteNode saved = await theNote(tester);
+      expect(saved.name, 'Only a title');
+      expect(saved.body, isEmpty);
+    });
+
+    notesTest(h, 'return moves the focus to the text', (tester) async {
+      await open(tester);
+      await tester.enterText(titleField(), 'Name');
+      await tester.testTextInput.receiveAction(TextInputAction.next);
+      await tester.pump();
+      expect(titleWidget(tester).focusNode!.hasFocus, isFalse);
+      expect(tester.widget<SuperEditor>(find.byType(SuperEditor)).focusNode!.hasFocus, isTrue);
+      expect(editorOf(tester).composer.selection, isNotNull, reason: 'the caret is placed');
+    });
+
+    notesTest(h, 'opens with the chosen name, and empty while the name follows the text', (tester) async {
+      await open(tester, seedBody: 'First line', seedTitle: 'Chosen');
+      expect(titleWidget(tester).controller!.text, 'Chosen');
+    });
+
+    notesTest(h, 'an automatically named note opens with an empty title', (tester) async {
+      await open(tester, seedBody: 'First line');
+      expect(titleWidget(tester).controller!.text, isEmpty);
+      expect(find.text('Title'), findsOneWidget);
+    });
+
+    notesTest(h, 'clearing the title gives the name back to the text', (tester) async {
+      await open(tester, seedBody: 'First line', seedTitle: 'Chosen');
+      await tester.enterText(titleField(), '');
+      await afterAutosave(tester);
+      final NoteNode saved = await theNote(tester);
+      expect(saved.name, 'First line');
+      expect(saved.autoName, isTrue);
+    });
+
+    notesTest(h, 'editing only the text keeps a chosen name', (tester) async {
+      await open(tester, seedBody: 'First line', seedTitle: 'Chosen');
+      await type(tester, ' more');
+      await afterAutosave(tester);
+      final NoteNode saved = await theNote(tester);
+      expect(saved.name, 'Chosen');
+      expect(saved.body, 'First line more');
+    });
+
+    notesTest(h, 'the text overlays keep the iOS caret, handles and toolbar anchor', (tester) async {
+      await open(tester);
+      final List<SuperEditorLayerBuilder> overlays = tester.widget<SuperEditor>(find.byType(SuperEditor)).documentOverlayBuilders;
+      expect(overlays.whereType<SuperEditorIosHandlesDocumentLayerBuilder>(), isNotEmpty);
+      expect(overlays.whereType<SuperEditorIosToolbarFocalPointDocumentLayerBuilder>(), isNotEmpty);
+      expect(overlays.whereType<DefaultCaretOverlayBuilder>(), isNotEmpty);
+    });
+  });
+
   group('opening', () {
     notesTest(h, 'shows the stored Markdown formatted, without markers', (tester) async {
       await open(tester, seedBody: '# Title\n\nSome **bold** text\n\n- one\n- two\n\n- [ ] task');
@@ -175,10 +271,23 @@ void main() {
     notesTest(h, 'going to the background saves a pending change', (tester) async {
       await open(tester);
       await type(tester, 'Pending');
-      tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.paused);
+      // The text field checks the order of the lifecycle states, so walk them one by one.
+      for (final AppLifecycleState state in <AppLifecycleState>[
+        AppLifecycleState.inactive,
+        AppLifecycleState.hidden,
+        AppLifecycleState.paused,
+      ]) {
+        tester.binding.handleAppLifecycleStateChanged(state);
+      }
       await h.settle(tester);
       expect((await tree(tester)).children(null).single.body, 'Pending');
-      tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
+      for (final AppLifecycleState state in <AppLifecycleState>[
+        AppLifecycleState.hidden,
+        AppLifecycleState.inactive,
+        AppLifecycleState.resumed,
+      ]) {
+        tester.binding.handleAppLifecycleStateChanged(state);
+      }
       await tester.pump();
     });
 
@@ -346,6 +455,7 @@ void main() {
       await h.settle(tester);
       NoteNode note = (await tree(tester)).all.firstWhere((n) => !n.isFolder);
       expect(note.name, 'Renamed');
+      expect(titleWidget(tester).controller!.text, 'Renamed', reason: 'the title field follows the rename');
 
       await choose('Move');
       await tester.tap(find.byKey(ValueKey<String>('move-${target.id}')));

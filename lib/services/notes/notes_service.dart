@@ -49,31 +49,39 @@ class NotesService {
 
   /// Creates the Note, or updates it when [id] is given.
   ///
-  /// A new Note with a blank [body] is not created and null is returned. While
-  /// the Note has an Automatic_Name its name follows the first non-empty line
-  /// of [body]; [untitledName] is used when no line gives a name. Saving a body
-  /// equal to the stored one writes nothing.
+  /// [title] is what the user typed in the title field: null leaves the naming
+  /// as it is, a non-blank title (trimmed) becomes the name and ends the
+  /// Automatic_Name, a blank one restores the Automatic_Name. While the Note has
+  /// an Automatic_Name its name follows the first non-empty line of [body];
+  /// [untitledName] is used when no line gives a name.
+  ///
+  /// A new Note is only created when [title] is non-blank or [body] is not
+  /// blank; otherwise null is returned. Saving what is already stored writes
+  /// nothing.
   Future<NoteNode?> saveBody({
     int? id,
     int? parentId,
     required String body,
     required String untitledName,
+    String? title,
   }) async {
     if (body.runes.length > maxBodyLength) {
       throw const ValidationError('body', 'must be at most $maxBodyLength characters');
     }
+    final bool hasTitle = title != null && title.trim().isNotEmpty;
+    final String? chosenName = hasTitle ? validatedName(title, 'name') : null;
     return _db.runTransaction(() async {
       final DateTime now = _clock.now();
       if (id == null) {
-        if (body.trim().isEmpty) return null;
+        if (body.trim().isEmpty && !hasTitle) return null;
         await _requireFolderOrRoot(parentId);
         final int newId = await _db.into(_db.noteNodes).insert(
               NoteNodesCompanion.insert(
                 parentId: Value<int?>(parentId),
                 isFolder: false,
-                name: _autoName(body, untitledName),
+                name: chosenName ?? _autoName(body, untitledName),
                 body: Value<String>(body),
-                autoName: const Value<bool>(true),
+                autoName: Value<bool>(!hasTitle),
                 createdAt: now,
                 updatedAt: now,
               ),
@@ -85,12 +93,15 @@ class NotesService {
       if (!(await _tree()).isVisible(id)) {
         throw const InvalidStateError('a Trashed_Node cannot be edited');
       }
-      if (row.body == body) return row.toNode();
+      final bool autoName = title == null ? row.autoName : !hasTitle;
+      final String name = chosenName ?? (autoName ? _autoName(body, untitledName) : row.name);
+      if (row.body == body && row.name == name && row.autoName == autoName) return row.toNode();
       await (_db.update(_db.noteNodes)..where((t) => t.id.equals(id))).write(
         NoteNodesCompanion(
           body: Value<String>(body),
           updatedAt: Value<DateTime>(now),
-          name: row.autoName ? Value<String>(_autoName(body, untitledName)) : const Value<String>.absent(),
+          name: Value<String>(name),
+          autoName: Value<bool>(autoName),
         ),
       );
       return (await _load(id)).toNode();

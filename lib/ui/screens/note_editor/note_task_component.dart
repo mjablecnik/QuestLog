@@ -12,9 +12,12 @@ class NoteTaskComponentBuilder implements ComponentBuilder {
   NoteTaskComponentBuilder(Editor editor, {required this.toggleLabel})
     : _package = TaskComponentBuilder(editor);
 
+  /// For a read-only reader: the same round check, which ignores taps.
+  const NoteTaskComponentBuilder.readOnly({required this.toggleLabel}) : _package = const ReadOnlyTaskComponentBuilder();
+
   /// Already localized semantic label of the check ("Toggle done").
   final String toggleLabel;
-  final TaskComponentBuilder _package;
+  final ComponentBuilder _package;
 
   @override
   SingleColumnLayoutComponentViewModel? createViewModel(Document document, DocumentNode node) =>

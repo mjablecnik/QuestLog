@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'dart:io';
+import 'dart:typed_data';
+
+import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart' show FontLoader;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:questlog/core/notes/note_node.dart';
@@ -15,12 +20,19 @@ import '_notes_harness.dart';
 void main() {
   final NotesUiHarness h = NotesUiHarness();
 
-  Future<void> open(WidgetTester tester, {DateTime? now, double? textScale, Brightness? brightness}) => h.pump(
+  Future<void> open(
+    WidgetTester tester, {
+    DateTime? now,
+    double? textScale,
+    Brightness? brightness,
+    Locale locale = const Locale('en'),
+  }) => h.pump(
     tester,
     home: const NotesScreen(),
     now: now,
     textScale: textScale,
     brightness: brightness ?? Brightness.dark,
+    locale: locale,
   );
 
   ProviderContainer container(WidgetTester tester) =>
@@ -44,6 +56,67 @@ void main() {
     await tester.drag(row, const Offset(-320, 0));
     await h.settle(tester);
   }
+
+  group('title row', () {
+    double lineCount(WidgetTester tester, String text, {double scale = 1}) {
+      final RenderParagraph paragraph = tester.renderObject(find.text(text));
+      return paragraph.size.height / (paragraph.text.style!.fontSize! * scale * paragraph.text.style!.height!);
+    }
+
+    /// The real Figtree: with the test font (Ahem) every letter is a full square and the widths are not the app's.
+    Future<void> loadFigtree(WidgetTester tester) => tester.runAsync(() async {
+      final FontLoader loader = FontLoader('Figtree');
+      for (final int weight in <int>[400, 500, 600, 700, 800]) {
+        loader.addFont(
+          Future<ByteData>.value(ByteData.sublistView(File('assets/fonts/Figtree-$weight.ttf').readAsBytesSync())),
+        );
+      }
+      await loader.load();
+    });
+
+    notesTest(h, 'Poznámky is never broken inside the word', (tester) async {
+      await loadFigtree(tester);
+      await h.pump(tester, home: const NotesScreen(), locale: const Locale('cs'));
+      await h.folder(tester, 'ABAP');
+      await h.note(tester, '# One');
+      expect(find.text('Poznámky'), findsOneWidget);
+      expect(lineCount(tester, 'Poznámky'), closeTo(1, 0.1), reason: 'no break inside the word');
+      expect(tester.getTopLeft(find.byKey(const ValueKey<String>('notes-trash'))).dx, greaterThan(300));
+    });
+
+    notesTest(h, 'the counts go under the title when they do not fit beside it', (tester) async {
+      await loadFigtree(tester);
+      await h.pump(tester, home: const NotesScreen(), locale: const Locale('cs'), textScale: 1.3);
+      await h.folder(tester, 'ABAP');
+      await h.note(tester, '# One');
+      expect(lineCount(tester, 'Poznámky', scale: 1.3), closeTo(1, 0.1), reason: 'the title keeps one line');
+      expect(
+        tester.getTopLeft(find.text('1 složka · 1 poznámka')).dy,
+        greaterThan(tester.getBottomLeft(find.text('Poznámky')).dy - 1),
+        reason: 'the counts sit under the title',
+      );
+      expect(tester.getTopLeft(find.byKey(const ValueKey<String>('notes-trash'))).dx, greaterThan(300));
+    });
+
+    notesTest(h, 'a short title keeps the counts beside it, at the right', (tester) async {
+      await open(tester);
+      await h.folder(tester, 'A');
+      expect(find.text('Notes'), findsOneWidget);
+      final Finder counts = find.text('1 folder');
+      expect(tester.getCenter(counts).dy, closeTo(tester.getCenter(find.text('Notes')).dy, 2));
+      expect(tester.getTopLeft(counts).dx, greaterThan(tester.getTopRight(find.text('Notes')).dx));
+    });
+
+    notesTest(h, 'no overflow at 320 points and a text scale of 130 %', (tester) async {
+      await open(tester, textScale: 1.3, locale: const Locale('cs'));
+      tester.view.physicalSize = const Size(320, 844);
+      await h.folder(tester, 'ABAP');
+      await h.note(tester, '# One');
+      await h.settle(tester);
+      expect(tester.takeException(), isNull);
+      expect(lineCount(tester, 'Poznámky', scale: 1.3), closeTo(1, 0.1), reason: 'shrunk, not broken');
+    });
+  });
 
   group('browsing', () {
     notesTest(h, 'shows the empty state of an empty folder, no sections, no hero bar', (tester) async {

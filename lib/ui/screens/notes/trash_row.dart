@@ -17,6 +17,7 @@ class TrashRow extends StatelessWidget {
     required this.detail,
     required this.urgent,
     required this.onRestore,
+    this.onTap,
   });
 
   final String name;
@@ -27,12 +28,15 @@ class TrashRow extends StatelessWidget {
   final bool urgent;
   final VoidCallback onRestore;
 
+  /// Opens the preview of a Note; null for a Folder, which cannot be opened.
+  final VoidCallback? onTap;
+
   @override
   Widget build(BuildContext context) {
     final QuestlogPalette p = context.palette;
     final AppLocalizations l = AppLocalizations.of(context);
     return NodeCard(
-      onTap: null,
+      onTap: onTap,
       child: Padding(
         padding: const EdgeInsets.fromLTRB(Space.s12, Space.s10, Space.s12, Space.s10),
         child: Row(
@@ -42,6 +46,7 @@ class TrashRow extends StatelessWidget {
             Expanded(
               child: Semantics(
                 label: '$name. $detail',
+                hint: onTap == null ? null : l.trash_openHint,
                 excludeSemantics: true,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -67,41 +72,62 @@ class TrashRow extends StatelessWidget {
               ),
             ),
             const SizedBox(width: Space.s8),
-            Semantics(
-              button: true,
-              label: l.a11y_restoreNode(name),
-              excludeSemantics: true,
-              onTap: onRestore,
-              child: InkWell(
-                key: const ValueKey<String>('trash-restore'),
-                onTap: onRestore,
+            RestorePill(name: name, onPressed: onRestore),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// The Obnovit pill of a Trashed_Node, in the list and in the preview.
+class RestorePill extends StatelessWidget {
+  const RestorePill({
+    super.key,
+    required this.name,
+    required this.onPressed,
+    this.buttonKey = const ValueKey<String>('trash-restore'),
+  });
+
+  final String name;
+  final VoidCallback onPressed;
+  final Key buttonKey;
+
+  @override
+  Widget build(BuildContext context) {
+    final QuestlogPalette p = context.palette;
+    final AppLocalizations l = AppLocalizations.of(context);
+    return Semantics(
+      button: true,
+      label: l.a11y_restoreNode(name),
+      excludeSemantics: true,
+      onTap: onPressed,
+      child: InkWell(
+        key: buttonKey,
+        onTap: onPressed,
+        borderRadius: BorderRadius.circular(Radii.pill),
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(minHeight: Metrics.touchTarget),
+          child: Center(
+            widthFactor: 1,
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                color: p.brassSoft,
                 borderRadius: BorderRadius.circular(Radii.pill),
-                child: ConstrainedBox(
-                  constraints: const BoxConstraints(minHeight: Metrics.touchTarget),
-                  child: Center(
-                    widthFactor: 1,
-                    child: DecoratedBox(
-                      decoration: BoxDecoration(
-                        color: p.brassSoft,
-                        borderRadius: BorderRadius.circular(Radii.pill),
-                        border: Border.all(color: p.brass, width: Metrics.hairline),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: Space.s12, vertical: Space.s6),
-                        child: Text(
-                          l.trash_restore,
-                          style: context.bodyText.bodySmall!.copyWith(
-                            color: p.brassText,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ),
-                    ),
+                border: Border.all(color: p.brass, width: Metrics.hairline),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: Space.s12, vertical: Space.s6),
+                child: Text(
+                  l.trash_restore,
+                  style: context.bodyText.bodySmall!.copyWith(
+                    color: p.brassText,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
               ),
             ),
-          ],
+          ),
         ),
       ),
     );

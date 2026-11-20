@@ -19,6 +19,7 @@ import 'editor_style.dart';
 import 'format_toolbar.dart';
 import 'note_markdown.dart';
 import 'note_task_component.dart';
+import 'note_title_field.dart';
 
 /// Opens the Note_Editor on the Note [noteId], or on a new Note in [parentId]
 /// (null is the Root_Folder) when [noteId] is null.
@@ -49,7 +50,9 @@ class _NoteEditorScreenState extends ConsumerState<NoteEditorScreen>
   late final MutableDocument _document;
   late final MutableDocumentComposer _composer;
   late final Editor _editor;
+  late final TextEditingController _title;
   final FocusNode _focus = FocusNode();
+  final FocusNode _titleFocus = FocusNode();
   NoteSaveController? _save;
 
   /// False until the stored text is known and the editor is built.
@@ -62,11 +65,12 @@ class _NoteEditorScreenState extends ConsumerState<NoteEditorScreen>
     WidgetsBinding.instance.addObserver(this);
     final int? id = widget.noteId;
     if (id == null) {
-      _initEditor('');
+      _initEditor('', '');
     } else {
       final NoteTree? tree = ref.read(noteTreeProvider).value;
       if (tree != null) {
-        _initEditor(tree.byId(id)?.body ?? '');
+        final NoteNode? node = tree.byId(id);
+        _initEditor(node?.body ?? '', _titleOf(node));
       } else {
         // The notes were not read yet (this screen was opened before the list);
         // wait for the first read so that no stored text is replaced by an empty one.
@@ -75,13 +79,19 @@ class _NoteEditorScreenState extends ConsumerState<NoteEditorScreen>
           if (nodes == null || _ready || !mounted) return;
           _firstRead?.close();
           final Iterable<NoteNode> found = nodes.where((NoteNode n) => n.id == id);
-          setState(() => _initEditor(found.isEmpty ? '' : found.first.body));
+          final NoteNode? node = found.isEmpty ? null : found.first;
+          setState(() => _initEditor(node?.body ?? '', _titleOf(node)));
         });
       }
     }
   }
 
-  void _initEditor(String body) {
+  /// What the title field shows: the name the user chose; empty while the name
+  /// follows the first line of the text.
+  static String _titleOf(NoteNode? node) => node == null || node.autoName ? '' : node.name;
+
+  void _initEditor(String body, String title) {
+    _title = TextEditingController(text: title);
     _document = documentFromMarkdown(body);
     _composer = MutableDocumentComposer();
     _editor = createDefaultDocumentEditor(document: _document, composer: _composer);
@@ -107,7 +117,9 @@ class _NoteEditorScreenState extends ConsumerState<NoteEditorScreen>
     final NoteSaveController? save = _save;
     if (save != null) unawaited(save.flush().whenComplete(save.dispose));
     _focus.dispose();
+    _titleFocus.dispose();
     if (_ready) {
+      _title.dispose();
       _document.removeListener(_onDocumentChanged);
       _composer.dispose();
       _editor.dispose();
@@ -120,9 +132,28 @@ class _NoteEditorScreenState extends ConsumerState<NoteEditorScreen>
     if (state != AppLifecycleState.resumed) unawaited(_save?.flush());
   }
 
+  void _markChanged() {
+    _save?.markChanged(() => markdownFromDocument(_document), readTitle: () => _title.text);
+  }
+
   void _onDocumentChanged(DocumentChangeLog _) {
-    _save?.markChanged(() => markdownFromDocument(_document));
+    _markChanged();
     if (mounted) setState(() {});
+  }
+
+  /// A rename from the menu changes the name behind the field's back: show it.
+  /// A name that only echoes a save of what is typed (or a save still waiting)
+  /// is left alone, so typing is never overwritten.
+  void _followRename(NoteTree? tree) {
+    final int? id = _save?.noteId;
+    final NoteNode? node = id == null ? null : tree?.byId(id);
+    if (!_ready || node == null || node.autoName) return;
+    if (_save!.hasUnsavedChanges || _save!.status.value != SaveStatus.idle) return;
+    if (node.name == _title.text.trim()) return;
+    _title.value = TextEditingValue(
+      text: node.name,
+      selection: TextSelection.collapsed(offset: node.name.length),
+    );
   }
 
   /// Saves, and closes only when nothing is left unsaved.
@@ -153,6 +184,23 @@ class _NoteEditorScreenState extends ConsumerState<NoteEditorScreen>
     }
   }
 
+  /// Return in the title field: the text takes over, with the caret at its start.
+  void _focusBody() {
+    final DocumentNode first = _document.first;
+    if (first is TextNode) {
+      _editor.execute(<EditRequest>[
+        ChangeSelectionRequest(
+          DocumentSelection.collapsed(
+            position: DocumentPosition(nodeId: first.id, nodePosition: const TextNodePosition(offset: 0)),
+          ),
+          SelectionChangeType.placeCaret,
+          SelectionReason.userInteraction,
+        ),
+      ]);
+    }
+    _focus.requestFocus();
+  }
+
   bool get _isEmpty =>
       _ready &&
       _document.nodeCount == 1 &&
@@ -165,6 +213,7 @@ class _NoteEditorScreenState extends ConsumerState<NoteEditorScreen>
     final AppLocalizations l = AppLocalizations.of(context);
     if (!_ready) return const Scaffold(body: SizedBox.shrink());
     final NoteSaveController save = _save!;
+    ref.listen<AsyncValue<NoteTree>>(noteTreeProvider, (_, AsyncValue<NoteTree> next) => _followRename(next.value));
     final NoteTree? tree = ref.watch(noteTreeProvider).value;
     final NoteNode? node = save.noteId == null ? null : tree?.byId(save.noteId!);
     final int? parentId = node?.parentId ?? widget.parentId;
@@ -196,6 +245,13 @@ class _NoteEditorScreenState extends ConsumerState<NoteEditorScreen>
                       message: status == SaveStatus.failed ? l.editor_saveFailed : l.editor_tooLong,
                       onRetry: status == SaveStatus.failed ? () => unawaited(save.flush()) : null,
                     ),
+                  NoteTitleField(
+                    controller: _title,
+                    focusNode: _titleFocus,
+                    autofocus: widget.noteId == null,
+                    onChanged: (_) => _markChanged(),
+                    onSubmitted: _focusBody,
+                  ),
                   Expanded(
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: Space.s20),
@@ -204,7 +260,6 @@ class _NoteEditorScreenState extends ConsumerState<NoteEditorScreen>
                           SuperEditor(
                             editor: _editor,
                             focusNode: _focus,
-                            autofocus: widget.noteId == null,
                             stylesheet: buildEditorStylesheet(context),
                             selectionStyle: buildSelectionStyles(p),
                             documentOverlayBuilders: buildEditorOverlays(p),
