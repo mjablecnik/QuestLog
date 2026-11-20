@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:questlog/core/clock.dart';
 import 'package:questlog/core/font_licenses.dart';
 import 'package:questlog/data/database.dart';
 import 'package:questlog/data/preferences.dart';
 import 'package:questlog/l10n/app_localizations.dart';
+import 'package:questlog/services/export_service.dart';
 import 'package:questlog/services/providers.dart';
 import 'package:questlog/ui/screens/settings/settings_screen.dart';
 import 'package:questlog/ui/state/ui_providers.dart';
@@ -33,6 +35,23 @@ class _TestApp extends ConsumerWidget {
   }
 }
 
+/// Counts share requests instead of opening the system share sheet.
+class _FakeExportService extends ExportService {
+  _FakeExportService(QuestlogDatabase db, Clock clock)
+      : super(db, clock, _noVersion);
+
+  static Future<String> _noVersion() async => '1.2.3';
+
+  int shared = 0;
+  bool fail = false;
+
+  @override
+  Future<void> shareExport({Rect? origin}) async {
+    if (fail) throw StateError('share failed');
+    shared++;
+  }
+}
+
 void main() {
   late QuestlogDatabase db;
 
@@ -49,6 +68,7 @@ void main() {
     WidgetTester tester, {
     Size size = const Size(390, 844),
     String version = '1.2.3',
+    ExportService Function(QuestlogDatabase)? export,
   }) async {
     tester.view.physicalSize = size;
     tester.view.devicePixelRatio = 1;
@@ -61,6 +81,8 @@ void main() {
           clockProvider.overrideWithValue(FixedClock(DateTime(2026, 11, 16))),
           deviceLocaleProvider.overrideWithValue(const Locale('en')),
           appVersionProvider.overrideWith((ref) async => version),
+          if (export != null)
+            exportServiceProvider.overrideWith((ref) => export(db)),
         ],
         child: const _TestApp(),
       ),
@@ -97,7 +119,7 @@ void main() {
 
   settingsTest('shows the groups in the required order', (tester) async {
     await open(tester, size: const Size(390, 1200));
-    final labels = ['PROFILE', 'LANGUAGE', 'APPEARANCE', 'ABOUT'];
+    final labels = ['PROFILE', 'LANGUAGE', 'APPEARANCE', 'DATA', 'ABOUT'];
     final tops = [
       for (final label in labels) tester.getTopLeft(find.text(label)).dy,
     ];
@@ -105,6 +127,32 @@ void main() {
     expect(tops.toSet().length, labels.length);
     expect(find.text('Settings'), findsOneWidget);
     expect(find.text('0 / 40'), findsOneWidget);
+  });
+
+  settingsTest('the export row shares the data and reports a failure', (
+    tester,
+  ) async {
+    late _FakeExportService service;
+    await open(
+      tester,
+      size: const Size(390, 1200),
+      export: (db) => service = _FakeExportService(
+        db,
+        FixedClock(DateTime(2026, 11, 20)),
+      ),
+    );
+
+    await tester.tap(find.text('Export data'));
+    await settle(tester);
+    expect(service.shared, 1);
+    expect(find.text('The export failed. Please try again.'), findsNothing);
+
+    service.fail = true;
+    await tester.tap(find.text('Export data'));
+    await settle(tester);
+    expect(service.shared, 1);
+    expect(find.text('The export failed. Please try again.'), findsOneWidget);
+    await tester.pump(const Duration(seconds: 10));
   });
 
   settingsTest('saves the trimmed hero name on blur and shows it', (

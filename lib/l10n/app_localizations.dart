@@ -2593,6 +2593,30 @@ abstract class AppLocalizations {
   /// In cs, this message translates to:
   /// **'Funguje jen na iPhonu. Hotovou ikonu pak můžeš přesunout i do složky.'**
   String get settings_shortcutNote;
+
+  /// Group label.
+  ///
+  /// In cs, this message translates to:
+  /// **'Data'**
+  String get settings_groupData;
+
+  /// Row that saves all app data into one file and opens the share sheet.
+  ///
+  /// In cs, this message translates to:
+  /// **'Exportovat data'**
+  String get settings_exportTitle;
+
+  /// Explains the export row.
+  ///
+  /// In cs, this message translates to:
+  /// **'Uloží všechna data do jednoho souboru, který přeneseš jinam.'**
+  String get settings_exportSubtitle;
+
+  /// Snackbar shown when the export could not be written or shared.
+  ///
+  /// In cs, this message translates to:
+  /// **'Export se nepodařil. Zkus to prosím znovu.'**
+  String get settings_exportFailed;
 }
 
 class _AppLocalizationsDelegate

@@ -14,6 +14,7 @@ import '../../theme/tokens.dart';
 import '../../widgets/common/app_icon.dart';
 import '../../widgets/common/questlog_segmented.dart';
 import '../../widgets/common/snackbar_host.dart';
+import 'export_row.dart';
 import 'rules_section.dart';
 import 'shortcut_guide.dart';
 
@@ -72,6 +73,8 @@ class SettingsScreen extends ConsumerWidget {
               label: l.settings_shortcutTitle,
               child: const ShortcutGuide(),
             ),
+            const SizedBox(height: Space.s24),
+            _Group(label: l.settings_groupData, child: const ExportRow()),
             const SizedBox(height: Space.s24),
             _Group(label: l.settings_groupAbout, child: const _AboutRow()),
           ],

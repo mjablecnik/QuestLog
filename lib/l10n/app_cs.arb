@@ -2319,5 +2319,21 @@
   "settings_shortcutNote": "Funguje jen na iPhonu. Hotovou ikonu pak můžeš přesunout i do složky.",
   "@settings_shortcutNote": {
     "description": "Closing note of the guide."
+  },
+  "settings_groupData": "Data",
+  "@settings_groupData": {
+    "description": "Group label."
+  },
+  "settings_exportTitle": "Exportovat data",
+  "@settings_exportTitle": {
+    "description": "Row that saves all app data into one file and opens the share sheet."
+  },
+  "settings_exportSubtitle": "Uloží všechna data do jednoho souboru, který přeneseš jinam.",
+  "@settings_exportSubtitle": {
+    "description": "Explains the export row."
+  },
+  "settings_exportFailed": "Export se nepodařil. Zkus to prosím znovu.",
+  "@settings_exportFailed": {
+    "description": "Snackbar shown when the export could not be written or shared."
   }
 }

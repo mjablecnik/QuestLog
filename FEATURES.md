@@ -35,6 +35,7 @@ Questlog is a personal gamified to-do app for one user, built with Flutter for i
   (or follow the system), in Czech or English. One typeface, Figtree, for text and titles.
 - **Licences**: the bundled font is under the SIL Open Font License; its text ships in
   `assets/fonts/licenses/` and are listed under Settings → About → Licenses.
+- **Data export**: Settings → Data → Export data saves everything into one JSON file and opens the share sheet (see DOCS.md).
 - **Local only**: data lives in a SQLite file on the device through Drift. There is no
   server, no account and no network access.
 

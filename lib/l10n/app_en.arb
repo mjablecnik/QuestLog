@@ -415,5 +415,9 @@
   "settings_shortcutStep4": "Paste the copied link into the URL field.",
   "settings_shortcutStep5": "Tap the share icon and choose Add to Home Screen.",
   "settings_shortcutStep6": "Name the shortcut, change the icon if you like, and tap Add.",
-  "settings_shortcutNote": "Works on iPhone only. You can move the finished icon into a folder."
+  "settings_shortcutNote": "Works on iPhone only. You can move the finished icon into a folder.",
+  "settings_groupData": "Data",
+  "settings_exportTitle": "Export data",
+  "settings_exportSubtitle": "Saves all data into one file you can move elsewhere.",
+  "settings_exportFailed": "The export failed. Please try again."
 }

@@ -8,6 +8,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 
 import '../../data/models.dart';
 import '../../data/preferences.dart';
+import '../../services/export_service.dart';
 import '../../services/providers.dart';
 
 // The stream providers of every `watch*` query (settings, XP, board, missions,
@@ -108,4 +109,13 @@ class SnackbarNotifier extends Notifier<SnackMessage?> {
 
 final snackbarProvider = NotifierProvider<SnackbarNotifier, SnackMessage?>(
   SnackbarNotifier.new,
+);
+
+/// Exports all app data to a file and shares it.
+final exportServiceProvider = Provider<ExportService>(
+  (ref) => ExportService(
+    ref.watch(databaseProvider),
+    ref.watch(clockProvider),
+    () => ref.read(appVersionProvider.future),
+  ),
 );

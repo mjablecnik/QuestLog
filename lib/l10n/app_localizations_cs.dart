@@ -1753,4 +1753,18 @@ class AppLocalizationsCs extends AppLocalizations {
   @override
   String get settings_shortcutNote =>
       'Funguje jen na iPhonu. Hotovou ikonu pak můžeš přesunout i do složky.';
+
+  @override
+  String get settings_groupData => 'Data';
+
+  @override
+  String get settings_exportTitle => 'Exportovat data';
+
+  @override
+  String get settings_exportSubtitle =>
+      'Uloží všechna data do jednoho souboru, který přeneseš jinam.';
+
+  @override
+  String get settings_exportFailed =>
+      'Export se nepodařil. Zkus to prosím znovu.';
 }

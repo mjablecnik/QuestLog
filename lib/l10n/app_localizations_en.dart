@@ -1711,4 +1711,17 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get settings_shortcutNote =>
       'Works on iPhone only. You can move the finished icon into a folder.';
+
+  @override
+  String get settings_groupData => 'Data';
+
+  @override
+  String get settings_exportTitle => 'Export data';
+
+  @override
+  String get settings_exportSubtitle =>
+      'Saves all data into one file you can move elsewhere.';
+
+  @override
+  String get settings_exportFailed => 'The export failed. Please try again.';
 }

@@ -124,6 +124,10 @@ A Quest may have a Deadline. Saving one creates an all-day event of the type Que
 
 The URL scheme `questlog` (registered in `ios/Runner/Info.plist`) opens a tab: `questlog://quests`, `missions`, `calendar`, `notes` or `settings`; anything else is ignored. To get a Home Screen icon that opens the Calendar: in the iOS Shortcuts app make a shortcut with the action "Open URLs" and the URL `questlog://calendar`, then Share → Add to Home Screen and pick a name and an icon; the icon can be put in a folder. The same steps are in the app under Settings → Home Screen shortcut (`lib/ui/screens/settings/shortcut_guide.dart`): pick a tab, copy its link, follow the numbered steps. See `lib/ui/screens/shell/deep_link.dart` (spec `009-questlog-deep-links`).
 
+### Data export
+
+Settings → Data → Export data writes every table of the database into one JSON file (`questlog-export-<date>.json`, in the temporary directory) and opens the system share sheet, so the file can be saved to Files or sent with AirDrop. The export walks `db.allTables` and copies rows as stored, so a table or column added by a later migration is exported without changes (`lib/data/database_export.dart`, `lib/services/export_service.dart`, `lib/ui/screens/settings/export_row.dart`). The file has `format` (`questlog-export`), `formatVersion`, `app`, `appVersion`, `schemaVersion`, `exportedAt`, `rowCounts` (rows per table, for checking an import) and `tables` (table name to a list of rows keyed by column name). Integers stay integers, so dates and booleans keep the database representation; a BLOB would be `{"$blob": "<base64>"}`. There is no import yet.
+
 ### Rules of the game
 
 | Rule | Value |
