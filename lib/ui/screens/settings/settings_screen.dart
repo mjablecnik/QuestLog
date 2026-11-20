@@ -15,9 +15,10 @@ import '../../widgets/common/app_icon.dart';
 import '../../widgets/common/questlog_segmented.dart';
 import '../../widgets/common/snackbar_host.dart';
 import 'rules_section.dart';
+import 'shortcut_guide.dart';
 
 /// The "Nastavení" tab: profile, language, appearance, recurring rules,
-/// the temporary palette switch, the temporary font picker and About.
+/// the Home Screen shortcut guide and About.
 ///
 /// Every value is read from streams that already hold the stored settings, so
 /// a change of language or theme repaints this screen in place: the list keeps
@@ -66,6 +67,11 @@ class SettingsScreen extends ConsumerWidget {
             const SizedBox(height: Space.s24),
             // This one draws its own group header.
             const RulesSection(),
+            const SizedBox(height: Space.s24),
+            _Group(
+              label: l.settings_shortcutTitle,
+              child: const ShortcutGuide(),
+            ),
             const SizedBox(height: Space.s24),
             _Group(label: l.settings_groupAbout, child: const _AboutRow()),
           ],

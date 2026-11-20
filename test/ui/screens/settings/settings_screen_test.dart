@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:questlog/core/font_licenses.dart';
@@ -261,5 +262,43 @@ void main() {
     }
     expect(find.textContaining('SIL Open Font License'), findsWidgets);
     expect(find.textContaining('The Figtree Project Authors'), findsWidgets);
+  });
+
+  settingsTest('the shortcut guide copies the link of the chosen tab', (
+    tester,
+  ) async {
+    await open(tester, size: const Size(390, 1600));
+    String? copied;
+    tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
+      SystemChannels.platform,
+      (MethodCall call) async {
+        if (call.method == 'Clipboard.setData') {
+          copied = (call.arguments as Map)['text'] as String?;
+        }
+        return null;
+      },
+    );
+    addTearDown(
+      () => tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
+        SystemChannels.platform,
+        null,
+      ),
+    );
+
+    // Collapsed: the steps are hidden until the row is opened.
+    expect(find.text('Copy the link above.'), findsNothing);
+    await tester.tap(find.text('Home Screen shortcut').last);
+    await tester.pump();
+    expect(find.text('Copy the link above.'), findsOneWidget);
+    expect(find.text('questlog://calendar'), findsOneWidget);
+
+    await tester.tap(find.text('Notes'));
+    await tester.pump();
+    expect(find.text('questlog://notes'), findsOneWidget);
+
+    await tester.tap(find.text('Copy link'));
+    await tester.pump();
+    expect(copied, 'questlog://notes');
+    expect(find.text('Link copied'), findsOneWidget);
   });
 }
