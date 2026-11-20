@@ -71,26 +71,56 @@ class _NoteTaskComponentState extends State<NoteTaskComponent>
     final QuestlogPalette p = context.palette;
     final TaskComponentViewModel model = widget.viewModel;
     final void Function(bool)? setComplete = model.setComplete;
+    // Centres the first line of text against the 44 point check.
+    final TextStyle base = model.textStyleBuilder(<Attribution>{});
+    final double firstLine = base.fontSize! * base.height!;
+    final double textTop = (Metrics.touchTarget - firstLine) / 2;
+    final double indent = model.indentCalculator(base, model.indent);
+    final double ringSize = Metrics.iconSmall + Space.s4 + Space.s2 + Space.s2;
     return Directionality(
       textDirection: model.textDirection,
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Stack(
         children: <Widget>[
-          SizedBox(width: model.indentCalculator(model.textStyleBuilder(<Attribution>{}), model.indent)),
-          Semantics(
-            button: true,
-            checked: model.isComplete,
-            label: widget.toggleLabel,
-            excludeSemantics: true,
-            onTap: setComplete == null ? null : () => setComplete(!model.isComplete),
-            child: InkWell(
-              key: const ValueKey<String>('task-check'),
+          // The text sits close to the ring; the 44 point hit area below overlaps its first few points.
+          Padding(
+            padding: EdgeInsetsDirectional.only(start: indent + ringSize + Space.s8, top: textTop),
+            child: ConstrainedBox(
+              constraints: BoxConstraints(minHeight: Metrics.touchTarget - textTop),
+              child: TextComponent(
+                key: _textKey,
+                text: model.text,
+                textDirection: model.textDirection,
+                textAlign: model.textAlignment,
+                maxLines: model.maxLines,
+                overflow: model.overflow,
+                textStyleBuilder: _style,
+                inlineWidgetBuilders: model.inlineWidgetBuilders,
+                textSelection: model.selection,
+                selectionColor: model.selectionColor,
+                highlightWhenEmpty: model.highlightWhenEmpty,
+                underlines: model.createUnderlines(),
+              ),
+            ),
+          ),
+          PositionedDirectional(
+            start: indent,
+            top: 0,
+            width: Metrics.touchTarget,
+            height: Metrics.touchTarget,
+            child: Semantics(
+              button: true,
+              checked: model.isComplete,
+              label: widget.toggleLabel,
+              excludeSemantics: true,
               onTap: setComplete == null ? null : () => setComplete(!model.isComplete),
-              customBorder: const CircleBorder(),
-              child: SizedBox(
-                width: Metrics.touchTarget,
-                height: Metrics.touchTarget,
-                child: Center(
+              child: InkWell(
+                key: const ValueKey<String>('task-check'),
+                onTap: setComplete == null ? null : () => setComplete(!model.isComplete),
+                customBorder: const CircleBorder(),
+                // Start-aligned, so the ring lines up with the left edge of the other blocks;
+                // the rest of the 44 point square is only hit area.
+                child: Align(
+                  alignment: AlignmentDirectional.centerStart,
                   child: DecoratedBox(
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
@@ -111,26 +141,6 @@ class _NoteTaskComponentState extends State<NoteTaskComponent>
                     ),
                   ),
                 ),
-              ),
-            ),
-          ),
-          Expanded(
-            child: Padding(
-              // Centres the first line against the 44 point check.
-              padding: const EdgeInsets.only(top: Space.s2),
-              child: TextComponent(
-                key: _textKey,
-                text: model.text,
-                textDirection: model.textDirection,
-                textAlign: model.textAlignment,
-                maxLines: model.maxLines,
-                overflow: model.overflow,
-                textStyleBuilder: _style,
-                inlineWidgetBuilders: model.inlineWidgetBuilders,
-                textSelection: model.selection,
-                selectionColor: model.selectionColor,
-                highlightWhenEmpty: model.highlightWhenEmpty,
-                underlines: model.createUnderlines(),
               ),
             ),
           ),

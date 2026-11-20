@@ -75,7 +75,8 @@ Stylesheet buildEditorStylesheet(BuildContext context) {
         return <String, dynamic>{Styles.padding: const CascadingPadding.only(top: Space.s4)};
       }),
       StyleRule(const BlockSelector('task'), (Document doc, DocumentNode node) {
-        return <String, dynamic>{Styles.padding: const CascadingPadding.only(top: Space.s8)};
+        // The 44 point row of a task already gives it air; only a hairline of extra space.
+        return <String, dynamic>{Styles.padding: const CascadingPadding.only(top: Space.s2)};
       }),
       StyleRule(const BlockSelector('blockquote'), (Document doc, DocumentNode node) {
         return <String, dynamic>{
