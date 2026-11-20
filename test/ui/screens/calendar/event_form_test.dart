@@ -317,4 +317,61 @@ void main() {
     expect(find.text('Tue, Nov 24, 2026'), findsNWidgets(2));
     expect(find.byType(EventChip), findsNothing);
   });
+
+  group('address suggestions', () {
+    Finder suggestion(String a) => find.byKey(ValueKey<String>('address-suggestion-$a'), skipOffstage: false);
+
+    Future<void> seed(WidgetTester tester, List<String> addresses) async {
+      for (final String a in addresses) {
+        await tester.runAsync(() async {
+          await h.service.create(
+            EventDraft(
+              name: 'E',
+              location: a,
+              type: EventType.meeting,
+              startDate: d(2026, 11, 19),
+              endDate: d(2026, 11, 19),
+              repeat: const NoRepeat(),
+              onBoard: false,
+            ),
+          );
+          h.clock.advance(const Duration(minutes: 1));
+        });
+      }
+    }
+
+    Future<void> settleLookup(WidgetTester tester) async {
+      await tester.runAsync(() => Future<void>.delayed(const Duration(milliseconds: 50)));
+      await tester.pump();
+    }
+
+    calendarTest(h, 'focus shows the remembered addresses, typing narrows them, a tap fills the field', (tester) async {
+      await openCreate(tester);
+      await seed(tester, <String>['Brno, Česká 1', 'Praha, Dlouhá 2']);
+      await reveal(tester, key('form-location'));
+      expect(suggestion('Brno, Česká 1'), findsNothing);
+      await tester.tap(key('form-location'));
+      await settleLookup(tester);
+      expect(suggestion('Brno, Česká 1'), findsOneWidget);
+      expect(suggestion('Praha, Dlouhá 2'), findsOneWidget);
+      await tester.enterText(key('form-location'), 'dlou');
+      await settleLookup(tester);
+      expect(suggestion('Brno, Česká 1'), findsNothing);
+      expect(tester.getSize(suggestion('Praha, Dlouhá 2')).height, greaterThanOrEqualTo(44));
+      await tester.tap(suggestion('Praha, Dlouhá 2'));
+      await settleLookup(tester);
+      expect(tester.widget<TextField>(find.descendant(of: key('form-location'), matching: find.byType(TextField))).controller!.text, 'Praha, Dlouhá 2');
+      expect(suggestion('Praha, Dlouhá 2'), findsNothing);
+    });
+
+    calendarTest(h, 'nothing shows without a match or without focus', (tester) async {
+      await openCreate(tester);
+      await seed(tester, <String>['Brno']);
+      await reveal(tester, key('form-location'));
+      await tester.tap(key('form-location'));
+      await tester.enterText(key('form-location'), 'zzz');
+      await settleLookup(tester);
+      expect(suggestion('Brno'), findsNothing);
+    });
+  });
 }

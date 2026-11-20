@@ -15,6 +15,7 @@ import '../../../services/providers.dart';
 import '../../sheets/calendar/delete_event_sheet.dart';
 import '../../theme/questlog_theme.dart';
 import '../../theme/tokens.dart';
+import '../../widgets/calendar/address_suggestions.dart';
 import '../../widgets/calendar/calendar_fields.dart';
 import '../../widgets/calendar/event_type_picker.dart';
 import '../../widgets/common/app_icon.dart';
@@ -89,6 +90,11 @@ class _EventFormScreenState extends ConsumerState<EventFormScreen> {
   String? _errorName;
   String? _errorNote;
   String? _errorLocation;
+
+  /// Remembered addresses that match the Address field while it has focus.
+  List<String> _addresses = const <String>[];
+  bool _locationFocused = false;
+  int _addressRequest = 0;
 
   late String _initialKey;
 
@@ -226,6 +232,26 @@ class _EventFormScreenState extends ConsumerState<EventFormScreen> {
         ? Duration(days: _endDate.difference(_startDate).inDays + 1)
         : _wall(_endDate, _endMinute ?? 0).difference(_wall(_startDate, _startMinute ?? 0)),
   );
+
+  /// Looks up the Address_Suggestions for the text now in the Address field; a
+  /// newer request makes an older answer obsolete. A failure shows none.
+  Future<void> _refreshAddresses() async {
+    final int request = ++_addressRequest;
+    List<String> found;
+    try {
+      found = _locationFocused ? await ref.read(calendarServiceProvider).suggestAddresses(_location.text) : const <String>[];
+    } catch (_) {
+      found = const <String>[];
+    }
+    if (!mounted || request != _addressRequest) return;
+    setState(() => _addresses = found);
+  }
+
+  void _pickAddress(String address) {
+    _location.value = TextEditingValue(text: address, selection: TextSelection.collapsed(offset: address.length));
+    _changed(() => _addresses = const <String>[]);
+    _addressRequest++;
+  }
 
   void _changed(VoidCallback change) {
     setState(() {
@@ -532,8 +558,16 @@ class _EventFormScreenState extends ConsumerState<EventFormScreen> {
                           controller: _location,
                           hint: l.calendar_formLocationHint,
                           errorText: _errorLocation,
-                          onChanged: (_) => _changed(() {}),
+                          onChanged: (_) {
+                            _changed(() {});
+                            _refreshAddresses();
+                          },
+                          onFocusChange: (bool focused) {
+                            _locationFocused = focused;
+                            _refreshAddresses();
+                          },
                         ),
+                        if (_addresses.isNotEmpty) AddressSuggestions(addresses: _addresses, onPick: _pickAddress),
                       ],
                     ),
                     const SizedBox(height: Space.s12),

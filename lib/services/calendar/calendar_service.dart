@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:drift/drift.dart';
 
+import '../../core/calendar/address_history.dart';
 import '../../core/calendar/calendar_dates.dart';
 import '../../core/calendar/event_type.dart';
 import '../../core/calendar/event_xp.dart';
@@ -62,6 +63,7 @@ class CalendarService {
       final int id = await _db
           .into(_db.calendarEvents)
           .insert(eventCompanion(valid, createdAt: now, updatedAt: now));
+      await _rememberAddress(valid.location, now);
       return (await _load(id)).toModel();
     });
   }
@@ -74,8 +76,41 @@ class CalendarService {
       await (_db.update(_db.calendarEvents)..where((t) => t.id.equals(id))).write(
         eventCompanion(valid, createdAt: row.createdAt, updatedAt: _clock.now()),
       );
+      await _rememberAddress(valid.location, _clock.now());
       return (await _load(id)).toModel();
     });
+  }
+
+  Future<void> _rememberAddress(String? location, DateTime now) async {
+    if (location == null) return;
+    final String address = location.trim();
+    await _db.into(_db.calendarAddresses).insertOnConflictUpdate(
+      CalendarAddressesCompanion.insert(
+        key: addressKey(address),
+        address: address,
+        lastUsedAt: now,
+      ),
+    );
+  }
+
+  /// The remembered addresses that match [typed], most recently used first, at
+  /// most [limit]. An address not used for [addressRetention] is never returned.
+  Future<List<String>> suggestAddresses(String typed, {int limit = maxAddressSuggestions}) async {
+    final DateTime cutoff = _clock.now().subtract(addressRetention);
+    final List<CalendarAddressRow> rows = await (_db.select(_db.calendarAddresses)
+          ..where((t) => t.lastUsedAt.isBiggerOrEqualValue(cutoff))
+          ..orderBy([(t) => OrderingTerm.desc(t.lastUsedAt), (t) => OrderingTerm.asc(t.key)]))
+        .get();
+    return <String>[
+      for (final CalendarAddressRow row in rows)
+        if (matchesAddress(row.address, typed)) row.address,
+    ].take(limit).toList();
+  }
+
+  /// Forgets the addresses not used for [addressRetention]. Events keep theirs.
+  Future<void> purgeExpiredAddresses() async {
+    final DateTime cutoff = _clock.now().subtract(addressRetention);
+    await (_db.delete(_db.calendarAddresses)..where((t) => t.lastUsedAt.isSmallerThanValue(cutoff))).go();
   }
 
   /// Deletes the occurrence that starts on [occurrenceDate] according to [scope].

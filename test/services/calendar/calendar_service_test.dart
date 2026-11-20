@@ -9,6 +9,7 @@ import 'package:questlog/services/calendar/calendar_service.dart';
 import '_harness.dart';
 
 void main() {
+  addressHistoryTests();
   late CalendarHarness h;
 
   setUp(() async => h = await CalendarHarness.open());
@@ -293,6 +294,70 @@ void main() {
 
     test('deleting a missing event throws NotFoundError', () {
       expect(() => h.service.deleteOccurrence(42, d(2026, 11, 19), DeleteScope.all), throwsA(isA<NotFoundError>()));
+    });
+  });
+}
+
+void addressHistoryTests() {
+  late CalendarHarness h;
+
+  setUp(() async => h = await CalendarHarness.open());
+  tearDown(() => h.close());
+
+  group('address history', () {
+    test('a saved address is suggested, newest first, once per spelling', () async {
+      await h.service.create(h.draft(location: 'Brno, Česká 1'));
+      h.clock.advance(const Duration(hours: 1));
+      await h.service.create(h.draft(location: 'Praha, Dlouhá 2'));
+      h.clock.advance(const Duration(hours: 1));
+      await h.service.create(h.draft(location: '  brno, česká 1 '));
+      expect(await h.service.suggestAddresses(''), <String>['brno, česká 1', 'Praha, Dlouhá 2']);
+    });
+
+    test('suggestions match ignoring case and diacritics, never the typed text itself', () async {
+      await h.service.create(h.draft(location: 'Řehořova 5, Praha'));
+      expect(await h.service.suggestAddresses('rehor'), <String>['Řehořova 5, Praha']);
+      expect(await h.service.suggestAddresses('xyz'), isEmpty);
+      expect(await h.service.suggestAddresses('řehořova 5, praha'), isEmpty);
+    });
+
+    test('at most the limit is returned', () async {
+      for (int i = 0; i < 7; i++) {
+        h.clock.advance(const Duration(minutes: 1));
+        await h.service.create(h.draft(location: 'Street $i'));
+      }
+      final List<String> found = await h.service.suggestAddresses('');
+      expect(found, hasLength(5));
+      expect(found.first, 'Street 6');
+    });
+
+    test('an edit remembers the new address; a blank one remembers nothing', () async {
+      final CalendarEvent e = await h.service.create(h.draft(location: 'A'));
+      await h.service.update(e.id, h.draft(location: 'B'));
+      await h.service.create(h.draft(location: '   '));
+      expect((await h.service.suggestAddresses('')).toSet(), <String>{'A', 'B'});
+    });
+
+    test('an address expires 30 days after its last use, and using it again renews it', () async {
+      await h.service.create(h.draft(location: 'Old'));
+      await h.service.create(h.draft(location: 'Renewed'));
+      h.clock.advance(const Duration(days: 29));
+      await h.service.create(h.draft(location: 'Renewed'));
+      h.clock.advance(const Duration(days: 1, minutes: 1));
+      expect(await h.service.suggestAddresses(''), <String>['Renewed']);
+      await h.service.purgeExpiredAddresses();
+      expect(await h.db.select(h.db.calendarAddresses).get(), hasLength(1));
+    });
+
+    test('deleting an event keeps its address and forgetting it keeps the event', () async {
+      final CalendarEvent e = await h.service.create(h.draft(location: 'Brno'));
+      await h.service.deleteOccurrence(e.id, e.startDate, DeleteScope.all);
+      expect(await h.service.suggestAddresses(''), <String>['Brno']);
+      final CalendarEvent kept = await h.service.create(h.draft(location: 'Plzeň'));
+      h.clock.advance(const Duration(days: 31));
+      await h.service.purgeExpiredAddresses();
+      expect(await h.service.suggestAddresses(''), isEmpty);
+      expect((await h.service.getEvent(kept.id))!.location, 'Plzeň');
     });
   });
 }

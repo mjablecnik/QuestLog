@@ -55,6 +55,7 @@ class CalendarTextField extends StatefulWidget {
     this.keyboardType,
     this.textCapitalization = TextCapitalization.sentences,
     this.fieldKey,
+    this.onFocusChange,
   });
 
   final TextEditingController controller;
@@ -74,6 +75,9 @@ class CalendarTextField extends StatefulWidget {
   final TextInputType? keyboardType;
   final TextCapitalization textCapitalization;
   final Key? fieldKey;
+
+  /// Told when the field gains or loses focus.
+  final ValueChanged<bool>? onFocusChange;
 
   @override
   State<CalendarTextField> createState() => _CalendarTextFieldState();
@@ -103,7 +107,10 @@ class _CalendarTextFieldState extends State<CalendarTextField> {
         Focus(
           canRequestFocus: false,
           skipTraversal: true,
-          onFocusChange: (bool value) => setState(() => _focused = value),
+          onFocusChange: (bool value) {
+            setState(() => _focused = value);
+            widget.onFocusChange?.call(value);
+          },
           child: TextField(
             key: widget.fieldKey,
             controller: widget.controller,
