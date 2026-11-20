@@ -2136,16 +2136,18 @@ class $AppStateTable extends AppState
         requiredDuringInsert: false,
         defaultValue: const Constant('system'),
       ).withConverter<AppTheme>($AppStateTable.$convertertheme);
+  static const VerificationMeta _displayFontMeta = const VerificationMeta(
+    'displayFont',
+  );
   @override
-  late final GeneratedColumnWithTypeConverter<DisplayFont, String> displayFont =
-      GeneratedColumn<String>(
-        'display_font',
-        aliasedName,
-        false,
-        type: DriftSqlType.string,
-        requiredDuringInsert: false,
-        defaultValue: const Constant('figtree'),
-      ).withConverter<DisplayFont>($AppStateTable.$converterdisplayFont);
+  late final GeneratedColumn<String> displayFont = GeneratedColumn<String>(
+    'display_font',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('figtree'),
+  );
   @override
   List<GeneratedColumn> get $columns => [
     id,
@@ -2182,6 +2184,15 @@ class $AppStateTable extends AppState
         heroName.isAcceptableOrUnknown(data['hero_name']!, _heroNameMeta),
       );
     }
+    if (data.containsKey('display_font')) {
+      context.handle(
+        _displayFontMeta,
+        displayFont.isAcceptableOrUnknown(
+          data['display_font']!,
+          _displayFontMeta,
+        ),
+      );
+    }
     return context;
   }
 
@@ -2215,12 +2226,10 @@ class $AppStateTable extends AppState
           data['${effectivePrefix}theme'],
         )!,
       ),
-      displayFont: $AppStateTable.$converterdisplayFont.fromSql(
-        attachedDatabase.typeMapping.read(
-          DriftSqlType.string,
-          data['${effectivePrefix}display_font'],
-        )!,
-      ),
+      displayFont: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}display_font'],
+      )!,
     );
   }
 
@@ -2233,8 +2242,6 @@ class $AppStateTable extends AppState
       const EnumNameConverter<AppLanguage>(AppLanguage.values);
   static JsonTypeConverter2<AppTheme, String, String> $convertertheme =
       const EnumNameConverter<AppTheme>(AppTheme.values);
-  static JsonTypeConverter2<DisplayFont, String, String> $converterdisplayFont =
-      const EnumNameConverter<DisplayFont>(DisplayFont.values);
 }
 
 class AppStateRow extends DataClass implements Insertable<AppStateRow> {
@@ -2243,7 +2250,7 @@ class AppStateRow extends DataClass implements Insertable<AppStateRow> {
   final String heroName;
   final AppLanguage language;
   final AppTheme theme;
-  final DisplayFont displayFont;
+  final String displayFont;
   const AppStateRow({
     required this.id,
     required this.totalXp,
@@ -2268,11 +2275,7 @@ class AppStateRow extends DataClass implements Insertable<AppStateRow> {
         $AppStateTable.$convertertheme.toSql(theme),
       );
     }
-    {
-      map['display_font'] = Variable<String>(
-        $AppStateTable.$converterdisplayFont.toSql(displayFont),
-      );
-    }
+    map['display_font'] = Variable<String>(displayFont);
     return map;
   }
 
@@ -2302,9 +2305,7 @@ class AppStateRow extends DataClass implements Insertable<AppStateRow> {
       theme: $AppStateTable.$convertertheme.fromJson(
         serializer.fromJson<String>(json['theme']),
       ),
-      displayFont: $AppStateTable.$converterdisplayFont.fromJson(
-        serializer.fromJson<String>(json['displayFont']),
-      ),
+      displayFont: serializer.fromJson<String>(json['displayFont']),
     );
   }
   @override
@@ -2320,9 +2321,7 @@ class AppStateRow extends DataClass implements Insertable<AppStateRow> {
       'theme': serializer.toJson<String>(
         $AppStateTable.$convertertheme.toJson(theme),
       ),
-      'displayFont': serializer.toJson<String>(
-        $AppStateTable.$converterdisplayFont.toJson(displayFont),
-      ),
+      'displayFont': serializer.toJson<String>(displayFont),
     };
   }
 
@@ -2332,7 +2331,7 @@ class AppStateRow extends DataClass implements Insertable<AppStateRow> {
     String? heroName,
     AppLanguage? language,
     AppTheme? theme,
-    DisplayFont? displayFont,
+    String? displayFont,
   }) => AppStateRow(
     id: id ?? this.id,
     totalXp: totalXp ?? this.totalXp,
@@ -2388,7 +2387,7 @@ class AppStateCompanion extends UpdateCompanion<AppStateRow> {
   final Value<String> heroName;
   final Value<AppLanguage> language;
   final Value<AppTheme> theme;
-  final Value<DisplayFont> displayFont;
+  final Value<String> displayFont;
   const AppStateCompanion({
     this.id = const Value.absent(),
     this.totalXp = const Value.absent(),
@@ -2429,7 +2428,7 @@ class AppStateCompanion extends UpdateCompanion<AppStateRow> {
     Value<String>? heroName,
     Value<AppLanguage>? language,
     Value<AppTheme>? theme,
-    Value<DisplayFont>? displayFont,
+    Value<String>? displayFont,
   }) {
     return AppStateCompanion(
       id: id ?? this.id,
@@ -2464,9 +2463,7 @@ class AppStateCompanion extends UpdateCompanion<AppStateRow> {
       );
     }
     if (displayFont.present) {
-      map['display_font'] = Variable<String>(
-        $AppStateTable.$converterdisplayFont.toSql(displayFont.value),
-      );
+      map['display_font'] = Variable<String>(displayFont.value);
     }
     return map;
   }
@@ -4068,6 +4065,280 @@ class CalendarCompletionsCompanion
   }
 }
 
+class $CalendarAddressesTable extends CalendarAddresses
+    with TableInfo<$CalendarAddressesTable, CalendarAddressRow> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $CalendarAddressesTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _keyMeta = const VerificationMeta('key');
+  @override
+  late final GeneratedColumn<String> key = GeneratedColumn<String>(
+    'key',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _addressMeta = const VerificationMeta(
+    'address',
+  );
+  @override
+  late final GeneratedColumn<String> address = GeneratedColumn<String>(
+    'address',
+    aliasedName,
+    false,
+    check: () => ComparableExpr(address.length).isBetweenValues(1, 120),
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _lastUsedAtMeta = const VerificationMeta(
+    'lastUsedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> lastUsedAt = GeneratedColumn<DateTime>(
+    'last_used_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [key, address, lastUsedAt];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'calendar_addresses';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<CalendarAddressRow> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('key')) {
+      context.handle(
+        _keyMeta,
+        key.isAcceptableOrUnknown(data['key']!, _keyMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_keyMeta);
+    }
+    if (data.containsKey('address')) {
+      context.handle(
+        _addressMeta,
+        address.isAcceptableOrUnknown(data['address']!, _addressMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_addressMeta);
+    }
+    if (data.containsKey('last_used_at')) {
+      context.handle(
+        _lastUsedAtMeta,
+        lastUsedAt.isAcceptableOrUnknown(
+          data['last_used_at']!,
+          _lastUsedAtMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_lastUsedAtMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {key};
+  @override
+  CalendarAddressRow map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return CalendarAddressRow(
+      key: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}key'],
+      )!,
+      address: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}address'],
+      )!,
+      lastUsedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}last_used_at'],
+      )!,
+    );
+  }
+
+  @override
+  $CalendarAddressesTable createAlias(String alias) {
+    return $CalendarAddressesTable(attachedDatabase, alias);
+  }
+}
+
+class CalendarAddressRow extends DataClass
+    implements Insertable<CalendarAddressRow> {
+  final String key;
+  final String address;
+  final DateTime lastUsedAt;
+  const CalendarAddressRow({
+    required this.key,
+    required this.address,
+    required this.lastUsedAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['key'] = Variable<String>(key);
+    map['address'] = Variable<String>(address);
+    map['last_used_at'] = Variable<DateTime>(lastUsedAt);
+    return map;
+  }
+
+  CalendarAddressesCompanion toCompanion(bool nullToAbsent) {
+    return CalendarAddressesCompanion(
+      key: Value(key),
+      address: Value(address),
+      lastUsedAt: Value(lastUsedAt),
+    );
+  }
+
+  factory CalendarAddressRow.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return CalendarAddressRow(
+      key: serializer.fromJson<String>(json['key']),
+      address: serializer.fromJson<String>(json['address']),
+      lastUsedAt: serializer.fromJson<DateTime>(json['lastUsedAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'key': serializer.toJson<String>(key),
+      'address': serializer.toJson<String>(address),
+      'lastUsedAt': serializer.toJson<DateTime>(lastUsedAt),
+    };
+  }
+
+  CalendarAddressRow copyWith({
+    String? key,
+    String? address,
+    DateTime? lastUsedAt,
+  }) => CalendarAddressRow(
+    key: key ?? this.key,
+    address: address ?? this.address,
+    lastUsedAt: lastUsedAt ?? this.lastUsedAt,
+  );
+  CalendarAddressRow copyWithCompanion(CalendarAddressesCompanion data) {
+    return CalendarAddressRow(
+      key: data.key.present ? data.key.value : this.key,
+      address: data.address.present ? data.address.value : this.address,
+      lastUsedAt: data.lastUsedAt.present
+          ? data.lastUsedAt.value
+          : this.lastUsedAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('CalendarAddressRow(')
+          ..write('key: $key, ')
+          ..write('address: $address, ')
+          ..write('lastUsedAt: $lastUsedAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(key, address, lastUsedAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is CalendarAddressRow &&
+          other.key == this.key &&
+          other.address == this.address &&
+          other.lastUsedAt == this.lastUsedAt);
+}
+
+class CalendarAddressesCompanion extends UpdateCompanion<CalendarAddressRow> {
+  final Value<String> key;
+  final Value<String> address;
+  final Value<DateTime> lastUsedAt;
+  final Value<int> rowid;
+  const CalendarAddressesCompanion({
+    this.key = const Value.absent(),
+    this.address = const Value.absent(),
+    this.lastUsedAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  CalendarAddressesCompanion.insert({
+    required String key,
+    required String address,
+    required DateTime lastUsedAt,
+    this.rowid = const Value.absent(),
+  }) : key = Value(key),
+       address = Value(address),
+       lastUsedAt = Value(lastUsedAt);
+  static Insertable<CalendarAddressRow> custom({
+    Expression<String>? key,
+    Expression<String>? address,
+    Expression<DateTime>? lastUsedAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (key != null) 'key': key,
+      if (address != null) 'address': address,
+      if (lastUsedAt != null) 'last_used_at': lastUsedAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  CalendarAddressesCompanion copyWith({
+    Value<String>? key,
+    Value<String>? address,
+    Value<DateTime>? lastUsedAt,
+    Value<int>? rowid,
+  }) {
+    return CalendarAddressesCompanion(
+      key: key ?? this.key,
+      address: address ?? this.address,
+      lastUsedAt: lastUsedAt ?? this.lastUsedAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (key.present) {
+      map['key'] = Variable<String>(key.value);
+    }
+    if (address.present) {
+      map['address'] = Variable<String>(address.value);
+    }
+    if (lastUsedAt.present) {
+      map['last_used_at'] = Variable<DateTime>(lastUsedAt.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('CalendarAddressesCompanion(')
+          ..write('key: $key, ')
+          ..write('address: $address, ')
+          ..write('lastUsedAt: $lastUsedAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 class $NoteNodesTable extends NoteNodes
     with TableInfo<$NoteNodesTable, NoteNodeRow> {
   @override
@@ -4640,6 +4911,8 @@ abstract class _$QuestlogDatabase extends GeneratedDatabase {
       $CalendarSkippedDatesTable(this);
   late final $CalendarCompletionsTable calendarCompletions =
       $CalendarCompletionsTable(this);
+  late final $CalendarAddressesTable calendarAddresses =
+      $CalendarAddressesTable(this);
   late final $NoteNodesTable noteNodes = $NoteNodesTable(this);
   late final Index idxQuestsMission = Index(
     'idx_quests_mission',
@@ -4674,6 +4947,7 @@ abstract class _$QuestlogDatabase extends GeneratedDatabase {
     calendarEvents,
     calendarSkippedDates,
     calendarCompletions,
+    calendarAddresses,
     noteNodes,
     idxQuestsMission,
     idxQuestsCompleted,
@@ -6397,7 +6671,7 @@ typedef $$AppStateTableCreateCompanionBuilder = AppStateCompanion Function({
   Value<String> heroName,
   Value<AppLanguage> language,
   Value<AppTheme> theme,
-  Value<DisplayFont> displayFont,
+  Value<String> displayFont,
 });
 typedef $$AppStateTableUpdateCompanionBuilder = AppStateCompanion Function({
   Value<int> id,
@@ -6405,7 +6679,7 @@ typedef $$AppStateTableUpdateCompanionBuilder = AppStateCompanion Function({
   Value<String> heroName,
   Value<AppLanguage> language,
   Value<AppTheme> theme,
-  Value<DisplayFont> displayFont,
+  Value<String> displayFont,
 });
 
 class $$AppStateTableFilterComposer
@@ -6444,10 +6718,9 @@ class $$AppStateTableFilterComposer
         builder: (column) => ColumnWithTypeConverterFilters(column),
       );
 
-  ColumnWithTypeConverterFilters<DisplayFont, DisplayFont, String>
-  get displayFont => $composableBuilder(
+  ColumnFilters<String> get displayFont => $composableBuilder(
     column: $table.displayFont,
-    builder: (column) => ColumnWithTypeConverterFilters(column),
+    builder: (column) => ColumnFilters(column),
   );
 }
 
@@ -6515,11 +6788,10 @@ class $$AppStateTableAnnotationComposer
   GeneratedColumnWithTypeConverter<AppTheme, String> get theme =>
       $composableBuilder(column: $table.theme, builder: (column) => column);
 
-  GeneratedColumnWithTypeConverter<DisplayFont, String> get displayFont =>
-      $composableBuilder(
-        column: $table.displayFont,
-        builder: (column) => column,
-      );
+  GeneratedColumn<String> get displayFont => $composableBuilder(
+    column: $table.displayFont,
+    builder: (column) => column,
+  );
 }
 
 class $$AppStateTableTableManager
@@ -6558,7 +6830,7 @@ class $$AppStateTableTableManager
                 Value<String> heroName = const Value.absent(),
                 Value<AppLanguage> language = const Value.absent(),
                 Value<AppTheme> theme = const Value.absent(),
-                Value<DisplayFont> displayFont = const Value.absent(),
+                Value<String> displayFont = const Value.absent(),
               }) => AppStateCompanion(
                 id: id,
                 totalXp: totalXp,
@@ -6574,7 +6846,7 @@ class $$AppStateTableTableManager
                 Value<String> heroName = const Value.absent(),
                 Value<AppLanguage> language = const Value.absent(),
                 Value<AppTheme> theme = const Value.absent(),
-                Value<DisplayFont> displayFont = const Value.absent(),
+                Value<String> displayFont = const Value.absent(),
               }) => AppStateCompanion.insert(
                 id: id,
                 totalXp: totalXp,
@@ -7902,6 +8174,194 @@ typedef $$CalendarCompletionsTableProcessedTableManager =
       CalendarCompletionRow,
       PrefetchHooks Function({bool eventId})
     >;
+typedef $$CalendarAddressesTableCreateCompanionBuilder =
+    CalendarAddressesCompanion Function({
+      required String key,
+      required String address,
+      required DateTime lastUsedAt,
+      Value<int> rowid,
+    });
+typedef $$CalendarAddressesTableUpdateCompanionBuilder =
+    CalendarAddressesCompanion Function({
+      Value<String> key,
+      Value<String> address,
+      Value<DateTime> lastUsedAt,
+      Value<int> rowid,
+    });
+
+class $$CalendarAddressesTableFilterComposer
+    extends Composer<_$QuestlogDatabase, $CalendarAddressesTable> {
+  $$CalendarAddressesTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get key => $composableBuilder(
+    column: $table.key,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get address => $composableBuilder(
+    column: $table.address,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get lastUsedAt => $composableBuilder(
+    column: $table.lastUsedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$CalendarAddressesTableOrderingComposer
+    extends Composer<_$QuestlogDatabase, $CalendarAddressesTable> {
+  $$CalendarAddressesTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get key => $composableBuilder(
+    column: $table.key,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get address => $composableBuilder(
+    column: $table.address,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get lastUsedAt => $composableBuilder(
+    column: $table.lastUsedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$CalendarAddressesTableAnnotationComposer
+    extends Composer<_$QuestlogDatabase, $CalendarAddressesTable> {
+  $$CalendarAddressesTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get key =>
+      $composableBuilder(column: $table.key, builder: (column) => column);
+
+  GeneratedColumn<String> get address =>
+      $composableBuilder(column: $table.address, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get lastUsedAt => $composableBuilder(
+    column: $table.lastUsedAt,
+    builder: (column) => column,
+  );
+}
+
+class $$CalendarAddressesTableTableManager
+    extends
+        RootTableManager<
+          _$QuestlogDatabase,
+          $CalendarAddressesTable,
+          CalendarAddressRow,
+          $$CalendarAddressesTableFilterComposer,
+          $$CalendarAddressesTableOrderingComposer,
+          $$CalendarAddressesTableAnnotationComposer,
+          $$CalendarAddressesTableCreateCompanionBuilder,
+          $$CalendarAddressesTableUpdateCompanionBuilder,
+          (
+            CalendarAddressRow,
+            BaseReferences<
+              _$QuestlogDatabase,
+              $CalendarAddressesTable,
+              CalendarAddressRow
+            >,
+          ),
+          CalendarAddressRow,
+          PrefetchHooks Function()
+        > {
+  $$CalendarAddressesTableTableManager(
+    _$QuestlogDatabase db,
+    $CalendarAddressesTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$CalendarAddressesTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$CalendarAddressesTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$CalendarAddressesTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<String> key = const Value.absent(),
+                Value<String> address = const Value.absent(),
+                Value<DateTime> lastUsedAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => CalendarAddressesCompanion(
+                key: key,
+                address: address,
+                lastUsedAt: lastUsedAt,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String key,
+                required String address,
+                required DateTime lastUsedAt,
+                Value<int> rowid = const Value.absent(),
+              }) => CalendarAddressesCompanion.insert(
+                key: key,
+                address: address,
+                lastUsedAt: lastUsedAt,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<$CalendarAddressesTable, CalendarAddressRow>(
+                    table,
+                  ),
+                  BaseReferences<
+                    _$QuestlogDatabase,
+                    $CalendarAddressesTable,
+                    CalendarAddressRow
+                  >(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$CalendarAddressesTableProcessedTableManager =
+    ProcessedTableManager<
+      _$QuestlogDatabase,
+      $CalendarAddressesTable,
+      CalendarAddressRow,
+      $$CalendarAddressesTableFilterComposer,
+      $$CalendarAddressesTableOrderingComposer,
+      $$CalendarAddressesTableAnnotationComposer,
+      $$CalendarAddressesTableCreateCompanionBuilder,
+      $$CalendarAddressesTableUpdateCompanionBuilder,
+      (
+        CalendarAddressRow,
+        BaseReferences<
+          _$QuestlogDatabase,
+          $CalendarAddressesTable,
+          CalendarAddressRow
+        >,
+      ),
+      CalendarAddressRow,
+      PrefetchHooks Function()
+    >;
 typedef $$NoteNodesTableCreateCompanionBuilder = NoteNodesCompanion Function({
   Value<int> id,
   Value<int?> parentId,
@@ -8305,6 +8765,8 @@ class $QuestlogDatabaseManager {
       $$CalendarSkippedDatesTableTableManager(_db, _db.calendarSkippedDates);
   $$CalendarCompletionsTableTableManager get calendarCompletions =>
       $$CalendarCompletionsTableTableManager(_db, _db.calendarCompletions);
+  $$CalendarAddressesTableTableManager get calendarAddresses =>
+      $$CalendarAddressesTableTableManager(_db, _db.calendarAddresses);
   $$NoteNodesTableTableManager get noteNodes =>
       $$NoteNodesTableTableManager(_db, _db.noteNodes);
 }

@@ -10,11 +10,12 @@ import 'package:questlog/data/notes/notes_mappers.dart';
 
 import '../../helpers/test_database.dart';
 
-/// A schema 3 file is a schema 4 file without `note_nodes`, with `user_version = 3`.
+/// A schema 3 file is a schema 5 file without `note_nodes` and `calendar_addresses`, with `user_version = 3`.
 QuestlogDatabase openAsSchema3(File file) => QuestlogDatabase.forTesting(
   NativeDatabase(
     file,
     setup: (dynamic raw) {
+      raw.execute('DROP TABLE calendar_addresses');
       raw.execute('DROP TABLE note_nodes');
       raw.execute('PRAGMA user_version = 3');
     },
@@ -46,8 +47,8 @@ Future<void> main() async {
     setUp(() => db = createTestDatabase());
     tearDown(() => db.close());
 
-    test('a fresh database is at version 4 with an empty notes table', () async {
-      expect(db.schemaVersion, 4);
+    test('a fresh database is at version 5 with an empty notes table', () async {
+      expect(db.schemaVersion, 5);
       expect(await db.select(db.noteNodes).get(), isEmpty);
     });
 
@@ -124,7 +125,7 @@ Future<void> main() async {
 
       db = QuestlogDatabase.forTesting(NativeDatabase(file));
       expect(await db.select(db.noteNodes).get(), hasLength(1));
-      expect(db.schemaVersion, 4);
+      expect(db.schemaVersion, 5);
       await db.close();
     });
   });

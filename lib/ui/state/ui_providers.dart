@@ -39,7 +39,6 @@ final _currentSettingsProvider = Provider<AppSettings>((ref) {
         heroName: '',
         language: AppLanguage.system,
         theme: AppTheme.system,
-        displayFont: DisplayFont.figtree,
       );
 });
 
@@ -68,11 +67,6 @@ final themeModeProvider = Provider<ThemeMode>((ref) {
       return ThemeMode.system;
   }
 });
-
-/// The face used for titles and XP figures.
-final displayFontProvider = Provider<DisplayFont>(
-  (ref) => ref.watch(_currentSettingsProvider.select((s) => s.displayFont)),
-);
 
 /// The version from the platform build information (`pubspec.yaml` is the only
 /// copy). Tests override it.

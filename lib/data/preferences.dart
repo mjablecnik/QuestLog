@@ -6,13 +6,3 @@ enum AppLocaleCode { cs, en }
 
 /// Theme mode setting.
 enum AppTheme { light, dark, system }
-
-/// Display font choices; Figtree is the default.
-enum DisplayFont {
-  figtree,
-  bricolageGrotesque,
-  sora,
-  outfit,
-  unbounded,
-  cinzel,
-}

@@ -4,7 +4,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:questlog/core/errors.dart';
 import 'package:questlog/data/database.dart';
 import 'package:questlog/data/models.dart';
-import 'package:questlog/data/preferences.dart';
 import 'package:questlog/l10n/app_localizations.dart';
 import 'package:questlog/services/providers.dart';
 import 'package:questlog/services/quest_service.dart';
@@ -76,7 +75,6 @@ class BoardHarness {
         child: MaterialApp(
           theme: buildTheme(
             palette: QuestlogPalette.guildBoard,
-            font: DisplayFont.figtree,
           ),
           locale: const Locale('en'),
           localizationsDelegates: AppLocalizations.localizationsDelegates,

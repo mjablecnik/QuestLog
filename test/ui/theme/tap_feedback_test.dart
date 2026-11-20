@@ -5,7 +5,6 @@ import 'package:flutter/gestures.dart' show kPressTimeout;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:questlog/data/preferences.dart';
 import 'package:questlog/ui/theme/questlog_theme.dart';
 import 'package:questlog/ui/theme/tokens.dart';
 
@@ -20,7 +19,7 @@ void main() {
 
   test('the theme has no tap splash, highlight or hover for any palette', () {
     for (final QuestlogPalette p in palettes) {
-      final ThemeData t = buildTheme(palette: p, font: DisplayFont.figtree);
+      final ThemeData t = buildTheme(palette: p);
       expect(t.splashFactory, same(NoSplash.splashFactory));
       expect(t.splashColor, Colors.transparent);
       expect(t.highlightColor, Colors.transparent);
@@ -31,7 +30,6 @@ void main() {
   test('buttons paint an overlay only for keyboard focus', () {
     final ThemeData t = buildTheme(
       palette: QuestlogPalette.guildBoard,
-      font: DisplayFont.figtree,
     );
     final List<ButtonStyle?> styles = <ButtonStyle?>[
       t.textButtonTheme.style,
@@ -61,7 +59,6 @@ void main() {
     final GlobalKey boundary = GlobalKey();
     final ThemeData theme = buildTheme(
       palette: QuestlogPalette.guildBoard,
-      font: DisplayFont.figtree,
     );
     final QuestlogPalette p = QuestlogPalette.guildBoard;
     final Key chip = const ValueKey('chip');

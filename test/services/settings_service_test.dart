@@ -26,7 +26,6 @@ void main() {
     final settings = await current();
     expect(settings.language, AppLanguage.system);
     expect(settings.theme, AppTheme.system);
-    expect(settings.displayFont, DisplayFont.figtree);
     expect(settings.heroName, '');
     expect(settings.displayName, isNull);
   });
@@ -104,10 +103,6 @@ void main() {
       await pumpEventQueue();
       expect(emitted.last.theme, AppTheme.dark);
 
-      await service.setDisplayFont(DisplayFont.cinzel);
-      await pumpEventQueue();
-      expect(emitted.last.displayFont, DisplayFont.cinzel);
-
       await service.setHeroName('Martin');
       await pumpEventQueue();
       expect(
@@ -116,10 +111,9 @@ void main() {
           heroName: 'Martin',
           language: AppLanguage.cs,
           theme: AppTheme.dark,
-          displayFont: DisplayFont.cinzel,
         ),
       );
-      expect(emitted, hasLength(5));
+      expect(emitted, hasLength(4));
       await sub.cancel();
     });
   });

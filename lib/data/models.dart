@@ -48,14 +48,12 @@ class AppSettings {
     required this.heroName,
     required this.language,
     required this.theme,
-    required this.displayFont,
   });
 
   /// The trimmed hero name; empty when no name is set.
   final String heroName;
   final AppLanguage language;
   final AppTheme theme;
-  final DisplayFont displayFont;
 
   /// The hero name, or null when none is set (the UI then shows only the Level).
   String? get displayName => heroName.isEmpty ? null : heroName;
@@ -65,15 +63,14 @@ class AppSettings {
       other is AppSettings &&
       other.heroName == heroName &&
       other.language == language &&
-      other.theme == theme &&
-      other.displayFont == displayFont;
+      other.theme == theme;
 
   @override
-  int get hashCode => Object.hash(heroName, language, theme, displayFont);
+  int get hashCode => Object.hash(heroName, language, theme);
 
   @override
   String toString() =>
-      'AppSettings($heroName, $language, $theme, $displayFont)';
+      'AppSettings($heroName, $language, $theme)';
 }
 
 /// A one-off task, standalone or part of a Mission.

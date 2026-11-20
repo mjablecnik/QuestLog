@@ -118,9 +118,7 @@ void main() {
     await tester.pumpAndSettle();
     expect(context().palette, QuestlogPalette.daylight);
 
-    await settings.setDisplayFont(DisplayFont.cinzel);
-    await tester.pumpAndSettle();
-    expect(context().displayText.headlineLarge!.fontFamily, 'Cinzel');
+    expect(context().displayText.headlineLarge!.fontFamily, 'Figtree');
 
     await settings.setLanguage(AppLanguage.en);
     await tester.pumpAndSettle();

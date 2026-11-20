@@ -389,9 +389,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get a11y_pickPostingDay => 'Pick the posting day';
 
   @override
-  String get a11y_currentChoice => 'current choice';
-
-  @override
   String get quest_sheetCreateTitle => 'New quest';
 
   @override
@@ -739,12 +736,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settings_groupRules => 'Recurring missions';
 
   @override
-  String get settings_groupTemporary => 'Temporary';
-
-  @override
-  String get settings_temporaryHint => 'removed once you choose';
-
-  @override
   String get settings_licenses => 'Licenses';
 
   @override
@@ -941,52 +932,6 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get font_rowLabel => 'Title font';
-
-  @override
-  String get font_sample => 'Board · +25';
-
-  @override
-  String get font_help =>
-      'Changes only titles and numbers — text and controls stay in Figtree. The choice applies instantly across the app.';
-
-  @override
-  String get font_nameFigtree => 'Figtree';
-
-  @override
-  String get font_nameBricolage => 'Bricolage Grotesque';
-
-  @override
-  String get font_nameSora => 'Sora';
-
-  @override
-  String get font_nameOutfit => 'Outfit';
-
-  @override
-  String get font_nameUnbounded => 'Unbounded';
-
-  @override
-  String get font_nameCinzel => 'Cinzel';
-
-  @override
-  String get font_noteFigtree => 'Calm, universal';
-
-  @override
-  String get font_noteBricolage => 'Quirky grotesque';
-
-  @override
-  String get font_noteSora => 'Geometric, technical';
-
-  @override
-  String get font_noteOutfit => 'Soft geometric';
-
-  @override
-  String get font_noteUnbounded => 'Wide, playful';
-
-  @override
-  String get font_noteCinzel => 'Carved capitals';
-
-  @override
   String get error_nameRequired => 'Enter a name.';
 
   @override
@@ -1154,7 +1099,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get calendar_repeat => 'Repeat';
 
   @override
-  String get calendar_location => 'Location';
+  String get calendar_location => 'Address';
 
   @override
   String get calendar_notSet => 'Not set';
@@ -1179,7 +1124,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get calendar_menu => 'More actions';
 
   @override
-  String get calendar_locationCopied => 'Location copied';
+  String get calendar_locationCopied => 'Address copied';
 
   @override
   String get calendar_eventGone => 'This event no longer exists.';
@@ -1260,7 +1205,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get calendar_formNoteHint => 'Add details';
 
   @override
-  String get calendar_formLocationHint => 'Location';
+  String get calendar_formLocationHint => 'Address';
 
   @override
   String get calendar_formType => 'Event type';
@@ -1276,6 +1221,11 @@ class AppLocalizationsEn extends AppLocalizations {
     final String xpString = xpNumberFormat.format(xp);
 
     return 'For completing: +$xpString XP';
+  }
+
+  @override
+  String calendar_addressSuggestion(String address) {
+    return 'Use address $address';
   }
 
   @override
@@ -1295,7 +1245,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get calendar_errorNoteLong => 'The details are too long.';
 
   @override
-  String get calendar_errorLocationLong => 'The location is too long.';
+  String get calendar_errorLocationLong => 'The address is too long.';
 
   @override
   String get calendar_saveFailed => 'Saving failed. Try again.';
@@ -1593,6 +1543,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get trash_restored => 'Restored';
 
   @override
+  String get trash_openHint => 'Double tap to preview';
+
+  @override
+  String get trash_previewEmpty => 'Empty note';
+
+  @override
   String get trash_deleted => 'Deleted for good';
 
   @override
@@ -1603,6 +1559,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get editor_hint => 'Start writing…';
+
+  @override
+  String get editor_titleHint => 'Title';
 
   @override
   String get editor_saveFailed => 'The note could not be saved.';

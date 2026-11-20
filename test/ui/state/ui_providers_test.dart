@@ -94,16 +94,6 @@ void main() {
     }
   });
 
-  test('displayFontProvider follows the stored font', () async {
-    final container = await open(const Locale('en'));
-    expect(container.read(displayFontProvider), DisplayFont.figtree);
-    await container
-        .read(settingsServiceProvider)
-        .setDisplayFont(DisplayFont.cinzel);
-    await settle(container);
-    expect(container.read(displayFontProvider), DisplayFont.cinzel);
-  });
-
   test('appVersionProvider can be overridden', () async {
     final container = ProviderContainer(
       overrides: [appVersionProvider.overrideWith((ref) async => '9.8.7')],

@@ -8,11 +8,6 @@ import 'package:flutter/services.dart';
 const List<({String name, String file})> bundledFontLicenses =
     <({String name, String file})>[
       (name: 'Figtree', file: 'Figtree'),
-      (name: 'Bricolage Grotesque', file: 'BricolageGrotesque'),
-      (name: 'Sora', file: 'Sora'),
-      (name: 'Outfit', file: 'Outfit'),
-      (name: 'Unbounded', file: 'Unbounded'),
-      (name: 'Cinzel', file: 'Cinzel'),
     ];
 
 /// Asset path of the licence text for [file].

@@ -530,10 +530,6 @@
   "@a11y_pickPostingDay": {
     "description": "Semantic label of the posting-day row."
   },
-  "a11y_currentChoice": "aktuální volba",
-  "@a11y_currentChoice": {
-    "description": "Semantic suffix of the ticked font row."
-  },
   "quest_sheetCreateTitle": "Nový quest",
   "@quest_sheetCreateTitle": {
     "description": "Quest_Sheet title in create mode."
@@ -987,14 +983,6 @@
   "@settings_groupRules": {
     "description": "Group label."
   },
-  "settings_groupTemporary": "Dočasné",
-  "@settings_groupTemporary": {
-    "description": "Group label of the temporary display-font picker."
-  },
-  "settings_temporaryHint": "zmizí po výběru",
-  "@settings_temporaryHint": {
-    "description": "Small text next to the Temporary group label."
-  },
   "settings_licenses": "Licence",
   "@settings_licenses": {
     "description": "Row in the About group that opens the open-source licences page."
@@ -1277,66 +1265,6 @@
       }
     }
   },
-  "font_rowLabel": "Písmo titulků",
-  "@font_rowLabel": {
-    "description": "Row label in the Temporary group and title of the Font_Sheet."
-  },
-  "font_sample": "Nástěnka · +25",
-  "@font_sample": {
-    "description": "Sample text set in each font's own face."
-  },
-  "font_help": "Mění jen titulky a čísla — text a ovládání zůstávají ve Figtree. Volba se projeví okamžitě v celé aplikaci.",
-  "@font_help": {
-    "description": "Help line of the Font_Sheet."
-  },
-  "font_nameFigtree": "Figtree",
-  "@font_nameFigtree": {
-    "description": "Font name (proper noun)."
-  },
-  "font_nameBricolage": "Bricolage Grotesque",
-  "@font_nameBricolage": {
-    "description": "Font name (proper noun)."
-  },
-  "font_nameSora": "Sora",
-  "@font_nameSora": {
-    "description": "Font name (proper noun)."
-  },
-  "font_nameOutfit": "Outfit",
-  "@font_nameOutfit": {
-    "description": "Font name (proper noun)."
-  },
-  "font_nameUnbounded": "Unbounded",
-  "@font_nameUnbounded": {
-    "description": "Font name (proper noun)."
-  },
-  "font_nameCinzel": "Cinzel",
-  "@font_nameCinzel": {
-    "description": "Font name (proper noun)."
-  },
-  "font_noteFigtree": "Jedno písmo v celé aplikaci",
-  "@font_noteFigtree": {
-    "description": "Two-word character note."
-  },
-  "font_noteBricolage": "Grotesk s charakterem",
-  "@font_noteBricolage": {
-    "description": "Two-word character note."
-  },
-  "font_noteSora": "Geometrický, technický",
-  "@font_noteSora": {
-    "description": "Two-word character note."
-  },
-  "font_noteOutfit": "Měkký geometrický",
-  "@font_noteOutfit": {
-    "description": "Two-word character note."
-  },
-  "font_noteUnbounded": "Široký, herní",
-  "@font_noteUnbounded": {
-    "description": "Two-word character note."
-  },
-  "font_noteCinzel": "Tesané kapitálky",
-  "@font_noteCinzel": {
-    "description": "Two-word character note."
-  },
   "error_nameRequired": "Zadej název.",
   "@error_nameRequired": {
     "description": "FieldError.required."
@@ -1534,7 +1462,7 @@
   "@calendar_repeat": {
     "description": "Label of the repeat row of an event."
   },
-  "calendar_location": "Umístění",
+  "calendar_location": "Adresa",
   "@calendar_location": {
     "description": "Label of the location row of an event."
   },
@@ -1567,7 +1495,7 @@
   "@calendar_menu": {
     "description": "Accessibility label of the event menu button."
   },
-  "calendar_locationCopied": "Umístění zkopírováno",
+  "calendar_locationCopied": "Adresa zkopírována",
   "@calendar_locationCopied": {
     "description": "Snackbar after tapping the location of an event."
   },
@@ -1690,7 +1618,7 @@
   "@calendar_formNoteHint": {
     "description": "Hint of the note field."
   },
-  "calendar_formLocationHint": "Umístění",
+  "calendar_formLocationHint": "Adresa",
   "@calendar_formLocationHint": {
     "description": "Hint of the location field."
   },
@@ -1709,6 +1637,15 @@
       "xp": {
         "type": "int",
         "format": "decimalPattern"
+      }
+    }
+  },
+  "calendar_addressSuggestion": "Použít adresu {address}",
+  "@calendar_addressSuggestion": {
+    "description": "Screen reader label of a suggested address under the address field.",
+    "placeholders": {
+      "address": {
+        "type": "String"
       }
     }
   },
@@ -1732,7 +1669,7 @@
   "@calendar_errorNoteLong": {
     "description": "Inline error of a note over 500 characters."
   },
-  "calendar_errorLocationLong": "Umístění je příliš dlouhé.",
+  "calendar_errorLocationLong": "Adresa je příliš dlouhá.",
   "@calendar_errorLocationLong": {
     "description": "Inline error of a location over 120 characters."
   },
@@ -2145,6 +2082,14 @@
   "@trash_restored": {
     "description": "Snackbar after a Trashed_Node was restored."
   },
+  "trash_openHint": "Klepnutím otevřete náhled",
+  "@trash_openHint": {
+    "description": "Screen reader hint of a trashed Note that can be opened."
+  },
+  "trash_previewEmpty": "Prázdná poznámka",
+  "@trash_previewEmpty": {
+    "description": "Shown in the preview of a trashed Note that has no text."
+  },
   "trash_deleted": "Smazáno navždy",
   "@trash_deleted": {
     "description": "Snackbar after a Trashed_Node was deleted permanently."
@@ -2160,6 +2105,10 @@
   "editor_hint": "Začni psát…",
   "@editor_hint": {
     "description": "Hint of an empty Note."
+  },
+  "editor_titleHint": "Název",
+  "@editor_titleHint": {
+    "description": "Hint of the empty title field of the Note_Editor."
   },
   "editor_saveFailed": "Poznámku se nepodařilo uložit.",
   "@editor_saveFailed": {

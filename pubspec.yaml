@@ -45,6 +45,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   super_editor: 0.3.0-dev.52
+  app_links: ^7.2.2
 
 dev_dependencies:
   flutter_test:
@@ -72,9 +73,8 @@ flutter:
     - assets/icons/
     - assets/fonts/licenses/
 
-  # Static instances of the SIL OFL families (licences in assets/fonts/licenses/<Family>-OFL.txt).
-  # Figtree is the body face and the default display face; the other five exist
-  # only for the temporary display-font picker.
+  # Static instances of the SIL OFL family Figtree, the one face of the app, for body
+  # text and titles alike (licence in assets/fonts/licenses/Figtree-OFL.txt).
   fonts:
     - family: Figtree
       fonts:
@@ -87,44 +87,4 @@ flutter:
         - asset: assets/fonts/Figtree-700.ttf
           weight: 700
         - asset: assets/fonts/Figtree-800.ttf
-          weight: 800
-    - family: BricolageGrotesque
-      fonts:
-        - asset: assets/fonts/BricolageGrotesque-600.ttf
-          weight: 600
-        - asset: assets/fonts/BricolageGrotesque-700.ttf
-          weight: 700
-        - asset: assets/fonts/BricolageGrotesque-800.ttf
-          weight: 800
-    - family: Sora
-      fonts:
-        - asset: assets/fonts/Sora-600.ttf
-          weight: 600
-        - asset: assets/fonts/Sora-700.ttf
-          weight: 700
-        - asset: assets/fonts/Sora-800.ttf
-          weight: 800
-    - family: Outfit
-      fonts:
-        - asset: assets/fonts/Outfit-600.ttf
-          weight: 600
-        - asset: assets/fonts/Outfit-700.ttf
-          weight: 700
-        - asset: assets/fonts/Outfit-800.ttf
-          weight: 800
-    - family: Unbounded
-      fonts:
-        - asset: assets/fonts/Unbounded-600.ttf
-          weight: 600
-        - asset: assets/fonts/Unbounded-700.ttf
-          weight: 700
-        - asset: assets/fonts/Unbounded-800.ttf
-          weight: 800
-    - family: Cinzel
-      fonts:
-        - asset: assets/fonts/Cinzel-600.ttf
-          weight: 600
-        - asset: assets/fonts/Cinzel-700.ttf
-          weight: 700
-        - asset: assets/fonts/Cinzel-800.ttf
           weight: 800

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:questlog/data/preferences.dart';
 import 'package:questlog/l10n/app_localizations.dart';
 import 'package:questlog/ui/screens/shell/questlog_tab_bar.dart';
 import 'package:questlog/ui/theme/questlog_theme.dart';
@@ -23,7 +22,6 @@ void main() {
           MaterialApp(
             theme: buildTheme(
               palette: QuestlogPalette.guildBoard,
-              font: DisplayFont.figtree,
             ),
             locale: entry.$2,
             localizationsDelegates: AppLocalizations.localizationsDelegates,

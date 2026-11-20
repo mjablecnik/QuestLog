@@ -63,7 +63,7 @@ void main() {
       expect(state.heroName, '');
       expect(state.language, AppLanguage.system);
       expect(state.theme, AppTheme.system);
-      expect(state.displayFont, DisplayFont.figtree);
+      expect(state.displayFont, 'figtree', reason: 'the column is unused but keeps its default');
     });
 
     test('foreign keys are enabled', () async {

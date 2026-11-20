@@ -4,7 +4,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:questlog/core/xp_rules.dart';
 import 'package:questlog/data/database.dart';
 import 'package:questlog/data/models.dart';
-import 'package:questlog/data/preferences.dart';
 import 'package:questlog/l10n/app_localizations.dart';
 import 'package:questlog/l10n/app_localizations_en.dart';
 import 'package:questlog/services/providers.dart';
@@ -120,7 +119,6 @@ Future<_Env> _pump(
       child: MaterialApp(
         theme: buildTheme(
           palette: QuestlogPalette.guildBoard,
-          font: DisplayFont.figtree,
         ),
         locale: const Locale('en'),
         localizationsDelegates: AppLocalizations.localizationsDelegates,

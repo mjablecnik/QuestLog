@@ -30,6 +30,7 @@ part 'database.g.dart';
     CalendarEvents,
     CalendarSkippedDates,
     CalendarCompletions,
+    CalendarAddresses,
     NoteNodes,
   ],
 )
@@ -41,7 +42,7 @@ class QuestlogDatabase extends _$QuestlogDatabase {
   QuestlogDatabase.forTesting(super.executor);
 
   @override
-  int get schemaVersion => 4;
+  int get schemaVersion => 5;
 
   /// Runs [action] in a transaction (joining the active one, if any).
   ///
@@ -94,6 +95,10 @@ class QuestlogDatabase extends _$QuestlogDatabase {
           if (from < 4) {
             // Notes: one table for Folders and Notes. No existing table changes.
             await m.createTable(noteNodes);
+          }
+          if (from < 5) {
+            // Address suggestions for the event form. No existing table changes.
+            await m.createTable(calendarAddresses);
           }
         },
         beforeOpen: (details) async {

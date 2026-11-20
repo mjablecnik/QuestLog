@@ -61,3 +61,16 @@ class CalendarCompletions extends Table {
   @override
   Set<Column> get primaryKey => {eventId, occurrenceDate};
 }
+
+/// An address the user saved on an event, kept for suggestions until it has not
+/// been used for 30 days. The key is the lower-cased address, so spellings that
+/// differ only in letter case are one entry; [address] keeps the last spelling.
+@DataClassName('CalendarAddressRow')
+class CalendarAddresses extends Table {
+  TextColumn get key => text()();
+  TextColumn get address => text().check(address.length.isBetweenValues(1, 120))();
+  DateTimeColumn get lastUsedAt => dateTime()();
+
+  @override
+  Set<Column> get primaryKey => {key};
+}

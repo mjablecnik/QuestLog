@@ -20,10 +20,9 @@ class _TestApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final font = ref.watch(displayFontProvider);
     return MaterialApp(
-      theme: buildTheme(palette: QuestlogPalette.daylight, font: font),
-      darkTheme: buildTheme(palette: QuestlogPalette.guildBoard, font: font),
+      theme: buildTheme(palette: QuestlogPalette.daylight),
+      darkTheme: buildTheme(palette: QuestlogPalette.guildBoard),
       themeMode: ref.watch(themeModeProvider),
       locale: ref.watch(effectiveLocaleProvider),
       localizationsDelegates: AppLocalizations.localizationsDelegates,

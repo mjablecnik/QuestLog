@@ -21,7 +21,6 @@ class SettingsService {
             heroName: row.heroName,
             language: row.language,
             theme: row.theme,
-            displayFont: row.displayFont,
           ),
         )
         .distinct();
@@ -40,9 +39,6 @@ class SettingsService {
       _write(AppStateCompanion(language: Value(language)));
 
   Future<void> setTheme(AppTheme theme) => _write(AppStateCompanion(theme: Value(theme)));
-
-  Future<void> setDisplayFont(DisplayFont font) =>
-      _write(AppStateCompanion(displayFont: Value(font)));
 
   /// The language the app is shown in: an explicit choice wins, `system`
   /// resolves to Czech or English by the device language and to English for any

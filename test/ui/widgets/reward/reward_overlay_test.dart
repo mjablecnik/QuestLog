@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:questlog/core/xp_rules.dart';
 import 'package:questlog/data/models.dart';
-import 'package:questlog/data/preferences.dart';
 import 'package:questlog/l10n/app_localizations.dart';
 import 'package:questlog/services/providers.dart';
 import 'package:questlog/ui/state/reward_queue.dart';
@@ -70,7 +69,6 @@ Future<ProviderContainer> _pump(
       child: MaterialApp(
         theme: buildTheme(
           palette: QuestlogPalette.guildBoard,
-          font: DisplayFont.figtree,
         ),
         locale: locale,
         localizationsDelegates: AppLocalizations.localizationsDelegates,

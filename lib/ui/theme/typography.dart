@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../data/preferences.dart';
 import 'tokens.dart';
 
 /// Family of the always-on body role.
@@ -24,24 +23,6 @@ const List<FontFeature> _tabularFigures = <FontFeature>[
   FontFeature.tabularFigures(),
 ];
 
-/// `family:` name of [font] as declared in `pubspec.yaml`.
-String displayFamilyName(DisplayFont font) {
-  switch (font) {
-    case DisplayFont.figtree:
-      return 'Figtree';
-    case DisplayFont.bricolageGrotesque:
-      return 'BricolageGrotesque';
-    case DisplayFont.sora:
-      return 'Sora';
-    case DisplayFont.outfit:
-      return 'Outfit';
-    case DisplayFont.unbounded:
-      return 'Unbounded';
-    case DisplayFont.cinzel:
-      return 'Cinzel';
-  }
-}
-
 TextStyle _display(
   String family,
   Color color,
@@ -58,9 +39,9 @@ TextStyle _display(
   fontFeatures: _tabularFigures,
 );
 
-/// Titles and XP figures, set in the switchable display face.
-TextTheme buildDisplayTextTheme(DisplayFont font, QuestlogPalette p) {
-  final String family = displayFamilyName(font);
+/// Titles and XP figures, set in Figtree like the rest of the text, only heavier and tighter.
+TextTheme buildDisplayTextTheme(QuestlogPalette p) {
+  const String family = bodyFamilyName;
   return TextTheme(
     // Reward figure.
     displayLarge: _display(family, p.text, 48, FontWeight.w800),

@@ -6,11 +6,6 @@ import 'package:flutter_test/flutter_test.dart';
 
 const _fontWeights = <String, List<int>>{
   'Figtree': [400, 500, 600, 700, 800],
-  'BricolageGrotesque': [600, 700, 800],
-  'Sora': [600, 700, 800],
-  'Outfit': [600, 700, 800],
-  'Unbounded': [600, 700, 800],
-  'Cinzel': [600, 700, 800],
 };
 
 const _icons = <String>[
@@ -58,7 +53,7 @@ const _icons = <String>[
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  test('every display and body font family is declared with all its weights',
+  test('the one font family, Figtree, is declared with all its weights',
       () async {
     final manifest =
         jsonDecode(await rootBundle.loadString('FontManifest.json'))

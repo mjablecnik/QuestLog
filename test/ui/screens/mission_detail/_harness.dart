@@ -5,7 +5,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:questlog/core/xp_rules.dart';
 import 'package:questlog/data/database.dart';
 import 'package:questlog/data/models.dart';
-import 'package:questlog/data/preferences.dart';
 import 'package:questlog/l10n/app_localizations.dart';
 import 'package:questlog/services/providers.dart';
 import 'package:questlog/ui/screens/mission_detail/detail_quest_row.dart';
@@ -137,7 +136,7 @@ Future<(DetailFixture, int)> pumpDetail(
     UncontrolledProviderScope(
       container: container,
       child: MaterialApp(
-        theme: buildTheme(palette: palette, font: DisplayFont.figtree),
+        theme: buildTheme(palette: palette),
         locale: locale,
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,

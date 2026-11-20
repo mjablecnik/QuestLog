@@ -6,7 +6,6 @@ import 'package:questlog/core/calendar/repeat_rule.dart';
 import 'package:questlog/data/calendar/calendar_filter_store.dart';
 import 'package:questlog/data/calendar/calendar_models.dart';
 import 'package:questlog/data/database.dart';
-import 'package:questlog/data/preferences.dart';
 import 'package:questlog/l10n/app_localizations.dart';
 import 'package:questlog/l10n/app_localizations_en.dart';
 import 'package:questlog/services/calendar/calendar_providers.dart';
@@ -65,7 +64,6 @@ class CalendarUiHarness {
         child: MaterialApp(
           theme: buildTheme(
             palette: brightness == Brightness.dark ? QuestlogPalette.guildBoard : QuestlogPalette.daylight,
-            font: DisplayFont.figtree,
           ),
           locale: const Locale('en'),
           localizationsDelegates: AppLocalizations.localizationsDelegates,

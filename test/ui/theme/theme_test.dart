@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:questlog/data/preferences.dart';
 import 'package:questlog/ui/theme/questlog_theme.dart';
 import 'package:questlog/ui/theme/tokens.dart';
 import 'package:questlog/ui/theme/typography.dart';
@@ -12,65 +11,47 @@ void main() {
     QuestlogPalette.daylight,
   ];
 
-  test('buildTheme succeeds for every palette and every display font', () {
+  test('buildTheme succeeds for every palette', () {
     for (final QuestlogPalette p in palettes) {
-      for (final DisplayFont f in DisplayFont.values) {
-        final ThemeData t = buildTheme(palette: p, font: f);
-        expect(t.useMaterial3, isTrue);
-        expect(t.brightness, p.brightness);
-        expect(t.scaffoldBackgroundColor, p.board);
-        expect(t.colorScheme.primary, p.brass);
-        expect(t.extension<QuestlogStyle>(), isNotNull);
-      }
+      final ThemeData t = buildTheme(palette: p);
+      expect(t.useMaterial3, isTrue);
+      expect(t.brightness, p.brightness);
+      expect(t.scaffoldBackgroundColor, p.board);
+      expect(t.colorScheme.primary, p.brass);
+      expect(t.extension<QuestlogStyle>(), isNotNull);
     }
   });
 
-  test('display family names match the pubspec families', () {
-    expect(DisplayFont.values.map(displayFamilyName).toList(), <String>[
-      'Figtree',
-      'BricolageGrotesque',
-      'Sora',
-      'Outfit',
-      'Unbounded',
-      'Cinzel',
-    ]);
-  });
-
-  test('body stays Figtree while display follows the chosen font', () {
-    for (final DisplayFont f in DisplayFont.values) {
-      final ThemeData t = buildTheme(palette: palettes.first, font: f);
-      final QuestlogStyle s = t.extension<QuestlogStyle>()!;
-      expect(t.textTheme.bodyLarge!.fontFamily, 'Figtree');
-      for (final TextStyle? style in <TextStyle?>[
-        s.body.bodyLarge,
-        s.body.bodyMedium,
-        s.body.bodySmall,
-        s.body.titleMedium,
-        s.body.labelLarge,
-        s.body.labelSmall,
-      ]) {
-        expect(style!.fontFamily, 'Figtree');
-      }
-      for (final TextStyle? style in <TextStyle?>[
-        s.display.displayLarge,
-        s.display.headlineLarge,
-        s.display.headlineMedium,
-        s.display.titleLarge,
-        s.display.titleMedium,
-      ]) {
-        expect(style!.fontFamily, displayFamilyName(f));
-        expect(style.fontFamilyFallback, isNotEmpty);
-        expect(
-          style.fontFeatures,
-          contains(const FontFeature.tabularFigures()),
-        );
-      }
+  test('every text, titles included, is Figtree', () {
+    final ThemeData t = buildTheme(palette: palettes.first);
+    final QuestlogStyle s = t.extension<QuestlogStyle>()!;
+    expect(t.textTheme.bodyLarge!.fontFamily, 'Figtree');
+    for (final TextStyle? style in <TextStyle?>[
+      s.body.bodyLarge,
+      s.body.bodyMedium,
+      s.body.bodySmall,
+      s.body.titleMedium,
+      s.body.labelLarge,
+      s.body.labelSmall,
+    ]) {
+      expect(style!.fontFamily, 'Figtree');
+    }
+    for (final TextStyle? style in <TextStyle?>[
+      s.display.displayLarge,
+      s.display.headlineLarge,
+      s.display.headlineMedium,
+      s.display.titleLarge,
+      s.display.titleMedium,
+    ]) {
+      expect(style!.fontFamily, 'Figtree');
+      expect(style.fontFamilyFallback, isNotEmpty);
+      expect(style.fontFeatures, contains(const FontFeature.tabularFigures()));
     }
   });
 
   test('display and body sizes follow the design', () {
     final QuestlogPalette p = palettes.first;
-    final TextTheme d = buildDisplayTextTheme(DisplayFont.figtree, p);
+    final TextTheme d = buildDisplayTextTheme(p);
     final TextTheme b = buildBodyTextTheme(p);
     expect(d.displayLarge!.fontSize, 48);
     expect(d.displayLarge!.fontWeight, FontWeight.w800);
@@ -88,7 +69,7 @@ void main() {
 
   test('line heights follow the artboards: 1.35 body, 1.1 display', () {
     final QuestlogPalette p = palettes.first;
-    final TextTheme d = buildDisplayTextTheme(DisplayFont.figtree, p);
+    final TextTheme d = buildDisplayTextTheme(p);
     final TextTheme b = buildBodyTextTheme(p);
     for (final TextStyle? style in <TextStyle?>[
       d.displayLarge,
@@ -113,7 +94,7 @@ void main() {
 
   test('selection, cursor and handles are brass; sheets have no handle', () {
     for (final QuestlogPalette p in palettes) {
-      final ThemeData t = buildTheme(palette: p, font: DisplayFont.figtree);
+      final ThemeData t = buildTheme(palette: p);
       final TextSelectionThemeData sel = t.textSelectionTheme;
       expect(sel.cursorColor, p.brass);
       expect(sel.selectionHandleColor, p.brass);
@@ -125,10 +106,7 @@ void main() {
   });
 
   test('every platform uses the Cupertino page transition', () {
-    final ThemeData t = buildTheme(
-      palette: palettes.first,
-      font: DisplayFont.figtree,
-    );
+    final ThemeData t = buildTheme(palette: palettes.first);
     for (final TargetPlatform platform in TargetPlatform.values) {
       expect(
         t.pageTransitionsTheme.builders[platform],
@@ -144,10 +122,7 @@ void main() {
     late BuildContext captured;
     await tester.pumpWidget(
       MaterialApp(
-        theme: buildTheme(
-          palette: QuestlogPalette.daylight,
-          font: DisplayFont.cinzel,
-        ),
+        theme: buildTheme(palette: QuestlogPalette.daylight),
         home: Builder(
           builder: (BuildContext context) {
             captured = context;
@@ -157,7 +132,7 @@ void main() {
       ),
     );
     expect(captured.palette, same(QuestlogPalette.daylight));
-    expect(captured.displayText.headlineLarge!.fontFamily, 'Cinzel');
+    expect(captured.displayText.headlineLarge!.fontFamily, 'Figtree');
     expect(captured.bodyText.bodyLarge!.fontFamily, 'Figtree');
   });
 }

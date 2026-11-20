@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../../data/preferences.dart';
 import 'tokens.dart';
 import 'typography.dart';
 
@@ -52,13 +51,12 @@ extension QuestlogContext on BuildContext {
   TextTheme get bodyText => _style.body;
 }
 
-/// Material 3 theme for one palette and display font.
+/// Material 3 theme for one palette; every text is Figtree.
 ThemeData buildTheme({
   required QuestlogPalette palette,
-  required DisplayFont font,
 }) {
   final QuestlogPalette p = palette;
-  final TextTheme display = buildDisplayTextTheme(font, p);
+  final TextTheme display = buildDisplayTextTheme(p);
   final TextTheme body = buildBodyTextTheme(p);
 
   final ColorScheme scheme = ColorScheme(

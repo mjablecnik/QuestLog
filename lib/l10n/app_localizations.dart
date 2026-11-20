@@ -590,12 +590,6 @@ abstract class AppLocalizations {
   /// **'Vybrat den vyvěšení'**
   String get a11y_pickPostingDay;
 
-  /// Semantic suffix of the ticked font row.
-  ///
-  /// In cs, this message translates to:
-  /// **'aktuální volba'**
-  String get a11y_currentChoice;
-
   /// Quest_Sheet title in create mode.
   ///
   /// In cs, this message translates to:
@@ -1094,18 +1088,6 @@ abstract class AppLocalizations {
   /// **'Pravidelné mise'**
   String get settings_groupRules;
 
-  /// Group label of the temporary display-font picker.
-  ///
-  /// In cs, this message translates to:
-  /// **'Dočasné'**
-  String get settings_groupTemporary;
-
-  /// Small text next to the Temporary group label.
-  ///
-  /// In cs, this message translates to:
-  /// **'zmizí po výběru'**
-  String get settings_temporaryHint;
-
   /// Row in the About group that opens the open-source licences page.
   ///
   /// In cs, this message translates to:
@@ -1400,96 +1382,6 @@ abstract class AppLocalizations {
   /// **'Právě vyvěšená mise zůstane, ale podle pravidla „{name}“ se už další mise vyvěšovat nebudou.'**
   String rule_deleteBody(String name);
 
-  /// Row label in the Temporary group and title of the Font_Sheet.
-  ///
-  /// In cs, this message translates to:
-  /// **'Písmo titulků'**
-  String get font_rowLabel;
-
-  /// Sample text set in each font's own face.
-  ///
-  /// In cs, this message translates to:
-  /// **'Nástěnka · +25'**
-  String get font_sample;
-
-  /// Help line of the Font_Sheet.
-  ///
-  /// In cs, this message translates to:
-  /// **'Mění jen titulky a čísla — text a ovládání zůstávají ve Figtree. Volba se projeví okamžitě v celé aplikaci.'**
-  String get font_help;
-
-  /// Font name (proper noun).
-  ///
-  /// In cs, this message translates to:
-  /// **'Figtree'**
-  String get font_nameFigtree;
-
-  /// Font name (proper noun).
-  ///
-  /// In cs, this message translates to:
-  /// **'Bricolage Grotesque'**
-  String get font_nameBricolage;
-
-  /// Font name (proper noun).
-  ///
-  /// In cs, this message translates to:
-  /// **'Sora'**
-  String get font_nameSora;
-
-  /// Font name (proper noun).
-  ///
-  /// In cs, this message translates to:
-  /// **'Outfit'**
-  String get font_nameOutfit;
-
-  /// Font name (proper noun).
-  ///
-  /// In cs, this message translates to:
-  /// **'Unbounded'**
-  String get font_nameUnbounded;
-
-  /// Font name (proper noun).
-  ///
-  /// In cs, this message translates to:
-  /// **'Cinzel'**
-  String get font_nameCinzel;
-
-  /// Two-word character note.
-  ///
-  /// In cs, this message translates to:
-  /// **'Jedno písmo v celé aplikaci'**
-  String get font_noteFigtree;
-
-  /// Two-word character note.
-  ///
-  /// In cs, this message translates to:
-  /// **'Grotesk s charakterem'**
-  String get font_noteBricolage;
-
-  /// Two-word character note.
-  ///
-  /// In cs, this message translates to:
-  /// **'Geometrický, technický'**
-  String get font_noteSora;
-
-  /// Two-word character note.
-  ///
-  /// In cs, this message translates to:
-  /// **'Měkký geometrický'**
-  String get font_noteOutfit;
-
-  /// Two-word character note.
-  ///
-  /// In cs, this message translates to:
-  /// **'Široký, herní'**
-  String get font_noteUnbounded;
-
-  /// Two-word character note.
-  ///
-  /// In cs, this message translates to:
-  /// **'Tesané kapitálky'**
-  String get font_noteCinzel;
-
   /// FieldError.required.
   ///
   /// In cs, this message translates to:
@@ -1757,7 +1649,7 @@ abstract class AppLocalizations {
   /// Label of the location row of an event.
   ///
   /// In cs, this message translates to:
-  /// **'Umístění'**
+  /// **'Adresa'**
   String get calendar_location;
 
   /// Shown for an empty note or location.
@@ -1793,7 +1685,7 @@ abstract class AppLocalizations {
   /// Snackbar after tapping the location of an event.
   ///
   /// In cs, this message translates to:
-  /// **'Umístění zkopírováno'**
+  /// **'Adresa zkopírována'**
   String get calendar_locationCopied;
 
   /// Message when an open event was deleted.
@@ -1925,7 +1817,7 @@ abstract class AppLocalizations {
   /// Hint of the location field.
   ///
   /// In cs, this message translates to:
-  /// **'Umístění'**
+  /// **'Adresa'**
   String get calendar_formLocationHint;
 
   /// Label above the type picker.
@@ -1945,6 +1837,12 @@ abstract class AppLocalizations {
   /// In cs, this message translates to:
   /// **'Za splnění: +{xp} XP'**
   String calendar_onBoardXp(int xp);
+
+  /// Screen reader label of a suggested address under the address field.
+  ///
+  /// In cs, this message translates to:
+  /// **'Použít adresu {address}'**
+  String calendar_addressSuggestion(String address);
 
   /// Inline error of an empty name.
   ///
@@ -1979,7 +1877,7 @@ abstract class AppLocalizations {
   /// Inline error of a location over 120 characters.
   ///
   /// In cs, this message translates to:
-  /// **'Umístění je příliš dlouhé.'**
+  /// **'Adresa je příliš dlouhá.'**
   String get calendar_errorLocationLong;
 
   /// Inline error when saving an event fails.
@@ -2414,6 +2312,18 @@ abstract class AppLocalizations {
   /// **'Obnoveno'**
   String get trash_restored;
 
+  /// Screen reader hint of a trashed Note that can be opened.
+  ///
+  /// In cs, this message translates to:
+  /// **'Klepnutím otevřete náhled'**
+  String get trash_openHint;
+
+  /// Shown in the preview of a trashed Note that has no text.
+  ///
+  /// In cs, this message translates to:
+  /// **'Prázdná poznámka'**
+  String get trash_previewEmpty;
+
   /// Snackbar after a Trashed_Node was deleted permanently.
   ///
   /// In cs, this message translates to:
@@ -2437,6 +2347,12 @@ abstract class AppLocalizations {
   /// In cs, this message translates to:
   /// **'Začni psát…'**
   String get editor_hint;
+
+  /// Hint of the empty title field of the Note_Editor.
+  ///
+  /// In cs, this message translates to:
+  /// **'Název'**
+  String get editor_titleHint;
 
   /// Message of the Note_Editor when a save failed.
   ///

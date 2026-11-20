@@ -400,9 +400,6 @@ class AppLocalizationsCs extends AppLocalizations {
   String get a11y_pickPostingDay => 'Vybrat den vyvěšení';
 
   @override
-  String get a11y_currentChoice => 'aktuální volba';
-
-  @override
   String get quest_sheetCreateTitle => 'Nový quest';
 
   @override
@@ -766,12 +763,6 @@ class AppLocalizationsCs extends AppLocalizations {
   String get settings_groupRules => 'Pravidelné mise';
 
   @override
-  String get settings_groupTemporary => 'Dočasné';
-
-  @override
-  String get settings_temporaryHint => 'zmizí po výběru';
-
-  @override
   String get settings_licenses => 'Licence';
 
   @override
@@ -977,52 +968,6 @@ class AppLocalizationsCs extends AppLocalizations {
   }
 
   @override
-  String get font_rowLabel => 'Písmo titulků';
-
-  @override
-  String get font_sample => 'Nástěnka · +25';
-
-  @override
-  String get font_help =>
-      'Mění jen titulky a čísla — text a ovládání zůstávají ve Figtree. Volba se projeví okamžitě v celé aplikaci.';
-
-  @override
-  String get font_nameFigtree => 'Figtree';
-
-  @override
-  String get font_nameBricolage => 'Bricolage Grotesque';
-
-  @override
-  String get font_nameSora => 'Sora';
-
-  @override
-  String get font_nameOutfit => 'Outfit';
-
-  @override
-  String get font_nameUnbounded => 'Unbounded';
-
-  @override
-  String get font_nameCinzel => 'Cinzel';
-
-  @override
-  String get font_noteFigtree => 'Jedno písmo v celé aplikaci';
-
-  @override
-  String get font_noteBricolage => 'Grotesk s charakterem';
-
-  @override
-  String get font_noteSora => 'Geometrický, technický';
-
-  @override
-  String get font_noteOutfit => 'Měkký geometrický';
-
-  @override
-  String get font_noteUnbounded => 'Široký, herní';
-
-  @override
-  String get font_noteCinzel => 'Tesané kapitálky';
-
-  @override
   String get error_nameRequired => 'Zadej název.';
 
   @override
@@ -1191,7 +1136,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get calendar_repeat => 'Opakovat';
 
   @override
-  String get calendar_location => 'Umístění';
+  String get calendar_location => 'Adresa';
 
   @override
   String get calendar_notSet => 'Nenastaveno';
@@ -1216,7 +1161,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get calendar_menu => 'Další akce';
 
   @override
-  String get calendar_locationCopied => 'Umístění zkopírováno';
+  String get calendar_locationCopied => 'Adresa zkopírována';
 
   @override
   String get calendar_eventGone => 'Událost už neexistuje.';
@@ -1297,7 +1242,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get calendar_formNoteHint => 'Přidat podrobnosti';
 
   @override
-  String get calendar_formLocationHint => 'Umístění';
+  String get calendar_formLocationHint => 'Adresa';
 
   @override
   String get calendar_formType => 'Typ události';
@@ -1313,6 +1258,11 @@ class AppLocalizationsCs extends AppLocalizations {
     final String xpString = xpNumberFormat.format(xp);
 
     return 'Za splnění: +$xpString XP';
+  }
+
+  @override
+  String calendar_addressSuggestion(String address) {
+    return 'Použít adresu $address';
   }
 
   @override
@@ -1332,7 +1282,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get calendar_errorNoteLong => 'Podrobnosti jsou příliš dlouhé.';
 
   @override
-  String get calendar_errorLocationLong => 'Umístění je příliš dlouhé.';
+  String get calendar_errorLocationLong => 'Adresa je příliš dlouhá.';
 
   @override
   String get calendar_saveFailed => 'Uložení se nepovedlo. Zkus to znovu.';
@@ -1635,6 +1585,12 @@ class AppLocalizationsCs extends AppLocalizations {
   String get trash_restored => 'Obnoveno';
 
   @override
+  String get trash_openHint => 'Klepnutím otevřete náhled';
+
+  @override
+  String get trash_previewEmpty => 'Prázdná poznámka';
+
+  @override
   String get trash_deleted => 'Smazáno navždy';
 
   @override
@@ -1645,6 +1601,9 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get editor_hint => 'Začni psát…';
+
+  @override
+  String get editor_titleHint => 'Název';
 
   @override
   String get editor_saveFailed => 'Poznámku se nepodařilo uložit.';

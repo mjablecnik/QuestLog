@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:questlog/data/preferences.dart';
 
 import '_a11y_harness.dart';
 
@@ -117,10 +116,10 @@ void main() {
     );
   }
 
-  // The widest display font is the worst case for headings and card titles.
+  // The narrowest phone with large text is the worst case for headings and card titles.
   for (final Subject subject in Subject.values) {
     a11yTest(
-      '${subject.name} at 320px, text 130 %, Unbounded has no overflow',
+      '${subject.name} at 320px, text 130 %, titles have no overflow',
       (WidgetTester tester, void Function(A11yEnv) track) async {
         track(
           await A11yEnv.pump(
@@ -129,7 +128,6 @@ void main() {
             width: 320,
             textScale: 1.3,
             locale: const Locale('cs'),
-            font: DisplayFont.unbounded,
           ),
         );
         await expectNoOverflow(tester);

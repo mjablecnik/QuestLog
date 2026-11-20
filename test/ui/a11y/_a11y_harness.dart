@@ -12,7 +12,6 @@ import 'package:questlog/core/cadence.dart';
 import 'package:questlog/core/xp_rules.dart';
 import 'package:questlog/data/database.dart';
 import 'package:questlog/data/models.dart';
-import 'package:questlog/data/preferences.dart';
 import 'package:questlog/l10n/app_localizations.dart';
 import 'package:questlog/services/mission_service.dart';
 import 'package:questlog/services/providers.dart';
@@ -116,14 +115,10 @@ class A11yEnv {
     Locale locale = const Locale('en'),
     bool reduceMotion = false,
     QuestlogPalette palette = QuestlogPalette.guildBoard,
-    DisplayFont font = DisplayFont.figtree,
     int startXp = 0,
     bool calendarEvents = false,
   }) async {
     await _loadFont(tester, 'Figtree', <int>[400, 500, 600, 700, 800]);
-    if (font == DisplayFont.unbounded) {
-      await _loadFont(tester, 'Unbounded', <int>[600, 700, 800]);
-    }
     tester.view.physicalSize = Size(width, height);
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.reset);
@@ -155,7 +150,7 @@ class A11yEnv {
           appVersionProvider.overrideWith((Ref ref) async => '1.0.0'),
         ],
         child: MaterialApp(
-          theme: buildTheme(palette: palette, font: font),
+          theme: buildTheme(palette: palette),
           locale: locale,
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
