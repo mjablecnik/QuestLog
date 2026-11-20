@@ -1,7 +1,7 @@
 # Questlog — Documentation
 
 Reference material for working on Questlog. For what the app is and how to start it, see
-[README.md](./README.md).
+[README.md](./README.md); for the full feature list, [FEATURES.md](./FEATURES.md).
 
 ## Environment Variables
 
@@ -45,7 +45,7 @@ questlog/
 ├── scripts/                 check.sh, check-structure.sh
 ├── screenshots/             the five README screenshots (English, dark theme, 780x1688)
 ├── ios/, linux/             platform projects (iOS identity: ios/Flutter/AppIdentity.xcconfig)
-├── .kiro/specs/             001-questlog-domain to 007-questlog-trash-preview (requirements, design, tasks)
+├── .kiro/specs/             001-questlog-domain to 010-questlog-quest-deadline (requirements, design, tasks)
 ├── .design/                 the approved visual design: DESIGN.md, artboards/, screens/, icon/ (app icon + launch screen generator)
 ├── .agents/                 development pipeline artifacts (state, issues, use cases, reports)
 ├── l10n.yaml                Flutter localization generator configuration
@@ -134,8 +134,8 @@ The URL scheme `questlog` (registered in `ios/Runner/Info.plist`) opens a tab: `
 | Board day | starts at 04:00 local time |
 | Recurring cadences | daily, weekly, biweekly, monthly, quarterly, yearly |
 
-Out of scope in version 1: due dates, streaks, a history screen, notifications and
-projects.
+Out of scope in version 1: streaks, a history screen, notifications and projects, and any
+due date except the optional Quest Deadline.
 
 ### Font licences
 

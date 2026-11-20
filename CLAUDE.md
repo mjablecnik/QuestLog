@@ -78,7 +78,7 @@ test/                        mirrors lib/ (core, data, services, ui) + goldens/,
                              USE_CASES.md, runs/2026-11-15-1405/ (one report per phase)
 ```
 
-Humans read `README.md` and `DOCS.md`; do not duplicate them here.
+Humans read `README.md`, `FEATURES.md` and `DOCS.md`; do not duplicate them here.
 
 ## Rules for any agent working here
 
