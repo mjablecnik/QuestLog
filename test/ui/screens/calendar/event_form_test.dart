@@ -106,6 +106,7 @@ void main() {
     await tester.pump();
     expect(xp(), findsNothing);
 
+    await reveal(tester, t(en.calendar_typeBirthday));
     await tester.tap(t(en.calendar_typeBirthday));
     await tester.pump();
     expect(xp(), findsOneWidget);

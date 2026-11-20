@@ -42,13 +42,22 @@ void main() {
     final List<CalendarEventRow> all = await events();
     expect(all, hasLength(1));
     expect(all.single.name, 'Pay rent');
-    expect(all.single.eventType, EventType.date.key);
+    expect(all.single.eventType, EventType.quest.key);
     expect(all.single.startMinute, isNull);
     expect(all.single.startDate, d(2026, 11, 25));
     expect(all.single.endDate, d(2026, 11, 25));
     expect(all.single.onBoard, isFalse);
     expect(q.eventId, all.single.id);
     expect(await deadlines(), <int, DateTime>{q.id: d(2026, 11, 25)});
+  });
+
+  test('the Quest event does not become the last used type of the event form', () async {
+    await calendar.create(
+      EventDraft(name: 'Dance', type: EventType.dance, startDate: d(2026, 11, 21), endDate: d(2026, 11, 21), onBoard: false),
+    );
+    clock.advance(const Duration(hours: 1));
+    await quests.create(draft(deadline: d(2026, 11, 25)));
+    expect(await calendar.lastUsedType(), EventType.dance);
   });
 
   test('a Quest without a Deadline has no event', () async {

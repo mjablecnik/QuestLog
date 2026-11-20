@@ -1085,6 +1085,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get calendar_typeLesson => 'Lesson';
 
   @override
+  String get calendar_typeQuest => 'Quest';
+
+  @override
   String get calendar_allDay => 'All day';
 
   @override
@@ -1665,4 +1668,47 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get a11y_taskToggle => 'Toggle done';
+
+  @override
+  String get settings_shortcutTitle => 'Home Screen shortcut';
+
+  @override
+  String get settings_shortcutSubtitle =>
+      'Open QuestLog on the screen you choose with a single tap.';
+
+  @override
+  String get settings_shortcutPickLabel => 'Which screen should the icon open?';
+
+  @override
+  String get settings_shortcutCopyLink => 'Copy link';
+
+  @override
+  String get settings_shortcutCopied => 'Link copied';
+
+  @override
+  String get settings_shortcutStep1 => 'Copy the link above.';
+
+  @override
+  String get settings_shortcutStep2 =>
+      'On your iPhone open the Shortcuts app and tap +.';
+
+  @override
+  String get settings_shortcutStep3 =>
+      'Tap Add Action, search for Open URLs and pick it.';
+
+  @override
+  String get settings_shortcutStep4 =>
+      'Paste the copied link into the URL field.';
+
+  @override
+  String get settings_shortcutStep5 =>
+      'Tap the share icon and choose Add to Home Screen.';
+
+  @override
+  String get settings_shortcutStep6 =>
+      'Name the shortcut, change the icon if you like, and tap Add.';
+
+  @override
+  String get settings_shortcutNote =>
+      'Works on iPhone only. You can move the finished icon into a folder.';
 }

@@ -18,6 +18,7 @@ String eventTypeName(AppLocalizations l, EventType type) => switch (type) {
   EventType.meeting => l.calendar_typeMeeting,
   EventType.seminar => l.calendar_typeSeminar,
   EventType.lesson => l.calendar_typeLesson,
+  EventType.quest => l.calendar_typeQuest,
 };
 
 String _capitalized(String text) =>

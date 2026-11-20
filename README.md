@@ -25,7 +25,7 @@ Questlog is a personal gamified to-do app for one user, built with Flutter for i
 - **XP and levels** are shown in the hero bar; completing a quest or mission opens a reward
   card, and reopening one takes the XP back.
 - **Calendar** is a tab with a month overview, a day sheet, event detail, an event form,
-  search and a type filter. Events have one of ten types, each with its own colour (dance, work,
+  search and a type filter. Events have one of eleven types, each with its own colour (quest deadline, dance, work,
   birthday, name day, public holiday, notable day, date, meeting, seminar, lesson) and may repeat
   daily, weekly, monthly or yearly. The first start fills it with the Czech public holidays,
   notable and folk days and a few name days, repeating every year. An event with the "On the

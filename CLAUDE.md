@@ -19,7 +19,7 @@ by long-press drag (`missions.sort_order`). Quests without a mission always have
 In the dark theme Quest cards are dark raised cards, not parchment slips (2026-11-18, Martin's
 request; `slip*` roles in `tokens.dart`); the light theme is unchanged.
 Calendar (2026-11-19, Martin's request, spec `003-questlog-calendar`; schema v3): a tab, Kalendář, with a month
-overview, day sheet, event detail, event form, search and a type filter. Ten fixed event types with their own colour, repeat
+overview, day sheet, event detail, event form, search and a type filter. Eleven fixed event types (the eleventh, Quest, is the lime event of a Quest Deadline) with their own colour, repeat
 (daily, weekly, monthly, yearly), Czech public holidays, notable days and name days seeded once. An event with `On the board`
 shows on the Board as a task on its day and awards 10-100 XP (by length, or by type when all-day). The tab has no hero bar.
 Notes (2026-11-19, Martin's request, spec `004-questlog-notes`; schema v4): a fifth tab, Poznámky, between Kalendář and Nastavení. Folders and
@@ -35,7 +35,7 @@ Month view (2026-11-20, Martin's request, spec `006-questlog-calendar-spans`): a
 row across its days, lanes from `layoutWeek` (`lib/ui/screens/calendar/week_lanes.dart`) so a bar keeps one height.
 Address history (2026-11-20, Martin's request, spec `008-questlog-address-history`; schema v5): the Event_Form suggests addresses saved on earlier events, from the `calendar_addresses` table, forgotten after 30 days without use (no map service: there is no network).
 Deep links (spec `009-questlog-deep-links`): `questlog://calendar` (also quests, missions, notes, settings) opens that tab; Martin makes the Home Screen icon in Shortcuts (Open URL, Add to Home Screen). Package `app_links`; `deepLinksProvider` is empty except in `main`.
-Quest Deadline (2026-11-20, Martin's request, spec `010-questlog-quest-deadline`; schema v6): a Quest may have a date; it is an all-day Date event in the Calendar linked by `quests.event_id` (`ON DELETE SET NULL`), the Deadline is the event's end date, so editing the event moves it, deleting the event leaves the Quest without a date. An open Quest after its Deadline shows "Po termínu" (`destructiveText`). Completing happens only on the Quest.
+Quest Deadline (2026-11-20, Martin's request, spec `010-questlog-quest-deadline`; schema v6): a Quest may have a date; it is an all-day event of the type Quest in the Calendar linked by `quests.event_id` (`ON DELETE SET NULL`), the Deadline is the event's end date, so editing the event moves it, deleting the event leaves the Quest without a date. An open Quest after its Deadline shows "Po termínu" (`destructiveText`). Completing happens only on the Quest.
 Not done: the iOS build and every on-device check — Martin does those himself (open LOW
 entry in `.agents/ISSUES.md`).
 

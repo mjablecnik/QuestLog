@@ -9,7 +9,10 @@ enum EventType {
   date('date'),
   meeting('meeting'),
   seminar('seminar'),
-  lesson('lesson');
+  lesson('lesson'),
+
+  /// The event of a Quest's Deadline; made by the Questlog_App, not offered as a default.
+  quest('quest');
 
   const EventType(this.key);
 
@@ -27,7 +30,7 @@ enum EventType {
 
   /// Whether a new event of this type is put on the Board by default.
   bool get onBoardByDefault =>
-      this != EventType.publicHoliday && this != EventType.notableDay;
+      this != EventType.publicHoliday && this != EventType.notableDay && this != EventType.quest;
 
   /// Whether the type is drawn as a Soft_Chip instead of a solid chip.
   bool get isSoft => this == EventType.notableDay;

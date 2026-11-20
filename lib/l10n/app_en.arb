@@ -256,6 +256,7 @@
   "calendar_typeMeeting": "Meeting",
   "calendar_typeSeminar": "Seminar",
   "calendar_typeLesson": "Lesson",
+  "calendar_typeQuest": "Quest",
   "calendar_allDay": "All day",
   "calendar_dayEvents": "{count, plural, =0{No events} one{1 event} other{{count} events}}",
   "calendar_dayEmpty": "No events",
@@ -402,5 +403,17 @@
   "a11y_restoreNode": "Restore {name}",
   "a11y_foreverNode": "Delete {name} for good",
   "a11y_breadcrumbTo": "Go to {name}",
-  "a11y_taskToggle": "Toggle done"
+  "a11y_taskToggle": "Toggle done",
+  "settings_shortcutTitle": "Home Screen shortcut",
+  "settings_shortcutSubtitle": "Open QuestLog on the screen you choose with a single tap.",
+  "settings_shortcutPickLabel": "Which screen should the icon open?",
+  "settings_shortcutCopyLink": "Copy link",
+  "settings_shortcutCopied": "Link copied",
+  "settings_shortcutStep1": "Copy the link above.",
+  "settings_shortcutStep2": "On your iPhone open the Shortcuts app and tap +.",
+  "settings_shortcutStep3": "Tap Add Action, search for Open URLs and pick it.",
+  "settings_shortcutStep4": "Paste the copied link into the URL field.",
+  "settings_shortcutStep5": "Tap the share icon and choose Add to Home Screen.",
+  "settings_shortcutStep6": "Name the shortcut, change the icon if you like, and tap Add.",
+  "settings_shortcutNote": "Works on iPhone only. You can move the finished icon into a folder."
 }

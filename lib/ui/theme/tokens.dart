@@ -283,6 +283,7 @@ extension EventTypeColors on QuestlogPalette {
     EventType.seminar => const Color(0xFF6FD0D8),
     EventType.lesson => const Color(0xFF62CF9F),
     EventType.work => const Color(0xFF8CA0B3),
+    EventType.quest => const Color(0xFFA6D44E),
   };
 
   /// Text and marks on a solid event colour.

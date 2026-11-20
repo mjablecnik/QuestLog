@@ -1458,6 +1458,10 @@
   "@calendar_typeLesson": {
     "description": "Name of the event type lesson."
   },
+  "calendar_typeQuest": "Quest",
+  "@calendar_typeQuest": {
+    "description": "Name of the event type of a Quest's Deadline."
+  },
   "calendar_allDay": "Celý den",
   "@calendar_allDay": {
     "description": "Label of an all-day event and of the all-day switch."
@@ -2267,5 +2271,53 @@
   "a11y_taskToggle": "Přepnout splněno",
   "@a11y_taskToggle": {
     "description": "Semantic label of the check of a checklist item in the Note_Editor."
+  },
+  "settings_shortcutTitle": "Zkratka na ploše",
+  "@settings_shortcutTitle": {
+    "description": "Title of the Home Screen shortcut guide in Settings."
+  },
+  "settings_shortcutSubtitle": "Otevři QuestLog jedním klepnutím rovnou na vybrané obrazovce.",
+  "@settings_shortcutSubtitle": {
+    "description": "Hint under the guide title."
+  },
+  "settings_shortcutPickLabel": "Kam má ikona otevřít aplikaci?",
+  "@settings_shortcutPickLabel": {
+    "description": "Label above the choice of the screen the shortcut opens."
+  },
+  "settings_shortcutCopyLink": "Zkopírovat odkaz",
+  "@settings_shortcutCopyLink": {
+    "description": "Button that copies the questlog:// link."
+  },
+  "settings_shortcutCopied": "Odkaz zkopírován",
+  "@settings_shortcutCopied": {
+    "description": "Snackbar after the link was copied."
+  },
+  "settings_shortcutStep1": "Zkopíruj odkaz výše.",
+  "@settings_shortcutStep1": {
+    "description": "Guide step 1."
+  },
+  "settings_shortcutStep2": "Otevři na iPhonu aplikaci Zkratky a klepni na +.",
+  "@settings_shortcutStep2": {
+    "description": "Guide step 2; Zkratky is the Czech name of the iOS Shortcuts app."
+  },
+  "settings_shortcutStep3": "Klepni na Přidat akci, vyhledej Otevřít URL a vyber ji.",
+  "@settings_shortcutStep3": {
+    "description": "Guide step 3."
+  },
+  "settings_shortcutStep4": "Do pole s adresou vlož zkopírovaný odkaz.",
+  "@settings_shortcutStep4": {
+    "description": "Guide step 4."
+  },
+  "settings_shortcutStep5": "Klepni na ikonu sdílení a zvol Přidat na plochu.",
+  "@settings_shortcutStep5": {
+    "description": "Guide step 5."
+  },
+  "settings_shortcutStep6": "Pojmenuj zkratku, případně změň ikonu, a potvrď tlačítkem Přidat.",
+  "@settings_shortcutStep6": {
+    "description": "Guide step 6."
+  },
+  "settings_shortcutNote": "Funguje jen na iPhonu. Hotovou ikonu pak můžeš přesunout i do složky.",
+  "@settings_shortcutNote": {
+    "description": "Closing note of the guide."
   }
 }

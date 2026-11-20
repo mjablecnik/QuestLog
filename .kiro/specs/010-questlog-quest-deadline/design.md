@@ -9,7 +9,7 @@ A Quest does not store the date. `quests.event_id` references a row of `calendar
 - **The Event is the source of the date.** One value, no copy to keep equal.
 - **`ON DELETE SET NULL`.** Deleting the Event from the Calendar leaves the Quest without a Deadline and touches nothing else.
 - **Deadlines come from one stream.** `questDeadlinesProvider` joins `quests` and `calendar_events` into a map of Quest id to date; cards read from it, so the `Quest` model and the existing queries do not change.
-- **No new Event type.** The Linked_Event is of the existing type Date and the user may change the type.
+- **A Quest Event type with its own colour.** The Linked_Event has the type Quest (a lime colour no other type uses), so it stands out in the Month_View, the Day_Sheet and the filter. The user may change the type; the Questlog_App does not take the Quest type as the default of a new event.
 - **Overdue is derived.** End date before the calendar day of the Clock and the Quest not done.
 
 ## Project Structure

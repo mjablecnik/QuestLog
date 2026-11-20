@@ -118,11 +118,11 @@ carry plain text only.
 
 ### Quest Deadline
 
-A Quest may have a Deadline. Saving one creates an all-day event of type Date (not on the Board) named like the Quest and links it in `quests.event_id`; the Deadline is that event's end date, so changing the event in the Calendar changes the Deadline, and deleting the event (or undoing it) only clears (or restores) the link. Clearing the Deadline in the Quest sheet deletes the event, deleting the Quest deletes its event, and renaming the Quest renames the event. An open Quest whose Deadline is before the Board_Day shows "Overdue" in the destructive colour on its card (Board and Mission detail); a done Quest does not. Completing is only possible on the Quest (spec `010-questlog-quest-deadline`).
+A Quest may have a Deadline. Saving one creates an all-day event of the type Quest (not on the Board) named like the Quest and links it in `quests.event_id`; the Deadline is that event's end date, so changing the event in the Calendar changes the Deadline, and deleting the event (or undoing it) only clears (or restores) the link. Clearing the Deadline in the Quest sheet deletes the event, deleting the Quest deletes its event, and renaming the Quest renames the event. An open Quest whose Deadline is before the Board_Day shows "Overdue" in the destructive colour on its card (Board and Mission detail); a done Quest does not. Completing is only possible on the Quest (spec `010-questlog-quest-deadline`).
 
 ### Deep links
 
-The URL scheme `questlog` (registered in `ios/Runner/Info.plist`) opens a tab: `questlog://quests`, `missions`, `calendar`, `notes` or `settings`; anything else is ignored. To get a Home Screen icon that opens the Calendar: in the iOS Shortcuts app make a shortcut with the action "Open URLs" and the URL `questlog://calendar`, then Share → Add to Home Screen and pick a name and an icon; the icon can be put in a folder. See `lib/ui/screens/shell/deep_link.dart` (spec `009-questlog-deep-links`).
+The URL scheme `questlog` (registered in `ios/Runner/Info.plist`) opens a tab: `questlog://quests`, `missions`, `calendar`, `notes` or `settings`; anything else is ignored. To get a Home Screen icon that opens the Calendar: in the iOS Shortcuts app make a shortcut with the action "Open URLs" and the URL `questlog://calendar`, then Share → Add to Home Screen and pick a name and an icon; the icon can be put in a folder. The same steps are in the app under Settings → Home Screen shortcut (`lib/ui/screens/settings/shortcut_guide.dart`): pick a tab, copy its link, follow the numbered steps. See `lib/ui/screens/shell/deep_link.dart` (spec `009-questlog-deep-links`).
 
 ### Rules of the game
 

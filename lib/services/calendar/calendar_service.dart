@@ -332,7 +332,9 @@ class CalendarService {
   /// yet. Built-in events (saved at the epoch) do not count.
   Future<EventType> lastUsedType() async {
     final CalendarEventRow? row = await (_db.select(_db.calendarEvents)
-          ..where((t) => t.updatedAt.isBiggerThanValue(DateTime.fromMillisecondsSinceEpoch(0)))
+          ..where((t) =>
+              t.updatedAt.isBiggerThanValue(DateTime.fromMillisecondsSinceEpoch(0)) &
+              t.eventType.equals(EventType.quest.key).not())
           ..orderBy([
             (t) => OrderingTerm.desc(t.updatedAt),
             (t) => OrderingTerm.desc(t.id),

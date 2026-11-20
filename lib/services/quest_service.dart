@@ -137,7 +137,7 @@ class QuestService {
       eventCompanion(
         EventDraft(
           name: name,
-          type: EventType.date,
+          type: EventType.quest,
           startDate: day,
           endDate: day,
           onBoard: false,

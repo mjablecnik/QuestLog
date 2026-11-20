@@ -1121,6 +1121,9 @@ class AppLocalizationsCs extends AppLocalizations {
   String get calendar_typeLesson => 'Lekce';
 
   @override
+  String get calendar_typeQuest => 'Quest';
+
+  @override
   String get calendar_allDay => 'Celý den';
 
   @override
@@ -1707,4 +1710,47 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get a11y_taskToggle => 'Přepnout splněno';
+
+  @override
+  String get settings_shortcutTitle => 'Zkratka na ploše';
+
+  @override
+  String get settings_shortcutSubtitle =>
+      'Otevři QuestLog jedním klepnutím rovnou na vybrané obrazovce.';
+
+  @override
+  String get settings_shortcutPickLabel => 'Kam má ikona otevřít aplikaci?';
+
+  @override
+  String get settings_shortcutCopyLink => 'Zkopírovat odkaz';
+
+  @override
+  String get settings_shortcutCopied => 'Odkaz zkopírován';
+
+  @override
+  String get settings_shortcutStep1 => 'Zkopíruj odkaz výše.';
+
+  @override
+  String get settings_shortcutStep2 =>
+      'Otevři na iPhonu aplikaci Zkratky a klepni na +.';
+
+  @override
+  String get settings_shortcutStep3 =>
+      'Klepni na Přidat akci, vyhledej Otevřít URL a vyber ji.';
+
+  @override
+  String get settings_shortcutStep4 =>
+      'Do pole s adresou vlož zkopírovaný odkaz.';
+
+  @override
+  String get settings_shortcutStep5 =>
+      'Klepni na ikonu sdílení a zvol Přidat na plochu.';
+
+  @override
+  String get settings_shortcutStep6 =>
+      'Pojmenuj zkratku, případně změň ikonu, a potvrď tlačítkem Přidat.';
+
+  @override
+  String get settings_shortcutNote =>
+      'Funguje jen na iPhonu. Hotovou ikonu pak můžeš přesunout i do složky.';
 }

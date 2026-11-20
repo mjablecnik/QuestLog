@@ -1634,6 +1634,12 @@ abstract class AppLocalizations {
   /// **'Lekce'**
   String get calendar_typeLesson;
 
+  /// Name of the event type of a Quest's Deadline.
+  ///
+  /// In cs, this message translates to:
+  /// **'Quest'**
+  String get calendar_typeQuest;
+
   /// Label of an all-day event and of the all-day switch.
   ///
   /// In cs, this message translates to:
@@ -2515,6 +2521,78 @@ abstract class AppLocalizations {
   /// In cs, this message translates to:
   /// **'Přepnout splněno'**
   String get a11y_taskToggle;
+
+  /// Title of the Home Screen shortcut guide in Settings.
+  ///
+  /// In cs, this message translates to:
+  /// **'Zkratka na ploše'**
+  String get settings_shortcutTitle;
+
+  /// Hint under the guide title.
+  ///
+  /// In cs, this message translates to:
+  /// **'Otevři QuestLog jedním klepnutím rovnou na vybrané obrazovce.'**
+  String get settings_shortcutSubtitle;
+
+  /// Label above the choice of the screen the shortcut opens.
+  ///
+  /// In cs, this message translates to:
+  /// **'Kam má ikona otevřít aplikaci?'**
+  String get settings_shortcutPickLabel;
+
+  /// Button that copies the questlog:// link.
+  ///
+  /// In cs, this message translates to:
+  /// **'Zkopírovat odkaz'**
+  String get settings_shortcutCopyLink;
+
+  /// Snackbar after the link was copied.
+  ///
+  /// In cs, this message translates to:
+  /// **'Odkaz zkopírován'**
+  String get settings_shortcutCopied;
+
+  /// Guide step 1.
+  ///
+  /// In cs, this message translates to:
+  /// **'Zkopíruj odkaz výše.'**
+  String get settings_shortcutStep1;
+
+  /// Guide step 2; Zkratky is the Czech name of the iOS Shortcuts app.
+  ///
+  /// In cs, this message translates to:
+  /// **'Otevři na iPhonu aplikaci Zkratky a klepni na +.'**
+  String get settings_shortcutStep2;
+
+  /// Guide step 3.
+  ///
+  /// In cs, this message translates to:
+  /// **'Klepni na Přidat akci, vyhledej Otevřít URL a vyber ji.'**
+  String get settings_shortcutStep3;
+
+  /// Guide step 4.
+  ///
+  /// In cs, this message translates to:
+  /// **'Do pole s adresou vlož zkopírovaný odkaz.'**
+  String get settings_shortcutStep4;
+
+  /// Guide step 5.
+  ///
+  /// In cs, this message translates to:
+  /// **'Klepni na ikonu sdílení a zvol Přidat na plochu.'**
+  String get settings_shortcutStep5;
+
+  /// Guide step 6.
+  ///
+  /// In cs, this message translates to:
+  /// **'Pojmenuj zkratku, případně změň ikonu, a potvrď tlačítkem Přidat.'**
+  String get settings_shortcutStep6;
+
+  /// Closing note of the guide.
+  ///
+  /// In cs, this message translates to:
+  /// **'Funguje jen na iPhonu. Hotovou ikonu pak můžeš přesunout i do složky.'**
+  String get settings_shortcutNote;
 }
 
 class _AppLocalizationsDelegate
