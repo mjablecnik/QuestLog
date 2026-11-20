@@ -32,20 +32,20 @@ questlog/
 │   │   ├── theme/           design tokens (two themes of the blue palette), typography, ThemeData
 │   │   ├── state/           UI providers, reorder logic, reward queue, board-day signal
 │   │   ├── screens/         board, missions, mission_detail, settings, shell, calendar, notes (list and Trash), note_editor
-│   │   ├── sheets/          quest, mission, rule and font bottom sheets (calendar/: filter, month picker, delete; notes/: add, name, move, link)
+│   │   ├── sheets/          quest, mission and rule bottom sheets (calendar/: filter, month picker, delete; notes/: add, name, move, link)
 │   │   ├── widgets/         cards, common, hero, reward, sheet
 │   │   └── forms/           validators, posting day, error text
 │   └── l10n/                app_cs.arb (template), app_en.arb, generated localizations
 ├── assets/
-│   ├── fonts/               static TTFs: Figtree plus five temporary display families
+│   ├── fonts/               static TTFs of Figtree, the one typeface of the app
 │   │   └── licenses/        one SIL OFL text per family, `<Family>-OFL.txt`
 │   └── icons/               24px SVG icons drawn with currentColor strokes
-├── drift_schemas/           drift_schema_v1.json to v4, the schema dump per version
+├── drift_schemas/           drift_schema_v1.json to v5, the schema dump per version
 ├── test/                    mirrors lib/ (core, data, services, ui); goldens/, helpers/
 ├── scripts/                 check.sh, check-structure.sh
 ├── screenshots/             the five README screenshots (English, dark theme, 780x1688)
 ├── ios/, linux/             platform projects (iOS identity: ios/Flutter/AppIdentity.xcconfig)
-├── .kiro/specs/             001-questlog-domain, 002-questlog-ui, 003-questlog-calendar and 004-questlog-notes (requirements, design, tasks)
+├── .kiro/specs/             001-questlog-domain to 007-questlog-trash-preview (requirements, design, tasks)
 ├── .design/                 the approved visual design: DESIGN.md, artboards/, screens/, icon/ (app icon + launch screen generator)
 ├── .agents/                 development pipeline artifacts (state, issues, use cases, reports)
 ├── l10n.yaml                Flutter localization generator configuration
@@ -55,7 +55,7 @@ questlog/
 ### Data
 
 One SQLite file, `questlog.sqlite`, in the platform's application documents directory
-(`getApplicationDocumentsDirectory()`), opened lazily in a background isolate. Nine
+(`getApplicationDocumentsDirectory()`), opened lazily in a background isolate. Ten
 tables:
 
 | Table | Holds |
@@ -64,13 +64,14 @@ tables:
 | `missions` | name, bonus size, status (open, completed, closed), sort order, awarded bonus, optional rule |
 | `recurring_rules` | name, cadence, anchor date, next index, bonus size, last posted date |
 | `rule_quests` | the quests a rule posts with each mission |
-| `app_state` | the singleton row: total XP, hero name, language, theme, display font |
+| `app_state` | the singleton row: total XP, hero name, language, theme (the old display font column stays, unused) |
 | `calendar_events` | name, note, location, event type, start and end (a date plus minutes since midnight, no time zone, no minutes for an all-day event), repeat rule and its end, the On_Board flag |
 | `calendar_skipped_dates` | dates on which a repeating event is deleted for one occurrence |
 | `calendar_completions` | the completed occurrences of events (event, date, time, awarded XP) |
+| `calendar_addresses` | the addresses saved on events (lower-cased key, last spelling, last use), for suggestions; forgotten 30 days after the last use |
 | `note_nodes` | Folders and Notes in one table: optional parent (none is the top level; deleting a folder row deletes what is inside it), folder flag, name, the Markdown body, whether the name follows the first line, created, edited and deleted times |
 
-The schema is at version 4 (v4 added `note_nodes`; v3 added the three calendar tables and fills them once with 35 built-in events: 13 Czech public holidays, 16 notable and folk days and 6 name days; v2 added `quests.board` and `missions.sort_order`; the upgrade puts every quest without a mission in Todo and keeps the old Mission order). Adding the fourth effort tier (`fullDay`) needed no migration:
+The schema is at version 5 (v5 added `calendar_addresses`; v4 added `note_nodes`; v3 added the three calendar tables and fills them once with 35 built-in events: 13 Czech public holidays, 16 notable and folk days and 6 name days; v2 added `quests.board` and `missions.sort_order`; the upgrade puts every quest without a mission in Todo and keeps the old Mission order). Adding the fourth effort tier (`fullDay`) needed no migration:
 `quests.difficulty` and `rule_quests.difficulty` are plain text holding the enum name, with no
 `CHECK`, so the stored values `easy`, `normal` and `hard` keep their meaning. A change to the
 schema needs a migration step in
@@ -88,8 +89,11 @@ the n-th weekday of a month). Event XP: a timed event 10 / 25 / 50 / 100 XP by l
 30 min, 2 h, 5 h, longer); an all-day event 10 XP for birthday, name day, public holiday,
 notable day and date, 25 XP for the rest. The calendar uses the calendar day (midnight), the
 Board uses the Board_Day (04:00). The type filter is remembered in `calendar_filter.txt` beside
-the database. Notifications, an event URL, week and day views and user-defined types are not
-part of it (spec `003-questlog-calendar`).
+the database. In the month view an event of several days is one bar per week row across the days it
+covers (`layoutWeek` in `lib/ui/screens/calendar/week_lanes.dart` gives each bar a lane, the same on
+all its days; up to three lanes show, more show two and a "+N" in the days that have events in the
+lanes left out). The Address field of the event form lists the remembered addresses that match what is typed (up to 5, newest first); an address is forgotten 30 days after its last use, at start and on every lookup, and the event keeps its own (spec `008-questlog-address-history`). Notifications, an event URL, week and day views and user-defined types are not
+part of it (specs `003-questlog-calendar`, `006-questlog-calendar-spans`).
 
 ### Notes
 
@@ -103,8 +107,18 @@ the background and when the Trash opens); the foreign key's cascade removes what
 text is Markdown, edited with `super_editor` in `lib/ui/screens/note_editor/`; `note_markdown.dart` converts
 between the two and escapes plain text, because the package's own codec changes text typed in a WYSIWYG
 editor (for example ABAP field symbols such as `<fs_line>`). The language after a code fence is not kept.
-A new Note is named after its first line until it is renamed. Search, tags, images, tables, opening links
-and a Trash undo are not part of it (spec `004-questlog-notes`).
+A Note has a title field above its text. A typed title is the Note's name; with an empty title the name
+follows the first line of the text (and the title field stays empty), and renaming from the menu also sets
+a chosen name. A Note in the Trash opens in a read-only preview (`trash_preview_screen.dart`, a
+`SuperReader` with the editor's stylesheet) with an Obnovit button; opening it changes nothing.
+Search, tags, images, tables, opening links and a Trash undo are not part of it (specs
+`004-questlog-notes`, `005-questlog-note-title`, `007-questlog-trash-preview`). The editor keeps the package's own overlays (accent colour
+set) so that iOS shows the caret, the selection handles and the Cut, Copy and Paste toolbar; copy and paste
+carry plain text only.
+
+### Deep links
+
+The URL scheme `questlog` (registered in `ios/Runner/Info.plist`) opens a tab: `questlog://quests`, `missions`, `calendar`, `notes` or `settings`; anything else is ignored. To get a Home Screen icon that opens the Calendar: in the iOS Shortcuts app make a shortcut with the action "Open URLs" and the URL `questlog://calendar`, then Share → Add to Home Screen and pick a name and an icon; the icon can be put in a folder. See `lib/ui/screens/shell/deep_link.dart` (spec `009-questlog-deep-links`).
 
 ### Rules of the game
 
@@ -119,18 +133,9 @@ and a Trash undo are not part of it (spec `004-questlog-notes`).
 Out of scope in version 1: due dates, streaks, a history screen, notifications and
 projects.
 
-### Temporary display-font picker
-
-Settings has a "Title font" row that opens a sheet with six display faces (Figtree,
-Bricolage Grotesque, Sora, Outfit, Unbounded, Cinzel). It only changes titles and
-numbers; body text and controls always stay in Figtree. It exists until the final font is
-chosen, after which the picker, the five other font families, their licence files in
-`assets/fonts/licenses/` (and entries in `lib/core/font_licenses.dart`) and their ARB keys
-are removed.
-
 ### Font licences
 
-Every bundled font family is under the SIL Open Font License 1.1, which requires the licence
+The bundled font family (Figtree) is under the SIL Open Font License 1.1, which requires the licence
 text to travel with the fonts. The unmodified texts from `google/fonts` are bundled as
 `assets/fonts/licenses/<Family>-OFL.txt` and registered with Flutter's `LicenseRegistry` at
 app start (`registerFontLicenses` in `lib/core/font_licenses.dart`). Settings → About →

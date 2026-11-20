@@ -27,6 +27,14 @@ sub-Folders of any depth hold Notes written in a WYSIWYG editor (`super_editor`;
 `lib/ui/screens/note_editor/note_markdown.dart`, which escapes plain text because the package's own codec is lossy) that saves by itself.
 Rename, move and delete work from a swipe and from a menu; deleting moves a node to a Trash (30 days, then purged at start, on
 return from the background and when the Trash opens). No XP, no hero bar. The mission ring now shows the quests still open.
+A Note has a title field (2026-11-20, Martin's request, spec `005-questlog-note-title`): a typed title is the name, an empty
+one leaves the name to the first line of the text; the editor keeps `super_editor`'s default overlay list (accent colour set), because a
+list with the desktop caret alone leaves iOS with no caret, handles or Cut/Copy/Paste toolbar.
+A Note in the Trash opens in a read-only preview (spec `007-questlog-trash-preview`; `SuperReader`, Obnovit button).
+Month view (2026-11-20, Martin's request, spec `006-questlog-calendar-spans`): an event of several days is one bar per week
+row across its days, lanes from `layoutWeek` (`lib/ui/screens/calendar/week_lanes.dart`) so a bar keeps one height.
+Address history (2026-11-20, Martin's request, spec `008-questlog-address-history`; schema v5): the Event_Form suggests addresses saved on earlier events, from the `calendar_addresses` table, forgotten after 30 days without use (no map service: there is no network).
+Deep links (spec `009-questlog-deep-links`): `questlog://calendar` (also quests, missions, notes, settings) opens that tab; Martin makes the Home Screen icon in Shortcuts (Open URL, Add to Home Screen). Package `app_links`; `deepLinksProvider` is empty except in `main`.
 Not done: the iOS build and every on-device check — Martin does those himself (open LOW
 entry in `.agents/ISSUES.md`).
 
@@ -59,11 +67,11 @@ lib/
                         widgets/ (cards, common, hero, reward, sheet), forms/
   l10n/                 ARB files (cs, en) + generated localizations
 assets/fonts, assets/icons   bundled static TTFs (+ licenses/ OFL texts) and 24px SVG icons (nothing fetched at runtime)
-drift_schemas/               schema dump per version (currently v4)
+drift_schemas/               schema dump per version (currently v5)
 scripts/                     check.sh, check-structure.sh (max 15 source files per directory)
 screenshots/                 README screenshots (English, dark theme, real app at 2x); retake them after visible UI changes
 test/                        mirrors lib/ (core, data, services, ui) + goldens/, helpers/
-.kiro/specs/                 001 domain, 002 UI, 003 calendar, 004 notes: requirements, design, tasks
+.kiro/specs/                 001 domain, 002 UI, 003 calendar, 004 notes, 005-009 later changes: requirements, design, tasks
 .design/                     approved visual contract (DESIGN.md, artboards/, screens/, icon/generate.mjs = app icon + launch screen)
 .agents/                     pipeline artifacts: PIPELINE_STATE.json, ISSUES.md, MEMORY.md,
                              USE_CASES.md, runs/2026-11-15-1405/ (one report per phase)
@@ -84,17 +92,12 @@ Humans read `README.md` and `DOCS.md`; do not duplicate them here.
   `ios/Flutter/AppIdentity.xcconfig`; Linux keeps its own copy of the id
   (`APPLICATION_ID` in `linux/CMakeLists.txt`).
 
-## Temporary display-font picker
+## Typography
 
-Settings has a "Title font" row and a `FontSheet` offering six display faces (Figtree,
-Bricolage Grotesque, Sora, Outfit, Unbounded, Cinzel) so Martin can choose one. Once he
-has, remove: `lib/ui/screens/settings/font_section.dart`, `lib/ui/sheets/font_sheet.dart`,
-`displayFontProvider`, the five unchosen families in `pubspec.yaml` and `assets/fonts/`,
-the licence files and `lib/core/font_licenses.dart` entries of those five families
-(`assets/fonts/licenses/<Family>-OFL.txt`, SIL OFL: they must leave together with their
-fonts), and the `font_*` ARB keys. The `display_font` column of `app_state` needs a schema v3
-migration to drop it (plus a new dump in `drift_schemas/`), or can stay unused.
-Figtree stays as the body face either way.
+One face, Figtree, for body text and titles alike (Martin's choice, 2026-11-20; the title-font picker and
+the other five families are gone). Titles and XP figures differ only in weight and tight spacing
+(`buildDisplayTextTheme` in `lib/ui/theme/typography.dart`). The `display_font` column of `app_state`
+stays in the schema, unused, so that no migration is needed.
 
 ## Palette
 
