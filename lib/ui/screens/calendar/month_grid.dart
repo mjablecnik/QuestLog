@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -10,6 +12,7 @@ import '../../theme/questlog_theme.dart';
 import '../../theme/tokens.dart';
 import '../../widgets/calendar/event_chip.dart';
 import 'day_sheet.dart';
+import 'week_lanes.dart';
 
 /// Months from January 2000 to December 2100, one page each.
 const int _monthCount = 101 * 12;
@@ -103,21 +106,11 @@ class MonthPage extends ConsumerWidget {
           children: <Widget>[
             for (int row = 0; row < 6; row++)
               Expanded(
-                child: Row(
-                  // Every cell fills the whole row, so its border and tap area do.
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: <Widget>[
-                    for (int col = 0; col < 7; col++)
-                      Expanded(
-                        child: DayCell(
-                          date: dates[row * 7 + col],
-                          inMonth: dates[row * 7 + col].month == month.month,
-                          isToday: dates[row * 7 + col] == today,
-                          occurrences: forDate(all, dates[row * 7 + col]),
-                          leftEdge: col == 0,
-                        ),
-                      ),
-                  ],
+                child: _WeekRow(
+                  dates: dates.sublist(row * 7, row * 7 + 7),
+                  month: month,
+                  today: today,
+                  occurrences: all,
                 ),
               ),
           ],
@@ -127,45 +120,132 @@ class MonthPage extends ConsumerWidget {
   }
 }
 
-/// One day of the grid: the date number and the Event_Chips of that day.
+/// One week of the grid: the seven day cells, and above them the bars of the
+/// events, so that an event of several days is one bar across its days.
 ///
-/// Up to three events show as chips, more show two chips and "+N"; fewer when
-/// the cell is too small for them (large text), so nothing leaves the cell.
+/// A bar keeps one lane over all its days. Up to three lanes show, more show
+/// two and a "+N" label in each cell that has events in the lanes left out;
+/// fewer lanes when the row is too low for them (large text), so nothing leaves
+/// its cell. The bar layer takes no taps and no semantics: a tap reaches the
+/// cell under it, and the cell tells a screen reader its events.
+class _WeekRow extends StatelessWidget {
+  const _WeekRow({
+    required this.dates,
+    required this.month,
+    required this.today,
+    required this.occurrences,
+  });
+
+  final List<DateTime> dates;
+  final DateTime month;
+  final DateTime today;
+  final List<EventOccurrence> occurrences;
+
+  @override
+  Widget build(BuildContext context) {
+    final TextScaler scaler = MediaQuery.textScalerOf(context).clamp(maxScaleFactor: EventChip.maxTextScale);
+    final double numberHeight = scaler.scale(11) * 1.35 + Space.s2;
+    final double chipHeight = EventChip.heightOf(context) + Space.s2;
+    final List<WeekSegment> segments = layoutWeek(occurrences, dates.first);
+    final int needed = segments.isEmpty ? 0 : segments.map((WeekSegment s) => s.lane).reduce(math.max) + 1;
+    return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints box) {
+        final double room = box.maxHeight - numberHeight - Space.s2;
+        final int shown = lanesShown(needed, room <= 0 ? 0 : (room / chipHeight).floor());
+        final double cellWidth = box.maxWidth / 7;
+        return Stack(
+          children: <Widget>[
+            Row(
+              // Every cell fills the whole row, so its border and tap area do.
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                for (int col = 0; col < 7; col++)
+                  Expanded(
+                    child: DayCell(
+                      date: dates[col],
+                      inMonth: dates[col].month == month.month,
+                      isToday: dates[col] == today,
+                      count: MonthPage.forDate(occurrences, dates[col]).length,
+                      lanesShown: shown,
+                      hidden: segments
+                          .where((WeekSegment s) => s.covers(col) && s.lane >= shown)
+                          .length,
+                      leftEdge: col == 0,
+                    ),
+                  ),
+              ],
+            ),
+            Positioned.fill(
+              child: IgnorePointer(
+                child: ExcludeSemantics(
+                  child: Stack(
+                    clipBehavior: Clip.hardEdge,
+                    children: <Widget>[
+                      for (final WeekSegment segment in segments)
+                        if (segment.lane < shown)
+                          Positioned(
+                            left: segment.startColumn * cellWidth + (segment.continuesBefore ? 0 : Space.s2),
+                            width:
+                                (segment.endColumn - segment.startColumn + 1) * cellWidth -
+                                (segment.continuesBefore ? 0 : Space.s2) -
+                                (segment.continuesAfter ? 0 : Space.s2 + Metrics.hairline),
+                            top: Space.s2 + numberHeight + segment.lane * chipHeight,
+                            child: EventChip(
+                              type: segment.occurrence.event.type,
+                              label: segment.occurrence.event.name,
+                              continuesBefore: segment.continuesBefore,
+                              continuesAfter: segment.continuesAfter,
+                            ),
+                          ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+/// One day of the grid: the date number, the room the bars of the week row
+/// take below it, and the "+N" label for the events that did not fit.
 class DayCell extends ConsumerWidget {
   const DayCell({
     super.key,
     required this.date,
     required this.inMonth,
     required this.isToday,
-    required this.occurrences,
+    required this.count,
+    required this.lanesShown,
+    required this.hidden,
     required this.leftEdge,
   });
 
   final DateTime date;
   final bool inMonth;
   final bool isToday;
-  final List<EventOccurrence> occurrences;
-  final bool leftEdge;
 
-  /// How many chips are drawn and how many are left for the "+N" label.
-  static ({int shown, int hidden}) split(int count, double room, double chipHeight) {
-    final int capacity = room <= 0 ? 0 : (room / chipHeight).floor();
-    int shown = count <= 3 ? count : 2;
-    if (shown > capacity) shown = capacity;
-    if (count - shown > 0 && shown >= capacity) shown = capacity > 0 ? capacity - 1 : 0;
-    return (shown: shown, hidden: count - shown);
-  }
+  /// How many events touch this date, for a screen reader.
+  final int count;
+
+  /// How many lanes of bars the week row draws over this cell.
+  final int lanesShown;
+
+  /// How many events of this date are left out of the lanes shown.
+  final int hidden;
+  final bool leftEdge;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final QuestlogPalette p = context.palette;
     final AppLocalizations l = AppLocalizations.of(context);
     final TextScaler scaler = MediaQuery.textScalerOf(context).clamp(maxScaleFactor: EventChip.maxTextScale);
-    final double numberHeight = scaler.scale(11) * 1.35 + Space.s2;
     final double chipHeight = EventChip.heightOf(context) + Space.s2;
     final String label = l.calendar_cellLabel(
       DateFormat.yMMMMEEEEd(l.localeName).format(date),
-      occurrences.length,
+      count,
     );
     final BorderSide line = BorderSide(color: p.boardLine, width: Metrics.hairline);
     return Semantics(
@@ -189,64 +269,47 @@ class DayCell extends ConsumerWidget {
           foregroundDecoration: isToday
               ? BoxDecoration(border: Border.all(color: p.brass, width: Metrics.badgeBorder))
               : null,
-          child: LayoutBuilder(
-            builder: (BuildContext context, BoxConstraints box) {
-              final ({int shown, int hidden}) split = DayCell.split(
-                occurrences.length,
-                box.maxHeight - numberHeight - Space.s2,
-                chipHeight,
-              );
-              return ClipRect(
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(Space.s2, Space.s2, Space.s2, 0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.only(left: Space.s2),
-                        child: Text(
-                          '${date.day}',
-                          textScaler: scaler,
-                          style: context.bodyText.bodySmall!.copyWith(
-                            fontSize: 11,
-                            height: 1.35,
-                            fontWeight: isToday ? FontWeight.w800 : FontWeight.w600,
-                            color: isToday
-                                ? p.brassText
-                                : (inMonth ? p.text : p.textFaint),
-                          ),
+          child: ClipRect(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(Space.s2, Space.s2, Space.s2, 0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.only(left: Space.s2),
+                    child: Text(
+                      '${date.day}',
+                      textScaler: scaler,
+                      style: context.bodyText.bodySmall!.copyWith(
+                        fontSize: 11,
+                        height: 1.35,
+                        fontWeight: isToday ? FontWeight.w800 : FontWeight.w600,
+                        color: isToday ? p.brassText : (inMonth ? p.text : p.textFaint),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: Space.s2),
+                  // The bars of the week row are drawn over this room.
+                  SizedBox(height: lanesShown * chipHeight),
+                  if (hidden > 0)
+                    Padding(
+                      padding: const EdgeInsets.only(left: Space.s2),
+                      child: Text(
+                        l.calendar_moreEvents(hidden),
+                        maxLines: 1,
+                        textScaler: scaler,
+                        style: context.bodyText.bodySmall!.copyWith(
+                          fontSize: 9.5,
+                          height: 1.35,
+                          fontWeight: FontWeight.w700,
+                          color: p.textDim,
                         ),
                       ),
-                      const SizedBox(height: Space.s2),
-                      for (int i = 0; i < split.shown; i++)
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: Space.s2),
-                          child: EventChip(
-                            type: occurrences[i].event.type,
-                            label: occurrences[i].event.name,
-                          ),
-                        ),
-                      if (split.hidden > 0)
-                        Padding(
-                          padding: const EdgeInsets.only(left: Space.s2),
-                          child: Text(
-                            l.calendar_moreEvents(split.hidden),
-                            maxLines: 1,
-                            textScaler: scaler,
-                            style: context.bodyText.bodySmall!.copyWith(
-                              fontSize: 9.5,
-                              height: 1.35,
-                              fontWeight: FontWeight.w700,
-                              color: p.textDim,
-                            ),
-                          ),
-                        ),
-                    ],
-                  ),
-                ),
-              );
-            },
+                    ),
+                ],
+              ),
+            ),
           ),
         ),
       ),

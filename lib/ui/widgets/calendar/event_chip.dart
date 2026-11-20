@@ -10,10 +10,21 @@ import '../../theme/tokens.dart';
 /// day, which is a Soft_Chip: a tinted fill, a solid bar on the left edge and
 /// the body text colour. The name is cut off, never wrapped.
 class EventChip extends StatelessWidget {
-  const EventChip({super.key, required this.type, required this.label});
+  const EventChip({
+    super.key,
+    required this.type,
+    required this.label,
+    this.continuesBefore = false,
+    this.continuesAfter = false,
+  });
 
   final EventType type;
   final String label;
+
+  /// The event goes on to the previous / next week row: that end is square, as
+  /// the bar runs on.
+  final bool continuesBefore;
+  final bool continuesAfter;
 
   /// The largest text scale a chip follows, so a chip stays inside its cell.
   static const double maxTextScale = 1.3;
@@ -39,8 +50,11 @@ class EventChip extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: Space.s2),
       decoration: BoxDecoration(
         color: soft ? p.eventSoftFill(type) : color,
-        borderRadius: BorderRadius.circular(Space.s2),
-        border: soft ? Border(left: BorderSide(color: color, width: Space.s2)) : null,
+        borderRadius: BorderRadius.horizontal(
+          left: continuesBefore ? Radius.zero : const Radius.circular(Space.s2),
+          right: continuesAfter ? Radius.zero : const Radius.circular(Space.s2),
+        ),
+        border: soft && !continuesBefore ? Border(left: BorderSide(color: color, width: Space.s2)) : null,
       ),
       child: Text(
         label,

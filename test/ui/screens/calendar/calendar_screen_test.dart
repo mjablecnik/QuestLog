@@ -7,6 +7,7 @@ import 'package:questlog/core/calendar/repeat_rule.dart';
 import 'package:questlog/ui/screens/calendar/calendar_screen.dart';
 import 'package:questlog/ui/screens/calendar/day_sheet.dart';
 import 'package:questlog/ui/screens/calendar/month_grid.dart';
+import 'package:questlog/ui/screens/calendar/week_lanes.dart';
 import 'package:questlog/ui/state/calendar_state.dart';
 import 'package:questlog/ui/widgets/calendar/event_chip.dart';
 
@@ -19,6 +20,15 @@ void main() {
       h.pump(tester, home: const CalendarScreen(), now: now, keepSeed: keepSeed, filter: filter, textScale: textScale);
 
   Finder cell(int month, int day, [int year = 2026]) => find.byKey(ValueKey<String>('day-$year-$month-$day'));
+
+  /// The bars (Event_Chips) that touch [day]'s cell. A bar is drawn over the cells of the week row, not
+  /// inside one cell, and a bar of several days touches several cells.
+  Finder chipsIn(WidgetTester tester, Finder day) {
+    final Rect rect = tester.getRect(day);
+    return find.byWidgetPredicate(
+      (Widget w) => w is EventChip && tester.getRect(find.byWidget(w)).overlaps(rect),
+    );
+  }
 
   ProviderContainer container(WidgetTester tester) =>
       ProviderScope.containerOf(tester.element(find.byType(CalendarScreen)));
@@ -96,8 +106,8 @@ void main() {
     await open(tester);
     await h.add(tester, name: 'Porada', type: EventType.meeting, date: d(2026, 11, 18), startMinute: 8 * 60 + 15, endMinute: 10 * 60);
     await h.add(tester, name: 'Narozeniny Evy', type: EventType.birthday, date: d(2026, 11, 18), startMinute: null);
-    expect(find.descendant(of: cell(11, 18), matching: find.byType(EventChip)), findsNWidgets(2));
-    final List<EventChip> chips = tester.widgetList<EventChip>(find.descendant(of: cell(11, 18), matching: find.byType(EventChip))).toList();
+    expect(chipsIn(tester, cell(11, 18)), findsNWidgets(2));
+    final List<EventChip> chips = tester.widgetList<EventChip>(chipsIn(tester, cell(11, 18))).toList();
     expect(chips.map((EventChip c) => c.label).toList(), <String>['Narozeniny Evy', 'Porada']);
     expect(chips.first.type, EventType.birthday);
   });
@@ -107,12 +117,14 @@ void main() {
     for (int i = 1; i <= 5; i++) {
       await h.add(tester, name: 'E$i', date: d(2026, 11, 18), startMinute: 8 * 60 + i, endMinute: 9 * 60);
     }
-    expect(find.descendant(of: cell(11, 18), matching: find.byType(EventChip)), findsNWidgets(2));
+    expect(chipsIn(tester, cell(11, 18)), findsNWidgets(2));
     expect(find.descendant(of: cell(11, 18), matching: find.text('+3')), findsOneWidget);
-    await h.add(tester, name: 'Tři', date: d(2026, 11, 17));
-    await h.add(tester, name: 'Tři 2', date: d(2026, 11, 17), startMinute: 600, endMinute: 700);
-    await h.add(tester, name: 'Tři 3', date: d(2026, 11, 17), startMinute: 800, endMinute: 900);
-    expect(find.descendant(of: cell(11, 17), matching: find.byType(EventChip)), findsNWidgets(3));
+    // Three events fit in three lanes: all show, in another week so the five above do not take lanes from them.
+    await h.add(tester, name: 'Tři', date: d(2026, 11, 4));
+    await h.add(tester, name: 'Tři 2', date: d(2026, 11, 4), startMinute: 600, endMinute: 700);
+    await h.add(tester, name: 'Tři 3', date: d(2026, 11, 4), startMinute: 800, endMinute: 900);
+    expect(chipsIn(tester, cell(11, 4)), findsNWidgets(3));
+    expect(find.descendant(of: cell(11, 4), matching: find.textContaining('+')), findsNothing);
   });
 
   calendarTest(h, 'a notable day is a soft chip, a public holiday a solid one', (tester) async {
@@ -120,26 +132,68 @@ void main() {
     await h.add(tester, name: 'Den veteránů', type: EventType.notableDay, date: d(2026, 11, 11), startMinute: null);
     await h.add(tester, name: 'Boj za svobodu', type: EventType.publicHoliday, date: d(2026, 11, 17), startMinute: null);
     BoxDecoration decoration(Finder cellFinder) => tester
-        .widget<Container>(find.descendant(of: find.descendant(of: cellFinder, matching: find.byType(EventChip)), matching: find.byType(Container)).first)
+        .widget<Container>(find.descendant(of: chipsIn(tester, cellFinder), matching: find.byType(Container)).first)
         .decoration! as BoxDecoration;
     expect(decoration(cell(11, 11)).border, isNotNull);
     expect(decoration(cell(11, 17)).border, isNull);
   });
 
-  calendarTest(h, 'a multi-day event has a chip on every date it touches', (tester) async {
+  calendarTest(h, 'a multi-day event is one bar across the dates it touches, with no gap', (tester) async {
     await open(tester);
     await h.add(tester, name: 'Seminář', type: EventType.seminar, date: d(2026, 11, 18), endDate: d(2026, 11, 20));
+    expect(find.byType(EventChip), findsOneWidget, reason: 'one bar, not one chip per date');
     for (final int day in <int>[18, 19, 20]) {
-      expect(find.descendant(of: cell(11, day), matching: find.byType(EventChip)), findsOneWidget, reason: '$day');
+      expect(chipsIn(tester, cell(11, day)), findsOneWidget, reason: '$day');
     }
-    expect(find.descendant(of: cell(11, 21), matching: find.byType(EventChip)), findsNothing);
+    expect(chipsIn(tester, cell(11, 17)), findsNothing);
+    expect(chipsIn(tester, cell(11, 21)), findsNothing);
+    final Rect bar = tester.getRect(find.byType(EventChip));
+    expect(bar.left, lessThanOrEqualTo(tester.getRect(cell(11, 18)).left + 4));
+    expect(bar.right, greaterThanOrEqualTo(tester.getRect(cell(11, 20)).right - 4));
+    expect(bar.width, greaterThan(tester.getRect(cell(11, 18)).width * 2.8), reason: 'across the cell borders');
+    expect(find.text('Seminář'), findsOneWidget, reason: 'the name is written once');
+    final EventChip chip = tester.widget<EventChip>(find.byType(EventChip));
+    expect(chip.continuesBefore, isFalse);
+    expect(chip.continuesAfter, isFalse);
+  });
+
+  calendarTest(h, 'a bar that runs over the end of the week goes on in the next week row', (tester) async {
+    await open(tester);
+    await h.add(tester, name: 'Soustředění', type: EventType.seminar, date: d(2026, 11, 20), endDate: d(2026, 11, 24));
+    final List<EventChip> bars = tester.widgetList<EventChip>(find.byType(EventChip)).toList();
+    expect(bars, hasLength(2), reason: 'a bar in each week row');
+    expect(bars.map((EventChip b) => b.continuesAfter).toList(), <bool>[true, false]);
+    expect(bars.map((EventChip b) => b.continuesBefore).toList(), <bool>[false, true]);
+    final Rect first = tester.getRect(find.byWidget(bars.first));
+    final Rect second = tester.getRect(find.byWidget(bars.last));
+    expect(first.right, closeTo(tester.getRect(cell(11, 22)).right, 1), reason: 'to the end of the row');
+    expect(second.left, closeTo(tester.getRect(cell(11, 23)).left, 1), reason: 'from the start of the row');
+  });
+
+  calendarTest(h, 'a bar keeps one height over its days, a shorter event goes under it', (tester) async {
+    await open(tester);
+    await h.add(tester, name: 'Víkend', type: EventType.seminar, date: d(2026, 11, 18), endDate: d(2026, 11, 20));
+    await h.add(tester, name: 'Schůzka', type: EventType.meeting, date: d(2026, 11, 19), startMinute: 600, endMinute: 700);
+    final Rect long = tester.getRect(find.widgetWithText(EventChip, 'Víkend'));
+    final Rect short = tester.getRect(find.widgetWithText(EventChip, 'Schůzka'));
+    expect(long.top, lessThan(short.top), reason: 'the longer event takes the first lane');
+    expect(chipsIn(tester, cell(11, 19)), findsNWidgets(2));
+  });
+
+  calendarTest(h, 'a tap on a bar opens the day sheet of the date under it', (tester) async {
+    await open(tester);
+    await h.add(tester, name: 'Seminář', type: EventType.seminar, date: d(2026, 11, 18), endDate: d(2026, 11, 20));
+    await tester.tapAt(tester.getCenter(cell(11, 19)).translate(0, -tester.getRect(cell(11, 19)).height / 2 + 24));
+    await h.settle(tester);
+    expect(find.byType(DaySheet), findsOneWidget);
+    expect(container(tester).read(selectedDayProvider), d(2026, 11, 19));
   });
 
   calendarTest(h, 'a repeating event shows on each of its dates', (tester) async {
     await open(tester);
     await h.add(tester, name: 'Salsa', type: EventType.lesson, date: d(2026, 11, 4), repeat: const CadenceRepeat(Cadence.weekly));
     for (final int day in <int>[4, 11, 18, 25]) {
-      expect(find.descendant(of: cell(11, day), matching: find.byType(EventChip)), findsOneWidget, reason: '$day');
+      expect(chipsIn(tester, cell(11, day)), findsOneWidget, reason: '$day');
     }
   });
 
@@ -153,9 +207,9 @@ void main() {
 
   calendarTest(h, 'built-in holidays appear in the month: 17 November is a public holiday', (tester) async {
     await open(tester, keepSeed: true);
-    expect(find.descendant(of: cell(11, 17), matching: find.text('Den boje za svobodu a demokracii')), findsOneWidget);
+    expect(tester.getRect(cell(11, 17)).contains(tester.getCenter(find.text('Den boje za svobodu a demokracii'))), isTrue);
     // Two events on 11 November (Svatý Martin and no name day): the folk day shows as a soft chip.
-    expect(find.descendant(of: cell(11, 11), matching: find.text('Svatý Martin')), findsOneWidget);
+    expect(tester.getRect(cell(11, 11)).contains(tester.getCenter(find.text('Svatý Martin'))), isTrue);
   });
 
   group('large text', () {
@@ -166,7 +220,7 @@ void main() {
       }
       expect(tester.takeException(), isNull);
       final Rect cellRect = tester.getRect(cell(11, 18));
-      for (final Element e in find.descendant(of: cell(11, 18), matching: find.byType(EventChip)).evaluate()) {
+      for (final Element e in chipsIn(tester, cell(11, 18)).evaluate()) {
         final Rect chip = tester.getRect(find.byWidget(e.widget));
         expect(chip.bottom, lessThanOrEqualTo(cellRect.bottom + 0.5));
         expect(chip.right, lessThanOrEqualTo(cellRect.right + 0.5));
@@ -174,14 +228,33 @@ void main() {
     });
   });
 
-  calendarTest(h, 'DayCell.split keeps to the room it has', (tester) async {
-    await open(tester);
-    expect(DayCell.split(2, 100, 10), (shown: 2, hidden: 0));
-    expect(DayCell.split(3, 100, 10), (shown: 3, hidden: 0));
-    expect(DayCell.split(5, 100, 10), (shown: 2, hidden: 3));
-    expect(DayCell.split(5, 20, 10), (shown: 1, hidden: 4));
-    expect(DayCell.split(2, 15, 10), (shown: 0, hidden: 2));
-    expect(DayCell.split(5, 0, 10), (shown: 0, hidden: 5));
+  calendarTest(h, 'bars stay inside the week rows at 320 points and a text scale of 130 %', (tester) async {
+    await open(tester, textScale: 1.3);
+    tester.view.physicalSize = const Size(320, 844);
+    await h.add(tester, name: 'Víkendový seminář', type: EventType.seminar, date: d(2026, 11, 20), endDate: d(2026, 11, 24));
+    for (int i = 1; i <= 5; i++) {
+      await h.add(tester, name: 'Událost $i', date: d(2026, 11, 18), startMinute: 8 * 60 + i, endMinute: 9 * 60);
+    }
+    await h.settle(tester);
+    expect(tester.takeException(), isNull);
+    final Rect grid = tester.getRect(find.byKey(const ValueKey<String>('month-pager')));
+    for (final Element e in find.byType(EventChip).evaluate()) {
+      final Rect bar = tester.getRect(find.byWidget(e.widget));
+      expect(bar.left, greaterThanOrEqualTo(grid.left - 0.5));
+      expect(bar.right, lessThanOrEqualTo(grid.right + 0.5));
+      expect(bar.bottom, lessThanOrEqualTo(grid.bottom + 0.5));
+    }
+  });
+
+  test('lanesShown keeps to the room it has', () {
+    expect(lanesShown(2, 10), 2);
+    expect(lanesShown(3, 10), 3);
+    expect(lanesShown(5, 10), 2);
+    expect(lanesShown(5, 2), 1);
+    expect(lanesShown(2, 1), 0, reason: 'the +N label needs a line');
+    expect(lanesShown(3, 2), 1);
+    expect(lanesShown(5, 0), 0);
+    expect(lanesShown(0, 4), 0);
   });
 
   group('type filter', () {
